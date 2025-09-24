@@ -40,8 +40,8 @@ public class ModeloVista {
     }
 
     // Método llamado por el controlador cuando se selecciona una carta. este despues lo envia al modeloJuego donde maneja la logica de validacion.
-    public void seleccionarCarta(String carta) {
-        modeloJuego.verificarCarta(carta);
+    public void seleccionarCarta(int pos) {
+        modeloJuego.verificarCarta(pos);
     }
 
     //Metodo usado para agregar observadores en este caso la PRESENTACION se agrega como observador

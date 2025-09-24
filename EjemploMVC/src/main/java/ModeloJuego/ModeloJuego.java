@@ -12,6 +12,7 @@ import javax.swing.Timer;
 public class ModeloJuego {
 
     private List<Carta> mazo;
+    private Jugador jugador;
     private Carta cartaActual;
     private int marcador;
     private int contador;
@@ -22,6 +23,7 @@ public class ModeloJuego {
         this.modeloVista = modeloVista;
         contador = 0;
         mazo = crearMazo();
+        jugador = crearJugador(mazo);
         barajear();
         marcador = 0;
     }
@@ -40,15 +42,16 @@ public class ModeloJuego {
         cartaActual = mazo.get(contador);
         modeloVista.setCartaCantada(cartaActual);
         contador++;
-        
-        if(contador == 3){
+
+        if (contador == 3) {
             contador = 0;
         }
     }
 
     // Validación de la carta seleccionada y actualización del marcador
-    public void verificarCarta(String cartaSeleccionada) {
-        if (cartaSeleccionada.equals(cartaActual.getNombreCarta())) {
+    public void verificarCarta(int cartaSeleccionada) {
+        int casilla = jugador.getTarjeta().getCasilla(cartaSeleccionada).getNumCarta();
+        if (casilla == cartaActual.getNumCarta()){
             marcador++;
         }
         // Actualiza ModeloVista con estado actual
@@ -87,9 +90,17 @@ public class ModeloJuego {
         }
         return mazo;
     }
-    
+
     private void barajear() {
         Collections.shuffle(mazo);
+    }
+
+    private Jugador crearJugador(List<Carta> mazo) {
+        Carta[] casillas = {mazo.get(0), mazo.get(1), mazo.get(2)};
+
+        Tarjeta tarjetaPrueba = new Tarjeta(casillas);
+        Jugador jugador1 = new Jugador("Rodri", tarjetaPrueba, marcador);
+        return jugador1;
     }
 
 }

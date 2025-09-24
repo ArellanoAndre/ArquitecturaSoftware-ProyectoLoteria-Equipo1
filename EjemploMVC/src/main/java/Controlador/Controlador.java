@@ -15,7 +15,7 @@ public class Controlador {
     }
 
     // Envia desde la PRESENTACION al modeloVista la carta seleccionada para despues ser validada
-    public void seleccionarCarta(String carta) {
-        modeloVista.seleccionarCarta(carta);
+    public void seleccionarCarta(int pos) {
+        modeloVista.seleccionarCarta(pos);
     }
 }
