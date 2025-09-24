@@ -15,7 +15,7 @@ public class Tarjeta {
 
     public Tarjeta(Carta[] casillas) {
         this.casillas = casillas;
-        this.marcadas = new boolean[16];
+        this.marcadas = new boolean[casillas.length];
     }
 
     public Carta getCasilla(int numCasilla) {
@@ -32,6 +32,11 @@ public class Tarjeta {
 
     public Carta[] getCasillas() {
         return casillas;
+    }
+
+    @Override
+    public String toString() {
+        return "Tarjeta{" + "casillas=" + casillas + ", marcadas=" + marcadas + '}';
     }
 
 }

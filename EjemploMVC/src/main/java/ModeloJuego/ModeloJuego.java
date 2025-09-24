@@ -53,6 +53,8 @@ public class ModeloJuego {
         int casilla = jugador.getTarjeta().getCasilla(cartaSeleccionada).getNumCarta();
         if (casilla == cartaActual.getNumCarta()){
             marcador++;
+            jugador.getTarjeta().marcarCasilla(cartaSeleccionada);
+            System.out.println(Arrays.toString(jugador.getTarjeta().getMarcadas()));
         }
         // Actualiza ModeloVista con estado actual
         modeloVista.setMarcador(marcador);
