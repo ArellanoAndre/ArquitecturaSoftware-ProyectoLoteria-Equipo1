@@ -11,7 +11,7 @@ import java.awt.FlowLayout;
 // ====== MAIN ======
 public class main {
     public static void main(String[] args) {
-        // Ejecutar jframe y creacion de objetoss
+        // Ejecutar jframe y creacion de objetos
         SwingUtilities.invokeLater(() -> {
             ModeloVista modeloVista = new ModeloVista();
             ModeloJuego modeloJuego = new ModeloJuego(modeloVista);
