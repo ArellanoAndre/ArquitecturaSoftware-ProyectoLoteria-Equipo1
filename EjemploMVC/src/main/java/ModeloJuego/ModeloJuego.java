@@ -3,24 +3,26 @@ package ModeloJuego;
 import ModeloVista.ModeloVista;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import javax.swing.Timer;
 
 public class ModeloJuego {
 
-    private List<String> mazo;
-    private String cartaActual;
+    private List<Carta> mazo;
+    private Carta cartaActual;
     private int marcador;
-    private Random random;
+    private int contador;
     private ModeloVista modeloVista;
     private Timer timer;
 
     public ModeloJuego(ModeloVista modeloVista) {
         this.modeloVista = modeloVista;
-        random = new Random();
-        //lista de cartas (selecciona una random con la variable random de arriba)
-        mazo = Arrays.asList("El gallo", "La dama", "El catrín");
+        contador = 0;
+        mazo = crearMazo();
+        barajear();
         marcador = 0;
     }
 
@@ -29,14 +31,19 @@ public class ModeloJuego {
         siguienteCarta();
 
         // Cada segundo cambia la carta cantada
-        timer = new Timer(1000, e -> siguienteCarta());
+        timer = new Timer(2500, e -> siguienteCarta());
         timer.start();
     }
 
     // Obtiene una nueva carta random del 1 al 3 y se la envia al modelo vista
     private void siguienteCarta() {
-        cartaActual = mazo.get(random.nextInt(mazo.size()));
+        if(contador == 53){
+            contador = 0;
+        }
+        cartaActual = mazo.get(contador);
         modeloVista.setCartaCantada(cartaActual);
+        contador++;
+        
     }
 
     // Validación de la carta seleccionada y actualización del marcador
@@ -49,7 +56,7 @@ public class ModeloJuego {
     }
 
     //Regresa la carta actual del juego
-    public String getCartaActual() {
+    public Carta getCartaActual() {
         return cartaActual;
     }
 
@@ -76,6 +83,10 @@ public class ModeloJuego {
             mazo.add(new Carta(i + 1, nombres[i]));
         }
         return mazo;
+    }
+    
+    private void barajear() {
+        Collections.shuffle(mazo);
     }
 
 }
