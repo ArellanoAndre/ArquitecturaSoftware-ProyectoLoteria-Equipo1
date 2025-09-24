@@ -37,18 +37,18 @@ public class ModeloJuego {
 
     // Obtiene una nueva carta random del 1 al 3 y se la envia al modelo vista
     private void siguienteCarta() {
-        if(contador == 53){
-            contador = 0;
-        }
         cartaActual = mazo.get(contador);
         modeloVista.setCartaCantada(cartaActual);
         contador++;
         
+        if(contador == 3){
+            contador = 0;
+        }
     }
 
     // Validación de la carta seleccionada y actualización del marcador
     public void verificarCarta(String cartaSeleccionada) {
-        if (cartaSeleccionada.equals(cartaActual)) {
+        if (cartaSeleccionada.equals(cartaActual.getNombreCarta())) {
             marcador++;
         }
         // Actualiza ModeloVista con estado actual
@@ -66,17 +66,20 @@ public class ModeloJuego {
     }
 
     private List<Carta> crearMazo() {
+//        String[] nombres = {
+//            "El gallo", "El diablito", "La dama", "El catrín", "El paraguas", "La sirena",
+//            "La escalera", "La botella", "El barril", "El árbol", "El melón", "El valiente",
+//            "El gorrito", "La muerte", "La pera", "La bandera", "El bandolón", "El violoncello",
+//            "La garza", "El pájaro", "La mano", "La bota", "La luna", "El cotorro",
+//            "El borracho", "El negrito", "El corazón", "La sandía", "El tambor", "El camarón",
+//            "Las jaras", "El músico", "La araña", "El soldado", "La estrella", "El cazo",
+//            "El mundo", "El apache", "El nopal", "El alacrán", "La rosa", "La calavera",
+//            "La campana", "El cantarito", "El venado", "El sol", "La corona", "La chalupa",
+//            "El pino", "El pescado", "La palma", "La maceta", "El arpa", "La rana"
+//        };
+
         String[] nombres = {
-            "El gallo", "El diablito", "La dama", "El catrín", "El paraguas", "La sirena",
-            "La escalera", "La botella", "El barril", "El árbol", "El melón", "El valiente",
-            "El gorrito", "La muerte", "La pera", "La bandera", "El bandolón", "El violoncello",
-            "La garza", "El pájaro", "La mano", "La bota", "La luna", "El cotorro",
-            "El borracho", "El negrito", "El corazón", "La sandía", "El tambor", "El camarón",
-            "Las jaras", "El músico", "La araña", "El soldado", "La estrella", "El cazo",
-            "El mundo", "El apache", "El nopal", "El alacrán", "La rosa", "La calavera",
-            "La campana", "El cantarito", "El venado", "El sol", "La corona", "La chalupa",
-            "El pino", "El pescado", "La palma", "La maceta", "El arpa", "La rana"
-        };
+            "El gallo", "El diablito", "La dama"};
 
         List<Carta> mazo = new ArrayList<>();
         for (int i = 0; i < nombres.length; i++) {
