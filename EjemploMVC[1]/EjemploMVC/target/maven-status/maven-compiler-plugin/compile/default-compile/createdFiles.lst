@@ -1,6 +1,6 @@
-Presentacion\Presentacion.class
-Controlador\Controlador.class
+Observer/Observer.class
+ModeloJuego/ModeloJuego.class
+Controlador/Controlador.class
+Presentacion/Presentacion.class
+ModeloVista/ModeloVista.class
 main.class
-ModeloVista\ModeloVista.class
-Observer\Observer.class
-ModeloJuego\ModeloJuego.class
