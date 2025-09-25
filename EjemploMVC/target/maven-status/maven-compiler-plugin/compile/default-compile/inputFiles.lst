@@ -1,6 +1,11 @@
-C:\Users\Arell\Downloads\EjemploMVC[1]\EjemploMVC\src\main\java\Controlador\Controlador.java
-C:\Users\Arell\Downloads\EjemploMVC[1]\EjemploMVC\src\main\java\main.java
-C:\Users\Arell\Downloads\EjemploMVC[1]\EjemploMVC\src\main\java\ModeloJuego\ModeloJuego.java
-C:\Users\Arell\Downloads\EjemploMVC[1]\EjemploMVC\src\main\java\ModeloVista\ModeloVista.java
-C:\Users\Arell\Downloads\EjemploMVC[1]\EjemploMVC\src\main\java\Observer\Observer.java
-C:\Users\Arell\Downloads\EjemploMVC[1]\EjemploMVC\src\main\java\Presentacion\Presentacion.java
+/Users/abrilislas/Documents/ArquitecturaSoftware-ProyectoLoteria-Equipo1/EjemploMVC/src/main/java/Controlador/Controlador.java
+/Users/abrilislas/Documents/ArquitecturaSoftware-ProyectoLoteria-Equipo1/EjemploMVC/src/main/java/ModeloJuego/Carta.java
+/Users/abrilislas/Documents/ArquitecturaSoftware-ProyectoLoteria-Equipo1/EjemploMVC/src/main/java/ModeloJuego/Jugador.java
+/Users/abrilislas/Documents/ArquitecturaSoftware-ProyectoLoteria-Equipo1/EjemploMVC/src/main/java/ModeloJuego/ModeloJuego.java
+/Users/abrilislas/Documents/ArquitecturaSoftware-ProyectoLoteria-Equipo1/EjemploMVC/src/main/java/ModeloJuego/Tarjeta.java
+/Users/abrilislas/Documents/ArquitecturaSoftware-ProyectoLoteria-Equipo1/EjemploMVC/src/main/java/ModeloVista/ModeloVista.java
+/Users/abrilislas/Documents/ArquitecturaSoftware-ProyectoLoteria-Equipo1/EjemploMVC/src/main/java/Observer/Observer.java
+/Users/abrilislas/Documents/ArquitecturaSoftware-ProyectoLoteria-Equipo1/EjemploMVC/src/main/java/Presentacion/JFramePadre.java
+/Users/abrilislas/Documents/ArquitecturaSoftware-ProyectoLoteria-Equipo1/EjemploMVC/src/main/java/Presentacion/JPantallaJuego.java
+/Users/abrilislas/Documents/ArquitecturaSoftware-ProyectoLoteria-Equipo1/EjemploMVC/src/main/java/Presentacion/Presentacion.java
+/Users/abrilislas/Documents/ArquitecturaSoftware-ProyectoLoteria-Equipo1/EjemploMVC/src/main/java/main.java

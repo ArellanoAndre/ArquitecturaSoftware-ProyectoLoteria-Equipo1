@@ -1,6 +1,20 @@
+<<<<<<< Updated upstream
 Presentacion\Presentacion.class
 Controlador\Controlador.class
 main.class
 ModeloVista\ModeloVista.class
 Observer\Observer.class
 ModeloJuego\ModeloJuego.class
+=======
+Presentacion/JFramePadre.class
+Presentacion/Presentacion.class
+ModeloVista/ModeloVista.class
+main.class
+Presentacion/JPantallaJuego$3.class
+Presentacion/JPantallaJuego$1.class
+Observer/Observer.class
+ModeloJuego/ModeloJuego.class
+Controlador/Controlador.class
+Presentacion/JPantallaJuego.class
+Presentacion/JPantallaJuego$2.class
+>>>>>>> Stashed changes
