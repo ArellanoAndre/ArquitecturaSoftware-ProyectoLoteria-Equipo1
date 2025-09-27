@@ -59,22 +59,22 @@ public class Presentacion extends JFrame implements Observer {
         panelBotones.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JButton btnGallo = new JButton("El gallo");
-        JButton btnDama = new JButton("La dama");
-        JButton btnCatrin = new JButton("El catrín");
+        JButton btnDama = new JButton("El diablito");
+        JButton btnCatrin = new JButton("La dama");
 
         // Colores opcionales para cada boton
         btnGallo.setBackground(new Color(255, 230, 200));
         btnDama.setBackground(new Color(200, 230, 255));
-        btnCatrin.setBackground(new Color(200, 255, 200));
+        btnCatrin.setBackground(new Color(255, 100, 100));
 
         btnGallo.setFont(new Font("Arial", Font.BOLD, 16));
         btnDama.setFont(new Font("Arial", Font.BOLD, 16));
         btnCatrin.setFont(new Font("Arial", Font.BOLD, 16));
 
         // Events listeners a los botones para que envie al controlador en forma de texto para validarlo
-        btnGallo.addActionListener(e -> controlador.seleccionarCarta("El gallo"));
-        btnDama.addActionListener(e -> controlador.seleccionarCarta("La dama"));
-        btnCatrin.addActionListener(e -> controlador.seleccionarCarta("El catrín"));
+        btnGallo.addActionListener(e -> controlador.seleccionarCarta(0));
+        btnDama.addActionListener(e -> controlador.seleccionarCarta(1));
+        btnCatrin.addActionListener(e -> controlador.seleccionarCarta(2));
 
         panelBotones.add(btnGallo);
         panelBotones.add(btnDama);
