@@ -315,7 +315,6 @@ public class JPantallaJuego extends JFramePadre {
 
         panelTableroImagen.revalidate();
         panelTableroImagen.repaint();
-    
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
