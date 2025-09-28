@@ -4,6 +4,8 @@
  */
 package Presentacion;
 
+import java.awt.BorderLayout;
+import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -297,9 +299,22 @@ public class JPantallaJuego extends JFramePadre {
         java.awt.EventQueue.invokeLater(() -> new JPantallaJuego().setVisible(true));
     }
     private void deslpegarImagenTablero(){
-        ImageIcon imagenTablero = new ImageIcon("/Users/abrilislas/Documents/ArquitecturaSoftware-ProyectoLoteria-Equipo1/EjemploMVC[1]/EjemploMVC/src/main/java/Presentacion/Tablero01.jpeg"); 
-        JLabel labelTablero = new JLabel(imagenTablero);
-        this.panelTableroImagen.add(labelTablero);
+        ImageIcon iconoOriginal = new ImageIcon(getClass().getResource("/img/Tablero01.png"));
+
+        Image imgEscalada = iconoOriginal.getImage().getScaledInstance(
+                panelTableroImagen.getWidth(),
+                panelTableroImagen.getHeight(),
+                Image.SCALE_SMOOTH
+        );
+
+        JLabel labelTablero = new JLabel(new ImageIcon(imgEscalada));
+        labelTablero.setSize(panelTableroImagen.getSize());
+
+        panelTableroImagen.setLayout(new BorderLayout());
+        panelTableroImagen.add(labelTablero, BorderLayout.CENTER);
+
+        panelTableroImagen.revalidate();
+        panelTableroImagen.repaint();
     
     }
 
