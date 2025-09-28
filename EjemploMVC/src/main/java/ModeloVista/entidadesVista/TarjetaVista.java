@@ -2,26 +2,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package ModeloJuego;
+package ModeloVista.entidadesVista;
+
+import ModeloJuego.*;
 
 /**
  *
  * @author rodri
  */
-public class Tarjeta {
+public class TarjetaVista {
 
-    private Carta[] casillas;   // 4x4
     private boolean[] marcadas; // si la carta fue marcada
     // imagen de toda la tarjeta
 
-    public Tarjeta(Carta[] casillas) {
-        this.casillas = casillas;
+    public TarjetaVista(CartaVista[] casillas) {
         this.marcadas = new boolean[casillas.length];
     }
 
-    public Carta getCasilla(int numCasilla) {
-        return casillas[numCasilla];
-    }
     
     public void marcarCasilla(int numCasilla) {
         marcadas[numCasilla] = true;
@@ -31,13 +28,9 @@ public class Tarjeta {
         return marcadas;
     }
 
-    public Carta[] getCasillas() {
-        return casillas;
-    }
-
     @Override
     public String toString() {
-        return "Tarjeta{" + "casillas=" + casillas + ", marcadas=" + marcadas + '}';
+        return "Tarjeta{" + "marcadas= " + marcadas + '}';
     }
 
 }

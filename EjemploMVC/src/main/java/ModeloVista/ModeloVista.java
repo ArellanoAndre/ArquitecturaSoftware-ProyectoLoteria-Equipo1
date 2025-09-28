@@ -1,7 +1,7 @@
 package ModeloVista;
 
 // ====== MODELO VISTA (Puente entre ModeloJuego y Presentacion) ======
-import ModeloJuego.Carta;
+import ModeloJuego.entidades.Carta;
 import java.util.ArrayList;
 import java.util.List;
 import ModeloJuego.ModeloJuego;

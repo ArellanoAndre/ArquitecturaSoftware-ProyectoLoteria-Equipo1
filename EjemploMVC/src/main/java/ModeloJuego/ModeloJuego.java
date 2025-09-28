@@ -1,5 +1,8 @@
 package ModeloJuego;
 
+import ModeloJuego.entidades.Jugador;
+import ModeloJuego.entidades.Carta;
+import ModeloJuego.entidades.Tarjeta;
 import ModeloVista.ModeloVista;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,18 +17,16 @@ public class ModeloJuego {
     private List<Carta> mazo;
     private Jugador jugador;
     private Carta cartaActual;
-    private int marcador;
-    private int contador;
+    private int marcador = 0;
+    private int contador = 0;
     private ModeloVista modeloVista;
     private Timer timer;
 
     public ModeloJuego(ModeloVista modeloVista) {
         this.modeloVista = modeloVista;
-        contador = 0;
         mazo = crearMazo();
         jugador = crearJugador(mazo);
         barajear();
-        marcador = 0;
     }
 
     //Inicia el juego enviandole una carta al modeloVista y despues lo vuelve a ejecutar repetidamente segun el tiempo indicado.
@@ -50,7 +51,7 @@ public class ModeloJuego {
 
     // Validación de la carta seleccionada y actualización del marcador
     public void verificarCarta(int cartaSeleccionada) {
-        int casilla = jugador.getTarjeta().getCasilla(cartaSeleccionada).getNumCarta();
+        int casilla = jugador.getTarjeta().getCasilla(cartaSeleccionada);
         if (casilla == cartaActual.getNumCarta()){
             marcador++;
             jugador.getTarjeta().marcarCasilla(cartaSeleccionada);
@@ -98,7 +99,7 @@ public class ModeloJuego {
     }
 
     private Jugador crearJugador(List<Carta> mazo) {
-        Carta[] casillas = {mazo.get(0), mazo.get(1), mazo.get(2)};
+        int[] casillas = {mazo.get(0).getNumCarta(), mazo.get(1).getNumCarta(), mazo.get(2).getNumCarta()};
 
         Tarjeta tarjetaPrueba = new Tarjeta(casillas);
         Jugador jugador1 = new Jugador("Rodri", tarjetaPrueba, marcador);
