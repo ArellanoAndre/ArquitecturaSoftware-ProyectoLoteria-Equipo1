@@ -13,6 +13,7 @@ public class Carta {
     private int numCarta;
     private String nombreCarta;
     private boolean activada;
+    // poner imagen 
 
     public Carta(int numCarta, String nombreCarta) {
         this.numCarta = numCarta;

@@ -12,6 +12,7 @@ public class Tarjeta {
 
     private Carta[] casillas;   // 4x4
     private boolean[] marcadas; // si la carta fue marcada
+    // imagen de toda la tarjeta
 
     public Tarjeta(Carta[] casillas) {
         this.casillas = casillas;

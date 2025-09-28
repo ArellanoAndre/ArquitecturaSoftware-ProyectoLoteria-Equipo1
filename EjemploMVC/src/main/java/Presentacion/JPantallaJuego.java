@@ -39,20 +39,16 @@ public class JPantallaJuego extends JFramePadre {
         panelJugadorPrincipal = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         labelPuntaje = new javax.swing.JLabel();
-        panelLinea1 = new javax.swing.JPanel();
         panelCartaImg = new javax.swing.JPanel();
         panelCartaTexto = new javax.swing.JPanel();
         labelNombreCartaActual = new javax.swing.JLabel();
         labelProximaCarta = new javax.swing.JLabel();
         labelTimerProximaCarta = new javax.swing.JLabel();
-        panelLinea = new javax.swing.JPanel();
         panelBotones = new javax.swing.JPanel();
         btnGritarJugada = new javax.swing.JButton();
         btnGanarLoteria = new javax.swing.JButton();
         panelJugadoresSecundarios = new javax.swing.JPanel();
         btnAbandonarPartida = new javax.swing.JButton();
-
-        getContentPane().setLayout(new java.awt.BorderLayout());
 
         jPanelFondo.setBackground(new java.awt.Color(255, 250, 242));
 
@@ -79,21 +75,6 @@ public class JPantallaJuego extends JFramePadre {
         labelPuntaje.setForeground(new java.awt.Color(102, 102, 102));
         labelPuntaje.setText("Puntaje: 0000.00");
 
-        panelLinea1.setBackground(new java.awt.Color(153, 153, 153));
-        panelLinea1.setPreferredSize(new java.awt.Dimension(163, 1));
-        panelLinea1.setSize(new java.awt.Dimension(1, 110));
-
-        javax.swing.GroupLayout panelLinea1Layout = new javax.swing.GroupLayout(panelLinea1);
-        panelLinea1.setLayout(panelLinea1Layout);
-        panelLinea1Layout.setHorizontalGroup(
-            panelLinea1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panelLinea1Layout.setVerticalGroup(
-            panelLinea1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1, Short.MAX_VALUE)
-        );
-
         javax.swing.GroupLayout panelJugadorPrincipalLayout = new javax.swing.GroupLayout(panelJugadorPrincipal);
         panelJugadorPrincipal.setLayout(panelJugadorPrincipalLayout);
         panelJugadorPrincipalLayout.setHorizontalGroup(
@@ -101,22 +82,16 @@ public class JPantallaJuego extends JFramePadre {
             .addGroup(panelJugadorPrincipalLayout.createSequentialGroup()
                 .addGap(106, 106, 106)
                 .addGroup(panelJugadorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelJugadorPrincipalLayout.createSequentialGroup()
-                        .addGroup(panelJugadorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelPuntaje)
-                            .addComponent(jLabel1))
-                        .addGap(0, 177, Short.MAX_VALUE))
-                    .addComponent(panelLinea1, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(labelPuntaje)
+                    .addComponent(jLabel1))
+                .addContainerGap(185, Short.MAX_VALUE))
         );
         panelJugadorPrincipalLayout.setVerticalGroup(
             panelJugadorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelJugadorPrincipalLayout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelLinea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(13, 13, 13)
                 .addComponent(labelPuntaje)
                 .addContainerGap(19, Short.MAX_VALUE))
         );
@@ -147,44 +122,26 @@ public class JPantallaJuego extends JFramePadre {
         labelTimerProximaCarta.setForeground(new java.awt.Color(255, 102, 102));
         labelTimerProximaCarta.setText("00:00");
 
-        panelLinea.setBackground(new java.awt.Color(153, 153, 153));
-        panelLinea.setPreferredSize(new java.awt.Dimension(163, 1));
-        panelLinea.setSize(new java.awt.Dimension(2, 110));
-
-        javax.swing.GroupLayout panelLineaLayout = new javax.swing.GroupLayout(panelLinea);
-        panelLinea.setLayout(panelLineaLayout);
-        panelLineaLayout.setHorizontalGroup(
-            panelLineaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panelLineaLayout.setVerticalGroup(
-            panelLineaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1, Short.MAX_VALUE)
-        );
-
         javax.swing.GroupLayout panelCartaTextoLayout = new javax.swing.GroupLayout(panelCartaTexto);
         panelCartaTexto.setLayout(panelCartaTextoLayout);
         panelCartaTextoLayout.setHorizontalGroup(
             panelCartaTextoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCartaTextoLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addGroup(panelCartaTextoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(panelLinea, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                .addGroup(panelCartaTextoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelCartaTextoLayout.createSequentialGroup()
                         .addComponent(labelProximaCarta)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelTimerProximaCarta))
                     .addComponent(labelNombreCartaActual))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         panelCartaTextoLayout.setVerticalGroup(
             panelCartaTextoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCartaTextoLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(labelNombreCartaActual)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelLinea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
+                .addGap(11, 11, 11)
                 .addGroup(panelCartaTextoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelProximaCarta)
                     .addComponent(labelTimerProximaCarta))
@@ -361,8 +318,6 @@ public class JPantallaJuego extends JFramePadre {
     private javax.swing.JPanel panelCartaTexto;
     private javax.swing.JPanel panelJugadorPrincipal;
     private javax.swing.JPanel panelJugadoresSecundarios;
-    private javax.swing.JPanel panelLinea;
-    private javax.swing.JPanel panelLinea1;
     private javax.swing.JPanel panelTableroImagen;
     // End of variables declaration//GEN-END:variables
 }
