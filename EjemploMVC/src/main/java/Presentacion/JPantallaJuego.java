@@ -21,7 +21,8 @@ public class JPantallaJuego extends JFramePadre {
     public JPantallaJuego() {
         super();
         initComponents();
-        despegarImagenTablero();
+        deslpegarImagenTablero();
+        setLocationRelativeTo(null);  
     }
 
     /**
@@ -39,7 +40,6 @@ public class JPantallaJuego extends JFramePadre {
         jLabel1 = new javax.swing.JLabel();
         labelPuntaje = new javax.swing.JLabel();
         panelLinea1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         panelCartaImg = new javax.swing.JPanel();
         panelCartaTexto = new javax.swing.JPanel();
         labelNombreCartaActual = new javax.swing.JLabel();
@@ -52,7 +52,7 @@ public class JPantallaJuego extends JFramePadre {
         panelJugadoresSecundarios = new javax.swing.JPanel();
         btnAbandonarPartida = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new java.awt.BorderLayout());
 
         jPanelFondo.setBackground(new java.awt.Color(255, 250, 242));
 
@@ -94,16 +94,12 @@ public class JPantallaJuego extends JFramePadre {
             .addGap(0, 1, Short.MAX_VALUE)
         );
 
-        jLabel2.setText("(imgAvatar)");
-
         javax.swing.GroupLayout panelJugadorPrincipalLayout = new javax.swing.GroupLayout(panelJugadorPrincipal);
         panelJugadorPrincipal.setLayout(panelJugadorPrincipalLayout);
         panelJugadorPrincipalLayout.setHorizontalGroup(
             panelJugadorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelJugadorPrincipalLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
+                .addGap(106, 106, 106)
                 .addGroup(panelJugadorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelJugadorPrincipalLayout.createSequentialGroup()
                         .addGroup(panelJugadorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -117,12 +113,9 @@ public class JPantallaJuego extends JFramePadre {
             panelJugadorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelJugadorPrincipalLayout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addGroup(panelJugadorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panelJugadorPrincipalLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panelLinea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel2))
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelLinea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(labelPuntaje)
                 .addContainerGap(19, Short.MAX_VALUE))
@@ -346,8 +339,8 @@ public class JPantallaJuego extends JFramePadre {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new JPantallaJuego().setVisible(true));
     }
-    private void despegarImagenTablero(){
-        ImageIcon imagenTablero = new ImageIcon("'/Users/abrilislas/Documents/ArquitecturaSoftware-ProyectoLoteria-Equipo1/EjemploMVC[1]/EjemploMVC/src/main/java/Presentacion/Tablero01.jpeg'"); 
+    private void deslpegarImagenTablero(){
+        ImageIcon imagenTablero = new ImageIcon("/Users/abrilislas/Documents/ArquitecturaSoftware-ProyectoLoteria-Equipo1/EjemploMVC[1]/EjemploMVC/src/main/java/Presentacion/Tablero01.jpeg"); 
         JLabel labelTablero = new JLabel(imagenTablero);
         this.panelTableroImagen.add(labelTablero);
     
@@ -358,7 +351,6 @@ public class JPantallaJuego extends JFramePadre {
     private javax.swing.JButton btnGanarLoteria;
     private javax.swing.JButton btnGritarJugada;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanelFondo;
     private javax.swing.JLabel labelNombreCartaActual;
     private javax.swing.JLabel labelProximaCarta;

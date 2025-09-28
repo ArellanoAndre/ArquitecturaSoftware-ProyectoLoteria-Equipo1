@@ -16,9 +16,9 @@ public class JFramePadre extends javax.swing.JFrame {
      * Creates new form JFramePadre
      */
     public JFramePadre() {
+        ///initComponents();
         setLocationRelativeTo(null);
         this.setSize(1100,600);
-        initComponents();
     }
 
     /**
