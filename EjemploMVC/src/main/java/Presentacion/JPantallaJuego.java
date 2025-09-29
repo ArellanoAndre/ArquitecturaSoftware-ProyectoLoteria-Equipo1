@@ -299,7 +299,7 @@ public class JPantallaJuego extends JFramePadre {
         java.awt.EventQueue.invokeLater(() -> new JPantallaJuego().setVisible(true));
     }
     private void deslpegarImagenTablero(){
-        ImageIcon iconoOriginal = new ImageIcon(getClass().getResource("/img/Tablero01.png"));
+        ImageIcon iconoOriginal = new ImageIcon(getClass().getResource("/img/Tableros/Tablero01.png"));
 
         Image imgEscalada = iconoOriginal.getImage().getScaledInstance(
                 panelTableroImagen.getWidth(),
