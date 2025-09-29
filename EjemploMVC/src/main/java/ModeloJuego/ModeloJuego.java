@@ -25,8 +25,8 @@ public class ModeloJuego {
         this.modeloVista = modeloVista;
         this.controlVista = controlVista;
         mazo = crearMazo();
-//        jugador = crearJugador(mazo);
-//        controlVista.setJugadorPrincipal(jugador);
+        jugador = crearJugador(mazo);
+        controlVista.setJugadorPrincipal(jugador);
         barajear();
     }
 
@@ -94,12 +94,28 @@ public class ModeloJuego {
         Collections.shuffle(mazo);
     }
 
-//    private Jugador crearJugador(List<Carta> mazo) {
-//        int[] casillas = {mazo.get(0).getNumCarta(), mazo.get(1).getNumCarta(), mazo.get(2).getNumCarta()};
-//
-//        Tarjeta tarjetaPrueba = new Tarjeta(casillas);
-//        Jugador jugador1 = new Jugador("Rodri", tarjetaPrueba, marcador);
-//        return jugador1;
-//    }
+private Jugador crearJugador(List<Carta> mazo) {
+    // Crear un arreglo de 16 casillas con números de cartas del mazo
+    int[] casillas = new int[16];
+    for (int i = 0; i < 16; i++) {
+        casillas[i] = mazo.get(i).getNumCarta();
+    }
+
+    // Crear una tarjeta con las 16 casillas
+    Tarjeta tarjetaPrueba = new Tarjeta(casillas);
+
+    // Hardcodear un arreglo booleano de 16 posiciones con al menos 3 seleccionadas
+    boolean[] marcadas = new boolean[16];
+    marcadas[2] = true;  // Posición 3
+    marcadas[6] = true;  // Posición 7
+    marcadas[13] = true; // Posición 14
+
+    // Asignar las casillas marcadas a la tarjeta
+    tarjetaPrueba.setMarcadas(marcadas);
+
+    // Crear y devolver el jugador
+    Jugador jugador1 = new Jugador("Rodri", tarjetaPrueba, marcador);
+    return jugador1;
+}
 
 }

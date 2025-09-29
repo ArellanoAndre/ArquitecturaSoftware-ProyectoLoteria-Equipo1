@@ -24,6 +24,7 @@ public class main {
 
             // Iniciar estado del juego
             modeloJuego.iniciarJuego();
+            
         });
     }
 }

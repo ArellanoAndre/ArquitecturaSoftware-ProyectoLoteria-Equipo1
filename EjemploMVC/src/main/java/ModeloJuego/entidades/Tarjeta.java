@@ -40,4 +40,9 @@ public class Tarjeta {
         return "Tarjeta{" + "casillas=" + casillas + ", marcadas=" + marcadas + '}';
     }
 
+    public void setMarcadas(boolean[] marcadas) {
+        this.marcadas = marcadas;
+    }
+    
+
 }

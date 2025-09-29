@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package Presentacion;
 
 import Controlador.ControlSeleccionarCarta;
@@ -11,7 +8,10 @@ import Observer.Observer;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -29,8 +29,11 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         this.modeloVista = modeloVista;
         this.modeloVista.addObserver(this);
         initComponents();
-        deslpegarImagenTablero();
-        setLocationRelativeTo(null);  
+        panelTableroImagen.setPreferredSize(new java.awt.Dimension(350, 250)); // tamaño mínimo visible
+        inicializarTableroConMatriz(); // en lugar de deslpegarImagenTablero()
+        setLocationRelativeTo(null);
+        setResizable(false); // Evita que el usuario cambie el tamaño del JFrame
+         
         
     }
 
@@ -299,7 +302,8 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         panelTableroImagen.revalidate();
         panelTableroImagen.repaint();
     }
-    
+    //       actualizarCartasCorrectas(modeloVista.getJugadorPrincipal().getTarjeta().getMarcadas());
+
     @Override
     public void update() {
         // --- Actualizar carta en el panel MOVERSE EN CASO DE SEPARAR POR PANELES---
@@ -324,6 +328,167 @@ public class JPantallaJuego extends JFramePadre implements Observer {
             panelCartaImg.repaint();
         }
     }
+        // --- clase interna para mostrar la imagen escalada ---
+private static class ScaledImageComponent extends javax.swing.JComponent {
+    private final java.awt.Image image;
+    public ScaledImageComponent(java.awt.Image img) {
+        this.image = img;
+        setOpaque(false);
+    }
+    @Override
+    protected void paintComponent(java.awt.Graphics g) {
+        super.paintComponent(g);
+        if (image != null) {
+            int w = getWidth();
+            int h = getHeight();
+            g.drawImage(image, 0, 0, w, h, this);
+        }
+    }
+}
+
+private javax.swing.JLayeredPane layeredTablero;
+private javax.swing.JButton[][] botonesMatriz; // opcional para acceder luego
+
+private void inicializarTableroConMatriz() {
+    // Carga la imagen (no la escalamos aquí, la dibuja ScaledImageComponent)
+    java.net.URL url = getClass().getResource("/img/Tableros/Tablero01.png");
+    if (url == null) {
+        System.err.println("No se encontró la imagen /img/Tableros/Tablero01.png");
+        return;
+    }
+    java.awt.Image img = new javax.swing.ImageIcon(url).getImage();
+
+    // Componente que dibuja la imagen escalada automáticamente
+    ScaledImageComponent fondo = new ScaledImageComponent(img);
+
+    // Panel con GridLayout 4x4 para los botones (transparente)
+    JPanel panelMatriz = new JPanel(new java.awt.GridLayout(4, 4));
+    panelMatriz.setOpaque(false);
+
+    botonesMatriz = new javax.swing.JButton[4][4];
+    for (int r = 0; r < 4; r++) {
+        for (int c = 0; c < 4; c++) {
+            final int rf = r, cf = c;
+            JButton btn = new JButton();
+            // Apariencia transparente
+            btn.setContentAreaFilled(false);
+            btn.setBorderPainted(false);
+            btn.setOpaque(false);
+
+            // Acción al hacer clic: convierte a número (1-16) y envía al controlador
+            btn.addActionListener(e -> {
+                int posicion = (rf * 4) + cf + 1; // Convierte (fila, columna) a 1-16
+                ControlSeleccionarCarta controlador = new ControlSeleccionarCarta(modeloVista); // Instancia del controlador
+                controlador.seleccionarCarta(posicion);     // Envía la posición
+                System.out.println("Carta seleccionada: " + posicion); // Imprime la posición
+                // El Controlador decidirá si es correcta y lo notificará
+            });
+
+            botonesMatriz[r][c] = btn;
+            panelMatriz.add(btn);
+        }
+    }
+
+    // Crear JLayeredPane y añadir ambos componentes
+    layeredTablero = new JLayeredPane();
+    layeredTablero.setOpaque(false);
+
+    // Limpiar cualquier contenido previo del panel y añadir el layeredPane
+    panelTableroImagen.removeAll();
+    panelTableroImagen.setLayout(new BorderLayout());
+    panelTableroImagen.add(layeredTablero, BorderLayout.CENTER);
+
+    // Añadir componentes al layeredPane
+    layeredTablero.add(fondo, JLayeredPane.DEFAULT_LAYER);
+    layeredTablero.add(panelMatriz, JLayeredPane.PALETTE_LAYER);
+
+    // Cuando el panel cambie de tamaño, actualizamos bounds para ocupar todo el espacio
+    panelTableroImagen.addComponentListener(new java.awt.event.ComponentAdapter() {
+        @Override
+        public void componentResized(java.awt.event.ComponentEvent e) {
+            int w = panelTableroImagen.getWidth();
+            int h = panelTableroImagen.getHeight();
+            layeredTablero.setPreferredSize(new java.awt.Dimension(w, h));
+            layeredTablero.setBounds(0, 0, w, h);
+
+            fondo.setBounds(0, 0, w, h);           // Fondo escala internamente
+            panelMatriz.setBounds(0, 0, w, h);     // Panel con GridLayout ocupa todo el área
+            layeredTablero.revalidate();
+            layeredTablero.repaint();
+        }
+        @Override
+        public void componentShown(java.awt.event.ComponentEvent e) {
+            componentResized(e);
+        }
+    });
+
+    // Forzar primer ajuste
+    java.awt.EventQueue.invokeLater(() -> {
+        int w = panelTableroImagen.getWidth();
+        int h = panelTableroImagen.getHeight();
+        if (w > 0 && h > 0) {
+            layeredTablero.setBounds(0, 0, w, h);
+            fondo.setBounds(0, 0, w, h);
+            panelMatriz.setBounds(0, 0, w, h);
+        }
+    });
+
+    panelTableroImagen.revalidate();
+    panelTableroImagen.repaint();
+}
+
+
+
+public void actualizarCartasCorrectas(boolean[] cartasCorrectas) {
+    if (cartasCorrectas == null || cartasCorrectas.length != 16) {
+        return; // Validación básica para evitar errores
+    }
+
+    // Iterar sobre el arreglo booleano y actualizar los botones
+    for (int posicion = 0; posicion < 16; posicion++) {
+        if (cartasCorrectas[posicion]) {
+            // Convertir la posición (0-15) a índices de fila y columna (0-3)
+            int fila = posicion / 4;
+            int columna = posicion % 4;
+            JButton btn = botonesMatriz[fila][columna];
+            if (btn != null) {
+                btn.setOpaque(true);              // Activa la opacidad para mostrar el color
+                btn.setBackground(new java.awt.Color(0, 255, 0, 128)); // Verde
+                btn.setContentAreaFilled(true);   // Asegura que el fondo se vea
+                btn.repaint();                    // Fuerza la actualización visual
+            }
+        } else {
+            // Restaurar a estado transparente si no es correcta
+            int fila = posicion / 4;
+            int columna = posicion % 4;
+            JButton btn = botonesMatriz[fila][columna];
+            if (btn != null) {
+                btn.setOpaque(false);             // Desactiva la opacidad
+                btn.setContentAreaFilled(false);  // Restaura transparencia
+                btn.setBorderPainted(false);      // Asegura que no haya borde
+                btn.repaint();                    // Fuerza la actualización visual
+            }
+        }
+    }
+}
+public void resaltarCasillasMarcadas(boolean[] casillasMarcadas) {
+    if (casillasMarcadas == null || casillasMarcadas.length != 16) {
+        return; // Validación básica
+    }
+    for (int posicion = 0; posicion < 16; posicion++) {
+        if (casillasMarcadas[posicion]) {
+            int fila = posicion / 4;
+            int columna = posicion % 4;
+            JButton btn = botonesMatriz[fila][columna];
+            if (btn != null) {
+                btn.setOpaque(true);
+                btn.setBackground(new java.awt.Color(0, 255, 0, 128)); // Verde transparente 50%
+                btn.setContentAreaFilled(true);
+                btn.repaint();
+            }
+        }
+    }
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbandonarPartida;
