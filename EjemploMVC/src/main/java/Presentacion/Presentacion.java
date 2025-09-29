@@ -5,14 +5,14 @@
 package Presentacion;
 
 // ====== VISTA ======
-
-import Controlador.Controlador;
+import Controlador.ControlSeleccionarCarta;
 import ModeloVista.ModeloVista;
 import Observer.Observer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.Arrays;
 import javax.swing.BorderFactory;
 
 import javax.swing.JButton;
@@ -22,13 +22,18 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 public class Presentacion extends JFrame implements Observer {
+
     private JLabel lblCarta;
     private JLabel lblMarcador;
     private ModeloVista modeloVista;
 
+    JButton btnGallo;
+    JButton btnDama;
+    JButton btnCatrin;
+
     //basicamente todo es cosas irrelevantes de jframe de aqui para que no se vea tan gacho
     // ============================================================================================================
-    public Presentacion(ModeloVista modeloVista, Controlador controlador) {
+    public Presentacion(ModeloVista modeloVista, ControlSeleccionarCarta controlador) {
         this.modeloVista = modeloVista;
         this.modeloVista.addObserver(this);
 
@@ -58,9 +63,9 @@ public class Presentacion extends JFrame implements Observer {
         panelBotones.setLayout(new GridLayout(1, 3, 10, 10));
         panelBotones.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JButton btnGallo = new JButton("El gallo");
-        JButton btnDama = new JButton("El diablito");
-        JButton btnCatrin = new JButton("La dama");
+        this.btnGallo = new JButton("El gallo");
+        this.btnDama = new JButton("El diablito");
+        this.btnCatrin = new JButton("La dama");
 
         // Colores opcionales para cada boton
         btnGallo.setBackground(new Color(255, 230, 200));
@@ -90,6 +95,8 @@ public class Presentacion extends JFrame implements Observer {
     @Override
     public void update() {
         lblCarta.setText("Carta cantada: " + modeloVista.getCartaCantada());
-        lblMarcador.setText("Marcador: " + modeloVista.getMarcador());
+        boolean[] a = modeloVista.getJugadorPrincipal().getTarjeta().getMarcadas();
+        lblMarcador.setText(Arrays.toString(a));
     }
+
 }

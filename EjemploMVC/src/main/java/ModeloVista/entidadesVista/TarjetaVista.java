@@ -15,13 +15,12 @@ public class TarjetaVista {
     private boolean[] marcadas; // si la carta fue marcada
     // imagen de toda la tarjeta
 
-    public TarjetaVista(CartaVista[] casillas) {
-        this.marcadas = new boolean[casillas.length];
+    public TarjetaVista(boolean[] casillas) {
+        this.marcadas = casillas;
     }
 
-    
-    public void marcarCasilla(int numCasilla) {
-        marcadas[numCasilla] = true;
+    public void setMarcadas(boolean[] marcadas) {
+        this.marcadas = marcadas;
     }
 
     public boolean[] getMarcadas() {

@@ -1,22 +1,24 @@
-import Controlador.Controlador;
+
+import Controlador.ControlSeleccionarCarta;
 import ModeloJuego.ModeloJuego;
+import ModeloVista.ControlVista;
 import ModeloVista.ModeloVista;
 import Presentacion.Presentacion;
 import java.awt.BorderLayout;
 import javax.swing.*;
 import java.awt.FlowLayout;
 
-
-
 // ====== MAIN ======
 public class main {
+
     public static void main(String[] args) {
         // Ejecutar jframe y creacion de objetos
         SwingUtilities.invokeLater(() -> {
             ModeloVista modeloVista = new ModeloVista();
-            ModeloJuego modeloJuego = new ModeloJuego(modeloVista);
+            ControlVista controlVista = new ControlVista(modeloVista);
+            ModeloJuego modeloJuego = new ModeloJuego(modeloVista, controlVista);
             modeloVista.setModeloJuego(modeloJuego);
-            Controlador controlador = new Controlador(modeloVista, modeloJuego);
+            ControlSeleccionarCarta controlador = new ControlSeleccionarCarta(modeloVista);
             new Presentacion(modeloVista, controlador);
 
             // Iniciar estado del juego

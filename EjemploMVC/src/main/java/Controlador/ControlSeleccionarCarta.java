@@ -1,17 +1,15 @@
 package Controlador;
 
 // ====== CONTROLADOR ======
-import ModeloJuego.ModeloJuego;
 import ModeloVista.ModeloVista;
 
-public class Controlador {
+public class ControlSeleccionarCarta {
 
-    private ModeloVista modeloVista;
-    private ModeloJuego modeloJuego;
+    private final ModeloVista modeloVista;
 
-    public Controlador(ModeloVista modeloVista, ModeloJuego modeloJuego) {
+
+    public ControlSeleccionarCarta(ModeloVista modeloVista) {
         this.modeloVista = modeloVista;
-        this.modeloJuego = modeloJuego;
     }
 
     // Envia desde la PRESENTACION al modeloVista la carta seleccionada para despues ser validada

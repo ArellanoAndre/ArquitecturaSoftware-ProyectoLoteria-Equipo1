@@ -3,13 +3,11 @@ package ModeloJuego;
 import ModeloJuego.entidades.Jugador;
 import ModeloJuego.entidades.Carta;
 import ModeloJuego.entidades.Tarjeta;
+import ModeloVista.ControlVista;
 import ModeloVista.ModeloVista;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import javax.swing.Timer;
 
 public class ModeloJuego {
@@ -21,18 +19,21 @@ public class ModeloJuego {
     private int contador = 0;
     private ModeloVista modeloVista;
     private Timer timer;
+    private ControlVista controlVista;
 
-    public ModeloJuego(ModeloVista modeloVista) {
+    public ModeloJuego(ModeloVista modeloVista, ControlVista controlVista) {
         this.modeloVista = modeloVista;
+        this.controlVista = controlVista;
         mazo = crearMazo();
         jugador = crearJugador(mazo);
+        controlVista.setJugadorPrincipal(jugador);
         barajear();
     }
 
     //Inicia el juego enviandole una carta al modeloVista y despues lo vuelve a ejecutar repetidamente segun el tiempo indicado.
     public void iniciarJuego() {
         siguienteCarta();
-
+        
         // Cada segundo cambia la carta cantada
         timer = new Timer(2500, e -> siguienteCarta());
         timer.start();
@@ -52,13 +53,10 @@ public class ModeloJuego {
     // Validación de la carta seleccionada y actualización del marcador
     public void verificarCarta(int cartaSeleccionada) {
         int casilla = jugador.getTarjeta().getCasilla(cartaSeleccionada);
-        if (casilla == cartaActual.getNumCarta()){
-            marcador++;
+        if (casilla == cartaActual.getNumCarta()) {
             jugador.getTarjeta().marcarCasilla(cartaSeleccionada);
-            System.out.println(Arrays.toString(jugador.getTarjeta().getMarcadas()));
+            controlVista.actualizarTarjetaJugadorPrincipal(jugador.getTarjeta().getMarcadas());
         }
-        // Actualiza ModeloVista con estado actual
-        modeloVista.setMarcador(marcador);
     }
 
     //Regresa la carta actual del juego

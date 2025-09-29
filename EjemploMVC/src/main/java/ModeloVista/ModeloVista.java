@@ -5,14 +5,19 @@ import ModeloJuego.entidades.Carta;
 import java.util.ArrayList;
 import java.util.List;
 import ModeloJuego.ModeloJuego;
+import ModeloVista.entidadesVista.JugadorVista;
 import Observer.Observer;
 
 public class ModeloVista {
 
     private Carta cartaCantada;
     private int marcador;
+    private JugadorVista jugadorPrincipal;
     private List<Observer> observers = new ArrayList<>();
     private ModeloJuego modeloJuego;
+
+    public ModeloVista() {
+    }
 
     public void setModeloJuego(ModeloJuego modeloJuego) {
         this.modeloJuego = modeloJuego;
@@ -38,6 +43,20 @@ public class ModeloVista {
         this.marcador = marcador;
         notificar();
     }
+
+    public JugadorVista getJugadorPrincipal() {
+        return jugadorPrincipal;
+    }
+
+    public void setJugadorPrincipal(JugadorVista jugadorPrincipal) {
+        this.jugadorPrincipal = jugadorPrincipal;
+    }
+
+    public void actualizarTarjetaJugadorP (boolean[] casillas){
+        jugadorPrincipal.getTarjeta().setMarcadas(casillas);
+        notificar();
+    }
+    
 
     // Método llamado por el controlador cuando se selecciona una carta. este despues lo envia al modeloJuego donde maneja la logica de validacion.
     public void seleccionarCarta(int pos) {
