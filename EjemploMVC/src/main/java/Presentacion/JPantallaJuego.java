@@ -4,6 +4,7 @@ package Presentacion;
 import Controlador.ControlSeleccionarCarta;
 import ModeloVista.ModeloVista;
 import ModeloVista.entidadesVista.CartaVista;
+import ModeloVista.entidadesVista.JugadorVista;
 import Observer.Observer;
 import java.awt.BorderLayout;
 import java.awt.Image;
@@ -12,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -284,50 +286,44 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAbandonarPartidaActionPerformed
 
-    private void deslpegarImagenTablero(){
-        ImageIcon iconoOriginal = new ImageIcon(getClass().getResource("/img/Tableros/Tablero01.png"));
 
+
+private void actualizarCartaCantada() {
+    CartaVista cartaActual = modeloVista.getCartaCantada();
+    if (cartaActual != null) {
+        ImageIcon iconoOriginal = new ImageIcon(getClass().getResource(cartaActual.getRuta()));
         Image imgEscalada = iconoOriginal.getImage().getScaledInstance(
-                panelTableroImagen.getWidth(),
-                panelTableroImagen.getHeight(),
+                panelCartaImg.getWidth(),
+                panelCartaImg.getHeight(),
                 Image.SCALE_SMOOTH
         );
 
-        JLabel labelTablero = new JLabel(new ImageIcon(imgEscalada));
-        labelTablero.setSize(panelTableroImagen.getSize());
-
-        panelTableroImagen.setLayout(new BorderLayout());
-        panelTableroImagen.add(labelTablero, BorderLayout.CENTER);
-
-        panelTableroImagen.revalidate();
-        panelTableroImagen.repaint();
-    }
-    //       actualizarCartasCorrectas(modeloVista.getJugadorPrincipal().getTarjeta().getMarcadas());
-
-    @Override
-    public void update() {
-        // --- Actualizar carta en el panel MOVERSE EN CASO DE SEPARAR POR PANELES---
-        CartaVista cartaActual = modeloVista.getCartaCantada();
-        if (cartaActual != null) {
-            ImageIcon iconoOriginal = new ImageIcon(getClass().getResource(cartaActual.getRuta()));
-
-            Image imgEscalada = iconoOriginal.getImage().getScaledInstance(
-                    panelCartaImg.getWidth(),
-                    panelCartaImg.getHeight(),
-                    Image.SCALE_SMOOTH
-            );
-
-            JLabel labelCarta = new JLabel(new ImageIcon(imgEscalada));
-            labelCarta.setSize(panelCartaImg.getSize());
-            
-            panelCartaImg.removeAll(); // limpia el panel antes de agregar
+        // En lugar de removeAll(), reutiliza un JLabel fijo
+        if (panelCartaImg.getComponentCount() == 0 || !(panelCartaImg.getComponent(0) instanceof JLabel)) {
+            panelCartaImg.removeAll();
+            JLabel labelCarta = new JLabel();
+            labelCarta.setHorizontalAlignment(SwingConstants.CENTER);
             panelCartaImg.setLayout(new BorderLayout());
             panelCartaImg.add(labelCarta, BorderLayout.CENTER);
-            labelNombreCartaActual.setText(cartaActual.getNombreCarta());
-            panelCartaImg.revalidate();
-            panelCartaImg.repaint();
         }
+
+        JLabel labelCarta = (JLabel) panelCartaImg.getComponent(0);
+        labelCarta.setIcon(new ImageIcon(imgEscalada));
+        labelNombreCartaActual.setText(cartaActual.getNombreCarta());
+
+        panelCartaImg.revalidate();
+        panelCartaImg.repaint();
     }
+}
+
+   @Override
+public void update() {
+    // Procesar las casillas marcadas del jugador
+    procesarCasillasMarcadas();
+
+    // Actualizar la carta cantada
+    actualizarCartaCantada();
+}
         // --- clase interna para mostrar la imagen escalada ---
 private static class ScaledImageComponent extends javax.swing.JComponent {
     private final java.awt.Image image;
@@ -335,6 +331,7 @@ private static class ScaledImageComponent extends javax.swing.JComponent {
         this.image = img;
         setOpaque(false);
     }
+    
     @Override
     protected void paintComponent(java.awt.Graphics g) {
         super.paintComponent(g);
@@ -350,18 +347,16 @@ private javax.swing.JLayeredPane layeredTablero;
 private javax.swing.JButton[][] botonesMatriz; // opcional para acceder luego
 
 private void inicializarTableroConMatriz() {
-    // Carga la imagen (no la escalamos aquí, la dibuja ScaledImageComponent)
+    // Cargar la imagen de fondo una vez al iniciar
     java.net.URL url = getClass().getResource("/img/Tableros/Tablero01.png");
     if (url == null) {
         System.err.println("No se encontró la imagen /img/Tableros/Tablero01.png");
         return;
     }
     java.awt.Image img = new javax.swing.ImageIcon(url).getImage();
-
-    // Componente que dibuja la imagen escalada automáticamente
     ScaledImageComponent fondo = new ScaledImageComponent(img);
 
-    // Panel con GridLayout 4x4 para los botones (transparente)
+    // Panel con GridLayout 4x4 para los botones
     JPanel panelMatriz = new JPanel(new java.awt.GridLayout(4, 4));
     panelMatriz.setOpaque(false);
 
@@ -370,18 +365,20 @@ private void inicializarTableroConMatriz() {
         for (int c = 0; c < 4; c++) {
             final int rf = r, cf = c;
             JButton btn = new JButton();
-            // Apariencia transparente
+            // Apariencia transparente, sin imágenes
+            btn.setRolloverEnabled(false);
+
+            btn.setIcon(null);
             btn.setContentAreaFilled(false);
             btn.setBorderPainted(false);
             btn.setOpaque(false);
 
-            // Acción al hacer clic: convierte a número (1-16) y envía al controlador
+            // Acción al hacer clic usando el controlador del constructor
             btn.addActionListener(e -> {
-                int posicion = (rf * 4) + cf + 1; // Convierte (fila, columna) a 1-16
-                ControlSeleccionarCarta controlador = new ControlSeleccionarCarta(modeloVista); // Instancia del controlador
-                controlador.seleccionarCarta(posicion);     // Envía la posición
-                System.out.println("Carta seleccionada: " + posicion); // Imprime la posición
-                // El Controlador decidirá si es correcta y lo notificará
+                int posicion = (rf * 4) + cf + 1;
+                ControlSeleccionarCarta controlador = new ControlSeleccionarCarta(modeloVista);
+                controlador.seleccionarCarta(posicion);
+                System.out.println("Carta seleccionada: " + posicion);
             });
 
             botonesMatriz[r][c] = btn;
@@ -389,41 +386,33 @@ private void inicializarTableroConMatriz() {
         }
     }
 
-    // Crear JLayeredPane y añadir ambos componentes
+    // Configurar JLayeredPane
     layeredTablero = new JLayeredPane();
     layeredTablero.setOpaque(false);
 
-    // Limpiar cualquier contenido previo del panel y añadir el layeredPane
+    // Limpiar y añadir al panel
     panelTableroImagen.removeAll();
     panelTableroImagen.setLayout(new BorderLayout());
     panelTableroImagen.add(layeredTablero, BorderLayout.CENTER);
 
-    // Añadir componentes al layeredPane
+    // Añadir componentes al layeredPane (fondo estático)
     layeredTablero.add(fondo, JLayeredPane.DEFAULT_LAYER);
     layeredTablero.add(panelMatriz, JLayeredPane.PALETTE_LAYER);
 
-    // Cuando el panel cambie de tamaño, actualizamos bounds para ocupar todo el espacio
+    // Ajuste de tamaño solo para mantener proporciones, sin repaint
     panelTableroImagen.addComponentListener(new java.awt.event.ComponentAdapter() {
         @Override
         public void componentResized(java.awt.event.ComponentEvent e) {
             int w = panelTableroImagen.getWidth();
             int h = panelTableroImagen.getHeight();
-            layeredTablero.setPreferredSize(new java.awt.Dimension(w, h));
             layeredTablero.setBounds(0, 0, w, h);
-
-            fondo.setBounds(0, 0, w, h);           // Fondo escala internamente
-            panelMatriz.setBounds(0, 0, w, h);     // Panel con GridLayout ocupa todo el área
-            layeredTablero.revalidate();
-            layeredTablero.repaint();
-        }
-        @Override
-        public void componentShown(java.awt.event.ComponentEvent e) {
-            componentResized(e);
+            fondo.setBounds(0, 0, w, h);
+            panelMatriz.setBounds(0, 0, w, h);
         }
     });
 
-    // Forzar primer ajuste
     java.awt.EventQueue.invokeLater(() -> {
+        
         int w = panelTableroImagen.getWidth();
         int h = panelTableroImagen.getHeight();
         if (w > 0 && h > 0) {
@@ -431,62 +420,48 @@ private void inicializarTableroConMatriz() {
             fondo.setBounds(0, 0, w, h);
             panelMatriz.setBounds(0, 0, w, h);
         }
-    });
-
-    panelTableroImagen.revalidate();
-    panelTableroImagen.repaint();
+    }
+    );
 }
-
 
 
 public void actualizarCartasCorrectas(boolean[] cartasCorrectas) {
     if (cartasCorrectas == null || cartasCorrectas.length != 16) {
-        return; // Validación básica para evitar errores
+        return;
     }
-
-    // Iterar sobre el arreglo booleano y actualizar los botones
     for (int posicion = 0; posicion < 16; posicion++) {
-        if (cartasCorrectas[posicion]) {
-            // Convertir la posición (0-15) a índices de fila y columna (0-3)
-            int fila = posicion / 4;
-            int columna = posicion % 4;
-            JButton btn = botonesMatriz[fila][columna];
-            if (btn != null) {
-                btn.setOpaque(true);              // Activa la opacidad para mostrar el color
-                btn.setBackground(new java.awt.Color(0, 255, 0, 128)); // Verde
-                btn.setContentAreaFilled(true);   // Asegura que el fondo se vea
-                btn.repaint();                    // Fuerza la actualización visual
-            }
-        } else {
-            // Restaurar a estado transparente si no es correcta
-            int fila = posicion / 4;
-            int columna = posicion % 4;
-            JButton btn = botonesMatriz[fila][columna];
-            if (btn != null) {
-                btn.setOpaque(false);             // Desactiva la opacidad
-                btn.setContentAreaFilled(false);  // Restaura transparencia
-                btn.setBorderPainted(false);      // Asegura que no haya borde
-                btn.repaint();                    // Fuerza la actualización visual
+        int fila = posicion / 4;
+        int columna = posicion % 4;
+        JButton btn = botonesMatriz[fila][columna];
+        if (btn != null) {
+            java.awt.Color currentColor = btn.getBackground(); // Para referencia, aunque no se usará setBackground
+            if (cartasCorrectas[posicion]) {
+                // Crear o mostrar un panel interno verde si no está visible
+                if (btn.getComponentCount() == 0) {
+                    JPanel colorPanel = new JPanel();
+                    colorPanel.setBackground(new java.awt.Color(0, 255, 0, 128));
+                    colorPanel.setOpaque(true);
+                    btn.setLayout(new java.awt.BorderLayout());
+                    btn.add(colorPanel, java.awt.BorderLayout.CENTER);
+                } else if (!btn.getComponent(0).isVisible()) {
+                    btn.getComponent(0).setVisible(true);
+                }
+                System.out.println("Pintando casilla " + (posicion + 1) + " de verde");
+            } else {
+                // Ocultar el panel interno si existe y la casilla no está marcada
+                if (btn.getComponentCount() > 0 && btn.getComponent(0).isVisible()) {
+                    btn.getComponent(0).setVisible(false);
+                    System.out.println("Restaurando casilla " + (posicion + 1) + " a transparente");
+                }
             }
         }
     }
 }
-public void resaltarCasillasMarcadas(boolean[] casillasMarcadas) {
-    if (casillasMarcadas == null || casillasMarcadas.length != 16) {
-        return; // Validación básica
-    }
-    for (int posicion = 0; posicion < 16; posicion++) {
-        if (casillasMarcadas[posicion]) {
-            int fila = posicion / 4;
-            int columna = posicion % 4;
-            JButton btn = botonesMatriz[fila][columna];
-            if (btn != null) {
-                btn.setOpaque(true);
-                btn.setBackground(new java.awt.Color(0, 255, 0, 128)); // Verde transparente 50%
-                btn.setContentAreaFilled(true);
-                btn.repaint();
-            }
-        }
+private void procesarCasillasMarcadas() {
+    JugadorVista jugadorPrincipal = modeloVista.getJugadorPrincipal();
+    if (jugadorPrincipal != null) {
+        boolean[] casillasMarcadas = jugadorPrincipal.getTarjeta().getMarcadas();
+        actualizarCartasCorrectas(casillasMarcadas);
     }
 }
 

@@ -50,14 +50,35 @@ public class ModeloJuego {
         }
     }
 
-    // Validación de la carta seleccionada y actualización del marcador
-    public void verificarCarta(int cartaSeleccionada) {
-        int casilla = jugador.getTarjeta().getCasilla(cartaSeleccionada);
-        if (casilla == cartaActual.getNumCarta()) {
-            jugador.getTarjeta().marcarCasilla(cartaSeleccionada);
-            controlVista.actualizarTarjetaJugadorPrincipal(jugador.getTarjeta().getMarcadas());
+public void verificarCarta(int cartaSeleccionada) {
+    // Ajustar la posición a índice (de 1-16 a 0-15)
+    int indice = cartaSeleccionada - 1;
+    
+    // Obtener el arreglo de casillas de la tarjeta
+    int[] casillas = jugador.getTarjeta().getCasillas();
+    
+    // Verificar que el índice sea válido
+    if (indice >= 0 && indice < casillas.length) {
+        // Obtener el estado de las casillas marcadas
+        boolean[] marcadas = jugador.getTarjeta().getMarcadas();
+        
+        // Validar que la casilla no esté ya marcada
+        if (!marcadas[indice]) {
+            // Comparar el número de la carta cantada con el valor en la posición seleccionada
+            if (cartaActual != null && casillas[indice] == cartaActual.getNumCarta()) {
+                jugador.getTarjeta().marcarCasilla(cartaSeleccionada - 1);
+                controlVista.actualizarTarjetaJugadorPrincipal(jugador.getTarjeta().getMarcadas());
+                System.out.println("ModeloJuego.si");
+            } else {
+                System.out.println("ModeloJuego.no - No coincide la carta cantada (" + cartaActual.getNumCarta() + ") con la casilla " + casillas[indice]);
+            }
+        } else {
+            System.out.println("ModeloJuego.skip - Casilla " + cartaSeleccionada + " ya está marcada");
         }
+    } else {
+        System.out.println("ModeloJuego.error - Índice inválido: " + indice);
     }
+}
 
     //Regresa la carta actual del juego
     public Carta getCartaActual() {
@@ -96,19 +117,12 @@ public class ModeloJuego {
 
 private Jugador crearJugador(List<Carta> mazo) {
     // Crear un arreglo de 16 casillas con números de cartas del mazo
-    int[] casillas = new int[16];
-    for (int i = 0; i < 16; i++) {
-        casillas[i] = mazo.get(i).getNumCarta();
-    }
+    int[] casillas = {46,6,38,3,8,11,33,35,21,54,50,29,30,40,36,26};
 
     // Crear una tarjeta con las 16 casillas
     Tarjeta tarjetaPrueba = new Tarjeta(casillas);
 
-    // Hardcodear un arreglo booleano de 16 posiciones con al menos 3 seleccionadas
     boolean[] marcadas = new boolean[16];
-    marcadas[2] = true;  // Posición 3
-    marcadas[6] = true;  // Posición 7
-    marcadas[13] = true; // Posición 14
 
     // Asignar las casillas marcadas a la tarjeta
     tarjetaPrueba.setMarcadas(marcadas);

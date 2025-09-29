@@ -16,4 +16,6 @@ public class ControlSeleccionarCarta {
     public void seleccionarCarta(int pos) {
         modeloVista.seleccionarCarta(pos);
     }
+    
+    
 }

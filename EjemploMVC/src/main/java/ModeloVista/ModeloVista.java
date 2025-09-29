@@ -19,6 +19,7 @@ public class ModeloVista {
     public ModeloVista() {
     }
 
+        
     public void setModeloJuego(ModeloJuego modeloJuego) {
         this.modeloJuego = modeloJuego;
     }
@@ -74,5 +75,6 @@ public class ModeloVista {
             o.update();
         }
     }
+    
     
 }
