@@ -12,11 +12,12 @@ public class CartaVista {
     
     private int numCarta;
     private String nombreCarta;
-    // poner imagen 
+    private String ruta;
 
-    public CartaVista(int numCarta, String nombreCarta) {
+    public CartaVista(int numCarta, String nombreCarta, String ruta) {
         this.numCarta = numCarta;
         this.nombreCarta = nombreCarta;
+        this.ruta = ruta;
     }
 
     public int getNumCarta() {
@@ -34,6 +35,16 @@ public class CartaVista {
     public void setNombreCarta(String nombreCarta) {
         this.nombreCarta = nombreCarta;
     }
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String url) {
+        this.ruta = url;
+    }
+    
+    
 
     @Override
     public String toString() {

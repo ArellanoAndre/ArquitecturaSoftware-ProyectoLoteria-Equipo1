@@ -1,16 +1,16 @@
 package ModeloVista;
 
 // ====== MODELO VISTA (Puente entre ModeloJuego y Presentacion) ======
-import ModeloJuego.entidades.Carta;
 import java.util.ArrayList;
 import java.util.List;
 import ModeloJuego.ModeloJuego;
+import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import Observer.Observer;
 
 public class ModeloVista {
 
-    private Carta cartaCantada;
+    private CartaVista cartaCantada;
     private int marcador;
     private JugadorVista jugadorPrincipal;
     private List<Observer> observers = new ArrayList<>();
@@ -24,14 +24,14 @@ public class ModeloVista {
     }
 
     //Metodo que usa el modeloJuego para enviarle una carta nueva, este despues usa notificar para que se muestre en pantalla la nueva carta
-    public void setCartaCantada(Carta carta) {
+    public void setCartaCantada(CartaVista carta) {
         cartaCantada = carta;
         notificar();
     }
 
     // Metodo que usa la PRESENTACION para obtener la carta cantada ACTUAL. se usa despues de que se le notifica a la presentacion para que esta recupere informacion nueva
-    public String getCartaCantada() {
-        return cartaCantada.getNombreCarta();
+    public CartaVista getCartaCantada() {
+        return cartaCantada;
     }
     // Metodo que usa la PRESENTACION para obtener el marcado ACTUAL. se usa despues de que se le notifica a la presentacion para que esta recupere informacion nueva
     public int getMarcador() {

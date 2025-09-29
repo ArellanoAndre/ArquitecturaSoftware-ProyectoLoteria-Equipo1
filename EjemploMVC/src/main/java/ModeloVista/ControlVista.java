@@ -4,7 +4,9 @@
  */
 package ModeloVista;
 
+import ModeloJuego.entidades.Carta;
 import ModeloJuego.entidades.Jugador;
+import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import ModeloVista.entidadesVista.TarjetaVista;
 
@@ -28,6 +30,16 @@ public class ControlVista {
     
     public void actualizarTarjetaJugadorPrincipal (boolean[] marcadas){
         modeloVista.actualizarTarjetaJugadorP(marcadas);
+    }
+    
+    public void actualizarCartaCantada (Carta cartaActual){
+        CartaVista cv = new CartaVista(
+                cartaActual.getNumCarta(),
+                cartaActual.getNombreCarta(),
+                "/img/Cartas/" + cartaActual.getNumCarta() + ".jpeg"
+        );
+        
+        modeloVista.setCartaCantada(cv);
     }
     
     

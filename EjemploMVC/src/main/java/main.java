@@ -3,6 +3,7 @@ import Controlador.ControlSeleccionarCarta;
 import ModeloJuego.ModeloJuego;
 import ModeloVista.ControlVista;
 import ModeloVista.ModeloVista;
+import Presentacion.JPantallaJuego;
 import Presentacion.Presentacion;
 import java.awt.BorderLayout;
 import javax.swing.*;
@@ -19,7 +20,7 @@ public class main {
             ModeloJuego modeloJuego = new ModeloJuego(modeloVista, controlVista);
             modeloVista.setModeloJuego(modeloJuego);
             ControlSeleccionarCarta controlador = new ControlSeleccionarCarta(modeloVista);
-            new Presentacion(modeloVista, controlador);
+            new JPantallaJuego(modeloVista, controlador).setVisible(true);
 
             // Iniciar estado del juego
             modeloJuego.iniciarJuego();

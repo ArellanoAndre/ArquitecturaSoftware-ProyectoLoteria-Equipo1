@@ -4,6 +4,10 @@
  */
 package Presentacion;
 
+import Controlador.ControlSeleccionarCarta;
+import ModeloVista.ModeloVista;
+import ModeloVista.entidadesVista.CartaVista;
+import Observer.Observer;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import javax.swing.ImageIcon;
@@ -13,18 +17,21 @@ import javax.swing.JLabel;
  *
  * @author abrilislas
  */
-public class JPantallaJuego extends JFramePadre {
+public class JPantallaJuego extends JFramePadre implements Observer {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JPantallaJuego.class.getName());
-
+    private ModeloVista modeloVista;
     /**
      * Creates new form JPantallaJuego
      */
-    public JPantallaJuego() {
+    public JPantallaJuego(ModeloVista modeloVista, ControlSeleccionarCarta controlador) {
         super();
+        this.modeloVista = modeloVista;
+        this.modeloVista.addObserver(this);
         initComponents();
         deslpegarImagenTablero();
         setLocationRelativeTo(null);  
+        
     }
 
     /**
@@ -274,30 +281,6 @@ public class JPantallaJuego extends JFramePadre {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAbandonarPartidaActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new JPantallaJuego().setVisible(true));
-    }
     private void deslpegarImagenTablero(){
         ImageIcon iconoOriginal = new ImageIcon(getClass().getResource("/img/Tableros/Tablero01.png"));
 
@@ -315,6 +298,31 @@ public class JPantallaJuego extends JFramePadre {
 
         panelTableroImagen.revalidate();
         panelTableroImagen.repaint();
+    }
+    
+    @Override
+    public void update() {
+        // --- Actualizar carta en el panel MOVERSE EN CASO DE SEPARAR POR PANELES---
+        CartaVista cartaActual = modeloVista.getCartaCantada();
+        if (cartaActual != null) {
+            ImageIcon iconoOriginal = new ImageIcon(getClass().getResource(cartaActual.getRuta()));
+
+            Image imgEscalada = iconoOriginal.getImage().getScaledInstance(
+                    panelCartaImg.getWidth(),
+                    panelCartaImg.getHeight(),
+                    Image.SCALE_SMOOTH
+            );
+
+            JLabel labelCarta = new JLabel(new ImageIcon(imgEscalada));
+            labelCarta.setSize(panelCartaImg.getSize());
+            
+            panelCartaImg.removeAll(); // limpia el panel antes de agregar
+            panelCartaImg.setLayout(new BorderLayout());
+            panelCartaImg.add(labelCarta, BorderLayout.CENTER);
+            labelNombreCartaActual.setText(cartaActual.getNombreCarta());
+            panelCartaImg.revalidate();
+            panelCartaImg.repaint();
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
