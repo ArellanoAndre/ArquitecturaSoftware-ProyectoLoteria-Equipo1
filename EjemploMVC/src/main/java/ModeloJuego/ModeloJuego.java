@@ -132,23 +132,33 @@ public class ModeloJuego {
 
     private List<Jugador> crearJugadoresSecundarios() {
         // Crear tres arreglos de 16 casillas para simular las tarjetas de los demás jugadores
-        // Tarjeta 1
         int[] casillas2 = {29, 16, 3, 10, 14, 47, 40, 4, 53, 20, 35, 27, 15, 9, 31, 30};
-
-        // Tarjeta 2
         int[] casillas3 = {41, 31, 16, 48, 26, 53, 28, 31, 42, 39, 34, 27, 6, 37, 39, 8};
-
-        // Tarjeta 3
         int[] casillas4 = {13, 32, 42, 43, 23, 48, 2, 15, 26, 39, 17, 49, 6, 18, 45, 46};
-        
+        // Crear las tarjetas
         Tarjeta tarjetaPrueba2 = new Tarjeta(casillas2);
         Tarjeta tarjetaPrueba3 = new Tarjeta(casillas3);
         Tarjeta tarjetaPrueba4 = new Tarjeta(casillas4);
+        //Marcar algunas casillas
+        tarjetaPrueba2.marcarCasilla(0);
+        tarjetaPrueba2.marcarCasilla(5);
+        tarjetaPrueba2.marcarCasilla(10);
+        tarjetaPrueba2.marcarCasilla(15);
         
+        tarjetaPrueba3.marcarCasilla(5);
+        tarjetaPrueba3.marcarCasilla(6);
+        tarjetaPrueba3.marcarCasilla(9);
+        tarjetaPrueba3.marcarCasilla(10);
+        
+        tarjetaPrueba4.marcarCasilla(0);
+        tarjetaPrueba4.marcarCasilla(3);
+        tarjetaPrueba4.marcarCasilla(12);
+        tarjetaPrueba4.marcarCasilla(15);
+        //Crear los jugadores secundarios
         Jugador jugador2 = new Jugador("Isaac", tarjetaPrueba2, 2);
         Jugador jugador3 = new Jugador("Jorge", tarjetaPrueba3, 3);
         Jugador jugador4 = new Jugador("Abril", tarjetaPrueba4, 4);
-        
+        //Crear la lista de jugadores secundarios y añadir a los que creamos
         List<Jugador> jugadores = new ArrayList<>();
         jugadores.add(jugador2);
         jugadores.add(jugador3);
