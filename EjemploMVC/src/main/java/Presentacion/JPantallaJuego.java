@@ -31,7 +31,9 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         setResizable(false); // Evita que el usuario cambie el tamaño del JFrame
         crearPanelTarjeta();
         crearPanelCarta();
+        crearPanelJugadorPrincipal();
         cargarJugadoresSecundarios();
+        
     }
 
     /**
@@ -46,8 +48,6 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         jPanelFondo = new javax.swing.JPanel();
         panelTableroImagen = new javax.swing.JPanel();
         panelJugadorPrincipal = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        labelPuntaje = new javax.swing.JLabel();
         panelCartaImg = new javax.swing.JPanel();
         panelCartaTexto = new javax.swing.JPanel();
         labelNombreCartaActual = new javax.swing.JLabel();
@@ -76,33 +76,15 @@ public class JPantallaJuego extends JFramePadre implements Observer {
 
         panelJugadorPrincipal.setBackground(new java.awt.Color(255, 250, 242));
 
-        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(79, 55, 138));
-        jLabel1.setText("Jugador 01.");
-
-        labelPuntaje.setFont(new java.awt.Font("Helvetica Neue", 1, 22)); // NOI18N
-        labelPuntaje.setForeground(new java.awt.Color(102, 102, 102));
-        labelPuntaje.setText("Puntaje: 0000.00");
-
         javax.swing.GroupLayout panelJugadorPrincipalLayout = new javax.swing.GroupLayout(panelJugadorPrincipal);
         panelJugadorPrincipal.setLayout(panelJugadorPrincipalLayout);
         panelJugadorPrincipalLayout.setHorizontalGroup(
             panelJugadorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelJugadorPrincipalLayout.createSequentialGroup()
-                .addGap(106, 106, 106)
-                .addGroup(panelJugadorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelPuntaje)
-                    .addComponent(jLabel1))
-                .addContainerGap(185, Short.MAX_VALUE))
+            .addGap(0, 453, Short.MAX_VALUE)
         );
         panelJugadorPrincipalLayout.setVerticalGroup(
             panelJugadorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelJugadorPrincipalLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addGap(13, 13, 13)
-                .addComponent(labelPuntaje)
-                .addContainerGap(19, Short.MAX_VALUE))
+            .addGap(0, 111, Short.MAX_VALUE)
         );
 
         panelCartaImg.setBackground(new java.awt.Color(204, 204, 204));
@@ -240,7 +222,7 @@ public class JPantallaJuego extends JFramePadre implements Observer {
                             .addComponent(panelCartaTexto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(panelBotones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(panelJugadorPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
                 .addComponent(panelJugadoresSecundarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -285,11 +267,9 @@ public class JPantallaJuego extends JFramePadre implements Observer {
     private javax.swing.JButton btnAbandonarPartida;
     private javax.swing.JButton btnGanarLoteria;
     private javax.swing.JButton btnGritarJugada;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanelFondo;
     private javax.swing.JLabel labelNombreCartaActual;
     private javax.swing.JLabel labelProximaCarta;
-    private javax.swing.JLabel labelPuntaje;
     private javax.swing.JLabel labelTimerProximaCarta;
     private javax.swing.JPanel panelBotones;
     private javax.swing.JPanel panelCartaImg;
@@ -321,6 +301,14 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         panelCarta.setPreferredSize(new Dimension(213, 323));
         panelCartaImg.setLayout(new BorderLayout());
         panelCartaImg.add(panelCarta, BorderLayout.CENTER);
+    }
+    
+    public void crearPanelJugadorPrincipal() {
+        //Agregar panel tarjeta jugador principal
+        JPanelJugadorPrincipal panelJugadorPrincipal = new JPanelJugadorPrincipal(modeloVista);
+        panelJugadorPrincipal.setPreferredSize(new Dimension(453, 111));
+        this.panelJugadorPrincipal.setLayout(new BorderLayout());
+        this.panelJugadorPrincipal.add(panelJugadorPrincipal, BorderLayout.CENTER);
     }
 
     public void cargarJugadoresSecundarios() {
