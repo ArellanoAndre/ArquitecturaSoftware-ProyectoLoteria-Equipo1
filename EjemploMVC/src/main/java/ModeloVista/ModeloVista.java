@@ -13,6 +13,7 @@ public class ModeloVista {
     private CartaVista cartaCantada;
     private int marcador;
     private JugadorVista jugadorPrincipal;
+    private List<JugadorVista> jugadoresSecundarios;
     private List<Observer> observers = new ArrayList<>();
     private ModeloJuego modeloJuego;
 
@@ -57,7 +58,14 @@ public class ModeloVista {
         jugadorPrincipal.getTarjeta().setMarcadas(casillas);
         notificar();
     }
-    
+
+    public List<JugadorVista> getJugadoresSecundarios() {
+        return jugadoresSecundarios;
+    }
+
+    public void setJugadoresSecundarios(List<JugadorVista> jugadoresSecundarios) {
+        this.jugadoresSecundarios = jugadoresSecundarios;
+    }
 
     // Método llamado por el controlador cuando se selecciona una carta. este despues lo envia al modeloJuego donde maneja la logica de validacion.
     public void seleccionarCarta(int pos) {

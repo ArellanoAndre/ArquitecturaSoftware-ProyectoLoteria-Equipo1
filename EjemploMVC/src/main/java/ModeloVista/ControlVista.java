@@ -9,6 +9,8 @@ import ModeloJuego.entidades.Jugador;
 import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import ModeloVista.entidadesVista.TarjetaVista;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -24,12 +26,22 @@ public class ControlVista {
     
     public void setJugadorPrincipal(Jugador jugador){
         TarjetaVista tarjeta = new TarjetaVista(jugador.getTarjeta().getMarcadas());
-        JugadorVista jugadorP = new JugadorVista(jugador.getNombre(), tarjeta, 1);
+        JugadorVista jugadorP = new JugadorVista(jugador.getNombre(), tarjeta, jugador.getNumJugador());
         modeloVista.setJugadorPrincipal(jugadorP);
     }
     
     public void actualizarTarjetaJugadorPrincipal (boolean[] marcadas){
         modeloVista.actualizarTarjetaJugadorP(marcadas);
+    }
+    
+    public void setJugadoresSecundarios(List<Jugador> jugadores){
+        List<JugadorVista> jugadoresV = new ArrayList<>();
+        for (Jugador jugador : jugadores) {
+            TarjetaVista tarjeta = new TarjetaVista(jugador.getTarjeta().getMarcadas());
+            JugadorVista jugadorSV = new JugadorVista(jugador.getNombre(), tarjeta, jugador.getNumJugador());
+            jugadoresV.add(jugadorSV);
+        }
+        modeloVista.setJugadoresSecundarios(jugadoresV);
     }
     
     public void actualizarCartaCantada (Carta cartaActual){
