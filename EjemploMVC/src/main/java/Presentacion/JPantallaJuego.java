@@ -51,8 +51,6 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         panelCartaImg = new javax.swing.JPanel();
         panelCartaTexto = new javax.swing.JPanel();
         labelNombreCartaActual = new javax.swing.JLabel();
-        labelProximaCarta = new javax.swing.JLabel();
-        labelTimerProximaCarta = new javax.swing.JLabel();
         panelBotones = new javax.swing.JPanel();
         btnGritarJugada = new javax.swing.JButton();
         btnGanarLoteria = new javax.swing.JButton();
@@ -105,38 +103,21 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         labelNombreCartaActual.setFont(new java.awt.Font("Sarabun", 1, 34)); // NOI18N
         labelNombreCartaActual.setText("La Estrella ");
 
-        labelProximaCarta.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        labelProximaCarta.setForeground(new java.awt.Color(102, 0, 0));
-        labelProximaCarta.setText("Próxima carta en:");
-
-        labelTimerProximaCarta.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
-        labelTimerProximaCarta.setForeground(new java.awt.Color(255, 102, 102));
-        labelTimerProximaCarta.setText("00:00");
-
         javax.swing.GroupLayout panelCartaTextoLayout = new javax.swing.GroupLayout(panelCartaTexto);
         panelCartaTexto.setLayout(panelCartaTextoLayout);
         panelCartaTextoLayout.setHorizontalGroup(
             panelCartaTextoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCartaTextoLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addGroup(panelCartaTextoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelCartaTextoLayout.createSequentialGroup()
-                        .addComponent(labelProximaCarta)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labelTimerProximaCarta))
-                    .addComponent(labelNombreCartaActual))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addComponent(labelNombreCartaActual)
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         panelCartaTextoLayout.setVerticalGroup(
             panelCartaTextoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCartaTextoLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(labelNombreCartaActual)
-                .addGap(11, 11, 11)
-                .addGroup(panelCartaTextoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelProximaCarta)
-                    .addComponent(labelTimerProximaCarta))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(65, Short.MAX_VALUE))
         );
 
         panelBotones.setBackground(new java.awt.Color(255, 250, 242));
@@ -269,8 +250,6 @@ public class JPantallaJuego extends JFramePadre implements Observer {
     private javax.swing.JButton btnGritarJugada;
     private javax.swing.JPanel jPanelFondo;
     private javax.swing.JLabel labelNombreCartaActual;
-    private javax.swing.JLabel labelProximaCarta;
-    private javax.swing.JLabel labelTimerProximaCarta;
     private javax.swing.JPanel panelBotones;
     private javax.swing.JPanel panelCartaImg;
     private javax.swing.JPanel panelCartaTexto;
