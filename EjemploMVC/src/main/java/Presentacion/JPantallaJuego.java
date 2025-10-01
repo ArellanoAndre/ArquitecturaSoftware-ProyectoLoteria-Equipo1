@@ -2,10 +2,15 @@ package Presentacion;
 
 import Controlador.ControlSeleccionarCarta;
 import ModeloVista.ModeloVista;
+import ModeloVista.entidadesVista.JugadorVista;
 import Observer.Observer;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
-
+import java.util.Arrays;
+import java.util.List;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
 
 /**
  *
@@ -15,6 +20,7 @@ public class JPantallaJuego extends JFramePadre implements Observer {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JPantallaJuego.class.getName());
     private ModeloVista modeloVista;
+    private ControlSeleccionarCarta controlador;
 
     public JPantallaJuego(ModeloVista modeloVista, ControlSeleccionarCarta controlador) {
         super();
@@ -23,19 +29,9 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false); // Evita que el usuario cambie el tamaño del JFrame
-
-        //Agregar panel tarjeta jugador principal
-        JPanelTarjeta panelTarjeta = new JPanelTarjeta(modeloVista);
-        panelTarjeta.setPreferredSize(new Dimension(370, 525));
-        panelTableroImagen.setLayout(new BorderLayout());
-        panelTableroImagen.add(panelTarjeta, BorderLayout.CENTER);
-        
-        // Agregar panel de carta cantada
-        JPanelCarta panelCarta = new JPanelCarta(modeloVista, this);
-        panelCarta.setPreferredSize(new Dimension(213, 323));
-        panelCartaImg.setLayout(new BorderLayout());
-        panelCartaImg.add(panelCarta, BorderLayout.CENTER);
-
+        crearPanelTarjeta();
+        crearPanelCarta();
+        cargarJugadoresSecundarios();
     }
 
     /**
@@ -210,7 +206,7 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         panelJugadoresSecundarios.setLayout(panelJugadoresSecundariosLayout);
         panelJugadoresSecundariosLayout.setHorizontalGroup(
             panelJugadoresSecundariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 247, Short.MAX_VALUE)
+            .addGap(0, 153, Short.MAX_VALUE)
         );
         panelJugadoresSecundariosLayout.setVerticalGroup(
             panelJugadoresSecundariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -244,12 +240,13 @@ public class JPantallaJuego extends JFramePadre implements Observer {
                             .addComponent(panelCartaTexto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(panelBotones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(panelJugadorPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelJugadoresSecundarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
+                .addComponent(panelJugadoresSecundarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanelFondoLayout.setVerticalGroup(
             jPanelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelJugadoresSecundarios, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelJugadoresSecundarios, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(jPanelFondoLayout.createSequentialGroup()
                 .addGap(44, 44, 44)
                 .addGroup(jPanelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -284,17 +281,6 @@ public class JPantallaJuego extends JFramePadre implements Observer {
     private void btnAbandonarPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbandonarPartidaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAbandonarPartidaActionPerformed
-
-    @Override
-    public void update() {
- 
-    }
-
-
-    public void actualizarNombreCarta(String carta) {
-        this.labelNombreCartaActual.setText(carta);
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbandonarPartida;
     private javax.swing.JButton btnGanarLoteria;
@@ -312,4 +298,48 @@ public class JPantallaJuego extends JFramePadre implements Observer {
     private javax.swing.JPanel panelJugadoresSecundarios;
     private javax.swing.JPanel panelTableroImagen;
     // End of variables declaration//GEN-END:variables
+    
+    @Override
+    public void update() {
+    }
+
+    public void actualizarNombreCarta(String carta) {
+        this.labelNombreCartaActual.setText(carta);
+    }
+
+    public void crearPanelTarjeta() {
+        //Agregar panel tarjeta jugador principal
+        JPanelTarjeta panelTarjeta = new JPanelTarjeta(modeloVista);
+        panelTarjeta.setPreferredSize(new Dimension(370, 525));
+        panelTableroImagen.setLayout(new BorderLayout());
+        panelTableroImagen.add(panelTarjeta, BorderLayout.CENTER);
+    }
+
+    public void crearPanelCarta() {
+        // Agregar panel de carta cantada
+        JPanelCarta panelCarta = new JPanelCarta(modeloVista, this);
+        panelCarta.setPreferredSize(new Dimension(213, 323));
+        panelCartaImg.setLayout(new BorderLayout());
+        panelCartaImg.add(panelCarta, BorderLayout.CENTER);
+    }
+
+    public void cargarJugadoresSecundarios() {
+        JPanel panel = obtenerPanelesJugadores();
+        panel.setPreferredSize(new Dimension(150, 600));
+        panelJugadoresSecundarios.setLayout(new BorderLayout());
+        panelJugadoresSecundarios.add(panel, BorderLayout.CENTER);
+    }
+
+    public JPanel obtenerPanelesJugadores() {
+        List<JugadorVista> jugadores = modeloVista.getJugadoresSecundarios();
+        JPanel contenedorJugadoresSecundarios = new JPanel();
+        contenedorJugadoresSecundarios.setLayout(new BoxLayout(contenedorJugadoresSecundarios, BoxLayout.Y_AXIS));
+
+        for (JugadorVista jugador : jugadores) {
+            JPanelJugadorSecundario panelJugadorSecundario = new JPanelJugadorSecundario(jugador);
+            contenedorJugadoresSecundarios.add(panelJugadorSecundario);
+        }
+        return contenedorJugadoresSecundarios;
+    }
+
 }

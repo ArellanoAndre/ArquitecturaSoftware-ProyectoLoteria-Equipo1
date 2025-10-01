@@ -25,7 +25,7 @@ public class ControlVista {
     }
     
     public void setJugadorPrincipal(Jugador jugador){
-        TarjetaVista tarjeta = new TarjetaVista(jugador.getTarjeta().getMarcadas());
+        TarjetaVista tarjeta = new TarjetaVista(jugador.getTarjeta().getMarcadas(),jugador.getTarjeta().getImg());
         JugadorVista jugadorP = new JugadorVista(jugador.getNombre(), tarjeta, jugador.getNumJugador());
         modeloVista.setJugadorPrincipal(jugadorP);
     }
@@ -37,7 +37,7 @@ public class ControlVista {
     public void setJugadoresSecundarios(List<Jugador> jugadores){
         List<JugadorVista> jugadoresV = new ArrayList<>();
         for (Jugador jugador : jugadores) {
-            TarjetaVista tarjeta = new TarjetaVista(jugador.getTarjeta().getMarcadas());
+            TarjetaVista tarjeta = new TarjetaVista(jugador.getTarjeta().getMarcadas(),jugador.getTarjeta().getImg());
             JugadorVista jugadorSV = new JugadorVista(jugador.getNombre(), tarjeta, jugador.getNumJugador());
             jugadoresV.add(jugadorSV);
         }

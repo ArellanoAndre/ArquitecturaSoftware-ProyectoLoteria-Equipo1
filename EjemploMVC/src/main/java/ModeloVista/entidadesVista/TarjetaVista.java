@@ -13,10 +13,11 @@ import ModeloJuego.*;
 public class TarjetaVista {
 
     private boolean[] marcadas; // si la carta fue marcada
-    // imagen de toda la tarjeta
+    private String img;
 
-    public TarjetaVista(boolean[] casillas) {
+    public TarjetaVista(boolean[] casillas,String img) {
         this.marcadas = casillas;
+        this.img = img;
     }
 
     public void setMarcadas(boolean[] marcadas) {
@@ -27,6 +28,16 @@ public class TarjetaVista {
         return marcadas;
     }
 
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    
+    
     @Override
     public String toString() {
         return "Tarjeta{" + "marcadas= " + marcadas + '}';

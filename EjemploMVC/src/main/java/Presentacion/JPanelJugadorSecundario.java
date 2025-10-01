@@ -26,12 +26,13 @@ public class JPanelJugadorSecundario extends JPanel  {
         setLayout(new BorderLayout(5, 5));
         // crear instancia de la clase para construir el grid
         GridPanel panelGrid = new GridPanel();
-
+        setBackground(new Color(255,250,242));
         this.panelCasillasGrid = panelGrid.getCasillas(); // obtenemos las casillas de GridPanel
         add(panelGrid, BorderLayout.CENTER); // agregamos el panel al centro
 
         JPanel panelInfo = new JPanel(new GridLayout(2, 1));
-        lblNombre = new JLabel();
+        panelInfo.setBackground(new Color(255,250,242));
+        lblNombre = new JLabel(jugador.getNombre());
         lblPuntaje = new JLabel(); // por mientras todavia no se actauliza
         panelInfo.add(lblNombre);
         panelInfo.add(lblPuntaje);

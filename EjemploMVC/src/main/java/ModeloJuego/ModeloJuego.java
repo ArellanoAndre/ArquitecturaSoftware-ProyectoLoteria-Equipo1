@@ -121,9 +121,11 @@ public class ModeloJuego {
     private Jugador crearJugador() {
         // Crear un arreglo de 16 casillas con números de cartas del mazo
         int[] casillas1 = {46, 6, 38, 3, 8, 11, 33, 35, 21, 54, 50, 29, 30, 40, 36, 26};
+        
+        String img1 = "/img/Tableros/Tablero01.png";
 
         // Crear una tarjeta con las 16 casillas
-        Tarjeta tarjetaPrueba1 = new Tarjeta(casillas1);
+        Tarjeta tarjetaPrueba1 = new Tarjeta(casillas1,img1);
 
         // Crear y devolver el jugador
         Jugador jugador1 = new Jugador("Rodri", tarjetaPrueba1, 1);
@@ -135,10 +137,14 @@ public class ModeloJuego {
         int[] casillas2 = {29, 16, 3, 10, 14, 47, 40, 4, 53, 20, 35, 27, 15, 9, 31, 30};
         int[] casillas3 = {41, 31, 16, 48, 26, 53, 28, 31, 42, 39, 34, 27, 6, 37, 39, 8};
         int[] casillas4 = {13, 32, 42, 43, 23, 48, 2, 15, 26, 39, 17, 49, 6, 18, 45, 46};
+        // Crear la ruta a las imágenes
+        String img2 = "/img/Tableros/Tablero02.png";
+        String img3 = "/img/Tableros/Tablero03.png";
+        String img4 = "/img/Tableros/Tablero04.png";
         // Crear las tarjetas
-        Tarjeta tarjetaPrueba2 = new Tarjeta(casillas2);
-        Tarjeta tarjetaPrueba3 = new Tarjeta(casillas3);
-        Tarjeta tarjetaPrueba4 = new Tarjeta(casillas4);
+        Tarjeta tarjetaPrueba2 = new Tarjeta(casillas2,img2);
+        Tarjeta tarjetaPrueba3 = new Tarjeta(casillas3,img3);
+        Tarjeta tarjetaPrueba4 = new Tarjeta(casillas4,img4);
         //Marcar algunas casillas
         tarjetaPrueba2.marcarCasilla(0);
         tarjetaPrueba2.marcarCasilla(5);

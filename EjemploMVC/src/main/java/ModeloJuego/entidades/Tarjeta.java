@@ -12,11 +12,12 @@ public class Tarjeta {
 
     private int[] casillas;   // 4x4
     private boolean[] marcadas; // si la carta fue marcada
-    // imagen de toda la tarjeta
+    private String img;
 
-    public Tarjeta(int[] casillas) {
+    public Tarjeta(int[] casillas, String img) {
         this.casillas = casillas;
         this.marcadas = new boolean[casillas.length];
+        this.img = img;
     }
 
     public int getCasilla(int numCasilla) {
@@ -33,6 +34,14 @@ public class Tarjeta {
 
     public int[] getCasillas() {
         return casillas;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     @Override

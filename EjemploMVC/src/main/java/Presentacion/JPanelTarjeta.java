@@ -49,7 +49,7 @@ public class JPanelTarjeta extends javax.swing.JPanel implements Observer {
 
     private void inicializarTableroConMatriz() {
         // Cargar la imagen de fondo una vez al iniciar
-        java.net.URL url = getClass().getResource("/img/Tableros/Tablero01.png");
+        java.net.URL url = getClass().getResource(modeloVista.getJugadorPrincipal().getTarjeta().getImg());
         if (url == null) {
             System.err.println("No se encontró la imagen /img/Tableros/Tablero01.png");
             return;
