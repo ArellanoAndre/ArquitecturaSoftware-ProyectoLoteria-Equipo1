@@ -1,28 +1,56 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package Presentacion;
 
+import Controlador.ControlSeleccionarCarta;
+import ModeloVista.ModeloVista;
+import ModeloVista.entidadesVista.CartaVista;
+import Observer.Observer;
+import java.awt.BorderLayout;
+import java.awt.Image;
+import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 
 /**
  *
  * @author abrilislas
  */
-public class JPantallaJuego extends JFramePadre {
-    
+public class JPantallaJuego extends JFramePadre implements Observer {
+        
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JPantallaJuego.class.getName());
-
+    private ModeloVista modeloVista;
     /**
      * Creates new form JPantallaJuego
      */
-    public JPantallaJuego() {
+    //Agregar clases faltantes
+    public JPantallaJuego(ModeloVista modeloVista, ControlSeleccionarCarta controlador) {
         super();
-        initComponents();
-        despegarImagenTablero();
+        this.modeloVista = modeloVista;
+        this.modeloVista.addObserver(this);
+        ActionListener listenerClickCasilla;
+        initComponents();setLocationRelativeTo(null);
+        setResizable(false);
+        
+        listenerClickCasilla = e -> {
+        JButton boton = (JButton) e.getSource();
+        Integer numCarta = (Integer) boton.getClientProperty("idCarta");
+        JPanel overlay = (JPanel) boton.getClientProperty("overlay");
+        int[] arregloCartas = generarTarjeta();
+        PanelTarjeta panelTarjeta = new PanelTarjeta(arregloCartas, listenerClickCasilla);
+        panelTableroImagen.add(panelTarjeta);
+        };
     }
+
+           //De por mientris (Generar tarjeta no va aqui, si no que se genera desde el modelo de juego cuando se crea el jugador) 
+        private int[] generarTarjeta() {
+        return new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}
+                
+                };
+
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -38,21 +66,16 @@ public class JPantallaJuego extends JFramePadre {
         panelJugadorPrincipal = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         labelPuntaje = new javax.swing.JLabel();
-        panelLinea1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         panelCartaImg = new javax.swing.JPanel();
         panelCartaTexto = new javax.swing.JPanel();
         labelNombreCartaActual = new javax.swing.JLabel();
         labelProximaCarta = new javax.swing.JLabel();
         labelTimerProximaCarta = new javax.swing.JLabel();
-        panelLinea = new javax.swing.JPanel();
         panelBotones = new javax.swing.JPanel();
         btnGritarJugada = new javax.swing.JButton();
         btnGanarLoteria = new javax.swing.JButton();
         panelJugadoresSecundarios = new javax.swing.JPanel();
         btnAbandonarPartida = new javax.swing.JButton();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanelFondo.setBackground(new java.awt.Color(255, 250, 242));
 
@@ -79,51 +102,23 @@ public class JPantallaJuego extends JFramePadre {
         labelPuntaje.setForeground(new java.awt.Color(102, 102, 102));
         labelPuntaje.setText("Puntaje: 0000.00");
 
-        panelLinea1.setBackground(new java.awt.Color(153, 153, 153));
-        panelLinea1.setPreferredSize(new java.awt.Dimension(163, 1));
-        panelLinea1.setSize(new java.awt.Dimension(1, 110));
-
-        javax.swing.GroupLayout panelLinea1Layout = new javax.swing.GroupLayout(panelLinea1);
-        panelLinea1.setLayout(panelLinea1Layout);
-        panelLinea1Layout.setHorizontalGroup(
-            panelLinea1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panelLinea1Layout.setVerticalGroup(
-            panelLinea1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1, Short.MAX_VALUE)
-        );
-
-        jLabel2.setText("(imgAvatar)");
-
         javax.swing.GroupLayout panelJugadorPrincipalLayout = new javax.swing.GroupLayout(panelJugadorPrincipal);
         panelJugadorPrincipal.setLayout(panelJugadorPrincipalLayout);
         panelJugadorPrincipalLayout.setHorizontalGroup(
             panelJugadorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelJugadorPrincipalLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
+                .addGap(106, 106, 106)
                 .addGroup(panelJugadorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelJugadorPrincipalLayout.createSequentialGroup()
-                        .addGroup(panelJugadorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelPuntaje)
-                            .addComponent(jLabel1))
-                        .addGap(0, 177, Short.MAX_VALUE))
-                    .addComponent(panelLinea1, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(labelPuntaje)
+                    .addComponent(jLabel1))
+                .addContainerGap(185, Short.MAX_VALUE))
         );
         panelJugadorPrincipalLayout.setVerticalGroup(
             panelJugadorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelJugadorPrincipalLayout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addGroup(panelJugadorPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panelJugadorPrincipalLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panelLinea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addGap(13, 13, 13)
                 .addComponent(labelPuntaje)
                 .addContainerGap(19, Short.MAX_VALUE))
         );
@@ -154,44 +149,26 @@ public class JPantallaJuego extends JFramePadre {
         labelTimerProximaCarta.setForeground(new java.awt.Color(255, 102, 102));
         labelTimerProximaCarta.setText("00:00");
 
-        panelLinea.setBackground(new java.awt.Color(153, 153, 153));
-        panelLinea.setPreferredSize(new java.awt.Dimension(163, 1));
-        panelLinea.setSize(new java.awt.Dimension(2, 110));
-
-        javax.swing.GroupLayout panelLineaLayout = new javax.swing.GroupLayout(panelLinea);
-        panelLinea.setLayout(panelLineaLayout);
-        panelLineaLayout.setHorizontalGroup(
-            panelLineaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panelLineaLayout.setVerticalGroup(
-            panelLineaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1, Short.MAX_VALUE)
-        );
-
         javax.swing.GroupLayout panelCartaTextoLayout = new javax.swing.GroupLayout(panelCartaTexto);
         panelCartaTexto.setLayout(panelCartaTextoLayout);
         panelCartaTextoLayout.setHorizontalGroup(
             panelCartaTextoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCartaTextoLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addGroup(panelCartaTextoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(panelLinea, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                .addGroup(panelCartaTextoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelCartaTextoLayout.createSequentialGroup()
                         .addComponent(labelProximaCarta)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelTimerProximaCarta))
                     .addComponent(labelNombreCartaActual))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         panelCartaTextoLayout.setVerticalGroup(
             panelCartaTextoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCartaTextoLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(labelNombreCartaActual)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelLinea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
+                .addGap(11, 11, 11)
                 .addGroup(panelCartaTextoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelProximaCarta)
                     .addComponent(labelTimerProximaCarta))
@@ -322,43 +299,38 @@ public class JPantallaJuego extends JFramePadre {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAbandonarPartidaActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    @Override
+    public void update() {
+        // --- Actualizar carta en el panel MOVERSE EN CASO DE SEPARAR POR PANELES--- (ACTUALIZAR)
+        CartaVista cartaActual = modeloVista.getCartaCantada();
+        if (cartaActual != null) {
+            ImageIcon iconoOriginal = new ImageIcon(getClass().getResource(cartaActual.getRuta()));
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new JPantallaJuego().setVisible(true));
+            Image imgEscalada = iconoOriginal.getImage().getScaledInstance(
+                    panelCartaImg.getWidth(),
+                    panelCartaImg.getHeight(),
+                    Image.SCALE_SMOOTH
+            );
+
+            JLabel labelCarta = new JLabel(new ImageIcon(imgEscalada));
+            labelCarta.setSize(panelCartaImg.getSize());
+            
+            panelCartaImg.removeAll(); // limpia el panel antes de agregar
+            panelCartaImg.setLayout(new BorderLayout());
+            panelCartaImg.add(labelCarta, BorderLayout.CENTER);
+            labelNombreCartaActual.setText(cartaActual.getNombreCarta());
+            panelCartaImg.revalidate();
+            panelCartaImg.repaint();
+        }
     }
-    private void despegarImagenTablero(){
-        ImageIcon imagenTablero = new ImageIcon("'/Users/abrilislas/Documents/ArquitecturaSoftware-ProyectoLoteria-Equipo1/EjemploMVC[1]/EjemploMVC/src/main/java/Presentacion/Tablero01.jpeg'"); 
-        JLabel labelTablero = new JLabel(imagenTablero);
-        this.panelTableroImagen.add(labelTablero);
-    
-    }
+
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbandonarPartida;
     private javax.swing.JButton btnGanarLoteria;
     private javax.swing.JButton btnGritarJugada;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanelFondo;
     private javax.swing.JLabel labelNombreCartaActual;
     private javax.swing.JLabel labelProximaCarta;
@@ -369,8 +341,6 @@ public class JPantallaJuego extends JFramePadre {
     private javax.swing.JPanel panelCartaTexto;
     private javax.swing.JPanel panelJugadorPrincipal;
     private javax.swing.JPanel panelJugadoresSecundarios;
-    private javax.swing.JPanel panelLinea;
-    private javax.swing.JPanel panelLinea1;
     private javax.swing.JPanel panelTableroImagen;
     // End of variables declaration//GEN-END:variables
 }

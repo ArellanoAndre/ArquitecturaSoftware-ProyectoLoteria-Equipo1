@@ -50,7 +50,7 @@ public class ModeloJuego {
 
     // Validación de la carta seleccionada y actualización del marcador
     public void verificarCarta(int cartaSeleccionada) {
-        int casilla = jugador.getTarjeta().getCasilla(cartaSeleccionada).getNumCarta();
+        int casilla = jugador.getTarjeta().getCasilla(cartaSeleccionada);
         if (casilla == cartaActual.getNumCarta()){
             marcador++;
             jugador.getTarjeta().marcarCasilla(cartaSeleccionada);
@@ -97,12 +97,29 @@ public class ModeloJuego {
         Collections.shuffle(mazo);
     }
 
-    private Jugador crearJugador(List<Carta> mazo) {
+  /*  private Jugador crearJugador(List<Carta> mazo) {
         Carta[] casillas = {mazo.get(0), mazo.get(1), mazo.get(2)};
 
         Tarjeta tarjetaPrueba = new Tarjeta(casillas);
         Jugador jugador1 = new Jugador("Rodri", tarjetaPrueba, marcador);
         return jugador1;
+    }*/
+    
+    private Jugador crearJugador(List<Carta> mazo) {
+    // copia del mazo para no alterar el original
+    List<Carta> copiaMazo = new ArrayList<>(mazo);
+    Collections.shuffle(copiaMazo);
+
+    // Tomar las primeras 16 cartas sin repetir
+    int[] casillas = new int[16];
+    for (int i = 0; i < 16; i++) {
+        casillas[i] = copiaMazo.get(i).getNumCarta();
     }
+
+    Tarjeta tarjeta = new Tarjeta(casillas);
+    Jugador jugador = new Jugador("Rodri", tarjeta, marcador);
+    return jugador;
+}
+
 
 }

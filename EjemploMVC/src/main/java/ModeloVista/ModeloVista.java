@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import ModeloJuego.ModeloJuego;
 import Observer.Observer;
+import Presentacion.PanelTarjeta;
 
 public class ModeloVista {
 
@@ -39,6 +40,23 @@ public class ModeloVista {
         notificar();
     }
 
+
+    public JugadorVista getJugadorPrincipal() {
+        return jugadorPrincipal;
+    }
+
+    public void setJugadorPrincipal(JugadorVista jugadorPrincipal) {
+        this.jugadorPrincipal = jugadorPrincipal;
+    }
+    
+    public void mostrarTarjetaJugador(int[] arregloCartas) {
+    PanelTarjeta panelTarjeta = new PanelTarjeta(arregloCartas, actionListenerClickCarta);
+    }
+
+    public void actualizarTarjetaJugadorP (int[] casillas){
+        jugadorPrincipal.getTarjeta().setMarcadas(casillas);
+        notificar();
+    }
     // Método llamado por el controlador cuando se selecciona una carta. este despues lo envia al modeloJuego donde maneja la logica de validacion.
     public void seleccionarCarta(int pos) {
         modeloJuego.verificarCarta(pos);

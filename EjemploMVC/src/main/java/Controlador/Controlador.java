@@ -3,6 +3,7 @@ package Controlador;
 // ====== CONTROLADOR ======
 import ModeloJuego.ModeloJuego;
 import ModeloVista.ModeloVista;
+import javax.swing.JButton;
 
 public class Controlador {
 
@@ -15,7 +16,7 @@ public class Controlador {
     }
 
     // Envia desde la PRESENTACION al modeloVista la carta seleccionada para despues ser validada
-    public void seleccionarCarta(int pos) {
+    public void seleccionarCarta(int pos,JButton boton) {
         modeloVista.seleccionarCarta(pos);
     }
 }

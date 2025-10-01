@@ -10,15 +10,15 @@ package ModeloJuego;
  */
 public class Tarjeta {
 
-    private Carta[] casillas;   // 4x4
+    private int[] casillas;   // 4x4
     private boolean[] marcadas; // si la carta fue marcada
 
-    public Tarjeta(Carta[] casillas) {
+    public Tarjeta(int[] casillas) {
         this.casillas = casillas;
         this.marcadas = new boolean[casillas.length];
     }
 
-    public Carta getCasilla(int numCasilla) {
+    public int getCasilla(int numCasilla) {
         return casillas[numCasilla];
     }
     
@@ -30,7 +30,7 @@ public class Tarjeta {
         return marcadas;
     }
 
-    public Carta[] getCasillas() {
+    public int[] getCasillas() {
         return casillas;
     }
 
