@@ -1,42 +1,41 @@
-
 package Presentacion;
 
 import Controlador.ControlSeleccionarCarta;
 import ModeloVista.ModeloVista;
-import ModeloVista.entidadesVista.CartaVista;
-import ModeloVista.entidadesVista.JugadorVista;
 import Observer.Observer;
 import java.awt.BorderLayout;
-import java.awt.Image;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import java.awt.Dimension;
+
 
 /**
  *
  * @author abrilislas
  */
 public class JPantallaJuego extends JFramePadre implements Observer {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JPantallaJuego.class.getName());
     private ModeloVista modeloVista;
-    /**
-     * Creates new form JPantallaJuego
-     */
+
     public JPantallaJuego(ModeloVista modeloVista, ControlSeleccionarCarta controlador) {
         super();
         this.modeloVista = modeloVista;
         this.modeloVista.addObserver(this);
         initComponents();
-        panelTableroImagen.setPreferredSize(new java.awt.Dimension(350, 250)); // tamaño mínimo visible
-        inicializarTableroConMatriz(); // en lugar de deslpegarImagenTablero()
         setLocationRelativeTo(null);
         setResizable(false); // Evita que el usuario cambie el tamaño del JFrame
-         
+
+        //Agregar panel tarjeta jugador principal
+        JPanelTarjeta panelTarjeta = new JPanelTarjeta(modeloVista);
+        panelTarjeta.setPreferredSize(new Dimension(370, 525));
+        panelTableroImagen.setLayout(new BorderLayout());
+        panelTableroImagen.add(panelTarjeta, BorderLayout.CENTER);
         
+        // Agregar panel de carta cantada
+        JPanelCarta panelCarta = new JPanelCarta(modeloVista, this);
+        panelCarta.setPreferredSize(new Dimension(213, 323));
+        panelCartaImg.setLayout(new BorderLayout());
+        panelCartaImg.add(panelCarta, BorderLayout.CENTER);
+
     }
 
     /**
@@ -253,7 +252,7 @@ public class JPantallaJuego extends JFramePadre implements Observer {
             .addComponent(panelJugadoresSecundarios, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanelFondoLayout.createSequentialGroup()
                 .addGap(44, 44, 44)
-                .addGroup(jPanelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(jPanelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(panelTableroImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanelFondoLayout.createSequentialGroup()
                         .addComponent(panelJugadorPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -286,184 +285,15 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAbandonarPartidaActionPerformed
 
-
-
-private void actualizarCartaCantada() {
-    CartaVista cartaActual = modeloVista.getCartaCantada();
-    if (cartaActual != null) {
-        ImageIcon iconoOriginal = new ImageIcon(getClass().getResource(cartaActual.getRuta()));
-        Image imgEscalada = iconoOriginal.getImage().getScaledInstance(
-                panelCartaImg.getWidth(),
-                panelCartaImg.getHeight(),
-                Image.SCALE_SMOOTH
-        );
-
-        // En lugar de removeAll(), reutiliza un JLabel fijo
-        if (panelCartaImg.getComponentCount() == 0 || !(panelCartaImg.getComponent(0) instanceof JLabel)) {
-            panelCartaImg.removeAll();
-            JLabel labelCarta = new JLabel();
-            labelCarta.setHorizontalAlignment(SwingConstants.CENTER);
-            panelCartaImg.setLayout(new BorderLayout());
-            panelCartaImg.add(labelCarta, BorderLayout.CENTER);
-        }
-
-        JLabel labelCarta = (JLabel) panelCartaImg.getComponent(0);
-        labelCarta.setIcon(new ImageIcon(imgEscalada));
-        labelNombreCartaActual.setText(cartaActual.getNombreCarta());
-
-        panelCartaImg.revalidate();
-        panelCartaImg.repaint();
-    }
-}
-
-   @Override
-public void update() {
-    // Procesar las casillas marcadas del jugador
-    procesarCasillasMarcadas();
-
-    // Actualizar la carta cantada
-    actualizarCartaCantada();
-}
-        // --- clase interna para mostrar la imagen escalada ---
-private static class ScaledImageComponent extends javax.swing.JComponent {
-    private final java.awt.Image image;
-    public ScaledImageComponent(java.awt.Image img) {
-        this.image = img;
-        setOpaque(false);
-    }
-    
     @Override
-    protected void paintComponent(java.awt.Graphics g) {
-        super.paintComponent(g);
-        if (image != null) {
-            int w = getWidth();
-            int h = getHeight();
-            g.drawImage(image, 0, 0, w, h, this);
-        }
-    }
-}
-
-private javax.swing.JLayeredPane layeredTablero;
-private javax.swing.JButton[][] botonesMatriz; // opcional para acceder luego
-
-private void inicializarTableroConMatriz() {
-    // Cargar la imagen de fondo una vez al iniciar
-    java.net.URL url = getClass().getResource("/img/Tableros/Tablero01.png");
-    if (url == null) {
-        System.err.println("No se encontró la imagen /img/Tableros/Tablero01.png");
-        return;
-    }
-    java.awt.Image img = new javax.swing.ImageIcon(url).getImage();
-    ScaledImageComponent fondo = new ScaledImageComponent(img);
-
-    // Panel con GridLayout 4x4 para los botones
-    JPanel panelMatriz = new JPanel(new java.awt.GridLayout(4, 4));
-    panelMatriz.setOpaque(false);
-
-    botonesMatriz = new javax.swing.JButton[4][4];
-    for (int r = 0; r < 4; r++) {
-        for (int c = 0; c < 4; c++) {
-            final int rf = r, cf = c;
-            JButton btn = new JButton();
-            // Apariencia transparente, sin imágenes
-            btn.setRolloverEnabled(false);
-
-            btn.setIcon(null);
-            btn.setContentAreaFilled(false);
-            btn.setBorderPainted(false);
-            btn.setOpaque(false);
-
-            // Acción al hacer clic usando el controlador del constructor
-            btn.addActionListener(e -> {
-                int posicion = (rf * 4) + cf + 1;
-                ControlSeleccionarCarta controlador = new ControlSeleccionarCarta(modeloVista);
-                controlador.seleccionarCarta(posicion);
-                System.out.println("Carta seleccionada: " + posicion);
-            });
-
-            botonesMatriz[r][c] = btn;
-            panelMatriz.add(btn);
-        }
+    public void update() {
+ 
     }
 
-    // Configurar JLayeredPane
-    layeredTablero = new JLayeredPane();
-    layeredTablero.setOpaque(false);
 
-    // Limpiar y añadir al panel
-    panelTableroImagen.removeAll();
-    panelTableroImagen.setLayout(new BorderLayout());
-    panelTableroImagen.add(layeredTablero, BorderLayout.CENTER);
-
-    // Añadir componentes al layeredPane (fondo estático)
-    layeredTablero.add(fondo, JLayeredPane.DEFAULT_LAYER);
-    layeredTablero.add(panelMatriz, JLayeredPane.PALETTE_LAYER);
-
-    // Ajuste de tamaño solo para mantener proporciones, sin repaint
-    panelTableroImagen.addComponentListener(new java.awt.event.ComponentAdapter() {
-        @Override
-        public void componentResized(java.awt.event.ComponentEvent e) {
-            int w = panelTableroImagen.getWidth();
-            int h = panelTableroImagen.getHeight();
-            layeredTablero.setBounds(0, 0, w, h);
-            fondo.setBounds(0, 0, w, h);
-            panelMatriz.setBounds(0, 0, w, h);
-        }
-    });
-
-    java.awt.EventQueue.invokeLater(() -> {
-        
-        int w = panelTableroImagen.getWidth();
-        int h = panelTableroImagen.getHeight();
-        if (w > 0 && h > 0) {
-            layeredTablero.setBounds(0, 0, w, h);
-            fondo.setBounds(0, 0, w, h);
-            panelMatriz.setBounds(0, 0, w, h);
-        }
+    public void actualizarNombreCarta(String carta) {
+        this.labelNombreCartaActual.setText(carta);
     }
-    );
-}
-
-
-public void actualizarCartasCorrectas(boolean[] cartasCorrectas) {
-    if (cartasCorrectas == null || cartasCorrectas.length != 16) {
-        return;
-    }
-    for (int posicion = 0; posicion < 16; posicion++) {
-        int fila = posicion / 4;
-        int columna = posicion % 4;
-        JButton btn = botonesMatriz[fila][columna];
-        if (btn != null) {
-            java.awt.Color currentColor = btn.getBackground(); // Para referencia, aunque no se usará setBackground
-            if (cartasCorrectas[posicion]) {
-                // Crear o mostrar un panel interno verde si no está visible
-                if (btn.getComponentCount() == 0) {
-                    JPanel colorPanel = new JPanel();
-                    colorPanel.setBackground(new java.awt.Color(0, 255, 0, 128));
-                    colorPanel.setOpaque(true);
-                    btn.setLayout(new java.awt.BorderLayout());
-                    btn.add(colorPanel, java.awt.BorderLayout.CENTER);
-                } else if (!btn.getComponent(0).isVisible()) {
-                    btn.getComponent(0).setVisible(true);
-                }
-                System.out.println("Pintando casilla " + (posicion + 1) + " de verde");
-            } else {
-                // Ocultar el panel interno si existe y la casilla no está marcada
-                if (btn.getComponentCount() > 0 && btn.getComponent(0).isVisible()) {
-                    btn.getComponent(0).setVisible(false);
-                    System.out.println("Restaurando casilla " + (posicion + 1) + " a transparente");
-                }
-            }
-        }
-    }
-}
-private void procesarCasillasMarcadas() {
-    JugadorVista jugadorPrincipal = modeloVista.getJugadorPrincipal();
-    if (jugadorPrincipal != null) {
-        boolean[] casillasMarcadas = jugadorPrincipal.getTarjeta().getMarcadas();
-        actualizarCartasCorrectas(casillasMarcadas);
-    }
-}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbandonarPartida;
