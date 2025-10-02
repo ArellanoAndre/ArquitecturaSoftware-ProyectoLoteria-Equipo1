@@ -303,7 +303,7 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         contenedorJugadoresSecundarios.setLayout(new BoxLayout(contenedorJugadoresSecundarios, BoxLayout.Y_AXIS));
 
         for (JugadorVista jugador : jugadores) {
-            JPanelJugadorSecundario panelJugadorSecundario = new JPanelJugadorSecundario(jugador);
+            JPanelJugadorSecundario panelJugadorSecundario = new JPanelJugadorSecundario(jugador,modeloVista);
             contenedorJugadoresSecundarios.add(panelJugadorSecundario);
         }
         return contenedorJugadoresSecundarios;

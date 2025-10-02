@@ -13,21 +13,20 @@ import javax.swing.Timer;
 public class ModeloJuego {
 
     private List<Carta> mazo;
-    private Jugador jugador;
+    private Jugador jugadorPrincipal;
     private List<Jugador> jugadoresSecundarios;
     private Carta cartaActual;
     private int marcador = 0;
     private int contador = 0;
-    private ModeloVista modeloVista;
     private Timer timer;
     private ControlVista controlVista;
+    private ModeloJuego modeloJuegoSecundario;
 
-    public ModeloJuego(ModeloVista modeloVista, ControlVista controlVista) {
-        this.modeloVista = modeloVista;
+    public ModeloJuego(ControlVista controlVista, Jugador jugador, List<Jugador> jugadores) {
         this.controlVista = controlVista;
         mazo = crearMazo();
-        jugador = crearJugador();
-        jugadoresSecundarios = crearJugadoresSecundarios();
+        this.jugadorPrincipal = jugador;
+        this.jugadoresSecundarios = jugadores;
         controlVista.setJugadorPrincipal(jugador);
         controlVista.setJugadoresSecundarios(jugadoresSecundarios);
         barajear();
@@ -48,39 +47,50 @@ public class ModeloJuego {
         controlVista.actualizarCartaCantada(cartaActual);
         contador++;
 
-        if (contador == 52) {
+        if (contador == 54) {
             contador = 0;
         }
     }
 
-    public void verificarCarta(int cartaSeleccionada) {
+    public void verificarCarta(int casillaSeleccionada) {
         // Ajustar la posición a índice (de 1-16 a 0-15)
-        int indice = cartaSeleccionada - 1;
+        int indice = casillaSeleccionada - 1;
 
         // Obtener el arreglo de casillas de la tarjeta
-        int[] casillas = jugador.getTarjeta().getCasillas();
+        int[] casillas = jugadorPrincipal.getTarjeta().getCasillas();
 
         // Verificar que el índice sea válido
         if (indice >= 0 && indice < casillas.length) {
             // Obtener el estado de las casillas marcadas
-            boolean[] marcadas = jugador.getTarjeta().getMarcadas();
+            boolean[] marcadas = jugadorPrincipal.getTarjeta().getMarcadas();
 
             // Validar que la casilla no esté ya marcada
             if (!marcadas[indice]) {
                 // Comparar el número de la carta cantada con el valor en la posición seleccionada
                 if (cartaActual != null && casillas[indice] == cartaActual.getNumCarta()) {
-                    jugador.getTarjeta().marcarCasilla(cartaSeleccionada - 1);
-                    controlVista.actualizarTarjetaJugadorPrincipal(jugador.getTarjeta().getMarcadas());
+                    jugadorPrincipal.getTarjeta().marcarCasilla(casillaSeleccionada - 1);
+                    controlVista.actualizarTarjetaJugadorPrincipal(jugadorPrincipal.getTarjeta().getMarcadas());
+                    //Mandar llamada al control secundario
+                    modeloJuegoSecundario.actualizarJugadorSecundario(indice, jugadorPrincipal.getNumJugador());
                     System.out.println("ModeloJuego.si");
                 } else {
                     System.out.println("ModeloJuego.no - No coincide la carta cantada (" + cartaActual.getNumCarta() + ") con la casilla " + casillas[indice]);
                 }
             } else {
-                System.out.println("ModeloJuego.skip - Casilla " + cartaSeleccionada + " ya está marcada");
+                System.out.println("ModeloJuego.skip - Casilla " + casillaSeleccionada + " ya está marcada");
             }
         } else {
             System.out.println("ModeloJuego.error - Índice inválido: " + indice);
         }
+    }
+    
+    public void actualizarJugadorSecundario(int casilla, int numJugador){
+        for (Jugador jugador : jugadoresSecundarios) {
+            if(numJugador == jugador.getNumJugador()){
+                jugador.getTarjeta().marcarCasilla(casilla);
+            }
+        }
+        controlVista.setJugadoresSecundarios(jugadoresSecundarios);
     }
 
     //Regresa la carta actual del juego
@@ -91,6 +101,14 @@ public class ModeloJuego {
     //Regresa el marcador actual del jugador
     public int getMarcador() {
         return marcador;
+    }
+
+    public ModeloJuego getModeloJuegoSecundario() {
+        return modeloJuegoSecundario;
+    }
+
+    public void setModeloJuegoSecundario(ModeloJuego modeloJuegoSecundario) {
+        this.modeloJuegoSecundario = modeloJuegoSecundario;
     }
 
     private List<Carta> crearMazo() {
@@ -116,60 +134,5 @@ public class ModeloJuego {
 
     private void barajear() {
         Collections.shuffle(mazo);
-    }
-
-    private Jugador crearJugador() {
-        // Crear un arreglo de 16 casillas con números de cartas del mazo
-        int[] casillas1 = {46, 6, 38, 3, 8, 11, 33, 35, 21, 54, 50, 29, 30, 40, 36, 26};
-        
-        String img1 = "/img/Tableros/Tablero01.png";
-
-        // Crear una tarjeta con las 16 casillas
-        Tarjeta tarjetaPrueba1 = new Tarjeta(casillas1,img1);
-
-        // Crear y devolver el jugador
-        Jugador jugador1 = new Jugador("Rodri", tarjetaPrueba1, 1);
-        return jugador1;
-    }
-
-    private List<Jugador> crearJugadoresSecundarios() {
-        // Crear tres arreglos de 16 casillas para simular las tarjetas de los demás jugadores
-        int[] casillas2 = {29, 16, 3, 10, 14, 47, 40, 4, 53, 20, 35, 27, 15, 9, 31, 30};
-        int[] casillas3 = {41, 31, 16, 48, 26, 53, 28, 31, 42, 39, 34, 27, 6, 37, 39, 8};
-        int[] casillas4 = {13, 32, 42, 43, 23, 48, 2, 15, 26, 39, 17, 49, 6, 18, 45, 46};
-        // Crear la ruta a las imágenes
-        String img2 = "/img/Tableros/Tablero02.png";
-        String img3 = "/img/Tableros/Tablero03.png";
-        String img4 = "/img/Tableros/Tablero04.png";
-        // Crear las tarjetas
-        Tarjeta tarjetaPrueba2 = new Tarjeta(casillas2,img2);
-        Tarjeta tarjetaPrueba3 = new Tarjeta(casillas3,img3);
-        Tarjeta tarjetaPrueba4 = new Tarjeta(casillas4,img4);
-        //Marcar algunas casillas
-        tarjetaPrueba2.marcarCasilla(0);
-        tarjetaPrueba2.marcarCasilla(5);
-        tarjetaPrueba2.marcarCasilla(10);
-        tarjetaPrueba2.marcarCasilla(15);
-        
-        tarjetaPrueba3.marcarCasilla(5);
-        tarjetaPrueba3.marcarCasilla(6);
-        tarjetaPrueba3.marcarCasilla(9);
-        tarjetaPrueba3.marcarCasilla(10);
-        
-        tarjetaPrueba4.marcarCasilla(0);
-        tarjetaPrueba4.marcarCasilla(3);
-        tarjetaPrueba4.marcarCasilla(12);
-        tarjetaPrueba4.marcarCasilla(15);
-        //Crear los jugadores secundarios
-        Jugador jugador2 = new Jugador("Isaac", tarjetaPrueba2, 2);
-        Jugador jugador3 = new Jugador("Jorge", tarjetaPrueba3, 3);
-        Jugador jugador4 = new Jugador("Abril", tarjetaPrueba4, 4);
-        //Crear la lista de jugadores secundarios y añadir a los que creamos
-        List<Jugador> jugadores = new ArrayList<>();
-        jugadores.add(jugador2);
-        jugadores.add(jugador3);
-        jugadores.add(jugador4);
-        
-        return jugadores;
     }
 }

@@ -65,6 +65,7 @@ public class ModeloVista {
 
     public void setJugadoresSecundarios(List<JugadorVista> jugadoresSecundarios) {
         this.jugadoresSecundarios = jugadoresSecundarios;
+        notificar();
     }
 
     // Método llamado por el controlador cuando se selecciona una carta. este despues lo envia al modeloJuego donde maneja la logica de validacion.

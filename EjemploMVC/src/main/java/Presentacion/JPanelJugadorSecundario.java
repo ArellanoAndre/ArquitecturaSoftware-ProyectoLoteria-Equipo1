@@ -4,6 +4,7 @@
  */
 package Presentacion;
 
+import ModeloVista.ModeloVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import Observer.Observer;
 import Presentacion.utilidades.GridPanel;
@@ -16,13 +17,18 @@ import javax.swing.JPanel;
  *
  * @author isaac
  */
-public class JPanelJugadorSecundario extends JPanel  {
+public class JPanelJugadorSecundario extends JPanel implements Observer{
 
     private JLabel lblNombre;
     private JLabel lblPuntaje;
     private JPanel[] panelCasillasGrid; // arreglo donde guardamos las casillas
+    private JugadorVista jugador;
+    private ModeloVista modeloVista;
 
-    public JPanelJugadorSecundario(JugadorVista jugador) {
+    public JPanelJugadorSecundario(JugadorVista jugador, ModeloVista modeloVista) {
+        this.jugador = jugador;
+        this.modeloVista = modeloVista;
+        this.modeloVista.addObserver(this);
         setLayout(new BorderLayout(5, 5));
         // crear instancia de la clase para construir el grid
         GridPanel panelGrid = new GridPanel();
@@ -37,8 +43,6 @@ public class JPanelJugadorSecundario extends JPanel  {
         panelInfo.add(lblNombre);
         panelInfo.add(lblPuntaje);
         add(panelInfo, BorderLayout.NORTH);// agregamos el panel arriba
-
-        actualizar(jugador);
     }
 
     public void actualizar(JugadorVista jugador) {
@@ -47,11 +51,16 @@ public class JPanelJugadorSecundario extends JPanel  {
         boolean[] marcadas = jugador.getTarjeta().getMarcadas();
         for (int i = 0; i < panelCasillasGrid.length; i++) {
             if (marcadas[i]) {
-                panelCasillasGrid[i].setBackground(GREEN);
-            } else {
-
+                panelCasillasGrid[i].setBackground(Color.GREEN);
             }
         }
     }
+
+    @Override
+    public void update() {
+        actualizar(jugador);
+    }
+    
+    
 
 }
