@@ -24,9 +24,12 @@ public class ControlVista {
         this.modeloVista = modeloVista;
     }
     
+    
+    
     public void setJugadorPrincipal(Jugador jugador){
         TarjetaVista tarjeta = new TarjetaVista(jugador.getTarjeta().getMarcadas(),jugador.getTarjeta().getImg());
         JugadorVista jugadorP = new JugadorVista(jugador.getNombre(), tarjeta, jugador.getNumJugador());
+        jugadorP.setRutaAvatar("/img/Avatares/user" + jugador.getNumJugador() + ".png");
         modeloVista.setJugadorPrincipal(jugadorP);
     }
     
@@ -39,6 +42,7 @@ public class ControlVista {
         for (Jugador jugador : jugadores) {
             TarjetaVista tarjeta = new TarjetaVista(jugador.getTarjeta().getMarcadas(),jugador.getTarjeta().getImg());
             JugadorVista jugadorSV = new JugadorVista(jugador.getNombre(), tarjeta, jugador.getNumJugador());
+            jugadorSV.setRutaAvatar("/img/Avatares/user" + jugador.getNumJugador() + ".png");
             jugadoresV.add(jugadorSV);
         }
         modeloVista.setJugadoresSecundarios(jugadoresV);

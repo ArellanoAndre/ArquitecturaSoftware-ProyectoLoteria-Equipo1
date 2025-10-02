@@ -33,7 +33,7 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         crearPanelCarta();
         crearPanelJugadorPrincipal();
         cargarJugadoresSecundarios();
-        
+
     }
 
     /**
@@ -257,7 +257,7 @@ public class JPantallaJuego extends JFramePadre implements Observer {
     private javax.swing.JPanel panelJugadoresSecundarios;
     private javax.swing.JPanel panelTableroImagen;
     // End of variables declaration//GEN-END:variables
-    
+
     @Override
     public void update() {
     }
@@ -281,7 +281,7 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         panelCartaImg.setLayout(new BorderLayout());
         panelCartaImg.add(panelCarta, BorderLayout.CENTER);
     }
-    
+
     public void crearPanelJugadorPrincipal() {
         //Agregar panel tarjeta jugador principal
         JPanelJugadorPrincipal panelJugadorPrincipal = new JPanelJugadorPrincipal(modeloVista);
@@ -292,21 +292,30 @@ public class JPantallaJuego extends JFramePadre implements Observer {
 
     public void cargarJugadoresSecundarios() {
         JPanel panel = obtenerPanelesJugadores();
-        panel.setPreferredSize(new Dimension(150, 600));
-        panelJugadoresSecundarios.setLayout(new BorderLayout());
-        panelJugadoresSecundarios.add(panel, BorderLayout.CENTER);
+        if (modeloVista.getJugadoresSecundarios().size() == 1) {
+            panel.setPreferredSize(new Dimension(150, 200));
+            panelJugadoresSecundarios.setLayout(new BorderLayout());
+            panelJugadoresSecundarios.add(panel, BorderLayout.CENTER);
+        } else if (modeloVista.getJugadoresSecundarios().size() == 2) {
+            panel.setPreferredSize(new Dimension(150, 400));
+            panelJugadoresSecundarios.setLayout(new BorderLayout());
+            panelJugadoresSecundarios.add(panel, BorderLayout.CENTER);
+        } else {
+            panel.setPreferredSize(new Dimension(150, 600));
+            panelJugadoresSecundarios.setLayout(new BorderLayout());
+            panelJugadoresSecundarios.add(panel, BorderLayout.CENTER);
+        }
     }
 
     public JPanel obtenerPanelesJugadores() {
         List<JugadorVista> jugadores = modeloVista.getJugadoresSecundarios();
         JPanel contenedorJugadoresSecundarios = new JPanel();
         contenedorJugadoresSecundarios.setLayout(new BoxLayout(contenedorJugadoresSecundarios, BoxLayout.Y_AXIS));
-
         for (JugadorVista jugador : jugadores) {
-            JPanelJugadorSecundario panelJugadorSecundario = new JPanelJugadorSecundario(jugador,modeloVista);
+            JPanelJugadorSecundario panelJugadorSecundario = new JPanelJugadorSecundario(jugador, modeloVista);
             contenedorJugadoresSecundarios.add(panelJugadorSecundario);
         }
         return contenedorJugadoresSecundarios;
-    }
 
+    }
 }

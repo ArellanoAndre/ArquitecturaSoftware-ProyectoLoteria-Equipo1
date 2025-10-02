@@ -2,6 +2,9 @@ package Presentacion;
 
 import ModeloVista.ModeloVista;
 import Observer.Observer;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 
 public class JPanelJugadorPrincipal extends javax.swing.JPanel implements Observer {
     private ModeloVista modeloVista;
@@ -10,6 +13,8 @@ public class JPanelJugadorPrincipal extends javax.swing.JPanel implements Observ
         this.modeloVista = modeloVista;
         this.modeloVista.addObserver(this);
         cargarNombre();
+        cargarAvatar(modeloVista.getJugadorPrincipal().getRutaAvatar());
+
     }
 
     /**
@@ -23,6 +28,7 @@ public class JPanelJugadorPrincipal extends javax.swing.JPanel implements Observ
 
         lblNombreJugadorPrincipal = new javax.swing.JLabel();
         lblPuntaje = new javax.swing.JLabel();
+        lblAvatar = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 250, 242));
 
@@ -39,7 +45,9 @@ public class JPanelJugadorPrincipal extends javax.swing.JPanel implements Observ
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(106, 106, 106)
+                .addGap(29, 29, 29)
+                .addComponent(lblAvatar, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblPuntaje)
                     .addComponent(lblNombreJugadorPrincipal))
@@ -48,11 +56,14 @@ public class JPanelJugadorPrincipal extends javax.swing.JPanel implements Observ
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(18, Short.MAX_VALUE)
-                .addComponent(lblNombreJugadorPrincipal)
-                .addGap(13, 13, 13)
-                .addComponent(lblPuntaje)
-                .addGap(19, 19, 19))
+                .addContainerGap(16, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblAvatar, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblNombreJugadorPrincipal)
+                        .addGap(13, 13, 13)
+                        .addComponent(lblPuntaje)))
+                .addGap(21, 21, 21))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -65,9 +76,31 @@ public class JPanelJugadorPrincipal extends javax.swing.JPanel implements Observ
         System.out.println(modeloVista.getJugadorPrincipal().getNombre());
         lblNombreJugadorPrincipal.setText(modeloVista.getJugadorPrincipal().getNombre());
     }
+    
+   private void cargarAvatar(String rutaImagen) {
+    SwingUtilities.invokeLater(() -> {
+        java.net.URL url = getClass().getResource(rutaImagen);
+        if (url != null) {
+            ImageIcon icono = new ImageIcon(url);
+
+            Image imagenEscalada = icono.getImage().getScaledInstance(
+                    lblAvatar.getWidth(), 
+                    lblAvatar.getHeight(), 
+                    Image.SCALE_SMOOTH
+            );
+
+            lblAvatar.setIcon(new ImageIcon(imagenEscalada));
+        } else {
+            System.out.println("No se encontró la imagen: " + rutaImagen);
+        }
+    });
+}
+
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel lblAvatar;
     private javax.swing.JLabel lblNombreJugadorPrincipal;
     private javax.swing.JLabel lblPuntaje;
     // End of variables declaration//GEN-END:variables

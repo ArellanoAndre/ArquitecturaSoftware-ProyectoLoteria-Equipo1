@@ -10,6 +10,7 @@ import Observer.Observer;
 import Presentacion.utilidades.GridPanel;
 import java.awt.*;
 import static java.awt.Color.GREEN;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -17,10 +18,11 @@ import javax.swing.JPanel;
  *
  * @author isaac
  */
-public class JPanelJugadorSecundario extends JPanel implements Observer{
+public class JPanelJugadorSecundario extends JPanel implements Observer {
 
     private JLabel lblNombre;
     private JLabel lblPuntaje;
+    private JLabel lblAvatar;       // nuevo JLabel para el avatar
     private JPanel[] panelCasillasGrid; // arreglo donde guardamos las casillas
     private JugadorVista jugador;
     private ModeloVista modeloVista;
@@ -29,20 +31,49 @@ public class JPanelJugadorSecundario extends JPanel implements Observer{
         this.jugador = jugador;
         this.modeloVista = modeloVista;
         this.modeloVista.addObserver(this);
-        setLayout(new BorderLayout(5, 5));
-        // crear instancia de la clase para construir el grid
-        GridPanel panelGrid = new GridPanel();
-        setBackground(new Color(255,250,242));
-        this.panelCasillasGrid = panelGrid.getCasillas(); // obtenemos las casillas de GridPanel
-        add(panelGrid, BorderLayout.CENTER); // agregamos el panel al centro
 
+        setLayout(new BorderLayout(5, 5));
+        setBackground(new Color(255, 250, 242));
+
+        // PANEL GRID
+        GridPanel panelGrid = new GridPanel();
+        this.panelCasillasGrid = panelGrid.getCasillas();
+        add(panelGrid, BorderLayout.CENTER);
+
+        // PANEL INFO (Nombre + Puntaje)
         JPanel panelInfo = new JPanel(new GridLayout(2, 1));
-        panelInfo.setBackground(new Color(255,250,242));
+        panelInfo.setBackground(new Color(255, 250, 242));
         lblNombre = new JLabel(jugador.getNombre());
-        lblPuntaje = new JLabel(); // por mientras todavia no se actauliza
+        lblPuntaje = new JLabel("Puntaje: " + jugador.getPuntaje());
         panelInfo.add(lblNombre);
         panelInfo.add(lblPuntaje);
-        add(panelInfo, BorderLayout.NORTH);// agregamos el panel arriba
+
+        // PANEL AVATAR
+        lblAvatar = new JLabel();
+        cargarAvatar(); // método para cargar la imagen
+
+        // Panel contenedor para info + avatar
+        JPanel panelNorte = new JPanel(new BorderLayout());
+        panelNorte.setBackground(new Color(255, 250, 242));
+        panelNorte.add(lblAvatar, BorderLayout.WEST);
+        panelNorte.add(panelInfo, BorderLayout.CENTER);
+
+        add(panelNorte, BorderLayout.NORTH);
+    }
+
+    private void cargarAvatar() {
+        String rutaAvatar = jugador.getRutaAvatar();
+        if (rutaAvatar != null) {
+            java.net.URL url = getClass().getResource(rutaAvatar);
+            if (url != null) {
+                ImageIcon icono = new ImageIcon(url);
+
+                Image imagenEscalada = icono.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+                lblAvatar.setIcon(new ImageIcon(imagenEscalada));
+            } else {
+                System.out.println("No se encontró la imagen: " + rutaAvatar);
+            }
+        }
     }
 
     public void actualizar(JugadorVista jugador) {
@@ -60,7 +91,5 @@ public class JPanelJugadorSecundario extends JPanel implements Observer{
     public void update() {
         actualizar(jugador);
     }
-    
-    
 
 }

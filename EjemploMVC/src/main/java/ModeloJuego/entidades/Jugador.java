@@ -21,6 +21,7 @@ public class Jugador {
         this.tarjeta = tarjeta;
         this.puntaje = 0;
         this.principal = false;
+        this.numJugador = numJugador;
     }
 
     public String getNombre() {

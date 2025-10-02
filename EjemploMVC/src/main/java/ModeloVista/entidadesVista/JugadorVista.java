@@ -17,6 +17,7 @@ public class JugadorVista {
     private double puntaje;
     private TarjetaVista tarjeta;
     private boolean principal;
+    private String rutaAvatar;
 
     public JugadorVista(String nombre, TarjetaVista tarjeta, int numJugador) {
         this.nombre = nombre;
@@ -56,6 +57,16 @@ public class JugadorVista {
     public void setNumJugador(int numJugador) {
         this.numJugador = numJugador;
     }
+
+    public String getRutaAvatar() {
+        return rutaAvatar;
+    }
+
+    public void setRutaAvatar(String rutaAvatar) {
+        this.rutaAvatar = rutaAvatar;
+    }
+    
+    
     
     
 }

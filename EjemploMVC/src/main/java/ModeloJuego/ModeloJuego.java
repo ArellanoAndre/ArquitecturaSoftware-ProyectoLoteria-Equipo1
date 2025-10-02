@@ -24,12 +24,12 @@ public class ModeloJuego {
 
     public ModeloJuego(ControlVista controlVista, Jugador jugador, List<Jugador> jugadores) {
         this.controlVista = controlVista;
-        mazo = crearMazo();
+        this.mazo = crearMazo();
+        barajear();
         this.jugadorPrincipal = jugador;
         this.jugadoresSecundarios = jugadores;
         controlVista.setJugadorPrincipal(jugador);
         controlVista.setJugadoresSecundarios(jugadoresSecundarios);
-        barajear();
     }
 
     //Inicia el juego enviandole una carta al modeloVista y despues lo vuelve a ejecutar repetidamente segun el tiempo indicado.
@@ -83,10 +83,10 @@ public class ModeloJuego {
             System.out.println("ModeloJuego.error - Índice inválido: " + indice);
         }
     }
-    
-    public void actualizarJugadorSecundario(int casilla, int numJugador){
+
+    public void actualizarJugadorSecundario(int casilla, int numJugador) {
         for (Jugador jugador : jugadoresSecundarios) {
-            if(numJugador == jugador.getNumJugador()){
+            if (numJugador == jugador.getNumJugador()) {
                 jugador.getTarjeta().marcarCasilla(casilla);
             }
         }
@@ -109,9 +109,25 @@ public class ModeloJuego {
 
     public void setModeloJuegoSecundario(ModeloJuego modeloJuegoSecundario) {
         this.modeloJuegoSecundario = modeloJuegoSecundario;
+
+        // compartir mazo a modelo secundario
+        if (this.mazo != null && !this.mazo.isEmpty()) {
+            modeloJuegoSecundario.setMazo(this.mazo);
+        } else if (modeloJuegoSecundario.getMazo() != null) {
+            this.mazo = modeloJuegoSecundario.getMazo();
+        }
     }
 
-    private List<Carta> crearMazo() {
+    // Getter y Setter del mazo
+    public List<Carta> getMazo() {
+        return mazo;
+    }
+
+    public void setMazo(List<Carta> mazo) {
+        this.mazo = mazo;
+    }
+
+    public List<Carta> crearMazo() {
         String[] nombres = {
             "El Gallo", "El Diablito", "La Dama", "El Catrín", "El Paraguas", "La Sirena",
             "La Escalera", "La Botella", "El Barril", "El Árbol", "El Melón", "El Valiente",
@@ -134,5 +150,6 @@ public class ModeloJuego {
 
     private void barajear() {
         Collections.shuffle(mazo);
+
     }
 }
