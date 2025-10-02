@@ -115,9 +115,9 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         panelCartaTextoLayout.setVerticalGroup(
             panelCartaTextoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCartaTextoLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addGap(38, 38, 38)
                 .addComponent(labelNombreCartaActual)
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         panelBotones.setBackground(new java.awt.Color(255, 250, 242));
@@ -169,7 +169,7 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         panelJugadoresSecundarios.setLayout(panelJugadoresSecundariosLayout);
         panelJugadoresSecundariosLayout.setHorizontalGroup(
             panelJugadoresSecundariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 153, Short.MAX_VALUE)
+            .addGap(0, 247, Short.MAX_VALUE)
         );
         panelJugadoresSecundariosLayout.setVerticalGroup(
             panelJugadoresSecundariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,10 +201,10 @@ public class JPantallaJuego extends JFramePadre implements Observer {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(panelCartaTexto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(panelBotones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(panelBotones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panelJugadoresSecundarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(panelJugadorPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
-                .addComponent(panelJugadoresSecundarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanelFondoLayout.setVerticalGroup(
@@ -291,31 +291,23 @@ public class JPantallaJuego extends JFramePadre implements Observer {
     }
 
     public void cargarJugadoresSecundarios() {
-        JPanel panel = obtenerPanelesJugadores();
-        if (modeloVista.getJugadoresSecundarios().size() == 1) {
-            panel.setPreferredSize(new Dimension(150, 200));
-            panelJugadoresSecundarios.setLayout(new BorderLayout());
-            panelJugadoresSecundarios.add(panel, BorderLayout.CENTER);
-        } else if (modeloVista.getJugadoresSecundarios().size() == 2) {
-            panel.setPreferredSize(new Dimension(150, 400));
-            panelJugadoresSecundarios.setLayout(new BorderLayout());
-            panelJugadoresSecundarios.add(panel, BorderLayout.CENTER);
-        } else {
-            panel.setPreferredSize(new Dimension(150, 600));
-            panelJugadoresSecundarios.setLayout(new BorderLayout());
-            panelJugadoresSecundarios.add(panel, BorderLayout.CENTER);
-        }
-    }
-
-    public JPanel obtenerPanelesJugadores() {
         List<JugadorVista> jugadores = modeloVista.getJugadoresSecundarios();
-        JPanel contenedorJugadoresSecundarios = new JPanel();
-        contenedorJugadoresSecundarios.setLayout(new BoxLayout(contenedorJugadoresSecundarios, BoxLayout.Y_AXIS));
-        for (JugadorVista jugador : jugadores) {
-            JPanelJugadorSecundario panelJugadorSecundario = new JPanelJugadorSecundario(jugador, modeloVista);
-            contenedorJugadoresSecundarios.add(panelJugadorSecundario);
-        }
-        return contenedorJugadoresSecundarios;
 
+        JPanel contenedor = new JPanel();
+        contenedor.setLayout(new BoxLayout(contenedor, BoxLayout.Y_AXIS));
+
+        for (JugadorVista jugador : jugadores) {
+            PanelJugadorSecundario panelJugador = new PanelJugadorSecundario(jugador, modeloVista);
+            contenedor.add(panelJugador);
+        }
+        int altura = jugadores.size() * 200;
+        contenedor.setPreferredSize(new Dimension(150, altura));
+
+        panelJugadoresSecundarios.removeAll();
+        panelJugadoresSecundarios.setLayout(new BorderLayout());
+        panelJugadoresSecundarios.add(contenedor, BorderLayout.CENTER);
+        panelJugadoresSecundarios.revalidate();
+        panelJugadoresSecundarios.repaint();
     }
+
 }
