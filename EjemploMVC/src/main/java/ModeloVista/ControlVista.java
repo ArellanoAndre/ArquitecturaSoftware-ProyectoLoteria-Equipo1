@@ -44,6 +44,8 @@ public class ControlVista {
             JugadorVista jugadorSV = new JugadorVista(jugador.getNombre(), tarjeta, jugador.getNumJugador());
             jugadorSV.setRutaAvatar("/img/Avatares/user" + jugador.getNumJugador() + ".png");
             jugadoresV.add(jugadorSV);
+            jugadoresV.add(jugadorSV);
+          //  jugadoresV.add(jugadorSV);
         }
         modeloVista.setJugadoresSecundarios(jugadoresV);
     }

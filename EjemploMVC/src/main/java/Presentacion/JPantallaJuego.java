@@ -5,10 +5,11 @@ import ModeloVista.ModeloVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import Observer.Observer;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.util.Arrays;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.util.List;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
@@ -289,25 +290,76 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         this.panelJugadorPrincipal.setLayout(new BorderLayout());
         this.panelJugadorPrincipal.add(panelJugadorPrincipal, BorderLayout.CENTER);
     }
+public void cargarJugadoresSecundarios() {
+    List<JugadorVista> jugadores = modeloVista.getJugadoresSecundarios();
 
-    public void cargarJugadoresSecundarios() {
-        List<JugadorVista> jugadores = modeloVista.getJugadoresSecundarios();
+    // Contenedor vertical para los "slots"
+    JPanel contenedor = new JPanel();
+    contenedor.setLayout(new BoxLayout(contenedor, BoxLayout.Y_AXIS));
+    contenedor.setOpaque(false);
 
-        JPanel contenedor = new JPanel();
-        contenedor.setLayout(new BoxLayout(contenedor, BoxLayout.Y_AXIS));
+    // 1) Agrega los jugadores reales
+    int count = 0;
+    Dimension slotDim = null; // calcularemos el alto con el 1er panel real
+    for (JugadorVista j : jugadores) {
+        PanelJugadorSecundario item = new PanelJugadorSecundario(j, modeloVista);
 
-        for (JugadorVista jugador : jugadores) {
-            PanelJugadorSecundario panelJugador = new PanelJugadorSecundario(jugador, modeloVista);
-            contenedor.add(panelJugador);
+        // Que se pegue a la izquierda y no se centre raro
+        item.setAlignmentX(JPanel.LEFT_ALIGNMENT);
+
+        // guardamos el alto del primer panel para copiarlo a los vacíos
+        if (slotDim == null) {
+            // Tomamos su preferredHeight.
+            // Si tu panel tiene layout del editor, esto ya trae un alto coherente.
+            slotDim = new Dimension(300, item.getPreferredSize().height); 
+            // ancho "base"; puedes ignorarlo; el importante es el alto
         }
-        int altura = jugadores.size() * 200;
-        contenedor.setPreferredSize(new Dimension(150, altura));
 
-        panelJugadoresSecundarios.removeAll();
-        panelJugadoresSecundarios.setLayout(new BorderLayout());
-        panelJugadoresSecundarios.add(contenedor, BorderLayout.CENTER);
-        panelJugadoresSecundarios.revalidate();
-        panelJugadoresSecundarios.repaint();
+        // deja que se estire a lo ancho si el contenedor lo permite
+        item.setMaximumSize(new Dimension(Integer.MAX_VALUE, item.getPreferredSize().height));
+
+        contenedor.add(item);
+        count++;
     }
+
+    // 2) Agrega placeholders (vacíos) del MISMO tamaño para empujar hacia arriba
+    final int MIN_SLOTS = 4; // <- ajusta cuántos "slots" quieres ver como mínimo
+    if (slotDim == null) {
+        // Si no hubo jugadores, define un alto base para los vacíos (coherente con tu UI)
+        slotDim = new Dimension(300, 200);
+    }
+
+    while (count < MIN_SLOTS) {
+        JPanel placeholder = crearPlaceholder(slotDim.height);
+        placeholder.setAlignmentX(JPanel.LEFT_ALIGNMENT);
+        placeholder.setMaximumSize(new Dimension(Integer.MAX_VALUE, slotDim.height));
+        contenedor.add(placeholder);
+        count++;
+    }
+
+    // 3) Monta el contenedor en el panel derecho
+    panelJugadoresSecundarios.removeAll();
+    panelJugadoresSecundarios.setLayout(new BorderLayout());
+    panelJugadoresSecundarios.add(contenedor, BorderLayout.NORTH); // anclado arriba
+    panelJugadoresSecundarios.revalidate();
+    panelJugadoresSecundarios.repaint();
+}
+
+
+private JPanel crearPlaceholder(int height) {
+    JPanel p = new JPanel();
+    // si prefieres transparente:
+    p.setOpaque(false);
+    // o si prefieres "en blanco", usa:
+    // p.setBackground(Color.WHITE); p.setOpaque(true);
+
+    // Mismo alto que el panel real
+    p.setPreferredSize(new Dimension(300, height));
+    // Borde opcional muy sutil para conservar el layout visual (puedes quitarlo):
+    // p.setBorder(BorderFactory.createEmptyBorder(8, 0, 8, 0));
+    return p;
+}
+
+
 
 }
