@@ -4,6 +4,7 @@
  */
 package Observer;
 
+import ModeloJuego.ModeloJuego;
 import ModeloJuego.entidades.Carta;
 import ModeloJuego.entidades.Jugador;
 import java.util.List;
@@ -17,11 +18,15 @@ public interface IModeloJuego {
     void iniciarJuego();
     void siguienteCarta();
     void verificarCarta(int cartaSeleccionada);
+    void actualizarJugadorSecundario(int casilla, int numJugador);
     Carta getCartaActual();
     int getMarcador();
+    ModeloJuego getModeloJuegoSecundario();
+    void setModeloJuegoSecundario(ModeloJuego modeloJuegoSecundario);
+    List<Carta> getMazo();
+    void setMazo(List<Carta> mazo);
     List<Carta> crearMazo();
     void barajear();
-    Jugador crearJugador(List<Carta> mazo);
     
     
     

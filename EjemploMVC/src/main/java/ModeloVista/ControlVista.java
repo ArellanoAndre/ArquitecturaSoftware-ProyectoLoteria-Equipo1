@@ -9,6 +9,7 @@ import ModeloJuego.entidades.Jugador;
 import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import ModeloVista.entidadesVista.TarjetaVista;
+import Observer.IControlVista;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
  *
  * @author rodri
  */
-public class ControlVista {
+public class ControlVista implements IControlVista {
     
     private ModeloVista modeloVista;
     
@@ -26,6 +27,7 @@ public class ControlVista {
     
     
     
+    @Override
     public void setJugadorPrincipal(Jugador jugador){
         TarjetaVista tarjeta = new TarjetaVista(jugador.getTarjeta().getMarcadas(),jugador.getTarjeta().getImg());
         JugadorVista jugadorP = new JugadorVista(jugador.getNombre(), tarjeta, jugador.getNumJugador());
@@ -33,10 +35,12 @@ public class ControlVista {
         modeloVista.setJugadorPrincipal(jugadorP);
     }
     
+    @Override
     public void actualizarTarjetaJugadorPrincipal (boolean[] marcadas){
         modeloVista.actualizarTarjetaJugadorP(marcadas);
     }
     
+    @Override
     public void setJugadoresSecundarios(List<Jugador> jugadores){
         List<JugadorVista> jugadoresV = new ArrayList<>();
         for (Jugador jugador : jugadores) {
@@ -44,12 +48,11 @@ public class ControlVista {
             JugadorVista jugadorSV = new JugadorVista(jugador.getNombre(), tarjeta, jugador.getNumJugador());
             jugadorSV.setRutaAvatar("/img/Avatares/user" + jugador.getNumJugador() + ".png");
             jugadoresV.add(jugadorSV);
-            jugadoresV.add(jugadorSV);
-          //  jugadoresV.add(jugadorSV);
         }
         modeloVista.setJugadoresSecundarios(jugadoresV);
     }
     
+    @Override
     public void actualizarCartaCantada (Carta cartaActual){
         CartaVista cv = new CartaVista(
                 cartaActual.getNumCarta(),

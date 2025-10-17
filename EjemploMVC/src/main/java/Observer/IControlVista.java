@@ -6,6 +6,7 @@ package Observer;
 
 import ModeloJuego.entidades.Carta;
 import ModeloJuego.entidades.Jugador;
+import java.util.List;
 
 /**
  *
@@ -15,6 +16,7 @@ public interface IControlVista {
     
     void setJugadorPrincipal(Jugador jugador);
     void actualizarTarjetaJugadorPrincipal(boolean[] marcadas);
+    void setJugadoresSecundarios(List<Jugador> jugadores);
     void actualizarCartaCantada (Carta cartaActual);
     
 }

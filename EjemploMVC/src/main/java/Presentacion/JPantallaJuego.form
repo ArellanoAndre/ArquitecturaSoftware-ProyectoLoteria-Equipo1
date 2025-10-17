@@ -40,7 +40,6 @@
                   <Component id="panelTableroImagen" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="btnAbandonarPartida" min="-2" pref="468" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Component id="panelCartaImg" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -48,10 +47,16 @@
                               <Component id="panelCartaTexto" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="panelBotones" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="panelJugadoresSecundarios" max="32767" attributes="0"/>
+                          <EmptySpace pref="75" max="32767" attributes="0"/>
+                          <Component id="panelJugadoresSecundarios" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="panelJugadorPrincipal" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="btnAbandonarPartida" min="-2" pref="468" max="-2" attributes="0"/>
+                              <Component id="panelJugadorPrincipal" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -266,7 +271,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="247" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="178" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">

@@ -8,6 +8,7 @@ import ModeloJuego.ModeloJuego;
 import ModeloJuego.entidades.Carta;
 import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
+import java.util.List;
 
 /**
  *
@@ -16,7 +17,7 @@ import ModeloVista.entidadesVista.JugadorVista;
 public interface IModeloVista {
     
     // Métodos para la Vista 
-    String getCartaCantada();
+    CartaVista getCartaCantada();
     JugadorVista getJugadorPrincipal();
     void setJugadorPrincipal(JugadorVista jugadorPrincipal);
 
@@ -24,17 +25,18 @@ public interface IModeloVista {
     void seleccionarCarta(int pos);
 
     // Métodos para el ModeloJuego
-    void setCartaCantada(Carta carta);
     void actualizarTarjetaJugadorP(boolean[] casillas);
     void setModeloJuego(ModeloJuego modeloJuego);
     void setMarcador(int marcador);
     int getMarcador();
     void setCartaCantada(CartaVista carta);
+    List<JugadorVista> getJugadoresSecundarios();
+    void setJugadoresSecundarios(List<JugadorVista> jugadoresSecundarios);
     
    
    
     // Métodos para el patrón Observer
     void addObserver(Observer o);
-    void removeObserver(Observer o);
+    void notificar();
 }
 

@@ -2,15 +2,14 @@ package ModeloJuego;
 
 import ModeloJuego.entidades.Jugador;
 import ModeloJuego.entidades.Carta;
-import ModeloJuego.entidades.Tarjeta;
 import ModeloVista.ControlVista;
-import ModeloVista.ModeloVista;
+import Observer.IModeloJuego;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.Timer;
 
-public class ModeloJuego {
+public class ModeloJuego implements IModeloJuego{
 
     private List<Carta> mazo;
     private Jugador jugadorPrincipal;
@@ -33,6 +32,7 @@ public class ModeloJuego {
     }
 
     //Inicia el juego enviandole una carta al modeloVista y despues lo vuelve a ejecutar repetidamente segun el tiempo indicado.
+    @Override
     public void iniciarJuego() {
         siguienteCarta();
 
@@ -42,7 +42,8 @@ public class ModeloJuego {
     }
 
     // Obtiene una nueva carta random del 1 al 3 y se la envia al modelo vista
-    private void siguienteCarta() {
+    @Override
+    public void siguienteCarta() {
         cartaActual = mazo.get(contador);
         controlVista.actualizarCartaCantada(cartaActual);
         contador++;
@@ -52,6 +53,7 @@ public class ModeloJuego {
         }
     }
 
+    @Override
     public void verificarCarta(int casillaSeleccionada) {
         // Ajustar la posición a índice (de 1-16 a 0-15)
         int indice = casillaSeleccionada - 1;
@@ -84,6 +86,7 @@ public class ModeloJuego {
         }
     }
 
+    @Override
     public void actualizarJugadorSecundario(int casilla, int numJugador) {
         for (Jugador jugador : jugadoresSecundarios) {
             if (numJugador == jugador.getNumJugador()) {
@@ -94,19 +97,23 @@ public class ModeloJuego {
     }
 
     //Regresa la carta actual del juego
+    @Override
     public Carta getCartaActual() {
         return cartaActual;
     }
 
     //Regresa el marcador actual del jugador
+    @Override
     public int getMarcador() {
         return marcador;
     }
 
+    @Override
     public ModeloJuego getModeloJuegoSecundario() {
         return modeloJuegoSecundario;
     }
 
+    @Override
     public void setModeloJuegoSecundario(ModeloJuego modeloJuegoSecundario) {
         this.modeloJuegoSecundario = modeloJuegoSecundario;
 
@@ -119,14 +126,17 @@ public class ModeloJuego {
     }
 
     // Getter y Setter del mazo
+    @Override
     public List<Carta> getMazo() {
         return mazo;
     }
 
+    @Override
     public void setMazo(List<Carta> mazo) {
         this.mazo = mazo;
     }
 
+    @Override
     public List<Carta> crearMazo() {
         String[] nombres = {
             "El Gallo", "El Diablito", "La Dama", "El Catrín", "El Paraguas", "La Sirena",
@@ -148,8 +158,8 @@ public class ModeloJuego {
 
     }
 
-    private void barajear() {
+    @Override
+    public void barajear() {
         Collections.shuffle(mazo);
-
     }
 }
