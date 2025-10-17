@@ -1,7 +1,6 @@
 package Presentacion;
 
 import Controlador.ControlSeleccionarCarta;
-import ModeloVista.ModeloVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import Observer.IModeloVista;
 import Observer.Observer;
@@ -10,12 +9,21 @@ import javax.swing.JButton;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
+/**
+ * Panel que representa la tarjeta del jugador principal en la interfaz del
+ * juego. Muestra una cuadrícula 4x4 de botones sobre un fondo de imagen y
+ * actualiza visualmente las casillas marcadas. Implementa Observer para
+ * actualizar la vista cuando el ModeloVista notifica cambios.
+ */
 public class JPanelTarjeta extends javax.swing.JPanel implements Observer {
 
     private IModeloVista modeloVista;
 
     /**
-     * Creates new form JPanelTarjeta
+     * Constructor que inicializa el panel de la tarjeta y registra el
+     * observador.
+     *
+     * @param modeloVista ModeloVista del juego.
      */
     public JPanelTarjeta(IModeloVista modeloVista) {
         initComponents();
@@ -24,7 +32,9 @@ public class JPanelTarjeta extends javax.swing.JPanel implements Observer {
         inicializarTableroConMatriz();
     }
 
-    // --- clase interna para mostrar la imagen escalada ---
+    /**
+     * Clase interna para mostrar la imagen de fondo escalada automáticamente.
+     */
     private static class ScaledImageComponent extends javax.swing.JComponent {
 
         private final java.awt.Image image;
@@ -48,6 +58,11 @@ public class JPanelTarjeta extends javax.swing.JPanel implements Observer {
     private javax.swing.JLayeredPane layeredTablero;
     private javax.swing.JButton[][] botonesMatriz; // opcional para acceder luego
 
+    /**
+     * Inicializa el tablero 4x4 con botones transparentes sobre el fondo de la
+     * tarjeta. Asocia la acción de seleccionar carta al hacer clic en cada
+     * botón.
+     */
     private void inicializarTableroConMatriz() {
         // Cargar la imagen de fondo una vez al iniciar
         java.net.URL url = getClass().getResource(modeloVista.getJugadorPrincipal().getTarjeta().getImg());
@@ -126,6 +141,12 @@ public class JPanelTarjeta extends javax.swing.JPanel implements Observer {
         );
     }
 
+    /**
+     * Actualiza visualmente las casillas marcadas del jugador.
+     *
+     * @param cartasCorrectas Arreglo booleano indicando cuáles casillas están
+     * marcadas.
+     */
     public void actualizarCartasCorrectas(boolean[] cartasCorrectas) {
         if (cartasCorrectas == null || cartasCorrectas.length != 16) {
             return;
@@ -175,6 +196,9 @@ public class JPanelTarjeta extends javax.swing.JPanel implements Observer {
         }
     }
 
+    /**
+     * Procesa las casillas marcadas del jugador principal y actualiza la vista.
+     */
     private void procesarCasillasMarcadas() {
         JugadorVista jugadorPrincipal = modeloVista.getJugadorPrincipal();
         if (jugadorPrincipal != null) {
@@ -183,9 +207,12 @@ public class JPanelTarjeta extends javax.swing.JPanel implements Observer {
         }
     }
 
+    /**
+     * Método llamado cuando el ModeloVista notifica un cambio. Actualiza las
+     * casillas marcadas del jugador principal.
+     */
     @Override
     public void update() {
-        // Procesar las casillas marcadas del jugador
         procesarCasillasMarcadas();
 
     }

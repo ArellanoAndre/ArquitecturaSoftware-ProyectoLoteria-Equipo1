@@ -9,7 +9,11 @@ import java.util.Collections;
 import java.util.List;
 import javax.swing.Timer;
 
-public class ModeloJuego implements IModeloJuego{
+/**
+ * Clase que representa el modelo principal del juego de lotería. Se encarga de
+ * manejar la lógica del juego.
+ */
+public class ModeloJuego implements IModeloJuego {
 
     private List<Carta> mazo;
     private Jugador jugadorPrincipal;
@@ -21,6 +25,14 @@ public class ModeloJuego implements IModeloJuego{
     private IControlVista controlVista;
     private IModeloJuego modeloJuegoSecundario;
 
+    /**
+     * Constructor que inicializa el modelo con la vista, el jugador principal y
+     * la lista de jugadores secundarios.
+     *
+     * @param controlVista interfaz para actualizar la vista.
+     * @param jugador jugador principal del juego.
+     * @param jugadores lista de jugadores secundarios.
+     */
     public ModeloJuego(IControlVista controlVista, Jugador jugador, List<Jugador> jugadores) {
         this.controlVista = controlVista;
         this.mazo = crearMazo();
@@ -31,7 +43,10 @@ public class ModeloJuego implements IModeloJuego{
         controlVista.setJugadoresSecundarios(jugadoresSecundarios);
     }
 
-    //Inicia el juego enviandole una carta al modeloVista y despues lo vuelve a ejecutar repetidamente segun el tiempo indicado.
+    /**
+     * Inicia el juego mostrando la primera carta y repitiendo el proceso
+     * automáticamente cada cierto tiempo.
+     */
     @Override
     public void iniciarJuego() {
         siguienteCarta();
@@ -41,7 +56,9 @@ public class ModeloJuego implements IModeloJuego{
         timer.start();
     }
 
-    // Obtiene una nueva carta random del 1 al 3 y se la envia al modelo vista
+    /**
+     * Obtiene la siguiente carta del mazo y la envía a la vista.
+     */
     @Override
     public void siguienteCarta() {
         cartaActual = mazo.get(contador);
@@ -53,6 +70,12 @@ public class ModeloJuego implements IModeloJuego{
         }
     }
 
+    /**
+     * Verifica si la carta seleccionada por el jugador coincide con la carta
+     * actual.
+     *
+     * @param casillaSeleccionada número de casilla seleccionada (1–16).
+     */
     @Override
     public void verificarCarta(int casillaSeleccionada) {
         // Ajustar la posición a índice (de 1-16 a 0-15)
@@ -86,6 +109,12 @@ public class ModeloJuego implements IModeloJuego{
         }
     }
 
+    /**
+     * Actualiza el estado de las casillas marcadas de un jugador secundario.
+     *
+     * @param casilla posición de la casilla marcada.
+     * @param numJugador número del jugador que la marcó.
+     */
     @Override
     public void actualizarJugadorSecundario(int casilla, int numJugador) {
         for (Jugador jugador : jugadoresSecundarios) {
@@ -96,23 +125,33 @@ public class ModeloJuego implements IModeloJuego{
         controlVista.setJugadoresSecundarios(jugadoresSecundarios);
     }
 
-    //Regresa la carta actual del juego
+    /**
+     * @return carta actual cantada.
+     */
     @Override
     public Carta getCartaActual() {
         return cartaActual;
     }
 
-    //Regresa el marcador actual del jugador
+    /**
+     * @return marcador actual del jugador.
+     */
     @Override
     public int getMarcador() {
         return marcador;
     }
 
+    /**
+     * @return modelo del juego secundario.
+     */
     @Override
     public IModeloJuego getModeloJuegoSecundario() {
         return modeloJuegoSecundario;
     }
 
+    /**
+     * Asigna el modelo de juego secundario y comparte el mazo.
+     */
     @Override
     public void setModeloJuegoSecundario(IModeloJuego modeloJuegoSecundario) {
         this.modeloJuegoSecundario = modeloJuegoSecundario;
@@ -125,17 +164,27 @@ public class ModeloJuego implements IModeloJuego{
         }
     }
 
-    // Getter y Setter del mazo
+    /**
+     * @return lista de cartas del mazo.
+     */
     @Override
     public List<Carta> getMazo() {
         return mazo;
     }
 
+    /**
+     * Asigna un nuevo mazo.
+     */
     @Override
     public void setMazo(List<Carta> mazo) {
         this.mazo = mazo;
     }
 
+    /**
+     * Crea un nuevo mazo de 54 cartas de lotería.
+     *
+     * @return lista con las cartas generadas.
+     */
     @Override
     public List<Carta> crearMazo() {
         String[] nombres = {
@@ -158,6 +207,9 @@ public class ModeloJuego implements IModeloJuego{
 
     }
 
+    /**
+     * Mezcla las cartas del mazo.
+     */
     @Override
     public void barajear() {
         Collections.shuffle(mazo);

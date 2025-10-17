@@ -1,38 +1,38 @@
 package Presentacion;
 
 import Controlador.ControlSeleccionarCarta;
-import ModeloVista.ModeloVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import Observer.IModeloVista;
 import Observer.Observer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.util.List;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 /**
- *
- * @author abrilislas
+ * JFrame principal del juego de Lotería. Contiene la interfaz completa: tablero
+ * del jugador principal, carta actual, nombre de la carta cantada, botones de
+ * acción, y panel de jugadores secundarios. Implementa Observer para actualizar
+ * la vista cuando el ModeloVista notifica cambios.
  */
 public class JPantallaJuego extends JFramePadre implements Observer {
-    
+
     private IModeloVista modeloVista;
 
     public JPantallaJuego(IModeloVista modeloVista, ControlSeleccionarCarta controlador) {
         super();
         this.modeloVista = modeloVista;
         this.modeloVista.addObserver(this);
-        initComponents();
+
+        initComponents();           // Inicializa componentes generados por NetBeans
         setLocationRelativeTo(null);
-        setResizable(false); // Evita que el usuario cambie el tamaño del JFrame
-        crearPanelTarjeta();
-        crearPanelCarta();
-        crearPanelJugadorPrincipal();
-        cargarJugadoresSecundarios();
+        setResizable(false);        // Evita que el usuario cambie el tamaño
+
+        crearPanelTarjeta();        // Panel de tarjeta del jugador principal
+        crearPanelCarta();          // Panel de carta cantada
+        crearPanelJugadorPrincipal(); // Panel jugador principal
+        cargarJugadoresSecundarios(); // Panel jugadores secundarios
 
     }
 
@@ -261,14 +261,26 @@ public class JPantallaJuego extends JFramePadre implements Observer {
     private javax.swing.JPanel panelTableroImagen;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Método llamado cuando el ModeloVista notifica un cambio. Actualmente no
+     * realiza acción directa, pero puede actualizar UI futura.
+     */
     @Override
     public void update() {
     }
 
+    /**
+     * Actualiza el nombre de la carta actual mostrada en la interfaz.
+     *
+     * @param carta Nombre de la carta.
+     */
     public void actualizarNombreCarta(String carta) {
         this.labelNombreCartaActual.setText(carta);
     }
 
+    /**
+     * Crea e inserta el panel de tarjeta del jugador principal.
+     */
     public void crearPanelTarjeta() {
         //Agregar panel tarjeta jugador principal
         JPanelTarjeta panelTarjeta = new JPanelTarjeta(modeloVista);
@@ -277,6 +289,9 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         panelTableroImagen.add(panelTarjeta, BorderLayout.CENTER);
     }
 
+    /**
+     * Crea e inserta el panel de la carta cantada.
+     */
     public void crearPanelCarta() {
         // Agregar panel de carta cantada
         JPanelCarta panelCarta = new JPanelCarta(modeloVista, this);
@@ -285,6 +300,9 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         panelCartaImg.add(panelCarta, BorderLayout.CENTER);
     }
 
+    /**
+     * Crea e inserta el panel del jugador principal.
+     */
     public void crearPanelJugadorPrincipal() {
         //Agregar panel tarjeta jugador principal
         JPanelJugadorPrincipal panelJugadorPrincipal = new JPanelJugadorPrincipal(modeloVista);
@@ -292,76 +310,84 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         this.panelJugadorPrincipal.setLayout(new BorderLayout());
         this.panelJugadorPrincipal.add(panelJugadorPrincipal, BorderLayout.CENTER);
     }
-public void cargarJugadoresSecundarios() {
-    List<JugadorVista> jugadores = modeloVista.getJugadoresSecundarios();
 
-    // Contenedor vertical para los "slots"
-    JPanel contenedor = new JPanel();
-    contenedor.setLayout(new BoxLayout(contenedor, BoxLayout.Y_AXIS));
-    contenedor.setOpaque(false);
+    /**
+     * Carga los paneles de jugadores secundarios, agregando placeholders para
+     * mantener un layout uniforme incluso si hay pocos jugadores.
+     */
+    public void cargarJugadoresSecundarios() {
+        List<JugadorVista> jugadores = modeloVista.getJugadoresSecundarios();
 
-    // 1) Agrega los jugadores reales
-    int count = 0;
-    Dimension slotDim = null; // calcularemos el alto con el 1er panel real
-    for (JugadorVista j : jugadores) {
-        PanelJugadorSecundario item = new PanelJugadorSecundario(j, modeloVista);
+        // Contenedor vertical para los "slots"
+        JPanel contenedor = new JPanel();
+        contenedor.setLayout(new BoxLayout(contenedor, BoxLayout.Y_AXIS));
+        contenedor.setOpaque(false);
 
-        // Que se pegue a la izquierda y no se centre raro
-        item.setAlignmentX(JPanel.LEFT_ALIGNMENT);
+        // 1) Agrega los jugadores reales
+        int count = 0;
+        Dimension slotDim = null; // calcularemos el alto con el 1er panel real
+        for (JugadorVista j : jugadores) {
+            PanelJugadorSecundario item = new PanelJugadorSecundario(j, modeloVista);
 
-        // guardamos el alto del primer panel para copiarlo a los vacíos
-        if (slotDim == null) {
-            // Tomamos su preferredHeight.
-            // Si tu panel tiene layout del editor, esto ya trae un alto coherente.
-            slotDim = new Dimension(300, item.getPreferredSize().height); 
-            // ancho "base"; puedes ignorarlo; el importante es el alto
+            // Que se pegue a la izquierda y no se centre raro
+            item.setAlignmentX(JPanel.LEFT_ALIGNMENT);
+
+            // guardamos el alto del primer panel para copiarlo a los vacíos
+            if (slotDim == null) {
+                // Tomamos su preferredHeight.
+                // Si tu panel tiene layout del editor, esto ya trae un alto coherente.
+                slotDim = new Dimension(300, item.getPreferredSize().height);
+                // ancho "base"; puedes ignorarlo; el importante es el alto
+            }
+
+            // deja que se estire a lo ancho si el contenedor lo permite
+            item.setMaximumSize(new Dimension(Integer.MAX_VALUE, item.getPreferredSize().height));
+
+            contenedor.add(item);
+            count++;
         }
 
-        // deja que se estire a lo ancho si el contenedor lo permite
-        item.setMaximumSize(new Dimension(Integer.MAX_VALUE, item.getPreferredSize().height));
+        // 2) Agrega placeholders (vacíos) del MISMO tamaño para empujar hacia arriba
+        final int MIN_SLOTS = 4; // <- ajusta cuántos "slots" quieres ver como mínimo
+        if (slotDim == null) {
+            // Si no hubo jugadores, define un alto base para los vacíos (coherente con tu UI)
+            slotDim = new Dimension(300, 200);
+        }
 
-        contenedor.add(item);
-        count++;
+        while (count < MIN_SLOTS) {
+            JPanel placeholder = crearPlaceholder(slotDim.height);
+            placeholder.setAlignmentX(JPanel.LEFT_ALIGNMENT);
+            placeholder.setMaximumSize(new Dimension(Integer.MAX_VALUE, slotDim.height));
+            contenedor.add(placeholder);
+            count++;
+        }
+
+        // 3) Monta el contenedor en el panel derecho
+        panelJugadoresSecundarios.removeAll();
+        panelJugadoresSecundarios.setLayout(new BorderLayout());
+        panelJugadoresSecundarios.add(contenedor, BorderLayout.NORTH); // anclado arriba
+        panelJugadoresSecundarios.revalidate();
+        panelJugadoresSecundarios.repaint();
     }
 
-    // 2) Agrega placeholders (vacíos) del MISMO tamaño para empujar hacia arriba
-    final int MIN_SLOTS = 4; // <- ajusta cuántos "slots" quieres ver como mínimo
-    if (slotDim == null) {
-        // Si no hubo jugadores, define un alto base para los vacíos (coherente con tu UI)
-        slotDim = new Dimension(300, 200);
+    /**
+     * Crea un panel placeholder con alto fijo para mantener layout uniforme.
+     *
+     * @param height Alto del placeholder.
+     * @return JPanel placeholder.
+     */
+    private JPanel crearPlaceholder(int height) {
+        JPanel p = new JPanel();
+        // si prefieres transparente:
+        p.setOpaque(false);
+        // o si prefieres "en blanco", usa:
+        // p.setBackground(Color.WHITE); p.setOpaque(true);
+
+        // Mismo alto que el panel real
+        p.setPreferredSize(new Dimension(300, height));
+        // Borde opcional muy sutil para conservar el layout visual (puedes quitarlo):
+        // p.setBorder(BorderFactory.createEmptyBorder(8, 0, 8, 0));
+        return p;
     }
-
-    while (count < MIN_SLOTS) {
-        JPanel placeholder = crearPlaceholder(slotDim.height);
-        placeholder.setAlignmentX(JPanel.LEFT_ALIGNMENT);
-        placeholder.setMaximumSize(new Dimension(Integer.MAX_VALUE, slotDim.height));
-        contenedor.add(placeholder);
-        count++;
-    }
-
-    // 3) Monta el contenedor en el panel derecho
-    panelJugadoresSecundarios.removeAll();
-    panelJugadoresSecundarios.setLayout(new BorderLayout());
-    panelJugadoresSecundarios.add(contenedor, BorderLayout.NORTH); // anclado arriba
-    panelJugadoresSecundarios.revalidate();
-    panelJugadoresSecundarios.repaint();
-}
-
-
-private JPanel crearPlaceholder(int height) {
-    JPanel p = new JPanel();
-    // si prefieres transparente:
-    p.setOpaque(false);
-    // o si prefieres "en blanco", usa:
-    // p.setBackground(Color.WHITE); p.setOpaque(true);
-
-    // Mismo alto que el panel real
-    p.setPreferredSize(new Dimension(300, height));
-    // Borde opcional muy sutil para conservar el layout visual (puedes quitarlo):
-    // p.setBorder(BorderFactory.createEmptyBorder(8, 0, 8, 0));
-    return p;
-}
-
-
 
 }

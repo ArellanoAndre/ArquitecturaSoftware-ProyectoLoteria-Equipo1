@@ -1,16 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package Observer;
 
 /**
- *
- * @author isaac
+ * Interfaz que define las operaciones del controlador para seleccionar cartas.
+ * Permite notificar al modelo cuando un jugador selecciona una carta.
  */
 public interface IControlSeleccionarCarta {
-    
-    //metodos de ControlSeleccionarCarta
-    void seleccionarCarta( int pos );
-    
+
+    /**
+     * Indica que se ha seleccionado una carta en la posición indicada.
+     * @param pos Posición de la carta seleccionada.
+     */
+    void seleccionarCarta(int pos);
 }
+

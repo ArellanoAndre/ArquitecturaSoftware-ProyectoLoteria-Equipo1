@@ -7,10 +7,20 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
+/**
+ * Panel que representa al jugador principal en la interfaz del juego.
+ * Implementa Observer para actualizar la información del jugador
+ * cuando el ModeloVista notifica cambios.
+ */
 public class JPanelJugadorPrincipal extends javax.swing.JPanel implements Observer {
     
     private IModeloVista modeloVista;
     
+    /**
+     * Constructor que inicializa el panel y registra el observador.
+     * Carga el nombre y avatar del jugador principal.
+     * @param modeloVista ModeloVista del juego.
+     */
     public JPanelJugadorPrincipal(IModeloVista modeloVista) {
         initComponents();
         this.modeloVista = modeloVista;
@@ -75,11 +85,19 @@ public class JPanelJugadorPrincipal extends javax.swing.JPanel implements Observ
         //codigo para actualizar puntaje
     }
     
+    
+    /**
+     * Carga y muestra el nombre del jugador principal en el panel.
+     */
     private void cargarNombre(){
         System.out.println(modeloVista.getJugadorPrincipal().getNombre());
         lblNombreJugadorPrincipal.setText(modeloVista.getJugadorPrincipal().getNombre());
     }
     
+    /**
+     * Carga y escala la imagen del avatar del jugador principal.
+     * @param rutaImagen Ruta de la imagen del avatar.
+     */
    private void cargarAvatar(String rutaImagen) {
     SwingUtilities.invokeLater(() -> {
         java.net.URL url = getClass().getResource(rutaImagen);

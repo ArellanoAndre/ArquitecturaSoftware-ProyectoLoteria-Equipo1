@@ -1,17 +1,27 @@
 package Presentacion;
 
-import ModeloVista.ModeloVista;
 import ModeloVista.entidadesVista.CartaVista;
 import Observer.IModeloVista;
 import Observer.Observer;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 
+/**
+ * Panel gráfico que muestra la carta actual del juego. Implementa Observer para
+ * recibir notificaciones del ModeloVista cuando cambia la carta cantada.
+ */
 public class JPanelCarta extends javax.swing.JPanel implements Observer {
 
-    private IModeloVista modeloVista;
-    private JPantallaJuego pantallaJuego;
+    private IModeloVista modeloVista;     // Modelo que provee la carta actual
+    private JPantallaJuego pantallaJuego;  // Pantalla principal que contiene este panel
 
+    /**
+     * Constructor que inicializa el panel y lo registra como observador del
+     * modelo.
+     *
+     * @param modeloVista ModeloVista del juego.
+     * @param pantallaJuego Pantalla principal donde se muestra el juego.
+     */
     public JPanelCarta(IModeloVista modeloVista, JPantallaJuego pantallaJuego) {
         initComponents();
         this.modeloVista = modeloVista;
@@ -19,6 +29,10 @@ public class JPanelCarta extends javax.swing.JPanel implements Observer {
         this.pantallaJuego = pantallaJuego;
     }
 
+    /**
+     * Método llamado cuando el ModeloVista notifica un cambio. Actualiza la
+     * imagen de la carta y el nombre en la pantalla.
+     */
     @Override
     public void update() {
         CartaVista carta = modeloVista.getCartaCantada();

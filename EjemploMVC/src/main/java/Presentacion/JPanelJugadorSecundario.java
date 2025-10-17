@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Presentacion;
 
 import ModeloVista.ModeloVista;
@@ -9,24 +5,31 @@ import ModeloVista.entidadesVista.JugadorVista;
 import Observer.Observer;
 import Presentacion.utilidades.GridPanel;
 import java.awt.*;
-import static java.awt.Color.GREEN;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- *
- * @author isaac
+ * Panel que representa a un jugador secundario en la interfaz del juego.
+ * Implementa Observer para actualizar su información cuando el ModeloVista
+ * notifica cambios (como puntaje o casillas marcadas).
  */
 public class JPanelJugadorSecundario extends JPanel implements Observer {
 
-    private JLabel lblNombre;
-    private JLabel lblPuntaje;
-    private JLabel lblAvatar;       // nuevo JLabel para el avatar
-    private JPanel[] panelCasillasGrid; // arreglo donde guardamos las casillas
-    private JugadorVista jugador;
-    private ModeloVista modeloVista;
+    private JLabel lblNombre;               // Etiqueta con el nombre del jugador
+    private JLabel lblPuntaje;              // Etiqueta con el puntaje del jugador
+    private JLabel lblAvatar;               // Etiqueta con el avatar del jugador
+    private JPanel[] panelCasillasGrid;     // Arreglo de paneles que representan las casillas de la tarjeta
+    private JugadorVista jugador;           // Jugador asociado a este panel
+    private ModeloVista modeloVista;        // ModeloVista del juego
 
+    /**
+     * Constructor que inicializa el panel del jugador secundario y lo registra
+     * como observador.
+     *
+     * @param jugador JugadorVista del jugador secundario.
+     * @param modeloVista ModeloVista del juego.
+     */
     public JPanelJugadorSecundario(JugadorVista jugador, ModeloVista modeloVista) {
         this.jugador = jugador;
         this.modeloVista = modeloVista;
@@ -50,7 +53,7 @@ public class JPanelJugadorSecundario extends JPanel implements Observer {
 
         // PANEL AVATAR
         lblAvatar = new JLabel();
-        cargarAvatar(); // método para cargar la imagen
+        cargarAvatar();
 
         // Panel contenedor para info + avatar
         JPanel panelNorte = new JPanel(new BorderLayout());
@@ -61,13 +64,15 @@ public class JPanelJugadorSecundario extends JPanel implements Observer {
         add(panelNorte, BorderLayout.NORTH);
     }
 
+    /**
+     * Carga y escala la imagen del avatar del jugador secundario.
+     */
     private void cargarAvatar() {
         String rutaAvatar = jugador.getRutaAvatar();
         if (rutaAvatar != null) {
             java.net.URL url = getClass().getResource(rutaAvatar);
             if (url != null) {
                 ImageIcon icono = new ImageIcon(url);
-
                 Image imagenEscalada = icono.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
                 lblAvatar.setIcon(new ImageIcon(imagenEscalada));
             } else {
@@ -76,8 +81,14 @@ public class JPanelJugadorSecundario extends JPanel implements Observer {
         }
     }
 
+    /**
+     * Actualiza visualmente la información del jugador secundario, incluyendo
+     * el puntaje y las casillas marcadas de su tarjeta.
+     *
+     * @param jugador JugadorVista con la información actualizada.
+     */
     public void actualizar(JugadorVista jugador) {
-        lblPuntaje.setText("Puntaje:" + jugador.getPuntaje());
+        lblPuntaje.setText("Puntaje: " + jugador.getPuntaje());
 
         boolean[] marcadas = jugador.getTarjeta().getMarcadas();
         for (int i = 0; i < panelCasillasGrid.length; i++) {
@@ -87,9 +98,12 @@ public class JPanelJugadorSecundario extends JPanel implements Observer {
         }
     }
 
+    /**
+     * Método llamado cuando el ModeloVista notifica un cambio. Actualiza el
+     * panel con los datos del jugador asociado.
+     */
     @Override
     public void update() {
         actualizar(jugador);
     }
-
 }

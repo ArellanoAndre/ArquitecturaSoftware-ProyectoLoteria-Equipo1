@@ -1,6 +1,5 @@
 package ModeloVista;
 
-// ====== MODELO VISTA (Puente entre ModeloJuego y Presentacion) ======
 import java.util.ArrayList;
 import java.util.List;
 import ModeloVista.entidadesVista.CartaVista;
@@ -9,7 +8,12 @@ import Observer.IModeloJuego;
 import Observer.IModeloVista;
 import Observer.Observer;
 
-public class ModeloVista implements IModeloVista{
+/**
+ * Clase que representa el modeloVista del juego. Actúa como intermediario entre
+ * la lógica del juego (modelo) y la presentación (vista), utilizando el patrón
+ * Observer.
+ */
+public class ModeloVista implements IModeloVista {
 
     private CartaVista cartaCantada;
     private int marcador;
@@ -18,86 +22,132 @@ public class ModeloVista implements IModeloVista{
     private List<Observer> observers = new ArrayList<>();
     private IModeloJuego modeloJuego;
 
+    /**
+     * Constructor vacío del modeloVista.
+     */
     public ModeloVista() {
     }
 
-        
+    /**
+     * Asigna el modelo de juego con el cual se comunica.
+     */
     @Override
     public void setModeloJuego(IModeloJuego modeloJuego) {
         this.modeloJuego = modeloJuego;
     }
 
-    //Metodo que usa el modeloJuego para enviarle una carta nueva, este despues usa notificar para que se muestre en pantalla la nueva carta
+    /**
+     * Recibe una nueva carta cantada desde el modelo del juego y notifica a los
+     * observadores (la vista) para actualizar la pantalla.
+     */
     @Override
     public void setCartaCantada(CartaVista carta) {
         cartaCantada = carta;
         notificar();
     }
 
-    // Metodo que usa la PRESENTACION para obtener la carta cantada ACTUAL. se usa despues de que se le notifica a la presentacion para que esta recupere informacion nueva
+    /**
+     * @return la carta cantada actual.
+     */
     @Override
     public CartaVista getCartaCantada() {
         return cartaCantada;
     }
-    // Metodo que usa la PRESENTACION para obtener el marcado ACTUAL. se usa despues de que se le notifica a la presentacion para que esta recupere informacion nueva
+
+    /**
+     * @return el marcador actual del jugador.
+     */
     @Override
     public int getMarcador() {
         return marcador;
     }
 
-    // Metodo que usa el MODELOJUEGO para enviar un nuevo marcador al ModeloVista. este despues usa notificar para que sea actualizado en presentacion.
+    /**
+     * Actualiza el marcador y notifica a los observadores.
+     *
+     * @param marcador nuevo valor del marcador.
+     */
     @Override
     public void setMarcador(int marcador) {
         this.marcador = marcador;
         notificar();
     }
 
+    /**
+     * @return el jugador principal.
+     */
     @Override
     public JugadorVista getJugadorPrincipal() {
         return jugadorPrincipal;
     }
 
+    /**
+     * Asigna el jugador principal.
+     */
     @Override
     public void setJugadorPrincipal(JugadorVista jugadorPrincipal) {
         this.jugadorPrincipal = jugadorPrincipal;
     }
 
+    /**
+     * Actualiza las casillas marcadas del jugador principal y notifica a los
+     * observadores.
+     *
+     * @param casillas arreglo con el estado de las casillas.
+     */
     @Override
-    public void actualizarTarjetaJugadorP (boolean[] casillas){
+    public void actualizarTarjetaJugadorP(boolean[] casillas) {
         jugadorPrincipal.getTarjeta().setMarcadas(casillas);
         notificar();
     }
 
+    /**
+     * @return lista de jugadores secundarios.
+     */
     @Override
     public List<JugadorVista> getJugadoresSecundarios() {
         return jugadoresSecundarios;
     }
 
+    /**
+     * Asigna la lista de jugadores secundarios y notifica a los observadores.
+     */
     @Override
     public void setJugadoresSecundarios(List<JugadorVista> jugadoresSecundarios) {
         this.jugadoresSecundarios = jugadoresSecundarios;
         notificar();
     }
 
-    // Método llamado por el controlador cuando se selecciona una carta. este despues lo envia al modeloJuego donde maneja la logica de validacion.
+    /**
+     * Llamado por el controlador cuando se selecciona una carta. Envía la
+     * selección al modelo del juego para su validación.
+     *
+     * @param pos posición de la carta seleccionada.
+     */
     @Override
     public void seleccionarCarta(int pos) {
         modeloJuego.verificarCarta(pos);
     }
 
-    //Metodo usado para agregar observadores en este caso la PRESENTACION se agrega como observador
+    /**
+     * Agrega un observador (por lo general, la vista principal del juego).
+     *
+     * @param o objeto que implementa la interfaz Observer.
+     */
     @Override
     public void addObserver(Observer o) {
         observers.add(o);
     }
 
-    //Metodo que notifica a los observadores (en este caso solamente la PRESENTACION). despues como la presentacion implementa metodos de observer, se ejecuta update() el cual repinta la pantalla despues de ser notificada.
+    /**
+     * Notifica a todos los observadores que hubo un cambio para que actualicen
+     * su interfaz.
+     */
     @Override
     public void notificar() {
         for (Observer o : observers) {
             o.update();
         }
     }
-    
-    
+
 }
