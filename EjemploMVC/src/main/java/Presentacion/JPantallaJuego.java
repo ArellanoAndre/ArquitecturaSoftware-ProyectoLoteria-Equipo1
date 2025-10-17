@@ -3,6 +3,7 @@ package Presentacion;
 import Controlador.ControlSeleccionarCarta;
 import ModeloVista.ModeloVista;
 import ModeloVista.entidadesVista.JugadorVista;
+import Observer.IModeloVista;
 import Observer.Observer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -18,12 +19,10 @@ import javax.swing.JPanel;
  * @author abrilislas
  */
 public class JPantallaJuego extends JFramePadre implements Observer {
+    
+    private IModeloVista modeloVista;
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JPantallaJuego.class.getName());
-    private ModeloVista modeloVista;
-    private ControlSeleccionarCarta controlador;
-
-    public JPantallaJuego(ModeloVista modeloVista, ControlSeleccionarCarta controlador) {
+    public JPantallaJuego(IModeloVista modeloVista, ControlSeleccionarCarta controlador) {
         super();
         this.modeloVista = modeloVista;
         this.modeloVista.addObserver(this);

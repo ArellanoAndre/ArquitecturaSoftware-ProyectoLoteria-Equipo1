@@ -1,14 +1,17 @@
 package Presentacion;
 
 import ModeloVista.ModeloVista;
+import Observer.IModeloVista;
 import Observer.Observer;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 public class JPanelJugadorPrincipal extends javax.swing.JPanel implements Observer {
-    private ModeloVista modeloVista;
-    public JPanelJugadorPrincipal(ModeloVista modeloVista) {
+    
+    private IModeloVista modeloVista;
+    
+    public JPanelJugadorPrincipal(IModeloVista modeloVista) {
         initComponents();
         this.modeloVista = modeloVista;
         this.modeloVista.addObserver(this);

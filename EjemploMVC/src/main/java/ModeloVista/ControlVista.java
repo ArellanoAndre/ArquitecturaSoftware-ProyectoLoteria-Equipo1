@@ -10,6 +10,7 @@ import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import ModeloVista.entidadesVista.TarjetaVista;
 import Observer.IControlVista;
+import Observer.IModeloVista;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,9 +20,9 @@ import java.util.List;
  */
 public class ControlVista implements IControlVista {
     
-    private ModeloVista modeloVista;
+    private IModeloVista modeloVista;
     
-    public ControlVista(ModeloVista modeloVista) {
+    public ControlVista(IModeloVista modeloVista) {
         this.modeloVista = modeloVista;
     }
     

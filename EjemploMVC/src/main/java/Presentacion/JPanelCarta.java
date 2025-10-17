@@ -2,16 +2,17 @@ package Presentacion;
 
 import ModeloVista.ModeloVista;
 import ModeloVista.entidadesVista.CartaVista;
+import Observer.IModeloVista;
 import Observer.Observer;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 
 public class JPanelCarta extends javax.swing.JPanel implements Observer {
 
-    private ModeloVista modeloVista;
+    private IModeloVista modeloVista;
     private JPantallaJuego pantallaJuego;
 
-    public JPanelCarta(ModeloVista modeloVista, JPantallaJuego pantallaJuego) {
+    public JPanelCarta(IModeloVista modeloVista, JPantallaJuego pantallaJuego) {
         initComponents();
         this.modeloVista = modeloVista;
         this.modeloVista.addObserver(this);

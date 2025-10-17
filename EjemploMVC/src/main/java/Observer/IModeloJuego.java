@@ -21,8 +21,8 @@ public interface IModeloJuego {
     void actualizarJugadorSecundario(int casilla, int numJugador);
     Carta getCartaActual();
     int getMarcador();
-    ModeloJuego getModeloJuegoSecundario();
-    void setModeloJuegoSecundario(ModeloJuego modeloJuegoSecundario);
+    IModeloJuego getModeloJuegoSecundario();
+    void setModeloJuegoSecundario(IModeloJuego modeloJuegoSecundario);
     List<Carta> getMazo();
     void setMazo(List<Carta> mazo);
     List<Carta> crearMazo();

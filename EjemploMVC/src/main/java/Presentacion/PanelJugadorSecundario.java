@@ -6,6 +6,7 @@ package Presentacion;
 
 import ModeloVista.ModeloVista;
 import ModeloVista.entidadesVista.JugadorVista;
+import Observer.IModeloVista;
 import Observer.Observer;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,13 +21,13 @@ import javax.swing.JPanel;
 public class PanelJugadorSecundario extends javax.swing.JPanel implements Observer {
     
     private JugadorVista jugador;
-    private ModeloVista modeloVista;
+    private IModeloVista modeloVista;
     private JPanel[] panelCasillasGrid;
 
     /**
      * Creates new form PanelJugadorSecundario
      */
-    public PanelJugadorSecundario(JugadorVista jugador, ModeloVista modeloVista) {
+    public PanelJugadorSecundario(JugadorVista jugador, IModeloVista modeloVista) {
         initComponents();
         this.jugador = jugador;
         this.modeloVista = modeloVista;

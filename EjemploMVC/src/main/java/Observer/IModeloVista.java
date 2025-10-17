@@ -26,7 +26,7 @@ public interface IModeloVista {
 
     // Métodos para el ModeloJuego
     void actualizarTarjetaJugadorP(boolean[] casillas);
-    void setModeloJuego(ModeloJuego modeloJuego);
+    void setModeloJuego(IModeloJuego modeloJuego);
     void setMarcador(int marcador);
     int getMarcador();
     void setCartaCantada(CartaVista carta);

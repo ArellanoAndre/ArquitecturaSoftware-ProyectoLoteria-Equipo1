@@ -3,9 +3,9 @@ package ModeloVista;
 // ====== MODELO VISTA (Puente entre ModeloJuego y Presentacion) ======
 import java.util.ArrayList;
 import java.util.List;
-import ModeloJuego.ModeloJuego;
 import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
+import Observer.IModeloJuego;
 import Observer.IModeloVista;
 import Observer.Observer;
 
@@ -16,14 +16,14 @@ public class ModeloVista implements IModeloVista{
     private JugadorVista jugadorPrincipal;
     private List<JugadorVista> jugadoresSecundarios;
     private List<Observer> observers = new ArrayList<>();
-    private ModeloJuego modeloJuego;
+    private IModeloJuego modeloJuego;
 
     public ModeloVista() {
     }
 
         
     @Override
-    public void setModeloJuego(ModeloJuego modeloJuego) {
+    public void setModeloJuego(IModeloJuego modeloJuego) {
         this.modeloJuego = modeloJuego;
     }
 

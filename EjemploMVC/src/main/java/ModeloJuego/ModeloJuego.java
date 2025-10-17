@@ -2,7 +2,7 @@ package ModeloJuego;
 
 import ModeloJuego.entidades.Jugador;
 import ModeloJuego.entidades.Carta;
-import ModeloVista.ControlVista;
+import Observer.IControlVista;
 import Observer.IModeloJuego;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,10 +18,10 @@ public class ModeloJuego implements IModeloJuego{
     private int marcador = 0;
     private int contador = 0;
     private Timer timer;
-    private ControlVista controlVista;
-    private ModeloJuego modeloJuegoSecundario;
+    private IControlVista controlVista;
+    private IModeloJuego modeloJuegoSecundario;
 
-    public ModeloJuego(ControlVista controlVista, Jugador jugador, List<Jugador> jugadores) {
+    public ModeloJuego(IControlVista controlVista, Jugador jugador, List<Jugador> jugadores) {
         this.controlVista = controlVista;
         this.mazo = crearMazo();
         barajear();
@@ -109,12 +109,12 @@ public class ModeloJuego implements IModeloJuego{
     }
 
     @Override
-    public ModeloJuego getModeloJuegoSecundario() {
+    public IModeloJuego getModeloJuegoSecundario() {
         return modeloJuegoSecundario;
     }
 
     @Override
-    public void setModeloJuegoSecundario(ModeloJuego modeloJuegoSecundario) {
+    public void setModeloJuegoSecundario(IModeloJuego modeloJuegoSecundario) {
         this.modeloJuegoSecundario = modeloJuegoSecundario;
 
         // compartir mazo a modelo secundario

@@ -1,14 +1,14 @@
 package Controlador;
 
 // ====== CONTROLADOR ======
-import ModeloVista.ModeloVista;
+import Observer.IModeloVista;
 
 public class ControlSeleccionarCarta {
 
-    private final ModeloVista modeloVista;
+    private final IModeloVista modeloVista;
 
 
-    public ControlSeleccionarCarta(ModeloVista modeloVista) {
+    public ControlSeleccionarCarta(IModeloVista modeloVista) {
         this.modeloVista = modeloVista;
     }
 

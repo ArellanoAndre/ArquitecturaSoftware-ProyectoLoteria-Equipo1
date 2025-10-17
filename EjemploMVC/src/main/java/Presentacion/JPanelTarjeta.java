@@ -3,6 +3,7 @@ package Presentacion;
 import Controlador.ControlSeleccionarCarta;
 import ModeloVista.ModeloVista;
 import ModeloVista.entidadesVista.JugadorVista;
+import Observer.IModeloVista;
 import Observer.Observer;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
@@ -11,12 +12,12 @@ import javax.swing.JPanel;
 
 public class JPanelTarjeta extends javax.swing.JPanel implements Observer {
 
-    private ModeloVista modeloVista;
+    private IModeloVista modeloVista;
 
     /**
      * Creates new form JPanelTarjeta
      */
-    public JPanelTarjeta(ModeloVista modeloVista) {
+    public JPanelTarjeta(IModeloVista modeloVista) {
         initComponents();
         this.modeloVista = modeloVista;
         this.modeloVista.addObserver(this);
