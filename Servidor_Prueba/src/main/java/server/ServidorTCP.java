@@ -4,9 +4,8 @@
  */
 package server;
 
+import handler.ClienteHandler;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -28,24 +27,12 @@ public class ServidorTCP {
             
             while (true){
                 Socket clientSocket = serverSocket.accept(); //tomamos la conexión del cliente
+                Thread hiloCliente = new Thread(new ClienteHandler(clientSocket, BUFSIZE));//creamos un nuevo hilo para el cliente
+                hiloCliente.start();
                 SocketAddress direccioncliente = 
                 clientSocket.getRemoteSocketAddress(); //almacena la direccion del cliente (IP y puerto)
-                
-                System.out.println("Conectado al cliente, datos: " + direccioncliente);
-                
-                 InputStream in = clientSocket.getInputStream(); //lectura de datos
-                 OutputStream out = clientSocket.getOutputStream(); //flujo de salida
-                 
-                 byte[] recibeBuf = new byte[BUFSIZE]; // Receive buffer
-                 int bytesLeidos;
 
-                 //recibe mensajes y hace eco
-                 while ((bytesLeidos = in.read(recibeBuf)) != -1) {
-                    out.write(recibeBuf, 0, bytesLeidos);
-            }
-
-            clientSocket.close(); // Cierra el socket del cliente    
-            System.out.println("Cliente desconectado: " + direccioncliente);
+                System.out.println("Conectado al cliente, datos: " + direccioncliente);           
             }
         }
 }

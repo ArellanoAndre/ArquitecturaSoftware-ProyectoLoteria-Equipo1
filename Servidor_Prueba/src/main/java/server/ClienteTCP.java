@@ -27,6 +27,7 @@ public class ClienteTCP {
         Socket socketConexion = new Socket(SERVER, PUERTO_SERVER);
         System.out.println("Conectado al servidor en " + SERVER + ":" + PUERTO_SERVER);
         
+        
         // flujos de entrada y salida
         InputStream in = socketConexion.getInputStream();
         OutputStream out = socketConexion.getOutputStream();
@@ -43,7 +44,6 @@ public class ClienteTCP {
             if (mensaje.equalsIgnoreCase("exit")) {
                 break;
             }
-            
             // envía mensaje al servidor
             out.write(mensaje.getBytes());
             
