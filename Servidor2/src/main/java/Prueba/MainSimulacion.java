@@ -8,7 +8,8 @@ package Prueba;
  *
  * @author Arell
  */
-import Server.ServidorTCP;
+import Clientes.SimuladorCartas;
+import Servidor.ServidorTCP;
 
 public class MainSimulacion {
 

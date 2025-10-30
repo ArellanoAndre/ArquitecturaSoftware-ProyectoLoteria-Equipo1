@@ -11,9 +11,7 @@ package ConvertidorJSON;
 
 public enum EnumTipoEvento {
     SELECCIONAR_CARTA,
-    PINTAR_CARTA,      // 🔹 nuevo tipo
-    CANTAR_LOTERIA,
-    CONECTAR_JUGADOR
+    PINTAR_CARTA
 }
 
 

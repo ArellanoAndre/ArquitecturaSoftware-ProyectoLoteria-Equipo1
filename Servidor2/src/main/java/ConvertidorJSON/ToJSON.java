@@ -13,10 +13,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class ToJSON {
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson gson = new Gson();
 
-    public static String convertirAJson(Evento evento) {
-        return gson.toJson(evento);
+    public static String convertirAJson(Evento e) {
+        return gson.toJson(e);
     }
 
     public static Evento convertirDesdeJson(String json) {

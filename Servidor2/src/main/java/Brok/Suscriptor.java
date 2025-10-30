@@ -16,14 +16,14 @@ import java.util.function.Consumer;
  * Clase para suscribirse a un tópico del broker.
  */
 public class Suscriptor {
-
-    private final Broker broker;
-
-    public Suscriptor() {
-        this.broker = Broker.getInstancia();
-    }
-
-    public void suscribir(String nombreTopico, Consumer<Evento> callback) {
-        broker.suscribir(nombreTopico, callback::accept);
-    }
+//
+//    private final BrokerTCP broker;
+//
+//    public Suscriptor() {
+//        this.broker = BrokerTCP.getInstancia();
+//    }
+//
+//    public void suscribir(String nombreTopico, Consumer<Evento> callback) {
+//        broker.suscribir(nombreTopico, callback::accept);
+//    }
 }
