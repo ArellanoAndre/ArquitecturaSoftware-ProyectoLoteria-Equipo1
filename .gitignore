@@ -1,3 +1,4 @@
 *.lst
 *.class
 /Servidor2/target/
+/Servidor2/Servidor2/target/

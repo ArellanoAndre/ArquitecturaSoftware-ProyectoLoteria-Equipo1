@@ -24,7 +24,7 @@ import javax.swing.*;
 
 
 public class SimuladorCartas extends JFrame {
-    private static final String BROKER_IP = "192.168.1.26"; // IP del servidor central
+    private static final String BROKER_IP = "192.168.1.67"; // IP del servidor central
     private static final int BROKER_PORT = 6000;
 
     private PrintWriter out;

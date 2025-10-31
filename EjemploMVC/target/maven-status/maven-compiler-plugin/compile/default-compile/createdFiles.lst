@@ -1,1 +1,5 @@
+ModeloJuego\ModeloJuego2.class
+Events\EventProcessor.class
 main.class
+Events\EnumTipoEvento.class
+Evento.class

@@ -21,7 +21,7 @@ import java.net.Socket;
 
 
 public class ServidorTCP {
-    private static final String BROKER_IP = "192.168.1.26"; // IP del broker (máquina 1)
+    private static final String BROKER_IP = "192.168.1.67"; // IP del broker (máquina 1)
     private static final int BROKER_PORT = 6000;
 
     public static void main(String[] args) {
