@@ -1,7 +1,7 @@
 package Observer;
 
-import LogicaJuego.entidades.Carta;
-import LogicaJuego.entidades.Jugador;
+import ModeloJuego.entidades.Carta;
+import ModeloJuego.entidades.Jugador;
 import java.util.List;
 
 /**

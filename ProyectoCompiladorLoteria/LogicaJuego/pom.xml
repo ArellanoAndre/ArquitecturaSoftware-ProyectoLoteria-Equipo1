@@ -8,7 +8,7 @@
     <dependencies>
         <dependency>
             <groupId>itson</groupId>
-            <artifactId>ModeloJuego</artifactId>
+            <artifactId>ProcesadorEventos</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>

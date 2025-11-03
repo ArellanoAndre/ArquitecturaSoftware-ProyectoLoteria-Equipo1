@@ -4,17 +4,15 @@ public class Evento {
 
     private EnumTipoEvento tipo;
     private int idJugador;
-    private String cartaSeleccionada;
     private int posicion;
     private String topico;
 
     public Evento() {
     }
 
-    public Evento(EnumTipoEvento tipo, int idJugador, String cartaSeleccionada, int posicion, String topico) {
+    public Evento(EnumTipoEvento tipo, int idJugador, int posicion, String topico) {
         this.tipo = tipo;
         this.idJugador = idJugador;
-        this.cartaSeleccionada = cartaSeleccionada;
         this.posicion = posicion;
         this.topico = topico;
     }
@@ -35,14 +33,6 @@ public class Evento {
         this.idJugador = idJugador;
     }
 
-    public String getCartaSeleccionada() {
-        return cartaSeleccionada;
-    }
-
-    public void setCartaSeleccionada(String cartaSeleccionada) {
-        this.cartaSeleccionada = cartaSeleccionada;
-    }
-
     public int getPosicion() {
         return posicion;
     }
@@ -61,7 +51,7 @@ public class Evento {
 
     @Override
     public String toString() {
-        return "Evento{" + "tipo=" + tipo + ", idJugador=" + idJugador + ", cartaSeleccionada=" + cartaSeleccionada + ", posicion=" + posicion + ", topico=" + topico + '}';
+        return "Evento{" + "tipo=" + tipo + ", idJugador=" + idJugador + ", posicion=" + posicion + ", topico=" + topico + '}';
     }
 
     

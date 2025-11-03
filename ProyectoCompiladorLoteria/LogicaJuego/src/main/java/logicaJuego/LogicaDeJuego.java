@@ -4,13 +4,15 @@
  */
 package logicaJuego;
 
-import ModeloJuego.ModeloJuego;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.Timer;
 import logicaJuego.entidades.Carta;
 import logicaJuego.entidades.Jugador;
+import modeloJuego.IModeloJuego;
+import modeloJuego.ModeloJuego;
 
 /**
  *
@@ -24,7 +26,7 @@ public class LogicaDeJuego {
     private int contador = 0;
     private Timer timer;
     
-    private ModeloJuego modeloJuego;
+    private IModeloJuego modeloJuego;
 
     /**
      * Constructor que inicializa el modelo con la vista, el jugador principal y

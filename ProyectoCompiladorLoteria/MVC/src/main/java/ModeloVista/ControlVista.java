@@ -1,7 +1,7 @@
 package ModeloVista;
 
-import LogicaJuego.entidades.Carta;
-import LogicaJuego.entidades.Jugador;
+import ModeloJuego.entidades.Carta;
+import ModeloJuego.entidades.Jugador;
 import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import ModeloVista.entidadesVista.TarjetaVista;

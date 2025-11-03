@@ -1,8 +1,8 @@
 
 import Controlador.ControlSeleccionarCarta;
-import LogicaJuego.LogicaJuego;
-import LogicaJuego.entidades.Jugador;
-import LogicaJuego.entidades.Tarjeta;
+import ModeloJuego.entidades.Jugador;
+import ModeloJuego.entidades.Tarjeta;
+import ModeloJuego.ModeloJuego;
 import ModeloVista.ControlVista;
 import ModeloVista.ModeloVista;
 import Presentacion.JPantallaJuego;
@@ -35,32 +35,22 @@ public class main {
             List<Jugador> jugadores2 = new ArrayList<>();
             jugadores2.add(jugador1);
 
+            
             ModeloVista modeloVista = new ModeloVista();
             ControlVista controlVista = new ControlVista(modeloVista);
-
-            LogicaJuego modeloJuego = new LogicaJuego(controlVista, jugador1, jugadores1);
+            
+            //Instancia de modeloJuego
+            ModeloJuego modeloJuego = new ModeloJuego();
+            
+            
+            
             modeloVista.setModeloJuego(modeloJuego);
+            
             ControlSeleccionarCarta controlador = new ControlSeleccionarCarta(modeloVista);
 
-            ModeloVista modeloVista2 = new ModeloVista();
-            ControlVista controlVista2 = new ControlVista(modeloVista2);
-            LogicaJuego modeloJuego2 = new LogicaJuego(controlVista2, jugador2, jugadores2);
-            modeloVista2.setModeloJuego(modeloJuego2);
-            ControlSeleccionarCarta controlador2 = new ControlSeleccionarCarta(modeloVista2);
-
-            modeloJuego.setModeloJuegoSecundario(modeloJuego2);
-            modeloJuego2.setModeloJuegoSecundario(modeloJuego);
-
             JPantallaJuego pantalla1 = new JPantallaJuego(modeloVista, controlador);
-            JPantallaJuego pantalla2 = new JPantallaJuego(modeloVista2, controlador2);
             pantalla1.setTitle("Jugador1");
-            pantalla2.setTitle("Jugador2");
             pantalla1.setVisible(true);
-            pantalla2.setVisible(true);
-
-            // Iniciar estado del juego
-            modeloJuego.iniciarJuego();
-            modeloJuego2.iniciarJuego();
 
 
             // Crear al jugador 1 y su tarjeta

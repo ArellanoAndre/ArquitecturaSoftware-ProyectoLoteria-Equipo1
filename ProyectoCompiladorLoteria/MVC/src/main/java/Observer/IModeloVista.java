@@ -43,7 +43,7 @@ public interface IModeloVista {
     /**
      * Asigna el modelo de juego con el cual se comunica.
      */
-    void setModeloJuego(ILogicaJuego modeloJuego);
+    void setModeloJuego(IModeloJuego modeloJuego);
 
     /**
      * Actualiza el marcador y notifica a los observadores.

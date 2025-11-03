@@ -1,6 +1,9 @@
 package ProcesadorEventos;
 
 
+
+
+
 import Objetos.Evento;
 import Util.JSONHelper;
 import red.RedComponent;
@@ -13,7 +16,7 @@ public class ProcesarEvento {
 
     public ProcesarEvento() {
         //poner aqui datos de servidor puerto destino y puerto donde escucha
-        this.red = new RedComponent("localhost", 6000, 6001);
+        this.red = new RedComponent("localhost", 6000, 5000);
         red.iniciar(); 
         EscucharEvento();
     }

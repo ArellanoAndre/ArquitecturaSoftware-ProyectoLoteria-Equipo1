@@ -10,7 +10,6 @@
         <module>Red</module>
         <module>HelperJSON</module>
         <module>ProcesadorEventos</module>
-        <module>ModeloJuego</module>
         <module>MVC</module>
         <module>LogicaJuego</module>
     </modules>

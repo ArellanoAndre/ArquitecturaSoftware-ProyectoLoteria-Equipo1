@@ -1,5 +1,6 @@
 package ModeloVista;
 
+
 import ModeloJuego.ModeloJuego;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +8,7 @@ import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import Observer.IModeloVista;
 import Observer.Observer;
-import Observer.ILogicaJuego;
+import Observer.IModeloJuego;
 
 /**
  * Clase que representa el modeloVista del juego. Actúa como intermediario entre
@@ -21,10 +22,9 @@ public class ModeloVista implements IModeloVista {
     private JugadorVista jugadorPrincipal;
     private List<JugadorVista> jugadoresSecundarios;
     private List<Observer> observers = new ArrayList<>();
-    private ILogicaJuego LogicaJuego;
     
     //NUEVO
-    private ModeloJuego modeloJuego;
+    private IModeloJuego modeloJuego;
 
     /**
      * Constructor vacío del modeloVista.
@@ -37,8 +37,8 @@ public class ModeloVista implements IModeloVista {
      * Asigna el modelo de juego con el cual se comunica.
      */
     @Override
-    public void setModeloJuego(ILogicaJuego modeloJuego) {
-        this.LogicaJuego = modeloJuego;
+    public void setModeloJuego(IModeloJuego modeloJuego) {
+        this.modeloJuego = modeloJuego;
     }
 
     /**
@@ -131,8 +131,6 @@ public class ModeloVista implements IModeloVista {
      */
     @Override
     public void seleccionarCarta(int pos) {
-        LogicaJuego.verificarCarta(pos);
-        
         // VER SI ES NECESARIO ENVIAR STRING CON NOMBRE CARTA
         // Y SI ES AGREGAR ESA FUNCIONALIDAD
         modeloJuego.EnviarEventoCartaSeleccionada(pos, jugadorPrincipal.getNumJugador());
