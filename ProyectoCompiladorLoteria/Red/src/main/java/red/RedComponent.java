@@ -21,7 +21,7 @@ public class RedComponent {
     }
 
     public void registrarListener(NetworkListener listener) {
-        DispatcherFactory.crearDispatcher().registrarListener(listener);
+        DispatcherFactory.getSingletonInstance().registrarListener(listener);
     }
 
     public void detener() {

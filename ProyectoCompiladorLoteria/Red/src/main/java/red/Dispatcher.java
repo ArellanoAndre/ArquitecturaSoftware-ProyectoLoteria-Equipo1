@@ -10,45 +10,70 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 
+/**
+ * Dispatcher con inyección de dependencias
+ * El singleton es gestionado ahora por el factory
+ */
 public class Dispatcher {
-    //singleton
-    private static Dispatcher instance;
-    private final List<NetworkListener> listeners = new ArrayList<>();
-    private final BlockingQueue<String> colaMensajes = new LinkedBlockingQueue<>();
-    private boolean activo = true;
 
-    private Dispatcher() {
-        // Hilo que procesa los mensajes de la cola
-        new Thread(() -> {
-            while (activo) {
-                try {
-                    String json = colaMensajes.take();
+    private final List<NetworkListener> listeners; //dependencia inyectable
+    private final BlockingQueue<String> messageQueue; //dependencia inyectable
+    private volatile boolean activo; //BANDERA 
+    private final Thread workerThread;
+
+
+    /**
+     * CONSTRUCTOR INYECTABLE CON DEPENDENCIAS PERSONALIZADAS
+     * EL FACTORY DECIDIRA CON QUE TRABAJA EL DISPATCHER 
+     */
+    public Dispatcher(List<NetworkListener> listeners, BlockingQueue<String> messageQueue, boolean autoStart) {
+        
+        //SI EL LISTENER ES NULL INICIALIZAMOS CON VALORES POR DEFECTO
+        this.listeners = (listeners != null) ? listeners : new ArrayList<>();
+        this.messageQueue = (messageQueue != null) ? messageQueue : new LinkedBlockingQueue<>();
+        this.activo = autoStart;
+
+        // Hilo de procesamiento
+        this.workerThread = new Thread(this::processMessages, "DispatcherThread");
+        if (autoStart) {
+            this.workerThread.start();
+        }
+    }
+
+    private void processMessages() {
+        while (activo) {
+            try {
+                String json = messageQueue.take();
+                synchronized (listeners) {
                     for (NetworkListener listener : listeners) {
                         listener.onMessageReceived(json);
                     }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
                 }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
             }
-        }, "DispatcherThread").start();
-    }
-
-    public static synchronized Dispatcher getInstance() {
-        if (instance == null) {
-            instance = new Dispatcher();
         }
-        return instance;
     }
-
+    //REGISTRAMOS EL LISTENER POR MEDIO DEL SINGLETON
     public void registrarListener(NetworkListener listener) {
-        listeners.add(listener);
+        synchronized (listeners) {
+            listeners.add(listener);
+        }
     }
 
     public void dispatch(String json) {
-        colaMensajes.offer(json);
+        if (activo) {
+            messageQueue.offer(json);
+        }
     }
 
     public void detener() {
         activo = false;
+        workerThread.interrupt();
+    }
+
+    public boolean isActivo() {
+        return activo;
     }
 }

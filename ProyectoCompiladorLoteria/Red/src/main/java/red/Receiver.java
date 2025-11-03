@@ -10,7 +10,7 @@ public class Receiver implements Runnable {
 
     public Receiver(int puerto) {
         this.puerto = puerto;
-        this.dispatcher = DispatcherFactory.crearDispatcher();
+        this.dispatcher = DispatcherFactory.getSingletonInstance();
     }
 
     @Override
