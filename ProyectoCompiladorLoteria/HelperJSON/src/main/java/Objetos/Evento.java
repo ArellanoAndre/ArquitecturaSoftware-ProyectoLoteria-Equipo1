@@ -2,26 +2,28 @@ package Objetos;
 
 public class Evento {
 
-    private String tipo;
+    private EnumTipoEvento tipo;
     private int idJugador;
     private String cartaSeleccionada;
     private int posicion;
+    private String topico;
 
     public Evento() {
     }
 
-    public Evento(String tipo, int idJugador, String cartaSeleccionada, int posicion) {
+    public Evento(EnumTipoEvento tipo, int idJugador, String cartaSeleccionada, int posicion, String topico) {
         this.tipo = tipo;
         this.idJugador = idJugador;
         this.cartaSeleccionada = cartaSeleccionada;
         this.posicion = posicion;
+        this.topico = topico;
     }
 
-    public String getTipo() {
+    public EnumTipoEvento getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(EnumTipoEvento tipo) {
         this.tipo = tipo;
     }
 
@@ -49,13 +51,18 @@ public class Evento {
         this.posicion = posicion;
     }
 
+    public String getTopico() {
+        return topico;
+    }
+
+    public void setTopico(String topico) {
+        this.topico = topico;
+    }
+
     @Override
     public String toString() {
-        return "Evento{"
-                + "tipo='" + tipo + '\''
-                + ", idJugador=" + idJugador
-                + ", cartaSeleccionada='" + cartaSeleccionada + '\''
-                + ", posicion=" + posicion
-                + '}';
+        return "Evento{" + "tipo=" + tipo + ", idJugador=" + idJugador + ", cartaSeleccionada=" + cartaSeleccionada + ", posicion=" + posicion + ", topico=" + topico + '}';
     }
+
+    
 }
