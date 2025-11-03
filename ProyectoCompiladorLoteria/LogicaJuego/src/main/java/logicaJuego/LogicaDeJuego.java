@@ -4,6 +4,7 @@
  */
 package logicaJuego;
 
+import ModeloJuego.ModeloJuego;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +24,7 @@ public class LogicaDeJuego {
     private int contador = 0;
     private Timer timer;
     
+    private ModeloJuego modeloJuego;
 
     /**
      * Constructor que inicializa el modelo con la vista, el jugador principal y
@@ -30,10 +32,11 @@ public class LogicaDeJuego {
      *
      * @param jugadores lista de jugadores secundarios.
      */
-    public LogicaDeJuego(List<Jugador> jugadores) {
+    public LogicaDeJuego() {
         this.mazo = crearMazo();
         barajear();
-        this.jugadores = jugadores;
+        this.jugadores = new ArrayList<>();
+        this.modeloJuego = new ModeloJuego();
     }
 
     /**
@@ -94,7 +97,9 @@ public class LogicaDeJuego {
                 // Comparar el número de la carta cantada con el valor en la posición seleccionada
                 if (cartaActual != null && casillas[indice] == cartaActual.getNumCarta()) {
                     jugadorP.getTarjeta().marcarCasilla(casillaSeleccionada - 1);
-//                    controlVista.actualizarTarjetaJugadorPrincipal(jugadorP.getTarjeta().getMarcadas()); Llamar a modeloJuego
+                    
+                    modeloJuego.EnviarEventoCartaSeleccionada(casillaSeleccionada, jugadorId);
+                    
                     System.out.println("ModeloJuego.si");
                 } else {
                     System.out.println("ModeloJuego.no - No coincide la carta cantada (" + cartaActual.getNumCarta() + ") con la casilla " + casillas[indice]);
