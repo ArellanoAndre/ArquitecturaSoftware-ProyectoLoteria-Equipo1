@@ -18,9 +18,9 @@ public class ModeloJuego implements EventoListener {
         procesador.setListener(this);
     }
 
-    public void EnviarEventoCartaSeleccionada(String nombreCarta, int pos, int idJugador) {
+    public void EnviarEventoCartaSeleccionada(int pos, int idJugador) {
         new Thread(() -> {
-            Evento evento = new Evento("Carta Seleccionada", idJugador, nombreCarta, pos);
+            Evento evento = new Evento("Carta Seleccionada", idJugador, pos);
             procesador.procesarEvento(evento);
         }).start();
     }
