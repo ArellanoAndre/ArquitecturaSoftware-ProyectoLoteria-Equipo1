@@ -10,25 +10,35 @@ package ModeloJuego;
 
 import Objetos.EnumTipoEvento;
 import Objetos.Evento;
-import Observer.IControlVista;
-import Observer.IModeloJuego;
+import Interfaces.IControlVista;
+import Interfaces.IModeloJuego;
+import ModeloJuego.entidades.Jugador;
 import ProcesadorEventos.EventoListener;
 import ProcesadorEventos.ProcesarEvento;
+import java.util.List;
 
 public class ModeloJuego implements EventoListener,IModeloJuego {
 
     ProcesarEvento procesador;
     IControlVista controlVista;
+    Jugador jugadorPrincipal;
+    List<Jugador> jugadoresSecundarios;
 
-    public ModeloJuego() {
+    public ModeloJuego(IControlVista controlVista, Jugador jugadorPrincipal,List<Jugador> jugadoresSecundarios) {
         // Crear procesador y registrar este modelo como listener
+        this.controlVista = controlVista;
+        this.jugadorPrincipal = jugadorPrincipal;
+        this.jugadoresSecundarios = jugadoresSecundarios;
+        
+        
+        controlVista.setJugadorPrincipal(this.jugadorPrincipal);
+        controlVista.setJugadoresSecundarios(jugadoresSecundarios);
         procesador = new ProcesarEvento();
-        procesador.setListener(this);
+        procesador.setListener(this);   
     }
 
     @Override
     public void setControlVista (IControlVista controlVista){
-        this.controlVista = controlVista;
     }
     
     @Override
@@ -43,6 +53,6 @@ public class ModeloJuego implements EventoListener,IModeloJuego {
     public void onEventoRecibido(String json) {
         System.out.println("[ModeloJuego] Llego respuesta procesada por el broker: " + json);
     }
-
-
+    
+    
 }

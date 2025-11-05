@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
-import Observer.IModeloVista;
-import Observer.Observer;
-import Observer.IModeloJuego;
+import Interfaces.IModeloVista;
+import Interfaces.Observer;
+import Interfaces.IModeloJuego;
 
 /**
  * Clase que representa el modeloVista del juego. Actúa como intermediario entre
@@ -30,7 +30,6 @@ public class ModeloVista implements IModeloVista {
      * Constructor vacío del modeloVista.
      */
     public ModeloVista() {
-        modeloJuego = new ModeloJuego();
     }
 
     /**

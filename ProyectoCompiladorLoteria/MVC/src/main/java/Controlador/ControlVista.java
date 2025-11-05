@@ -1,12 +1,12 @@
-package ModeloVista;
+package Controlador;
 
 import ModeloJuego.entidades.Carta;
 import ModeloJuego.entidades.Jugador;
 import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import ModeloVista.entidadesVista.TarjetaVista;
-import Observer.IControlVista;
-import Observer.IModeloVista;
+import Interfaces.IControlVista;
+import Interfaces.IModeloVista;
 import java.util.ArrayList;
 import java.util.List;
 

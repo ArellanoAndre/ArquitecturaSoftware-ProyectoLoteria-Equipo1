@@ -1,4 +1,4 @@
-package Observer;
+package Interfaces;
 
 import ModeloJuego.entidades.Carta;
 import ModeloJuego.entidades.Jugador;

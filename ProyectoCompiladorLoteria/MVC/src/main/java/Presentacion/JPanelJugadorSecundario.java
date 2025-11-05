@@ -2,7 +2,7 @@ package Presentacion;
 
 import ModeloVista.ModeloVista;
 import ModeloVista.entidadesVista.JugadorVista;
-import Observer.Observer;
+import Interfaces.Observer;
 import Presentacion.utilidades.GridPanel;
 import java.awt.*;
 import javax.swing.ImageIcon;

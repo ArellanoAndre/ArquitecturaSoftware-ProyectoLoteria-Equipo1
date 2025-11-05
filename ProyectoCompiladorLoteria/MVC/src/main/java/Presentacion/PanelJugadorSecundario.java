@@ -6,8 +6,8 @@ package Presentacion;
 
 import ModeloVista.ModeloVista;
 import ModeloVista.entidadesVista.JugadorVista;
-import Observer.IModeloVista;
-import Observer.Observer;
+import Interfaces.IModeloVista;
+import Interfaces.Observer;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;

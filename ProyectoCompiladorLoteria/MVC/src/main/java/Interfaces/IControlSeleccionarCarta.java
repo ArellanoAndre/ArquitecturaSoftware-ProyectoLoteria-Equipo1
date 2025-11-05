@@ -1,4 +1,4 @@
-package Observer;
+package Interfaces;
 
 /**
  * Interfaz que define las operaciones del controlador para seleccionar cartas.

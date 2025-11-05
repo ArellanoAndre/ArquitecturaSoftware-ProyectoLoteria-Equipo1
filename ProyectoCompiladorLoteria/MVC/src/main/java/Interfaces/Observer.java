@@ -1,4 +1,4 @@
-package Observer;
+package Interfaces;
 
 /**
  * Interfaz que define el comportamiento de un observador en el patrón Observer.

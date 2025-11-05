@@ -2,8 +2,8 @@ package Presentacion;
 
 import Controlador.ControlSeleccionarCarta;
 import ModeloVista.entidadesVista.JugadorVista;
-import Observer.IModeloVista;
-import Observer.Observer;
+import Interfaces.IModeloVista;
+import Interfaces.Observer;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JLayeredPane;

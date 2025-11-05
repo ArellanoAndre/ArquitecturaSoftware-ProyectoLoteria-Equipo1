@@ -1,4 +1,4 @@
-package Observer;
+package Interfaces;
 
 import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
