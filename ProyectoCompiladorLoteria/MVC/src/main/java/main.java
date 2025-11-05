@@ -45,6 +45,7 @@ public class main {
             
             
             modeloVista.setModeloJuego(modeloJuego);
+            modeloJuego.setControlVista(controlVista);
             
             ControlSeleccionarCarta controlador = new ControlSeleccionarCarta(modeloVista);
 
