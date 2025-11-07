@@ -1,8 +1,8 @@
 package Presentacion;
 
 import ModeloVista.ModeloVista;
-import Observer.IModeloVista;
-import Observer.Observer;
+import Interfaces.IModeloVista;
+import Interfaces.Observer;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;

@@ -1,7 +1,7 @@
 package Controlador;
 
-import Observer.IControlSeleccionarCarta;
-import Observer.IModeloVista;
+import Interfaces.IControlSeleccionarCarta;
+import Interfaces.IModeloVista;
 
 /**
  * Controlador que se encarga de manejar la interaccion entre la presentacion y

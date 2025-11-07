@@ -20,13 +20,39 @@ public class ModeloJuego implements EventoListener,IModeloJuego {
         procesador.setListener(this);
     }
     
-    @Override
-    public void EnviarEventoCartaSeleccionada(int pos, int idJugador) {
-        new Thread(() -> {
-            Evento evento = new Evento(EnumTipoEvento.ACTUALIZAR_TABLERO, idJugador, pos, "juego_out");
-            procesador.procesarEvento(evento);
-        }).start();
-    }
+/**
+ * Envía un JSON con los datos del evento:
+ * tipoEvento, idJugador, posicionCarta y topicoEvento.
+ * Este método no crea objetos Evento, solo estructura un JSON.
+ *
+ * Ejemplo de salida:
+ * {
+ *   "tipoEvento": "SELECCIONAR_CARTA",
+ *   "idJugador": 1,
+ *   "pos": 3,
+ *   "topicoEvento": "juego_in"
+ * }
+ */
+@Override
+public void EnviarEventoCartaSeleccionada(int pos, int idJugador) {
+    new Thread(() -> {
+        // 1️⃣ Crear el JSON con todos los campos requeridos
+        String jsonEvento = String.format(
+            "{\"tipoEvento\":\"%s\",\"idJugador\":%d,\"pos\":%d,\"topicoEvento\":\"%s\"}",
+            EnumTipoEvento.SELECCIONAR_CARTA.name(),
+            idJugador,
+            pos,
+            "juego_in"
+        );
+
+        // 2️⃣ Enviar al procesador (quien construye el Evento real y lo envía)
+        procesador.procesarEvento(jsonEvento);
+
+        System.out.println("[ModeloJuego] JSON enviado al procesador: " + jsonEvento);
+    }).start();
+}
+
+
 
     @Override
     public void onEventoRecibido(String json) {

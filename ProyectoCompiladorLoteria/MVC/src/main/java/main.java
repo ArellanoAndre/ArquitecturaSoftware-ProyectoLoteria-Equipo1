@@ -3,7 +3,7 @@ import Controlador.ControlSeleccionarCarta;
 import ModeloJuego.entidades.Jugador;
 import ModeloJuego.entidades.Tarjeta;
 import ModeloJuego.ModeloJuego;
-import ModeloVista.ControlVista;
+import Controlador.ControlVista;
 import ModeloVista.ModeloVista;
 import Presentacion.JPantallaJuego;
 import javax.swing.*;
@@ -29,22 +29,19 @@ public class main {
             Jugador jugador2 = new Jugador("Isaac", tarjetaPrueba2, 2);
 
             //Crear
-            List<Jugador> jugadores1 = new ArrayList<>();
-            jugadores1.add(jugador2);
-
-            List<Jugador> jugadores2 = new ArrayList<>();
-            jugadores2.add(jugador1);
+            List<Jugador> jugadores = new ArrayList<>();
+            jugadores.add(jugador2);
 
             
             ModeloVista modeloVista = new ModeloVista();
             ControlVista controlVista = new ControlVista(modeloVista);
             
             //Instancia de modeloJuego
-            ModeloJuego modeloJuego = new ModeloJuego();
-            
-            
+            ModeloJuego modeloJuego = new ModeloJuego(controlVista,jugador1, jugadores);
             
             modeloVista.setModeloJuego(modeloJuego);
+            
+            
             
             ControlSeleccionarCarta controlador = new ControlSeleccionarCarta(modeloVista);
 
