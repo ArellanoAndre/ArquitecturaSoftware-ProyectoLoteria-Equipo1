@@ -70,6 +70,13 @@ public class EnsambladorRed {
     public ColaGenerica<String> getColaSalida() {
         return colaSalida;
     }
+    
+    /**
+     * Devuelve la cola de salida, por ejemplo para que otras capas agreguen mensajes.
+     */
+    public ColaGenerica<String> getColaEntrada() {
+        return colaSalida;
+    }
 
     /**
      * Devuelve el sender, por si se necesita control directo.

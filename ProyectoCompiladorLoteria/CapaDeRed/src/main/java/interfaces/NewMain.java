@@ -16,6 +16,7 @@ public class NewMain {
 
     /**
      * @param args the command line arguments
+     * @throws java.lang.InterruptedException
      */
     public static void main(String[] args) throws InterruptedException {
            // Crear el ensamblador con los parámetros de red
@@ -25,7 +26,7 @@ public class NewMain {
         ensamblador.ensamblar();
 
         // Obtener la cola de salida
-        ColaGenerica<String> cola = ensamblador.getColaSalida();
+        ColaGenerica<String> cola = ensamblador.getColaEntrada();
 
         // Agregar mensajes a la cola (el Sender los enviará automáticamente)
         cola.add("{\"tipoEvento\":\"PING\",\"mensaje\":\"Hola Broker\"}",TipoAddCola.Salida);

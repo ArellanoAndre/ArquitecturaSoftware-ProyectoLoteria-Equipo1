@@ -69,7 +69,7 @@ public class Dispatcher implements ObserverColaEntrada{
                 Thread.currentThread().interrupt();
                 System.err.println("[Dispatcher] Interrumpido mientras esperaba mensajes.");
             } catch (Exception e) {
-                System.err.println("[Dispatcher] Error procesando mensaje: " + e.getMessage());
+                System.err.println(mensajeError + e.getMessage());
             }
         }
 //    
