@@ -22,10 +22,8 @@ import networkListener.NetworkListener;
 public class EnsambladorRed2 {
 
     private Socket socket;
-
     private final String host;
     private final int puerto;
-
     private Dispatcher dispatcher;
     private Sender sender;
     private NetworkListener listener;

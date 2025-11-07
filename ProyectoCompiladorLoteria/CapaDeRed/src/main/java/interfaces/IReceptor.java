@@ -9,5 +9,5 @@ package interfaces;
  * @author abrilislas
  */
 public interface IReceptor {
-    void recibir(String json);
+    void mandarMensaje(String json);
 }

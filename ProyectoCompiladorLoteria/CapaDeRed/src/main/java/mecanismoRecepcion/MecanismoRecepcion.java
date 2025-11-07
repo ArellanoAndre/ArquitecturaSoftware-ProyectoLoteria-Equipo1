@@ -5,27 +5,48 @@
 package mecanismoRecepcion;
 
 import Send.ColaGenerica;
+import interfaces.IReceptor;
+import interfaces.ObserverColaEntrada;
+import utilidades.TipoAddCola;
 
 /**
  *
  * @author abrilislas
  */
-public class MecanismoRecepcion {
+public class MecanismoRecepcion implements ObserverColaEntrada{
     
     
     
     private final ColaGenerica<String> colaEntrada; //dependencia inyectable
+    private IReceptor receptor;
     
     
-    public MecanismoRecepcion(ColaGenerica<String> colaEntrada){
+    public MecanismoRecepcion(ColaGenerica<String> colaEntrada, IReceptor receptor){
         
         this.colaEntrada = colaEntrada;
-        //Se vuelve observer de la cola de entrada
         this.colaEntrada.addObserverEntrada(this);
+        this.receptor=receptor;
         System.out.println("Se ha registrado como observador de la cola de entrada.");
     
+    }
+
+    @Override
+    public void updateEntrada() {
+            try {
+                String json = colaEntrada.take();
+                        receptor.mandarMensaje(json);
+                System.out.println("[MecanismoRecepcion] : mensaje recibido desde la cola de entrada: "+json);
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.err.println("[MecanismoRecepcion] Interrumpido mientras esperaba mensajes.");
+            } catch (Exception e) {
+                System.err.println("[MecanismoRecepcion] Error procesando mensaje: " + e.getMessage());
+            }
+    }
     
-    
+    public void mandarMensaje(String json) {
+        receptor.mandarMensaje(json); 
     }
     
 }
