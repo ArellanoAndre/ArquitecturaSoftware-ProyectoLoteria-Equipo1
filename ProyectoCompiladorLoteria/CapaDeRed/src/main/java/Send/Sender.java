@@ -22,8 +22,7 @@ import java.util.logging.Logger;
  */
 public class Sender implements ISender, ObserverColaSalida {
 
-    private final String host;
-    private final int puerto;
+   
 
     private Socket socket;
     private DataOutputStream salida;
@@ -37,11 +36,12 @@ public class Sender implements ISender, ObserverColaSalida {
      * Constructor.
      * @param host Dirección IP o nombre del host del broker (por ejemplo "localhost").
      * @param puerto Puerto TCP del broker (por ejemplo 6000).
-     * @param colaSalida
      */
-    public Sender(String host, int puerto,ColaGenerica colaSalida) {
-        this.host = host;
-        this.puerto = puerto;
+    
+   
+
+    public Sender(Socket socket, ColaGenerica<String> colaSalida) {
+        this.socket = socket;
         this.colaSalida = colaSalida;
         conectar();
     }
@@ -54,9 +54,9 @@ public class Sender implements ISender, ObserverColaSalida {
         new Thread(() -> {
             while (!conectado) {
                 try {
-                    System.out.println("[Sender] Intentando conectar a " + host + ":" + puerto);
-                    socket = new Socket();
-                    socket.connect(new InetSocketAddress(host, puerto), 5000);
+                    System.out.println("[Sender] Intentando conectar a "+ socket.getInetAddress() );
+                    
+                    
                     salida = new DataOutputStream(socket.getOutputStream());
                     conectado = true;
                     System.out.println("[Sender] Conectado al broker.");
