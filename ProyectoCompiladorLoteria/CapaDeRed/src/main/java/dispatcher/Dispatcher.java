@@ -4,11 +4,8 @@
  */
 package dispatcher;
 import Send.ColaGenerica;
-import interfaces.IReceptor;
-import interfaces.ObserverColaEntrada;
-import java.util.ArrayList;
-import java.util.List;
 import utilidades.TipoAddCola;
+import interfaces.IDispatcher;
 
 
 /**
@@ -16,11 +13,10 @@ import utilidades.TipoAddCola;
  * Este dispatcher utiliza con cola genérica con observer
  * Está comentada la versión con hilo, en caso de ser necesaria
  */
-public class Dispatcher implements ObserverColaEntrada{
+public class Dispatcher implements IDispatcher{
 
     //private final List<IReceptor> receptores; //dependencia inyectable
-    private final ColaGenerica<String> colaEntrada; //dependencia inyectable
-    private final ColaGenerica<String> colaSalida; //dependencia inyectable
+    private final ColaGenerica<String> colaSalida=null; //dependencia inyectable
     private volatile boolean activo = true; //BANDERA 
     private String mensajeError = "[Dispatcher] Error al procesar el mensaje:";
     //SINGLETON
@@ -32,37 +28,33 @@ public class Dispatcher implements ObserverColaEntrada{
      */
     public static synchronized Dispatcher getSingletonInstance() {
         if (singleton == null) {
-            singleton = new DispatcherFactory().createDispatcherDefault();
+            singleton = new Dispatcher();
         }
         return singleton;
     }
     /**
-     * CONSTRUCTOR INYECTABLE CON DEPENDENCIAS PERSONALIZADAS
-     * EL FACTORY DECIDIRA CON QUE TRABAJA EL DISPATCHER (network Listeners y cola)
      */
-    /**
-     * 
-     * @param receptores
-     * @param colaEntrada
-     * @param autoStart 
-     */
-    public Dispatcher(List<IReceptor> receptores, ColaGenerica<String> colaEntrada, ColaGenerica<String> colaSalida ) {
-        
-        this.colaEntrada = colaEntrada;
-        this.colaSalida = colaSalida;
+    private Dispatcher() {}
 
-        //Se vuelve observer de la cola de entrada
-        this.colaEntrada.addObserverEntrada(this);
-        System.out.println("Se ha registrado como observador de la cola de entrada.");
+    /** Detiene el procesamiento del Dispatcher. */
+    public void detener() {
+        activo = false;
+        System.out.println("[Dispatcher] Detenido.");
+    }
+    
+    /**
+     * Setea la cola de salida
+     * @param colaSalida 
+     */
+    public void setColaSalida( ColaGenerica<String> colaSalida){
+        colaSalida=this.colaSalida;
     }
 
-        @Override
-        public void updateEntrada() {
-            if (!activo) return;
+    @Override
+    public void dispatch(String json) {
+        if (!activo) return;
             try {
-                String mensaje = colaEntrada.take();
-                System.out.println("Dispatcher: mensaje recibido desde la cola de entrada: " + mensaje);
-                colaSalida.add(mensaje, TipoAddCola.Salida);
+                colaSalida.add(json, TipoAddCola.Salida);
                 System.out.println("[Dispatcher] Mensaje reenviado a la cola de salida.");
 
             } catch (InterruptedException e) {
@@ -70,27 +62,8 @@ public class Dispatcher implements ObserverColaEntrada{
                 System.err.println("[Dispatcher] Interrumpido mientras esperaba mensajes.");
             } catch (Exception e) {
                 System.err.println(mensajeError + e.getMessage());
-            }
+            }    
         }
-//    
-//        //REGISTRAMOS EL RECEPTOR
-//    public void registrarReceptor(IReceptor receptor) {
-//        receptores.add(receptor);
-//    }
-//
-//    public void dispatch(String json) {
-//        synchronized (receptores) {
-//            for (IReceptor receptor : receptores) {
-//                receptor.recibir(json);
-//            }
-//        }
-//    }
-    /** Detiene el procesamiento del Dispatcher. */
-    public void detener() {
-        activo = false;
-        System.out.println("[Dispatcher] Detenido.");
-    }
-    
  }
 
 

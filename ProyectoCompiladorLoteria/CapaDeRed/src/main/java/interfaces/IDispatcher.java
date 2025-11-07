@@ -11,5 +11,4 @@ package interfaces;
 public interface IDispatcher {
     
     void dispatch(String json);
-    void registerListener(IReceptor receptor);
 }
