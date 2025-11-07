@@ -6,6 +6,7 @@ package interfaces;
 
 import Ensamblador.EnsambladorRed;
 import Send.ColaGenerica;
+import utilidades.TipoAddCola;
 
 /**
  *
@@ -27,8 +28,8 @@ public class NewMain {
         ColaGenerica<String> cola = ensamblador.getColaSalida();
 
         // Agregar mensajes a la cola (el Sender los enviará automáticamente)
-        cola.add("{\"tipoEvento\":\"PING\",\"mensaje\":\"Hola Broker\"}");
-        cola.add("{\"tipoEvento\":\"INFO\",\"mensaje\":\"Segundo mensaje desde ColaGenerica\"}");
+        cola.add("{\"tipoEvento\":\"PING\",\"mensaje\":\"Hola Broker\"}",TipoAddCola.Salida);
+        cola.add("{\"tipoEvento\":\"INFO\",\"mensaje\":\"Segundo mensaje desde ColaGenerica\"}",TipoAddCola.Entrada);
 
         Thread.sleep(3000);
         ensamblador.getSender().close();
