@@ -14,7 +14,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Dispatcher con inyección de dependencias
  * El singleton es gestionado ahora por el factory
  */
-public class Dispatcher {
+public class Dispatcher implements IDispatcher{
 
     private final List<NetworkListener> listeners; //dependencia inyectable
     private final BlockingQueue<String> messageQueue; //dependencia inyectable
