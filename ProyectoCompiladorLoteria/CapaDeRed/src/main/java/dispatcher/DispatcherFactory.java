@@ -17,53 +17,32 @@ import dispatcher.Dispatcher;
 /**
  * Factory responsable de crear instancias configurables del Dispatcher por medio de inyección
  */
-public class DispatcherFactory {
+public class DispatcherFactory{
     /**
      *
      */
     private boolean autoStart = true;
     List<IReceptor> receptores;
-    private ColaGenerica<String> cola;
+    private ColaGenerica<String> colaEntrada;
+
 
     /**
-     * 
-     * @param listeners
-     * @return 
+     * Crea un Dispatcher con las colas default
+     * Este metodo sera usado por el singleton y el ensamblador.
      */
-     public DispatcherFactory withReceptores(List<IReceptor> receptores) {
-        this.receptores = receptores;
-        return this;
-    }
-
-    public DispatcherFactory withQueue(ColaGenerica<String> cola) {
-        this.cola = cola;
-        return this;
-    }
-
-    public DispatcherFactory autoStart(boolean value) {
-        this.autoStart = value;
-        return this;
-    }
-
     public Dispatcher createDispatcherDefault() {
-        Dispatcher dispatcher = new Dispatcher(receptores,cola, autoStart);
-
-        if (receptores != null) {
-            for (IReceptor rc : receptores) {
-                dispatcher.registrarReceptor(rc);
-            }
-        }
-
-        return dispatcher;
+        ColaGenerica<String> colaEntrada = new ColaGenerica<>();
+        ColaGenerica<String> colaSalida = new ColaGenerica<>();
+        return new Dispatcher(null, colaEntrada, colaSalida);
     }
 
-    // Singleton
-    private static Dispatcher singleton;
-
-    public static synchronized Dispatcher getSingletonInstance() {
-        if (singleton == null) {
-            singleton = new DispatcherFactory().createDispatcherDefault();
-        }
-        return singleton;
+    /**
+     * Crea un Dispatcher con colas personalizadas (inyección de dependencias).
+     * @param colaEntrada cola de entrada observada
+     * @param colaSalida cola de salida para despachar mensajes
+     * @return Dispatcher listo
+     */
+    public Dispatcher createDispatcherCustom(List<IReceptor> receptores, ColaGenerica<String> colaEntrada, ColaGenerica<String> colaSalida) {
+        return new Dispatcher(receptores, colaEntrada, colaSalida);
     }
 }

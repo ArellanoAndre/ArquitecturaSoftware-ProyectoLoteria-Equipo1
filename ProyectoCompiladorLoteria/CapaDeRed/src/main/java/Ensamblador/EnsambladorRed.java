@@ -6,6 +6,8 @@ package Ensamblador;
 
 import Send.ColaGenerica;
 import Send.Sender;
+import dispatcher.Dispatcher;
+import dispatcher.DispatcherFactory;
 
 /**
  * @author Arell
@@ -22,9 +24,10 @@ public class EnsambladorRed {
 
     private final String host;
     private final int puerto;
-
     private ColaGenerica<String> colaSalida;
+    private ColaGenerica<String> colaEntrada;
     private Sender sender;
+    private Dispatcher dispatcher;
 
     /**
      * Constructor del ensamblador.
@@ -44,12 +47,19 @@ public class EnsambladorRed {
 
         // Crear cola de salida
         colaSalida = new ColaGenerica<>();
+        
+        //cola entrada
+        colaEntrada = new ColaGenerica<>();
 
+        // Crea el Dispatcher por medio de la fabrica, se inyectan las colas 
+        DispatcherFactory factory = new DispatcherFactory();
+        dispatcher = factory.createDispatcherCustom(null, colaEntrada, colaSalida);
+        
         // Crear sender configurado
-        sender = new Sender(host, puerto);
+        sender = new Sender(host, puerto, colaSalida);
 
         // Registrar sender como observador de la cola
-        colaSalida.addObserver(sender);
+        colaSalida.addObserverSalida(sender);
 
         System.out.println("[EnsambladorRed] Cola y Sender conectados correctamente.");
     }
@@ -66,5 +76,12 @@ public class EnsambladorRed {
      */
     public Sender getSender() {
         return sender;
+    }
+    
+    /**
+     * Devuelve el dispatcher ensamblado.
+     */
+    public Dispatcher getDispatcher() {
+        return dispatcher;
     }
 }

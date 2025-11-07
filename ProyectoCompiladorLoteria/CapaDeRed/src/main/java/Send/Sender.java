@@ -37,6 +37,7 @@ public class Sender implements ISender, ObserverColaSalida {
      * Constructor.
      * @param host Dirección IP o nombre del host del broker (por ejemplo "localhost").
      * @param puerto Puerto TCP del broker (por ejemplo 6000).
+     * @param colaSalida
      */
     public Sender(String host, int puerto,ColaGenerica colaSalida) {
         this.host = host;
