@@ -4,10 +4,13 @@
  */
 package Send;
 import interfaces.ISender;
+import interfaces.ObserverColaSalida;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author Arell
@@ -17,7 +20,7 @@ import java.net.Socket;
  * - Implementa ColaGenerica.Observer<String> para escuchar el flujo de salida.
  * - Mantiene una conexión persistente con el Broker.
  */
-public class Sender implements ISender, ColaGenerica.Observer<String> {
+public class Sender implements ISender, ObserverColaSalida {
 
     private final String host;
     private final int puerto;
@@ -27,15 +30,18 @@ public class Sender implements ISender, ColaGenerica.Observer<String> {
     private volatile boolean conectado;
 
     private final Object lock = new Object();
+    
+    private final ColaGenerica<String> colaSalida;
 
     /**
      * Constructor.
      * @param host Dirección IP o nombre del host del broker (por ejemplo "localhost").
      * @param puerto Puerto TCP del broker (por ejemplo 6000).
      */
-    public Sender(String host, int puerto) {
+    public Sender(String host, int puerto,ColaGenerica colaSalida) {
         this.host = host;
         this.puerto = puerto;
+        this.colaSalida = colaSalida;
         conectar();
     }
 
@@ -85,15 +91,6 @@ public class Sender implements ISender, ColaGenerica.Observer<String> {
         }
     }
 
-    /**
-     * Callback del Observer de ColaGenerica.
-     * Se ejecuta automáticamente cada vez que se agrega un elemento a la cola.
-     */
-    @Override
-    public void onElementoAgregado(String mensaje) {
-        send(mensaje);
-    }
-
     /** Reconecta en caso de error. */
     private void reconnect() {
         close();
@@ -110,6 +107,18 @@ public class Sender implements ISender, ColaGenerica.Observer<String> {
             System.out.println("[Sender] Conexión cerrada correctamente.");
         } catch (IOException e) {
             System.err.println("[Sender] Error al cerrar conexión: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void updateSalida() {
+        try {
+            String mensaje = colaSalida.take();
+            
+            send(mensaje);
+            
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Sender.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

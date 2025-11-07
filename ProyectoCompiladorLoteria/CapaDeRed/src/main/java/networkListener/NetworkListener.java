@@ -28,7 +28,7 @@ public class NetworkListener implements Runnable {
     private BufferedReader entrada;
 
     // Controla si el hilo sigue activo
-    private boolean activo = true;
+    private volatile boolean activo = true;
 
     /**
      * Constructor: inicializa el listener con el socket y la cola de entrada.
