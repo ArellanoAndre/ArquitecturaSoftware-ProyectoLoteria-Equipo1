@@ -4,7 +4,7 @@
  */
 package dispatcher;
 
-import Send.ColaGenerica;
+import ColaGenerica.ColaGenerica;
 import interfaces.IReceptor;
 import java.util.List;
 import dispatcher.Dispatcher;

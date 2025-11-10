@@ -4,7 +4,7 @@
  */
 package networkListener;
 
-import Send.ColaGenerica;
+import ColaGenerica.ColaGenerica;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

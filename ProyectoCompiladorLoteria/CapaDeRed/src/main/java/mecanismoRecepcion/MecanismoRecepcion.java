@@ -4,19 +4,16 @@
  */
 package mecanismoRecepcion;
 
-import Send.ColaGenerica;
+import ColaGenerica.ColaGenerica;
 import interfaces.IReceptor;
 import interfaces.ObserverColaEntrada;
-import utilidades.TipoAddCola;
 
 /**
  *
  * @author abrilislas
  */
 public class MecanismoRecepcion implements ObserverColaEntrada{
-    
-    
-    
+
     private final ColaGenerica<String> colaEntrada; //dependencia inyectable
     private IReceptor receptor;
     

@@ -4,91 +4,89 @@
  */
 package Ensamblador;
 
-import Send.ColaGenerica;
+import ColaGenerica.ColaGenerica;
 import Send.Sender;
 import dispatcher.Dispatcher;
 import dispatcher.DispatcherFactory;
+import interfaces.IReceptor;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.util.List;
+import mecanismoRecepcion.MecanismoRecepcion;
+import networkListener.NetworkListener;
 
 /**
- * @author Arell
- * EnsambladorRed
- * 
- * Clase responsable de ensamblar los componentes de red:
- * - Crea la ColaGenerica<String> (cola de salida)
- * - Crea el Sender
- * - Establece la relación Observer entre ambos
- * 
- * No ejecuta lógica de red; solo configura y conecta los componentes.
+ *
+ * @author isaac
  */
 public class EnsambladorRed {
 
+    private Socket socket;
     private final String host;
     private final int puerto;
+    private Dispatcher dispatcher;
+    private Sender sender;
+    private NetworkListener listener;
     private ColaGenerica<String> colaSalida;
     private ColaGenerica<String> colaEntrada;
-    private Sender sender;
-    private Dispatcher dispatcher;
+    private IReceptor receptor;
 
-    /**
-     * Constructor del ensamblador.
-     * @param host Dirección del broker.
-     * @param puerto Puerto TCP de conexión.
-     */
     public EnsambladorRed(String host, int puerto) {
         this.host = host;
         this.puerto = puerto;
     }
 
-    /**
-     * Ensambla los componentes del flujo de salida.
-     */
-    public void ensamblar() {
-        System.out.println("[EnsambladorRed] Iniciando ensamblaje...");
-
-        // Crear cola de salida
-        colaSalida = new ColaGenerica<>();
-        
-        //cola entrada
-        colaEntrada = new ColaGenerica<>();
-
-        // Crea el Dispatcher por medio de la fabrica, se inyectan las colas 
-        DispatcherFactory factory = new DispatcherFactory();
-        dispatcher = factory.createDispatcherCustom(null, colaEntrada, colaSalida);
-        
-        // Crear sender configurado
-        sender = new Sender(host, puerto, colaSalida);
-
-        // Registrar sender como observador de la cola
-        colaSalida.addObserverSalida(sender);
-
-        System.out.println("[EnsambladorRed] Cola y Sender conectados correctamente.");
+    private Socket crearSocket(String host, int puerto) throws IOException {
+        socket = new Socket();
+        socket.connect(new InetSocketAddress(host, puerto), 5000);
+        return socket;
     }
 
-    /**
-     * Devuelve la cola de salida, por ejemplo para que otras capas agreguen mensajes.
-     */
+    public void ensamblar(IReceptor receptor) throws IOException {
+        System.out.println("[EnsambladorRed] Iniciando ensamblaje...");
+
+        this.receptor = receptor;
+
+        // Crear socket y colas
+        socket = crearSocket(host, puerto);
+        colaSalida = new ColaGenerica<>();
+        colaEntrada = new ColaGenerica<>();
+
+        // Crear Sender y asociarlo con la cola de salida
+        sender = new Sender(socket, colaSalida);
+        colaSalida.addObserverSalida(sender);
+
+        // Crear Dispatcher singleton
+        dispatcher = DispatcherFactorySingleton();
+
+        // Inyectar la cola de salida al dispatcher
+        dispatcher.setColaSalida(colaSalida);
+
+        // Crear listener y mecanismo de recepción
+        listener = new NetworkListener(socket, colaEntrada);
+        new Thread(listener, "NetworkListener-Thread").start();
+
+        new MecanismoRecepcion(colaEntrada, receptor);
+
+        System.out.println("[EnsambladorRed] Componentes ensamblados correctamente.");
+    }
+
+    private Dispatcher DispatcherFactorySingleton() {
+        DispatcherFactory factory = new DispatcherFactory();
+        return factory.createDispatcherDefault();
+    }
+
+    public Dispatcher getDispatcher() {
+        return dispatcher;
+    }
+
     public ColaGenerica<String> getColaSalida() {
         return colaSalida;
     }
-    
-    /**
-     * Devuelve la cola de salida, por ejemplo para que otras capas agreguen mensajes.
-     */
-    public ColaGenerica<String> getColaEntrada() {
-        return colaSalida;
-    }
 
-    /**
-     * Devuelve el sender, por si se necesita control directo.
-     */
     public Sender getSender() {
         return sender;
-    }
-    
-    /**
-     * Devuelve el dispatcher ensamblado.
-     */
-    public Dispatcher getDispatcher() {
-        return dispatcher;
     }
 }

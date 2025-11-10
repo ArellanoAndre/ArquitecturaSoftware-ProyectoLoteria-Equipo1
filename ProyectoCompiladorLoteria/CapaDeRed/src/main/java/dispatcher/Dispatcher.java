@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dispatcher;
-import Send.ColaGenerica;
+import ColaGenerica.ColaGenerica;
 import utilidades.TipoAddCola;
 import interfaces.IDispatcher;
 
@@ -16,7 +16,7 @@ import interfaces.IDispatcher;
 public class Dispatcher implements IDispatcher{
 
     //private final List<IReceptor> receptores; //dependencia inyectable
-    private final ColaGenerica<String> colaSalida=null; //dependencia inyectable
+    private ColaGenerica<String> colaSalida=null; //dependencia inyectable
     private volatile boolean activo = true; //BANDERA 
     private String mensajeError = "[Dispatcher] Error al procesar el mensaje:";
     //SINGLETON
@@ -47,7 +47,7 @@ public class Dispatcher implements IDispatcher{
      * @param colaSalida 
      */
     public void setColaSalida( ColaGenerica<String> colaSalida){
-        colaSalida=this.colaSalida;
+        this.colaSalida = colaSalida;
     }
 
     @Override

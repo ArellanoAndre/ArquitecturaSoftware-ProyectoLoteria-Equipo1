@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Send;
+import ColaGenerica.ColaGenerica;
 import interfaces.ISender;
 import interfaces.ObserverColaSalida;
 import java.io.DataOutputStream;

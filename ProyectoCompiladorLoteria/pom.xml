@@ -7,12 +7,12 @@
     <packaging>pom</packaging>
     <modules>
         <module>Broker</module>
-        <module>Red</module>
         <module>HelperJSON</module>
         <module>ProcesadorEventos</module>
         <module>MVC</module>
         <module>LogicaJuego</module>
         <module>CapaDeRed</module>
+        <module>Servidor</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
