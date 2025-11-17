@@ -9,11 +9,10 @@ import Send.Sender;
 import dispatcher.Dispatcher;
 import dispatcher.DispatcherFactory;
 import interfaces.IReceptor;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
 import mecanismoRecepcion.MecanismoRecepcion;
 import networkListener.NetworkListener;
 
@@ -24,7 +23,7 @@ import networkListener.NetworkListener;
 public class EnsambladorRed {
 
     private Socket socket;
-    private final String host;
+    private String host = "";
     private final int puerto;
     private Dispatcher dispatcher;
     private Sender sender;
@@ -33,9 +32,21 @@ public class EnsambladorRed {
     private ColaGenerica<String> colaEntrada;
     private IReceptor receptor;
 
+    //Constructores Para iniciar como cliente o servidor
+    
+    //Cliente
     public EnsambladorRed(String host, int puerto) {
         this.host = host;
         this.puerto = puerto;
+    }
+
+    //Servidor
+    public EnsambladorRed(int puerto) throws IOException {
+        this.puerto = puerto;
+        
+        ServerSocket server = new ServerSocket(puerto);
+        socket = server.accept();
+        
     }
 
     private Socket crearSocket(String host, int puerto) throws IOException {

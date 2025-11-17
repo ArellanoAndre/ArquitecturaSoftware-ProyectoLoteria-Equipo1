@@ -13,6 +13,7 @@
         <module>LogicaJuego</module>
         <module>CapaDeRed</module>
         <module>Servidor</module>
+        <module>Eventos</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
