@@ -10,5 +10,5 @@ package interfacesGlobales;
  */
 public interface IReceptor {
     
-    public void recibir();
+    public void recibir(String eventojson);
 }

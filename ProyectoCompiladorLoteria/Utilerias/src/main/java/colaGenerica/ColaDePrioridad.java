@@ -105,6 +105,7 @@ public class ColaDePrioridad<T> {
     /**
      * Obtiene y elimina el primer elemento bloqueando si está vacía.
      */
+    
     public T take() throws InterruptedException {
         return cola.take();
     }
