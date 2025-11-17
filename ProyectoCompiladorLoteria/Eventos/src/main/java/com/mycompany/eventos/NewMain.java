@@ -4,6 +4,9 @@
  */
 package com.mycompany.eventos;
 
+import Evento.Evento;
+import builder.EventBuilder;
+
 /**
  *
  * @author rodri
@@ -14,7 +17,14 @@ public class NewMain {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        
+        EventBuilder eb = new EventBuilder("localhost");
+        
+        Evento e = eb.crearEvento();
+        
+        System.out.println(e);
+        
+        
     }
     
 }
