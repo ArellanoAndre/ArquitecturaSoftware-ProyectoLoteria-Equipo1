@@ -4,7 +4,7 @@
  */
 package Evento;
 
-import com.mycompany.utilerias.IEvento;
+import interfacesGlobales.IEvento;
 import java.net.InetAddress;
 
 /**
