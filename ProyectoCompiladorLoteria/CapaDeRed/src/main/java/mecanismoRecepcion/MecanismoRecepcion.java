@@ -5,6 +5,8 @@
 package mecanismoRecepcion;
 
 import ColaGenerica.ColaGenerica;
+import colaGenerica.ColaDePrioridad;
+import colaGenerica.ObserverEntrada;
 import interfaces.IReceptor;
 import interfaces.ObserverColaEntrada;
 
@@ -12,13 +14,13 @@ import interfaces.ObserverColaEntrada;
  *
  * @author abrilislas
  */
-public class MecanismoRecepcion implements ObserverColaEntrada{
+public class MecanismoRecepcion implements ObserverEntrada{
 
-    private final ColaGenerica<String> colaEntrada; //dependencia inyectable
+    private final ColaDePrioridad<String> colaEntrada; //dependencia inyectable
     private IReceptor receptor;
     
     
-    public MecanismoRecepcion(ColaGenerica<String> colaEntrada, IReceptor receptor){
+    public MecanismoRecepcion(ColaDePrioridad<String> colaEntrada, IReceptor receptor){
         
         this.colaEntrada = colaEntrada;
         this.colaEntrada.addObserverEntrada(this);

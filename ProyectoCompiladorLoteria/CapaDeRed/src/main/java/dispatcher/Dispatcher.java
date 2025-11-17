@@ -4,6 +4,8 @@
  */
 package dispatcher;
 import ColaGenerica.ColaGenerica;
+import colaGenerica.ColaDePrioridad;
+import colaGenerica.TipoAdd;
 import utilidades.TipoAddCola;
 import interfaces.IDispatcher;
 
@@ -16,7 +18,7 @@ import interfaces.IDispatcher;
 public class Dispatcher implements IDispatcher{
 
     //private final List<IReceptor> receptores; //dependencia inyectable
-    private ColaGenerica<String> colaSalida=null; //dependencia inyectable
+    private ColaDePrioridad<String> colaSalida=null; //dependencia inyectable
     private volatile boolean activo = true; //BANDERA 
     private String mensajeError = "[Dispatcher] Error al procesar el mensaje:";
     //SINGLETON
@@ -46,7 +48,7 @@ public class Dispatcher implements IDispatcher{
      * Setea la cola de salida
      * @param colaSalida 
      */
-    public void setColaSalida( ColaGenerica<String> colaSalida){
+    public void setColaSalida( ColaDePrioridad<String> colaSalida){
         this.colaSalida = colaSalida;
     }
 
@@ -54,7 +56,7 @@ public class Dispatcher implements IDispatcher{
     public void dispatch(String json) {
         if (!activo) return;
             try {
-                colaSalida.add(json, TipoAddCola.Salida);
+                colaSalida.add(json, TipoAdd.Salida);
                 System.out.println("[Dispatcher] Mensaje reenviado a la cola de salida.");
 
             } catch (InterruptedException e) {

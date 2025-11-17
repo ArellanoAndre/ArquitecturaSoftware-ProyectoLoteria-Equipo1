@@ -6,6 +6,7 @@ package Ensamblador;
 
 import ColaGenerica.ColaGenerica;
 import Send.Sender;
+import colaGenerica.ColaDePrioridad;
 import dispatcher.Dispatcher;
 import dispatcher.DispatcherFactory;
 import interfaces.IReceptor;
@@ -28,8 +29,8 @@ public class EnsambladorRed {
     private Dispatcher dispatcher;
     private Sender sender;
     private NetworkListener listener;
-    private ColaGenerica<String> colaSalida;
-    private ColaGenerica<String> colaEntrada;
+    private ColaDePrioridad<String> colaSalida;
+    private ColaDePrioridad<String> colaEntrada;
     private IReceptor receptor;
 
     //Constructores Para iniciar como cliente o servidor
@@ -62,8 +63,8 @@ public class EnsambladorRed {
 
         // Crear socket y colas
         socket = crearSocket(host, puerto);
-        colaSalida = new ColaGenerica<>();
-        colaEntrada = new ColaGenerica<>();
+        colaSalida = new ColaDePrioridad<>();
+        colaEntrada = new ColaDePrioridad<>();
 
         // Crear Sender y asociarlo con la cola de salida
         sender = new Sender(socket, colaSalida);
@@ -93,7 +94,7 @@ public class EnsambladorRed {
         return dispatcher;
     }
 
-    public ColaGenerica<String> getColaSalida() {
+    public ColaDePrioridad<String> getColaSalida() {
         return colaSalida;
     }
 

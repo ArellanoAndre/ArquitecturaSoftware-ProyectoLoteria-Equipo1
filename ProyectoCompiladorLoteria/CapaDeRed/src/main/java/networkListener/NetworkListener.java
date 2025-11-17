@@ -5,6 +5,8 @@
 package networkListener;
 
 import ColaGenerica.ColaGenerica;
+import colaGenerica.ColaDePrioridad;
+import colaGenerica.TipoAdd;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,7 +21,7 @@ import utilidades.TipoAddCola;
 public class NetworkListener implements Runnable {
 
     // Referencia a la cola donde se encolaran los mensajes recibidos
-    private final ColaGenerica<String> colaEntrada;
+    private final ColaDePrioridad<String> colaEntrada;
 
     // Socket de conexion
     private final Socket socket;
@@ -36,7 +38,7 @@ public class NetworkListener implements Runnable {
      * @param socket Socket de conexion
      * @param colaEntrada Cola donde se almacenaran los mensajes entrantes
      */
-    public NetworkListener(Socket socket, ColaGenerica<String> colaEntrada) {
+    public NetworkListener(Socket socket, ColaDePrioridad<String> colaEntrada) {
         this.socket = socket;
         this.colaEntrada = colaEntrada;
     }
@@ -57,7 +59,7 @@ public class NetworkListener implements Runnable {
             while (activo && (mensaje = entrada.readLine()) != null) {
                 System.out.println("[NetworkListener] Mensaje recibido: " + mensaje);
                 try {
-                    colaEntrada.add(mensaje, TipoAddCola.Entrada);
+                    colaEntrada.add(mensaje, TipoAdd.Entrada);
                 } catch (Exception ex) {
                     System.err.println(ex);
                 }

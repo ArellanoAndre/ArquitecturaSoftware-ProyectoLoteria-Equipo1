@@ -3,12 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Send;
-import ColaGenerica.ColaGenerica;
+import colaGenerica.ColaDePrioridad;
+import colaGenerica.ObserverSalida;
 import interfaces.ISender;
-import interfaces.ObserverColaSalida;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +20,7 @@ import java.util.logging.Logger;
  * - Implementa ColaGenerica.Observer<String> para escuchar el flujo de salida.
  * - Mantiene una conexión persistente con el Broker.
  */
-public class Sender implements ISender, ObserverColaSalida {
+public class Sender implements ISender, ObserverSalida {
 
    
 
@@ -31,17 +30,14 @@ public class Sender implements ISender, ObserverColaSalida {
 
     private final Object lock = new Object();
     
-    private final ColaGenerica<String> colaSalida;
+    private final ColaDePrioridad<String> colaSalida;
 
     /**
      * Constructor.
-     * @param host Dirección IP o nombre del host del broker (por ejemplo "localhost").
-     * @param puerto Puerto TCP del broker (por ejemplo 6000).
+     * @param socket
+     * @param colaSalida
      */
-    
-   
-
-    public Sender(Socket socket, ColaGenerica<String> colaSalida) {
+    public Sender(Socket socket, ColaDePrioridad<String> colaSalida) {
         this.socket = socket;
         this.colaSalida = colaSalida;
         conectar();
