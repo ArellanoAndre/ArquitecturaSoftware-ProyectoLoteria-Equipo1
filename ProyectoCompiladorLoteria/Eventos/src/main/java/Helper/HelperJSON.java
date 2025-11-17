@@ -2,7 +2,7 @@ package Helper;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.mycompany.eventos.Evento;
+import Evento.Evento;
 
 public class HelperJSON {
     public class JSONHelper {
