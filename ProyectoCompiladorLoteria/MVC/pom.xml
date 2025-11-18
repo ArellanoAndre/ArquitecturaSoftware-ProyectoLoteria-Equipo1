@@ -12,16 +12,4 @@
         <exec.mainClass>itson.ejemplomvc.EjemploMVC</exec.mainClass>
     </properties>
     <name>MVC</name>
-    <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>Red</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>ProcesadorEventos</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
 </project>

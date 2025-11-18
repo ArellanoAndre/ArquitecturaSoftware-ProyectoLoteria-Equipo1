@@ -4,11 +4,6 @@
  */
 package dispatcher;
 
-import ColaGenerica.ColaGenerica;
-import interfaces.IReceptor;
-import java.util.List;
-import dispatcher.Dispatcher;
-
 /**
  *
  * @author abrilislas

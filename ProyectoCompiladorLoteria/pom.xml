@@ -7,8 +7,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>Broker</module>
-        <module>HelperJSON</module>
-        <module>ProcesadorEventos</module>
         <module>MVC</module>
         <module>LogicaJuego</module>
         <module>CapaDeRed</module>

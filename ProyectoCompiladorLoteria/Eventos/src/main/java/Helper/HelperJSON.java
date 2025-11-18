@@ -5,7 +5,6 @@ import com.google.gson.JsonSyntaxException;
 import Evento.Evento;
 
 public class HelperJSON {
-    public class JSONHelper {
     private static final Gson gson = new Gson();
 
     // Convierte un objeto Evento a su representación JSON
@@ -22,5 +21,4 @@ public class HelperJSON {
             return null;
         }
     }
-}
 }

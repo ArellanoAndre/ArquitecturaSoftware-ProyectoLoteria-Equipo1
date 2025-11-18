@@ -11,8 +11,8 @@ import java.util.List;
 import javax.swing.Timer;
 import logicaJuego.entidades.Carta;
 import logicaJuego.entidades.Jugador;
-import modeloJuego.IModeloJuego;
-import modeloJuego.ModeloJuego;
+import modeloJuego.ModeloLogica;
+import modeloJuego.IModeloLogica;
 
 /**
  *
@@ -26,7 +26,7 @@ public class LogicaDeJuego {
     private int contador = 0;
     private Timer timer;
     
-    private IModeloJuego modeloJuego;
+    private IModeloLogica modeloJuego;
 
     /**
      * Constructor que inicializa el modelo con la vista, el jugador principal y
@@ -38,7 +38,7 @@ public class LogicaDeJuego {
         this.mazo = crearMazo();
         barajear();
         this.jugadores = new ArrayList<>();
-        this.modeloJuego = new ModeloJuego();
+        this.modeloJuego = new ModeloLogica();
     }
 
     /**
