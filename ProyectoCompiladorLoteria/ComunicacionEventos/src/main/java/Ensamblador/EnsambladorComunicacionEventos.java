@@ -1,11 +1,15 @@
 package Ensamblador;
 
+import Desempaquetador.Desempaquetador;
 import Empaquetador.Empaquetador;
+import Evento.Evento;
 import colaGenerica.ColaDePrioridad;
+import interfacesGlobales.IEvento;
+
 
 public class EnsambladorComunicacionEventos {
     private ColaDePrioridad<String> colaSalida;
-    private ColaDePrioridad<String> colaEntrada;
+    private ColaDePrioridad<IEvento> colaEntrada;
     
     public EnsambladorComunicacionEventos() {
         ensamblar();
@@ -16,6 +20,10 @@ public class EnsambladorComunicacionEventos {
         colaSalida = new ColaDePrioridad<>();
         Empaquetador empaquetador = new Empaquetador();
         empaquetador.setColaSalida(colaSalida);
+        
+        colaEntrada = new ColaDePrioridad<>();
+        Desempaquetador desempaquetador = new Desempaquetador();
+        desempaquetador.setColaEntrada(colaEntrada);
     }
     
     
