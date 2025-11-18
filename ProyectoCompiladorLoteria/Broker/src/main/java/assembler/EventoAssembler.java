@@ -6,6 +6,8 @@ package assembler;
 
 import Helper.HelperJSON;
 import colaGenerica.ColaDePrioridad;
+import interfaces.IBroker;
+import pruebas.Broker;
 /**
  *
  * @author abrilislas
@@ -15,6 +17,7 @@ public class EventoAssembler {
     
     ColaDePrioridad cola = new ColaDePrioridad();
     HelperJSON helper = new HelperJSON();
+    IBroker broker = new Broker(); 
     
     
 }
