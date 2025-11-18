@@ -4,7 +4,6 @@
  */
 package Ensamblador;
 
-import ColaGenerica.ColaGenerica;
 import Send.Sender;
 import colaGenerica.ColaDePrioridad;
 import dispatcher.Dispatcher;

@@ -4,11 +4,9 @@
  */
 package mecanismoRecepcion;
 
-import ColaGenerica.ColaGenerica;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverEntrada;
 import interfaces.IReceptor;
-import interfaces.ObserverColaEntrada;
 
 /**
  *

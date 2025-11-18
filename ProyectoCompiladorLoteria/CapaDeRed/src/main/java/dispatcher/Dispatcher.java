@@ -3,10 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dispatcher;
-import ColaGenerica.ColaGenerica;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.TipoAdd;
-import utilidades.TipoAddCola;
 import interfaces.IDispatcher;
 
 
