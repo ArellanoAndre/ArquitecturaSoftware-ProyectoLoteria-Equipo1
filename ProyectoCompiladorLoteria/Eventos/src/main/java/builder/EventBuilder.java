@@ -21,8 +21,6 @@ public class EventBuilder {
     public EventBuilder(String ipDestino) {
         this.ipDestino = ipDestino;
     }
-
-    
     
     public Evento crearEvento() {
         Evento e = new Evento();

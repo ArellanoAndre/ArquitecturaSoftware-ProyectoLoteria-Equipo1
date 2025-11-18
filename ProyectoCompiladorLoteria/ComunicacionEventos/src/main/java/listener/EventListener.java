@@ -18,7 +18,8 @@ public class EventListener implements IReceptor {
     private String eventoJSON;
     private ColaDePrioridad<String> colaEntrada;
     private IReceptor suscriptor;
-
+    
+    
     public EventListener(ColaDePrioridad<String> colaEntrada) {
         this.colaEntrada = colaEntrada;
     }

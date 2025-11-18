@@ -1,177 +1,39 @@
-package pruebas;
 
-import Bus.BusEventos;
-import Objetos.EnumTipoEvento;
-import Objetos.Evento;
-import Util.JSONHelper;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.List;
-import org.json.JSONObject;
-import red.RedComponent;
+import Evento.Evento;
+import interfaces.IBroker;
+import responsabilityChainBroker.ResponsabilityChain;
 
-public class Broker {
 
+public class Broker implements IBroker{
+    
     private static final int PUERTO_BROKER = 6000;
-    private static final String HOST_LOGICA = "localhost"; // o la IP donde corre la lógica
-    private static final int PUERTO_LOGICA = 7000;
-    private static final int PUERTO_BROKER_PARA_LOGICA = 7001;
-    private static RedComponent redALogica; // canal de salida hacia la logica
-    private static BusEventos busEventos;
+    private static final String IP_BROKER = "localhost";
+    private Evento evento;
+    ResponsabilityChain reponsabilityChain; 
+    
+    //lista bidimensional 
+    //agregar al assembler HelperJSON helper, EventListener eventListener
+    //desempaquetador manda a broker el evento
+    
+    public Broker() {
+        
+    }
+    
 
-    public static void main(String[] args) {
-        System.out.println("[Broker] Escuchando en puerto " + PUERTO_BROKER);
-        busEventos = BusEventos.getInstancia();
-
-        //  Conectarse a la LogicaJuego
-        RedComponent redALogica = new RedComponent(HOST_LOGICA, PUERTO_LOGICA, PUERTO_BROKER_PARA_LOGICA);
-        redALogica.iniciar();
-        busEventos.setConexionLogica(redALogica);
-
-        //  Escuchar respuestas de "juego-out" (de la LogicaJuego)
-        redALogica.registrarListener(json -> {
-            System.out.println("[Broker] Recibió de LogicaJuego (juego-out): " + json);
-
-            //  Pedir al Bus la lista de clientes suscritos a "juego-out"
-            List<Suscripcion> suscriptores = busEventos.getSuscriptoresJuegoOut();
-
-            // El BROKER envía la respuesta a cada cliente
-            for (Suscripcion s : suscriptores) {
-                enviarRespuesta(s.getHost(), s.getPuerto(), json);
-            }
-        });
-
-        // 5. Escuchar conexiones de Clientes (MVC)
-        try (ServerSocket server = new ServerSocket(PUERTO_BROKER)) {
-            while (true) {
-                Socket socket = server.accept();
-                new Thread(() -> manejarCliente(socket)).start();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void registrarSuscripcion(String topico, String suscriptor) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    /**
-     * Maneja la conexión de un CLIENTE (MVC). Recibe eventos "juego-in" o
-     * "suscribirse".
-     */
-    private static void manejarCliente(Socket socket) {
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-
-            String json = in.readLine();
-            System.out.println("[Broker] Evento entrante de Cliente: " + json);
-
-            Evento evento = JSONHelper.jsonAEvento(json);
-            if (evento == null) {
-                return;
-            }
-
-            // --- Lógica de Ruteo ---
-            if (evento.getTipo() == EnumTipoEvento.SUSCRIBIRSE) {
-                // Obtenemos el puerto de escucha del cliente (enviado en el evento)
-                int puertoCliente = evento.getPosicion(); // (Usamos 'posicion' para el puerto)
-                String hostCliente = socket.getInetAddress().getHostAddress();
-
-                busEventos.suscribir(evento.getTopico(), hostCliente, puertoCliente);
-            } // Si es un evento para "juego-in"
-            else if ("juego-in".equals(evento.getTopico())) {
-                busEventos.publicarEnJuegoIn(json);
-            }
-
-        } catch (IOException e) {
-            System.err.println("[Broker] Error al manejar cliente: " + e.getMessage());
-        }
+    @Override
+    public void obtenerSuscriptores(String topico) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    // el viejito
-//    private static void manejarCliente(Socket socket) {
-//        try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-//
-//            String json = in.readLine();
-//            System.out.println("[Broker] Evento entrante: " + json);
-//
-//            // Procesar el evento y generar respuesta tipo PONG
-//            String respuesta = procesarEvento(json);
-//
-//            // Enviar respuesta al cliente (a su puerto de escucha)
-//            enviarRespuesta("localhost", 6001, respuesta);
-//
-//        } catch (IOException e) {
-//            System.err.println("[Broker] Error al manejar cliente: " + e.getMessage());
-//        }
-//    }
-    private static void enviarRespuesta(String host, int puerto, String json) {
-        try (Socket socket = new Socket(host, puerto); PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-            out.println(json);
-            System.out.println("[Broker] Enviado evento saliente: " + json);
-        } catch (IOException e) {
-            System.err.println("[Broker] Error al enviar respuesta: " + e.getMessage());
-        }
-    }
 
-    // AQUI DEBERIA DE LLAMAR A LA LOGICA DE JUEGO PARA PROCESAR EL EVENTO ESTO ES TEMPORAL
-    private static String procesarEvento(String json) {
-        try {
-            // 1. Convertir el JSON en un objeto Evento usando JSONHelper
-            Evento evento = JSONHelper.jsonAEvento(json);
-
-            if (evento == null) {
-                return "{\"error\":\"Evento no válido\"}";
-            }
-
-            // 3. NOMAS CHECA QUE SI LA POSICION ES ENTRE 1 Y 4 ES VALIDA SI NO NO, AGREGAR MANDAR A LLAMAR LOGICA AQUI PARA QUE VERIFIQUE
-            JSONObject respuesta = new JSONObject();
-            respuesta.put("tipo", "RESPUESTA_VALIDACION");
-            respuesta.put("idJugador", evento.getIdJugador());
-
-            if (evento.getPosicion() >= 1 && evento.getPosicion() <= 4) {
-                respuesta.put("mensaje", "Seleccion Valida");
-            } else {
-                respuesta.put("mensaje", "Seleccion Invalida");
-            }
-
-            // 4. Devolver el JSON de respuesta
-            return respuesta.toString();
-
-        } catch (Exception e) {
-            System.err.println("[Broker] Error procesando evento: " + e.getMessage());
-            return "{\"error\":\"Error interno en el broker\"}";
-        }
-    }
-
-    //    private static void reenviarAlCliente(String json) {
-//        try {
-//            JSONObject respuesta = new JSONObject(json);
-//
-//            String hostCliente = respuesta.optString("hostCliente", "localhost");
-//            int puertoCliente = respuesta.optInt("puertoCliente", 6001); // puerto por defecto del cliente
-//
-//            try (Socket socket = new Socket(hostCliente, puertoCliente); PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-//                out.println(json);
-//                System.out.println("[Broker] Reenviado evento al cliente en " + hostCliente + ":" + puertoCliente);
-//            }
-//
-//        } catch (Exception e) {
-//            System.err.println("[Broker] Error reenviando al cliente: " + e.getMessage());
-//        }
-//    }
-    // Enviar a la lógica de juego por red
-//    private static String enviarALogica(String json) {
-//        try (Socket socket = new Socket(HOST_LOGICA, PUERTO_LOGICA); PrintWriter out = new PrintWriter(socket.getOutputStream(), true); BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-//
-//            out.println(json); // mando evento al servidor de lógica
-//            String respuesta = in.readLine(); // espero respuesta
-//            System.out.println("[Broker] Respuesta de la lógica: " + respuesta);
-//            return respuesta;
-//
-//        } catch (IOException e) {
-//            System.err.println("[Broker] Error comunicando con lógica: " + e.getMessage());
-//            return "{\"error\":\"No se pudo contactar la lógica\"}";
-//        }
-//    }
+    
+    
+    
+    
+    
 }
