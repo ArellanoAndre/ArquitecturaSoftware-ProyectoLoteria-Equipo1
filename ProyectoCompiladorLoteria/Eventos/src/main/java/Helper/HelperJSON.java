@@ -3,12 +3,18 @@ package Helper;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import Evento.Evento;
+import interfacesGlobales.IEvento;
 
 public class HelperJSON {
     private static final Gson gson = new Gson();
 
     // Convierte un objeto Evento a su representación JSON
     public static String toJSON(Evento evento) {
+        return gson.toJson(evento);
+    }
+    
+    // Convierte un objeto que implemente IEvento a su representación JSON
+    public static String toJSON(IEvento evento) {
         return gson.toJson(evento);
     }
 
