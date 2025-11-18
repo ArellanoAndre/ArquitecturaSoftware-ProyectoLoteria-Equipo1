@@ -19,14 +19,14 @@ import interfacesGlobales.IReceptorEventos;
  */
 public class Desempaquetador implements IDesempaquetador {
 
-    private ColaDePrioridad<Evento> colaEntrada = null;
+    private ColaDePrioridad<IEvento> colaEntrada = null;
     private String eventojson;
 
     public Desempaquetador() {
 
     }
 
-    public void setColaEntrada(ColaDePrioridad<Evento> colaEntrada) {
+    public void setColaEntrada(ColaDePrioridad<IEvento> colaEntrada) {
         this.colaEntrada = colaEntrada;
     }
 
@@ -43,7 +43,7 @@ public class Desempaquetador implements IDesempaquetador {
                 return;
             }
 
-            Evento evento = HelperJSON.toEvento(eventojson); // tiene que llegar como evento o ievento xd
+            IEvento evento = HelperJSON.toEvento(eventojson); // tiene que llegar como evento o ievento xd
 
             if (evento == null) {
                 System.out.println("el evento es nulo, no se pudo encolar");
