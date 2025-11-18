@@ -8,7 +8,7 @@ package interfacesGlobales;
  *
  * @author rodri
  */
-public interface IReceptor {
+public interface IReceptorEventos {
     
-    public void recibir(String eventojson);
+    public void recibirEvento(String eventojson);
 }

@@ -5,7 +5,7 @@
 package listener;
 
 import colaGenerica.ColaDePrioridad;
-import interfacesGlobales.IReceptor;
+import interfacesGlobales.IReceptorJSON;
 
 /**
  *
@@ -20,14 +20,14 @@ public class pruebaListener {
 
         ColaDePrioridad<String> colaEntrada = new ColaDePrioridad<>();
 
-        IReceptor listener = new EventListener(colaEntrada);
+        IReceptorJSON listener = new EventListener(colaEntrada);
 
         String jsonPrueba = " {\"topico\":\"juego-123\", \"evento\":\"unirse\"}";
         System.out.println("Simulando recepción de: " + jsonPrueba);
 
         try {
             // Esto llama al método que queremos probar
-            listener.recibir(jsonPrueba);
+            listener.recibirJSON(jsonPrueba);
 
             System.out.println("Llamada a recibir() completada. Verificando la cola...");
 

@@ -26,6 +26,8 @@ public abstract class ResponsabilityChain {
     //2. Proceso 02 - Registrar Suscriptor
         private void registrarSuscriptor(Evento evento){
         if(evento==null){
+            
+            
         }else{
             desuscribirTopico(evento);
         }
@@ -33,6 +35,8 @@ public abstract class ResponsabilityChain {
     //3. Proceso 03 - Desuscribir
         private void desuscribirTopico(Evento evento){
         if(evento==null){
+            
+            
         }else{
             notificarEvento(evento);
         }

@@ -6,13 +6,13 @@ package listener;
 
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.TipoAdd;
-import interfacesGlobales.IReceptor;
+import interfacesGlobales.IReceptorJSON;
 
 /**
  *
  * @author isaac
  */
-public class EventListener implements IReceptor {
+public class EventListener implements IReceptorJSON {
 
     private ColaDePrioridad<String> colaEntrada;
     
@@ -23,7 +23,7 @@ public class EventListener implements IReceptor {
 
 
     @Override
-    public void recibir(String eventojson) {
+    public void recibirJSON(String eventojson) {
             try {
                 this.colaEntrada.add(eventojson, TipoAdd.Entrada);
                 System.out.println("EventListener recibio el JSON y lo metio a la cola");
