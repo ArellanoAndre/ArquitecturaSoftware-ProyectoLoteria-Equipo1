@@ -23,7 +23,7 @@ public class EnsambladorComunicacionEventos {
         
         colaEntrada = new ColaDePrioridad<>();
         Desempaquetador desempaquetador = new Desempaquetador();
-        desempaquetador.setColaEntrada(colaEntrada);
+        colaEntrada.addObserverEntrada(desempaquetador);
     }
     
     
