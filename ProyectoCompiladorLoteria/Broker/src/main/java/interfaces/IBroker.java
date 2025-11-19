@@ -4,12 +4,16 @@
  */
 package interfaces;
 
+import java.util.List;
+import pruebas.Suscripcion;
+
 /**
  *
  * @author abrilislas
  */
 public interface IBroker {
     
-    public void registrarSuscripcion(String topico, String suscriptor);
-    public void obtenerSuscriptores(String topico);
+    public void registrarSuscripcion(String topico, Suscripcion suscriptor);
+    public void desuscribirCliente(String topico, Suscripcion sucriptor);
+    public List<Suscripcion> obtenerSuscriptores(String topico);
 }

@@ -11,24 +11,25 @@ import java.net.InetAddress;
  *
  * @author isaac
  */
-
 public class Evento implements IEvento {
-    
+
     private String topico;
     private String evento;
     private String JSON;
     private String ipLocal;
     private String ipDestino;
+    private int puerto;
 
     public Evento() {
     }
 
-    public Evento(String topico, String evento, String JSON, InetAddress ipLocal, String ipDestino) {
+    public Evento(String topico, String evento, String JSON, InetAddress ipLocal, String ipDestino, int puerto) {
         this.topico = topico;
         this.evento = evento;
         this.JSON = JSON;
         this.ipLocal = ipLocal.getHostAddress();
         this.ipDestino = ipDestino;
+        this.puerto = puerto;
     }
 
     public String getTopico() {
@@ -54,7 +55,7 @@ public class Evento implements IEvento {
     public void setJSON(String JSON) {
         this.JSON = JSON;
     }
-    
+
     public String getIpLocal() {
         return ipLocal;
     }
@@ -71,18 +72,22 @@ public class Evento implements IEvento {
         this.ipDestino = ipDestino;
     }
 
+    public int getPuerto() {
+        return puerto;
+    }
+
+    public void setPuerto(int puerto) {
+        this.puerto = puerto;
+    }
+
     @Override
     public String toString() {
         return "Evento{" + "topico=" + topico + ", evento=" + evento + ", JSON=" + JSON + ", ipLocal=" + ipLocal + ", ipDestino=" + ipDestino + '}';
     }
 
-   @Override
-public String getTipo() {
-    return evento;
+    @Override
+    public String getTipo() {
+        return evento;
+    }
+
 }
-
-
-   
-    
-}
-

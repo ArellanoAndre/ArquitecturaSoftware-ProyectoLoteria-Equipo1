@@ -26,7 +26,8 @@ public class ServidorMain {
                     "MENSAJE_SERVIDOR",
                     "{\"msg\":\"hola desde el servidor\"}",
                     InetAddress.getLocalHost(),
-                    "127.0.0.1"
+                    "127.0.0.1",
+                    5000
             );
 
             System.out.println("[ServidorMain] Enviando evento de prueba hacia la red...");

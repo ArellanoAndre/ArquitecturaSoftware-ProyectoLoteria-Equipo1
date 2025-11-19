@@ -28,6 +28,7 @@ public class EventBuilder {
             
             e.setIpLocal(InetAddress.getLocalHost().getHostAddress());
             e.setIpDestino(ipDestino);
+            e.setPuerto(5000);
             
         } catch (UnknownHostException ex) {
             Logger.getLogger(EventBuilder.class.getName()).log(Level.SEVERE, null, ex);

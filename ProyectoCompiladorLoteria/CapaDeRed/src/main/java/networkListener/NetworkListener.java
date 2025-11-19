@@ -24,9 +24,6 @@ public class NetworkListener implements Runnable {
     // Socket de conexion
     private final Socket socket;
 
-    // Flujo de entrada para leer mensajes
-    private BufferedReader entrada;
-
     // Controla si el hilo sigue activo
     private volatile boolean activo = true;
 
