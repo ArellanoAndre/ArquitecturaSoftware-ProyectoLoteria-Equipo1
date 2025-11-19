@@ -4,9 +4,12 @@
  */
 package assembler;
 
+import Ensamblador.EnsambladorComunicacionEventos;
+import Ensamblador.EnsambladorRed;
 import Helper.HelperJSON;
 import colaGenerica.ColaDePrioridad;
 import interfaces.IBroker;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,17 +24,24 @@ public class ClientHandler implements Runnable{
     
     IBroker broker;
     Socket socket;
+    EnsambladorRed ensambladorRed;
+    EnsambladorComunicacionEventos ensambladorEventos;
 
-    public ClientHandler(Broker broker, Socket socket) {
+    public ClientHandler(Broker broker, Socket socket) throws IOException {
         this.broker = broker;
         this.socket = socket;
+        this.ensambladorRed = new EnsambladorRed(socket);
+//        this.ensambladorEventos = new EnsambladorComunicacionEventos(manejadorSuperior);
     }
 
     
     
     @Override
     public void run() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        
+//        ensambladorRed.ensamblar(receptor);
+        
     }
     
     

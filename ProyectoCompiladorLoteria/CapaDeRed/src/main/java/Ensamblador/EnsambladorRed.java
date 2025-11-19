@@ -10,7 +10,6 @@ import dispatcher.Dispatcher;
 import dispatcher.DispatcherFactory;
 import interfaces.IReceptor;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import mecanismoRecepcion.MecanismoRecepcion;
 import networkListener.NetworkListener;
@@ -25,6 +24,7 @@ public class EnsambladorRed {
     private Dispatcher dispatcher;
     private Sender sender;
     private NetworkListener listener;
+    private MecanismoRecepcion recepcion;
     private ColaDePrioridad<String> colaSalida;
     private ColaDePrioridad<String> colaEntrada;
 
@@ -56,14 +56,13 @@ public class EnsambladorRed {
         listener = new NetworkListener(socket, colaEntrada);
         new Thread(listener, "NetworkListener-Thread").start();
 
-        new MecanismoRecepcion(colaEntrada, receptor);
+        recepcion = new MecanismoRecepcion(colaEntrada, receptor);
 
         System.out.println("[EnsambladorRed] Componentes ensamblados correctamente.");
     }
 
     private Dispatcher DispatcherFactorySingleton() {
-        DispatcherFactory factory = new DispatcherFactory();
-        return factory.createDispatcherDefault();
+        return DispatcherFactory.createDispatcherDefault();
     }
 
     public Dispatcher getDispatcher() {

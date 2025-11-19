@@ -3,16 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Desempaquetador;
-import Evento.Evento;
 import Helper.HelperJSON;
-import Sender.EventSender;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverEntrada;
-import colaGenerica.TipoAdd;
-import interfacesGlobales.IDesempaquetador;
 import interfacesGlobales.IEvento;
 import interfacesGlobales.IManejadorEvento;
-import interfacesGlobales.IReceptorEventos;
 
 /**
  *

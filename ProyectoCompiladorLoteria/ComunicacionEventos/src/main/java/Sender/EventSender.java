@@ -2,6 +2,7 @@ package Sender;
 
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverEntrada;
+import colaGenerica.ObserverSalida;
 import interfacesGlobales.IDispatcher;
 
 /**
@@ -9,39 +10,31 @@ import interfacesGlobales.IDispatcher;
  * red. Implementa Observer para reaccionar cuando haya un nuevo mensaje
  * disponible.
  */
-public class EventSender implements ObserverEntrada {
+public class EventSender implements ObserverSalida {
 
     private IDispatcher dispatcher;
-    private ColaDePrioridad<String> colaEntrada;
+    private ColaDePrioridad<String> colaSalida;
 
     /**
      * @param dispatcher Componente encargado de enviarlos por la red.
      * @param colaEntrada Cola de donde se tomaran los mensajes.
      */
-    public EventSender( ColaDePrioridad<String> colaEntrada) {
-        this.colaEntrada = colaEntrada;
+    public EventSender(ColaDePrioridad<String> colaEntrada) {
+        this.colaSalida = colaEntrada;
     }
 
-
-    /**
-     * Se invoca automaticamente cuando la cola de entrada notifica que se
- agrego un nuevo mensaje
-
- La cola NO entrega el JSON directamente, por lo que el EventSender debe
- solicitarlo mediante poll() o take().
-     */
     @Override
-    public void updateEntrada() {
+    public void updateSalida() {
         try {
             // Recupera el mensaje recien agregado (o el primero)
-            String json = colaEntrada.poll();
+            String json = colaSalida.take();
 
             if (json == null) {
                 System.err.println("[Sender] No hay mensaje disponible en la cola.");
                 return;
             }
 
-            System.out.println("[Sender] Mensaje recibido desde cola de entrada: " + json);
+            System.out.println("[Sender] Mensaje recibido desde cola de salia: " + json);
             Send(json);
 
         } catch (Exception e) {
@@ -64,8 +57,8 @@ public class EventSender implements ObserverEntrada {
         }
     }
 
-public void setDispatcher(IDispatcher dispatcher) {
-    this.dispatcher = dispatcher;
-}
+    public void setDispatcher(IDispatcher dispatcher) {
+        this.dispatcher = dispatcher;
+    }
 
 }

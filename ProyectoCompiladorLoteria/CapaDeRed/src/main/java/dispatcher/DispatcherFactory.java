@@ -22,7 +22,7 @@ public class DispatcherFactory{
      * Crea un Dispatcher con las colas default
      * Este metodo sera usado por el singleton y el ensamblador.
      */
-    public Dispatcher createDispatcherDefault() {
+    public static Dispatcher createDispatcherDefault() {
         return  Dispatcher.getSingletonInstance();
     }
 }

@@ -4,10 +4,12 @@ import colaGenerica.ColaDePrioridad;
 import Empaquetador.Empaquetador;
 import Desempaquetador.Desempaquetador;
 import Sender.EventSender;
+import interfaces.IReceptor;
 import listener.EventListener;
 import interfacesGlobales.IDispatcher;
 import interfacesGlobales.IEvento;
 import interfacesGlobales.IManejadorEvento;
+import interfacesGlobales.IReceptorJSON;
 
 
 public class EnsambladorComunicacionEventos {
@@ -30,7 +32,7 @@ public class EnsambladorComunicacionEventos {
 
         // Desde red → JSON → colaEntradaEventos
         listener = new EventListener(colaEntradaEventos);
-
+        
         // colaEntradaEventos → Desempaquetador → IManejadorEvento
         desempaquetador = new Desempaquetador(colaEntradaEventos, manejadorSuperior);
         colaEntradaEventos.addObserverEntrada(desempaquetador);
@@ -41,7 +43,7 @@ public class EnsambladorComunicacionEventos {
 
         // colaSalidaEventos → EventSender → IDispatcher (que luego va a la red)
         sender = new EventSender(colaSalidaEventos);
-        colaSalidaEventos.addObserverEntrada(sender);
+        colaSalidaEventos.addObserverSalida(sender);
     }
 
     // Entrada desde la capa de red (cuando llega JSON del socket)
@@ -57,5 +59,9 @@ public class EnsambladorComunicacionEventos {
     // Para conectar el dispatcher de la capa de red (adaptado)
     public void asignarDispatcher(IDispatcher dispatcherEventos) {
         sender.setDispatcher(dispatcherEventos);
+    }
+
+    public EventListener getListener() {
+        return listener;
     }
 }
