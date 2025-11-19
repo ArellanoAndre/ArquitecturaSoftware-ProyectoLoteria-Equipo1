@@ -3,14 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Desempaquetador;
-
 import Evento.Evento;
 import Helper.HelperJSON;
 import Sender.EventSender;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverEntrada;
 import colaGenerica.TipoAdd;
-import interfaces.IReceptor;
 import interfacesGlobales.IDesempaquetador;
 import interfacesGlobales.IEvento;
 import interfacesGlobales.IManejadorEvento;
@@ -20,46 +18,52 @@ import interfacesGlobales.IReceptorEventos;
  *
  * @author isaac
  */
-public class Desempaquetador implements IReceptor {
+public class Desempaquetador implements ObserverEntrada {
 
+    private ColaDePrioridad<String> colaEntrada;
     private IManejadorEvento componenteSuperior; // broker o logica de juego
-
-    public Desempaquetador(IManejadorEvento componenteSuperior) {
-
+     
+    public Desempaquetador(ColaDePrioridad<String> colaEntrada, IManejadorEvento componenteSuperior) {
+        this.colaEntrada = colaEntrada;
         this.componenteSuperior = componenteSuperior;
     }
 
     public Desempaquetador() {
     }
+    
 
-    public void setComponenteSuperior(IManejadorEvento componenteSuperior) {
-        this.componenteSuperior = componenteSuperior;
+    
+
+    public void setColaEntrada(ColaDePrioridad<String> colaEntrada) {
+        this.colaEntrada = colaEntrada;
     }
 
     @Override
-    public void mandarMensaje(String json) {
-
-        if (json == null) {
-            return;
-        }
-
-        System.out.println("[Desempaquetador] Recibido desde CapaRed: " + json);
-
+    public void updateEntrada( ) {
+        
         try {
+            
+            String eventojson =  colaEntrada.poll();
+            
+             if (eventojson == null) {
+                 return;
+             }
              
-            IEvento evento = HelperJSON.toEvento(json);
+             IEvento evento = HelperJSON.toEvento(eventojson); 
+            
+             
 
-             
-            if (evento != null && componenteSuperior != null) {
-                componenteSuperior.manejar(evento);
-            } else {
-                System.out.println("[Desempaquetador] Evento nulo o sin componente superior.");
+            if (eventojson != null  ) {
+                componenteSuperior.manejar(evento); // falta implementar como lo agarra y asi
+                System.out.println("Evento entregado a " + componenteSuperior.getClass().getSimpleName());
+
             }
-
         } catch (Exception e) {
-            System.err.println("Error al procesar JSON: " + e.getMessage());
+            System.err.println("[Empaquetador] Error al desempaquetar evento: " + e.getMessage());
         }
 
     }
+
+     
 
 }

@@ -30,16 +30,10 @@ public class EnsambladorRed {
 
     //Constructores Para iniciar como cliente o servidor
     
-    //Cliente
-    public EnsambladorRed(String host, int puerto) throws IOException {
-        this.socket = new Socket(host, puerto);
+    public EnsambladorRed(Socket socket) throws IOException {
+        this.socket = socket;
     }
 
-    //Servidor
-    public EnsambladorRed(int puerto) throws IOException {
-        ServerSocket server = new ServerSocket(puerto);
-        socket = server.accept();
-    }
 
     public void ensamblar(IReceptor receptor) throws IOException {
         System.out.println("[EnsambladorRed] Iniciando ensamblaje...");

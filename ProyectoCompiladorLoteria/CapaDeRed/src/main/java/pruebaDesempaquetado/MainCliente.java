@@ -14,33 +14,34 @@ import interfaces.IReceptor;
  
 
 public class MainCliente {
-    public static void main(String[] args) {
-        try {
-            
-            System.out.println("Conectando al servidor...");
-            EnsambladorRed redCliente = new EnsambladorRed("localhost", 5000);
-            
-            
-            redCliente.ensamblar(new IReceptor() {
-                @Override
-                public void mandarMensaje(String json) {
-                    System.out.println("Cliente recibió: " + json);
-                }
-            });
-
-           
-            String jsonPrueba = "{\"topico\":\"test\", \"evento\":\"Hola desde CapaRed!\"}";
-            System.out.println("Enviando: " + jsonPrueba);
-            
-            
-            redCliente.getDispatcher().dispatch(jsonPrueba);
-            
-          
-            Thread.sleep(2000);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+  public static void main(String[] args) 
+    {
+//        try {
+//            
+//            System.out.println("Conectando al servidor...");
+//            EnsambladorRed redCliente = new EnsambladorRed("localhost", 5000);
+//            
+//            
+//            redCliente.ensamblar(new IReceptor() {
+//                @Override
+//                public void mandarMensaje(String json) {
+//                    System.out.println("Cliente recibió: " + json);
+//                }
+//            });
+//
+//           
+//            String jsonPrueba = "{\"topico\":\"test\", \"evento\":\"Hola desde CapaRed!\"}";
+//            System.out.println("Enviando: " + jsonPrueba);
+//            
+//            
+//            redCliente.getDispatcher().dispatch(jsonPrueba);
+//            
+//          
+//            Thread.sleep(2000);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+   }
     
 }

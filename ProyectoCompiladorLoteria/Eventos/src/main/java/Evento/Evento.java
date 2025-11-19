@@ -76,6 +76,12 @@ public class Evento implements IEvento {
         return "Evento{" + "topico=" + topico + ", evento=" + evento + ", JSON=" + JSON + ", ipLocal=" + ipLocal + ", ipDestino=" + ipDestino + '}';
     }
 
+   @Override
+public String getTipo() {
+    return evento;
+}
+
+
    
     
 }

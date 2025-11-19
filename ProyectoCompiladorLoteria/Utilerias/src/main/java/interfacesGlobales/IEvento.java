@@ -9,4 +9,6 @@ package interfacesGlobales;
  * @author rodri
  */
 public interface IEvento {
+
+    public String getTipo();
 }

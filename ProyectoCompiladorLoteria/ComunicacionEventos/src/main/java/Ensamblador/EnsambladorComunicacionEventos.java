@@ -1,34 +1,61 @@
 package Ensamblador;
 
-import Desempaquetador.Desempaquetador;
-import Empaquetador.Empaquetador;
-import Evento.Evento;
 import colaGenerica.ColaDePrioridad;
+import Empaquetador.Empaquetador;
+import Desempaquetador.Desempaquetador;
+import Sender.EventSender;
+import listener.EventListener;
+import interfacesGlobales.IDispatcher;
 import interfacesGlobales.IEvento;
-import java.io.IOException;
+import interfacesGlobales.IManejadorEvento;
+
 
 public class EnsambladorComunicacionEventos {
 
-    private ColaDePrioridad<String> colaSalida;
-    private ColaDePrioridad<IEvento> colaEntrada;
-    private EnsambladorRed red;
+    private ColaDePrioridad<String> colaEntradaEventos;
+    private ColaDePrioridad<String> colaSalidaEventos;
 
-    public EnsambladorComunicacionEventos() throws IOException {
-        ensamblar();
+    private EventListener listener;
+    private Desempaquetador desempaquetador;
+    private Empaquetador empaquetador;
+    private EventSender sender;
+
+    public EnsambladorComunicacionEventos(IManejadorEvento manejadorSuperior) {
+        ensamblar(manejadorSuperior);
     }
 
-    public void ensamblar() throws IOException {
-        //....
+    private void ensamblar(IManejadorEvento manejadorSuperior) {
+        colaEntradaEventos = new ColaDePrioridad<>();
+        colaSalidaEventos  = new ColaDePrioridad<>();
 
-        int puerto = 5000;
-        red = new EnsambladorRed(puerto);
-        colaSalida = new ColaDePrioridad<>();
-        Empaquetador empaquetador = new Empaquetador();
-        empaquetador.setColaSalida(colaSalida);
+        // Desde red → JSON → colaEntradaEventos
+        listener = new EventListener(colaEntradaEventos);
 
-        Desempaquetador desempaquetador = new Desempaquetador();
-        red.ensamblar(desempaquetador);
-         
+        // colaEntradaEventos → Desempaquetador → IManejadorEvento
+        desempaquetador = new Desempaquetador(colaEntradaEventos, manejadorSuperior);
+        colaEntradaEventos.addObserverEntrada(desempaquetador);
+
+        // Lógica → Empaquetador → JSON → colaSalidaEventos
+        empaquetador = new Empaquetador();
+        empaquetador.setColaSalida(colaSalidaEventos);
+
+        // colaSalidaEventos → EventSender → IDispatcher (que luego va a la red)
+        sender = new EventSender(colaSalidaEventos);
+        colaSalidaEventos.addObserverEntrada(sender);
     }
 
+    // Entrada desde la capa de red (cuando llega JSON del socket)
+    public void recibirJSONDesdeRed(String json) {
+        listener.recibirJSON(json);
+    }
+
+    // Salida hacia la red (la lógica genera un IEvento)
+    public void enviarEventoDesdeLogica(IEvento evento) {
+        empaquetador.empaquetar(evento);
+    }
+
+    // Para conectar el dispatcher de la capa de red (adaptado)
+    public void asignarDispatcher(IDispatcher dispatcherEventos) {
+        sender.setDispatcher(dispatcherEventos);
+    }
 }

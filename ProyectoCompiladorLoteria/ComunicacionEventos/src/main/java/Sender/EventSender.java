@@ -18,8 +18,7 @@ public class EventSender implements ObserverEntrada {
      * @param dispatcher Componente encargado de enviarlos por la red.
      * @param colaEntrada Cola de donde se tomaran los mensajes.
      */
-    public EventSender(IDispatcher dispatcher, ColaDePrioridad<String> colaEntrada) {
-        this.dispatcher = dispatcher;
+    public EventSender( ColaDePrioridad<String> colaEntrada) {
         this.colaEntrada = colaEntrada;
     }
 
@@ -64,4 +63,9 @@ public class EventSender implements ObserverEntrada {
             System.err.println("[Sender] Error al enviar JSON: " + e.getMessage());
         }
     }
+
+public void setDispatcher(IDispatcher dispatcher) {
+    this.dispatcher = dispatcher;
+}
+
 }
