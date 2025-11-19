@@ -34,7 +34,7 @@ public class EventSender implements ObserverSalida {
                 return;
             }
 
-            System.out.println("[Sender] Mensaje recibido desde cola de salia: " + json);
+            System.out.println("\n SENDER, LO SAQUE DE LA COLA CARNAL Y LO ENVIARE AL DISPATCHER!");
             Send(json);
 
         } catch (Exception e) {

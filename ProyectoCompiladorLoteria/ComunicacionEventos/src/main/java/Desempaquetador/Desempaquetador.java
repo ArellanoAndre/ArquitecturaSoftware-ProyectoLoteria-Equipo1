@@ -39,14 +39,14 @@ public class Desempaquetador implements ObserverEntrada {
         try {
             
             String eventojson =  colaEntrada.poll();
-            
+            System.out.println("\n DESEMPAQUETADOR, YA SAQUE EL EVENTO DE LA COLA ENTRADA CARNAL!");
              if (eventojson == null) {
                  return;
              }
              
              IEvento evento = HelperJSON.toEvento(eventojson); 
             
-             
+             System.out.println(evento.toString());
 
             if (eventojson != null  ) {
                 componenteSuperior.manejar(evento); // falta implementar como lo agarra y asi

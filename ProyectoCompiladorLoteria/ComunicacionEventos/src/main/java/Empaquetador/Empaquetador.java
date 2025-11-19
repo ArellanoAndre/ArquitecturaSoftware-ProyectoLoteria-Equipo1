@@ -45,14 +45,13 @@ public class Empaquetador implements IEmpaquetador {
             if (colaSalida == null) {
                 throw new IllegalStateException("[Empaquetador] La cola de salida no ha sido inicializada.");
             }
-
+            System.out.println("\n EMPAQUETADOR LO METI A LA COLA SALIDA!");
             // Se convierte el evento a JSON mediante HelperJSON
             String json = HelperJSON.toJSON(evento);
 
             // Se agrega a la cola de salida con prioridad indicada
             colaSalida.add(json, TipoAdd.Salida);
-
-            System.out.println("[Empaquetador] Mensaje empaquetado y enviado a la cola de salida.");
+            
         } catch (Exception e) {
             System.err.println("[Empaquetador] Error al empaquetar evento: " + e.getMessage());
         }

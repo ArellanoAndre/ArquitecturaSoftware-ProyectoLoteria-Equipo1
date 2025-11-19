@@ -25,8 +25,8 @@ public class EventListener implements IReceptorJSON {
     @Override
     public void recibirJSON(String eventojson) {
             try {
+                System.out.println("\n LISTENER, RECIBI UN EVENTO CARNAL LO METERE A LA COLA ENTRADA!");
                 this.colaEntrada.add(eventojson, TipoAdd.Entrada);
-                System.out.println("EventListener recibio el JSON y lo metio a la cola");
 
             } catch (InterruptedException e) {
                 System.out.println("EventListener interrumpido");
