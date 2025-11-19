@@ -8,8 +8,7 @@ package interfacesGlobales;
  *
  * @author isaac
  */
-public interface IDesempaquetador {
+public interface ObserverEntrada {
     
-    public void Desempaquetar( );
-    
+    public void updateEntrada();
 }

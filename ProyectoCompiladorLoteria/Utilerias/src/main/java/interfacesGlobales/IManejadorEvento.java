@@ -8,8 +8,8 @@ package interfacesGlobales;
  *
  * @author isaac
  */
-public interface IDesempaquetador {
+public interface IManejadorEvento {
     
-    public void Desempaquetar( );
+    void manejar(IEvento evento);
     
 }

@@ -8,56 +8,59 @@ import Evento.Evento;
 import Helper.HelperJSON;
 import Sender.EventSender;
 import colaGenerica.ColaDePrioridad;
+import colaGenerica.ObserverEntrada;
 import colaGenerica.TipoAdd;
 import interfacesGlobales.IDesempaquetador;
 import interfacesGlobales.IEvento;
+import interfacesGlobales.IManejadorEvento;
 import interfacesGlobales.IReceptorEventos;
 
 /**
  *
  * @author isaac
  */
-public class Desempaquetador implements IDesempaquetador {
+public class Desempaquetador implements ObserverEntrada {
 
-    private ColaDePrioridad<IEvento> colaEntrada = null;
-    private String eventojson;
-
-    public Desempaquetador() {
-
+    private ColaDePrioridad<String> colaEntrada;
+    private IManejadorEvento componenteSuperior; // broker o logica de juego
+     
+    public Desempaquetador(ColaDePrioridad<String> colaEntrada, IManejadorEvento componenteSuperior) {
+        this.colaEntrada = colaEntrada;
+        this.componenteSuperior = componenteSuperior;
     }
+    
 
-    public void setColaEntrada(ColaDePrioridad<IEvento> colaEntrada) {
+    
+
+    public void setColaEntrada(ColaDePrioridad<String> colaEntrada) {
         this.colaEntrada = colaEntrada;
     }
 
     @Override
-    public void Desempaquetar(String eventojson) {
-
+    public void updateEntrada( ) {
+        
         try {
-            if (colaEntrada == null) {
-                throw new IllegalStateException("[Empaquetador] La cola de salida no ha sido inicializada.");
+            
+            String eventojson =  colaEntrada.poll();
+            
+             if (eventojson == null) {
+                 return;
+             }
+             
+             IEvento evento = HelperJSON.toEvento(eventojson); 
+            
+             
+
+            if (eventojson != null  ) {
+                componenteSuperior.manejar(evento); // falta implementar como lo agarra y asi
+                System.out.println("Evento entregado a ");
             }
-
-            if (eventojson == null || eventojson.isEmpty()) {
-                System.out.println("evento vacio");
-                return;
-            }
-
-            IEvento evento = HelperJSON.toEvento(eventojson); // tiene que llegar como evento o ievento xd
-
-            if (evento == null) {
-                System.out.println("el evento es nulo, no se pudo encolar");
-                return;
-            }
-
-            this.colaEntrada.add(evento, TipoAdd.Entrada);
-            System.out.println("Evento encolado para arriba");
-
-            System.out.println("[Empaquetador] Mensaje enviado a la cola de entrada.");
         } catch (Exception e) {
             System.err.println("[Empaquetador] Error al desempaquetar evento: " + e.getMessage());
         }
 
     }
+
+     
 
 }
