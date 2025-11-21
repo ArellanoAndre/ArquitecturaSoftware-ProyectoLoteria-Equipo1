@@ -15,6 +15,7 @@
         <module>Utilerias</module>
         <module>ComunicacionEventos</module>
         <module>ProcesadorEventos</module>
+        <module>MVC_InicioJuego</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
