@@ -4,6 +4,7 @@
  */
 package interfaces;
 
+import Evento.Evento;
 import java.util.List;
 import pruebas.Suscripcion;
 
@@ -13,7 +14,13 @@ import pruebas.Suscripcion;
  */
 public interface IBroker {
     
-    public void registrarSuscripcion(String topico, Suscripcion suscriptor);
-    public void desuscribirCliente(String topico, Suscripcion sucriptor);
-    public List<Suscripcion> obtenerSuscriptores(String topico);
+    void registrarSuscripcion(String topico, Suscripcion suscriptor);
+    
+    void eliminarSusripcion(String topico, Suscripcion sucriptor);
+    
+    List<Suscripcion> obtenerSuscriptores(String topico);
+    
+    void publicarEvento(String topico, Evento eventoNuevo);
+    
+    void procesarEvento();
 }
