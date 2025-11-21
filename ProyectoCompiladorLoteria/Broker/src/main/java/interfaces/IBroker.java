@@ -16,11 +16,11 @@ public interface IBroker {
     
     void registrarSuscripcion(String topico, Suscripcion suscriptor);
     
-    void eliminarSusripcion(String topico, Suscripcion sucriptor);
+    void eliminarSusripcion(String topico, Suscripcion suscriptor);
     
     List<Suscripcion> obtenerSuscriptores(String topico);
     
-    void publicarEvento(String topico, Evento eventoNuevo);
+    void publicarEvento(Evento eventoNuevo);
     
-    void procesarEvento();
+    void procesarEvento(Evento evento);
 }

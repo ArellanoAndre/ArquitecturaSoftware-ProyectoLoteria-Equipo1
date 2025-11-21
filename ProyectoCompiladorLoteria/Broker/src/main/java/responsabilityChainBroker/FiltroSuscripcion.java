@@ -1,0 +1,41 @@
+
+package responsabilityChainBroker;
+
+import Evento.Evento;
+import interfaces.IBroker;
+import pruebas.Suscripcion;
+
+/**
+ *
+ * @author abrilislas
+ */
+public class FiltroSuscripcion implements IFiltro{
+    
+    protected IFiltro sucesor; 
+    IBroker broker;
+    
+    @Override
+    public void setBroker(IBroker broker) {
+        this.broker = broker;
+    }
+    
+    @Override
+    public void setNext(IFiltro succesor) {
+        this.sucesor=sucesor; 
+    }
+
+    @Override
+    public void procesarEvento(Evento evento) {
+        String topico = evento.getTopico();
+        if(topico.equals("suscripcion")){
+        String IP_SUSCRIPTOR= evento.getIpLocal();
+        int PUERTO_SUSCRIPTOR = evento.getPuerto();
+        Suscripcion suscriptor = new Suscripcion(IP_SUSCRIPTOR,PUERTO_SUSCRIPTOR);
+        broker.registrarSuscripcion(topico, suscriptor);
+        }
+        else{
+            sucesor.procesarEvento(evento);
+        }
+    }
+    
+}

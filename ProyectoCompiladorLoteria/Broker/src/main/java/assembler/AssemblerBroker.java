@@ -5,6 +5,7 @@
 package assembler;
 
 import Desempaquetador.Desempaquetador;
+import Server.Servidor;
 import colaGenerica.ColaDePrioridad;
 import java.util.logging.Handler;
 
@@ -16,6 +17,15 @@ public class AssemblerBroker {
     
     private Handler handler;
     private Desempaquetador desempaquetador;
-    private ColaDePrioridad colaEntrada; 
+    private ColaDePrioridad colaEntrada = new ColaDePrioridad(); 
+    private Servidor servidor = new Servidor();
+    
+    public AssemblerBroker(){
+    
+        this.desempaquetador = new Desempaquetador();
+        desempaquetador.setColaEntrada(colaEntrada);
+    
+    }
+    
     
 }

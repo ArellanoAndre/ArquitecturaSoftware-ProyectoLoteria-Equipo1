@@ -4,10 +4,16 @@
  */
 package responsabilityChainBroker;
 
+import Evento.Evento;
+import interfaces.IBroker;
+
 /**
  *
  * @author abrilislas
  */
-public interface IFiltro {
+public abstract interface IFiltro {
     
+    void setNext(IFiltro succesor);
+    void procesarEvento(Evento evento);
+    void setBroker(IBroker broker);
 }
