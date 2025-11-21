@@ -6,6 +6,7 @@ package Send;
 
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverSalida;
+import eventoRed.EventoRed;
 import interfaces.ISender;
 
 import java.io.BufferedWriter;
@@ -13,6 +14,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Clase Sender
@@ -20,89 +23,63 @@ import java.nio.charset.StandardCharsets;
  * - Implementa ISender para enviar mensajes por TCP.
  * - Implementa ObserverSalida para escuchar el flujo de salida.
  * - Envía cada mensaje como una línea de texto (JSON por línea).
+ * - Crea un socket nuevo por cada mensaje y lo cierra al terminar.
  */
 public class Sender implements ISender, ObserverSalida {
 
-    private final Socket socket;
-    private final ColaDePrioridad<String> colaSalida;
+    // Cola desde la que se leerán los eventos de red a enviar
+    private final ColaDePrioridad<EventoRed> colaSalida;
 
-    private BufferedWriter writer;
-    private volatile boolean conectado;
+    // Lock para sincronizar el envío (por si se usa desde varios hilos)
     private final Object lock = new Object();
 
     /**
      * Constructor.
-     * @param socket Socket ya conectado.
+     *
      * @param colaSalida Cola desde la que se leerán los mensajes a enviar.
      */
-    public Sender(Socket socket, ColaDePrioridad<String> colaSalida) {
-        this.socket = socket;
+    public Sender(ColaDePrioridad<EventoRed> colaSalida) {
         this.colaSalida = colaSalida;
-        inicializar();
     }
 
-    /**
-     * Inicializa el writer sobre el socket.
-     */
-    private void inicializar() {
-        try {
-            this.writer = new BufferedWriter(
-                    new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8)
-            );
-            this.conectado = true;
-            System.out.println("[Sender] Conectado. Listo para enviar mensajes.");
-        } catch (IOException e) {
-            this.conectado = false;
-            System.err.println("[Sender] No se pudo obtener el OutputStream: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Envía un mensaje JSON por el socket como una línea de texto.
-     * @param json Mensaje serializado.
-     */
     @Override
-    public void send(String json) {
-        if (!conectado || socket == null || socket.isClosed()) {
-            System.err.println("[Sender] No conectado. Mensaje no enviado: " + json);
-            return;
-        }
+    public void send(EventoRed evento) {
+        // Creamos el Socket y el Writer como recursos locales
+        try (Socket socket = new Socket(evento.getIpDestino(), evento.getPuertoDestino());
+             BufferedWriter writer = new BufferedWriter(
+                     new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8))
+        ) {
+            System.out.println("[Sender] Conectado a " + evento.getIpDestino()
+                    + ":" + evento.getPuertoDestino() + ". Listo para enviar.");
 
-        synchronized (lock) {
-            try {
-                writer.write(json);
-                writer.newLine();   // MUY IMPORTANTE para que readLine() lo lea
+            // Sincronizamos por si varios hilos llaman send al mismo tiempo
+            synchronized (lock) {
+                // Escribimos el JSON del evento
+                writer.write(evento.getEvento());
+                writer.newLine();   // MUY IMPORTANTE para que el servidor pueda usar readLine()
                 writer.flush();
-                System.out.println("[Sender] Mensaje enviado: " + json);
-            } catch (IOException e) {
-                System.err.println("[Sender] Error al enviar mensaje: " + e.getMessage());
-                conectado = false;
-                close(); // en servidor normalmente cerramos la conexión
-            }
-        }
-    }
 
-    /** Cierra la conexión TCP. */
-    @Override
-    public void close() {
-        conectado = false;
-        try {
-            if (writer != null) writer.close();
-            if (socket != null && !socket.isClosed()) socket.close();
-            System.out.println("[Sender] Conexión cerrada correctamente.");
+                System.out.println("[Sender] Mensaje enviado: " + evento.getEvento());
+            }
+
+            // Al salir del try, writer y socket se cierran automáticamente
+
         } catch (IOException e) {
-            System.err.println("[Sender] Error al cerrar conexión: " + e.getMessage());
+            System.err.println("[Sender] Error al enviar mensaje: " + e.getMessage());
+            Logger.getLogger(Sender.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
     /**
      * Método llamado por la cola cuando se agrega un nuevo mensaje de salida.
+     * Toma un evento de la cola (bloqueante) y lo envía.
      */
     @Override
     public void updateSalida() {
         try {
-            String mensaje = colaSalida.take();
-            send(mensaje);
+            // Bloquea hasta que haya un evento disponible
+            EventoRed evento = colaSalida.take();
+            send(evento);
         } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
             System.err.println("[Sender] Hilo de envío interrumpido.");

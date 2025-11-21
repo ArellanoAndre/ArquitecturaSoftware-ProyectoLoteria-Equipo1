@@ -8,72 +8,113 @@ import Send.Sender;
 import colaGenerica.ColaDePrioridad;
 import dispatcher.Dispatcher;
 import dispatcher.DispatcherFactory;
+import eventoRed.EventoRed;
 import interfaces.IReceptor;
-import java.io.IOException;
-import java.net.Socket;
 import mecanismoRecepcion.MecanismoRecepcion;
 import networkListener.NetworkListener;
 
+import java.io.IOException;
+
 /**
+ * EnsambladorRed
  *
- * @author isaac
+ * Se encarga de:
+ * - Crear colas de entrada y salida.
+ * - Crear el Sender y suscribirlo a la cola de salida.
+ * - Crear el Dispatcher y conectarlo con la cola de salida.
+ * - Crear el mecanismo de recepción (MecanismoRecepcion) y conectarlo con la cola de entrada.
+ * - Crear y arrancar el NetworkListener (servidor) en un hilo separado.
  */
 public class EnsambladorRed {
 
-    private Socket socket;
+    private final int puerto;
+
     private Dispatcher dispatcher;
     private Sender sender;
     private NetworkListener listener;
     private MecanismoRecepcion recepcion;
-    private ColaDePrioridad<String> colaSalida;
+
+    // Cola de salida: aquí se encolarán los eventos de red a enviar
+    private ColaDePrioridad<EventoRed> colaSalida;
+
+    // Cola de entrada: aquí se encolarán los JSON (String) recibidos por red
     private ColaDePrioridad<String> colaEntrada;
 
-    //Constructores Para iniciar como cliente o servidor
-    
-    public EnsambladorRed(Socket socket) throws IOException {
-        this.socket = socket;
+    /**
+     * Constructor para el ensamblador de red.
+     *
+     * @param puerto Puerto en el que escuchará el servidor (NetworkListener)
+     */
+    public EnsambladorRed(int puerto) {
+        this.puerto = puerto;
     }
 
-
+    /**
+     * Ensambla todos los componentes de la capa de red.
+     *
+     * @param receptor Implementación de IReceptor, que procesará los mensajes recibidos.
+     */
     public void ensamblar(IReceptor receptor) throws IOException {
         System.out.println("[EnsambladorRed] Iniciando ensamblaje...");
 
-        // Crear socket y colas
+        // Crear colas de prioridad
         colaSalida = new ColaDePrioridad<>();
         colaEntrada = new ColaDePrioridad<>();
 
         // Crear Sender y asociarlo con la cola de salida
-        sender = new Sender(socket, colaSalida);
+        sender = new Sender(colaSalida);
         colaSalida.addObserverSalida(sender);
 
-        // Crear Dispatcher singleton
+        // Crear Dispatcher (por medio de fábrica / singleton)
         dispatcher = DispatcherFactorySingleton();
 
         // Inyectar la cola de salida al dispatcher
+        // (El dispatcher encolará IEventoRed que luego el Sender enviará)
         dispatcher.setColaSalida(colaSalida);
 
-        // Crear listener y mecanismo de recepción
-        listener = new NetworkListener(socket, colaEntrada);
-        new Thread(listener, "NetworkListener-Thread").start();
-
+        // Crear mecanismo de recepción: leerá de colaEntrada y llamará a receptor.recibir(...)
         recepcion = new MecanismoRecepcion(colaEntrada, receptor);
+
+        // Si MecanismoRecepcion corre en su propio hilo, podrías hacer algo así:
+        // new Thread(recepcion, "MecanismoRecepcion-Thread").start();
+        // o recepcion.start(); si tú lo defines así.
+
+        // Crear listener (servidor) y arrancarlo en un hilo separado
+        listener = new NetworkListener(puerto, colaEntrada);
+
+        // Si tu NetworkListener tiene método start() (como en la versión que te propuse):
+        listener.start();
+
+        // Si en cambio solo implementa Runnable, podrías hacer:
+        // new Thread(listener, "NetworkListener-Thread").start();
 
         System.out.println("[EnsambladorRed] Componentes ensamblados correctamente.");
     }
 
     private Dispatcher DispatcherFactorySingleton() {
+        // Ajusta esto según tu implementación real
         return DispatcherFactory.createDispatcherDefault();
     }
+
+    // Getters para que otras capas puedan interactuar con la red:
 
     public Dispatcher getDispatcher() {
         return dispatcher;
     }
 
-    public ColaDePrioridad<String> getColaSalida() {
+    public ColaDePrioridad<EventoRed> getColaSalida() {
         return colaSalida;
     }
 
     public Sender getSender() {
         return sender;
+    }
+
+    public NetworkListener getListener() {
+        return listener;
+    }
+
+    public MecanismoRecepcion getRecepcion() {
+        return recepcion;
     }
 }

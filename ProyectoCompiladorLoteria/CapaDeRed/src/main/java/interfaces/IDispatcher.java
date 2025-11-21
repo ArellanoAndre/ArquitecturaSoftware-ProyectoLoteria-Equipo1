@@ -4,11 +4,13 @@
  */
 package interfaces;
 
+import eventoRed.EventoRed;
+
 /**
  *
  * @author abrilislas
  */
 public interface IDispatcher {
     
-    void dispatch(String json);
+    void dispatch(EventoRed json);
 }

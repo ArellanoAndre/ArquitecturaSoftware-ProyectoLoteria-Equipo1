@@ -4,6 +4,8 @@
  */
 package interfaces;
 
+import eventoRed.EventoRed;
+
 /**
  * @author Arell
  * Interfaz ISender
@@ -12,12 +14,8 @@ package interfaces;
 public interface ISender {
     /**
      * Envía un mensaje JSON a través de la red.
-     * @param json Mensaje serializado en formato JSON.
+     * 
+     * @param eventoRed El envoltorio que contiene payload en json, ip y puerto destino.
      */
-    void send(String json);
-
-    /**
-     * Cierra la conexión de red de forma segura.
-     */
-    void close();
+    void send(EventoRed eventoRed);
 }

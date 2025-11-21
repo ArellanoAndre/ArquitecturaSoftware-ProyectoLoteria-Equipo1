@@ -22,7 +22,6 @@ public DispatcherAdapter(interfaces.IDispatcher dispatcherRed) {
 
     @Override
     public void dispatch(String json) {
-        dispatcherRed.dispatch(json);
     }
 }
 

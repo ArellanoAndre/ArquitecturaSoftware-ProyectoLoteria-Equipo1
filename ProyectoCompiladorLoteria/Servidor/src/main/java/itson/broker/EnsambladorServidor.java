@@ -31,7 +31,7 @@ public class EnsambladorServidor {
         ensambladorEventos = new EnsambladorComunicacionEventos(manejador);
 
         // 3) Capa de red (modo servidor)
-        ensambladorRed = new EnsambladorRed(socket);
+        ensambladorRed = new EnsambladorRed();
 
         // 4) Adaptador IReceptor: MecanismoRecepcion → capa de eventos
         IReceptor receptorAdapter = new ReceptorEventosAdapter(ensambladorEventos);

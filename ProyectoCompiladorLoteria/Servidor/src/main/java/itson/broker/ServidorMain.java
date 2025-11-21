@@ -6,17 +6,14 @@ import java.net.*;
 public class ServidorMain {
 
     public static void main(String[] args) {
-        int puerto = 7000;
+        int puerto = 5000;
         try (ServerSocket servidor = new ServerSocket(puerto)) {
 
             
             System.out.println("[ServidorMain] Iniciando servidor en puerto " + puerto);
             Socket cliente = servidor.accept();
             EnsambladorServidor server = new EnsambladorServidor(cliente);
-
-            System.out.println("[ServidorMain] Servidor listo.");
-            System.out.println("Conéctate con:  nc 127.0.0.1 7000");
-            System.out.println("Envía un JSON compatible con tu clase Evento.");
+            
 
             // Opcional: mandar un evento de prueba hacia el cliente después de unos segundos
             Thread.sleep(5000);
