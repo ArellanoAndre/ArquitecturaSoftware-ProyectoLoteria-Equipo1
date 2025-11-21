@@ -10,7 +10,6 @@
         <module>MVC</module>
         <module>LogicaJuego</module>
         <module>CapaDeRed</module>
-        <module>Servidor</module>
         <module>Eventos</module>
         <module>Utilerias</module>
         <module>ComunicacionEventos</module>
