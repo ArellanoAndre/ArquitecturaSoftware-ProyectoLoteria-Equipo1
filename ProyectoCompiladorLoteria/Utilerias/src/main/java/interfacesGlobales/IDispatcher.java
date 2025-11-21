@@ -1,5 +1,7 @@
 package interfacesGlobales;
 
+import eventoRed.EventoRed;
+
 public interface IDispatcher {
-    void dispatch(String json);
+    void dispatch(EventoRed eventoRed);
 }

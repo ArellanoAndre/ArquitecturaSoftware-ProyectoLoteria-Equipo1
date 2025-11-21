@@ -6,7 +6,7 @@ package dispatcher;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.TipoAdd;
 import eventoRed.EventoRed;
-import interfaces.IDispatcher;
+import interfacesGlobales.IDispatcher;
 
 
 /**

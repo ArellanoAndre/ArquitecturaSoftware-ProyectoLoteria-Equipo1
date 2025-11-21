@@ -5,7 +5,6 @@
 package Evento;
 
 import interfacesGlobales.IEvento;
-import java.net.InetAddress;
 
 /**
  *
@@ -18,76 +17,84 @@ public class Evento implements IEvento {
     private String JSON;
     private String ipLocal;
     private String ipDestino;
-    private int puerto;
+    private int puertoLocal;
+    private int puertoDestino;
 
     public Evento() {
     }
 
-    public Evento(String topico, String evento, String JSON, InetAddress ipLocal, String ipDestino, int puerto) {
-        this.topico = topico;
-        this.evento = evento;
-        this.JSON = JSON;
-        this.ipLocal = ipLocal.getHostAddress();
-        this.ipDestino = ipDestino;
-        this.puerto = puerto;
-    }
-
+    @Override
     public String getTopico() {
         return topico;
     }
 
+    @Override
     public void setTopico(String topico) {
         this.topico = topico;
     }
 
+    @Override
     public String getEvento() {
         return evento;
     }
 
+    @Override
     public void setEvento(String evento) {
         this.evento = evento;
     }
 
+    @Override
     public String getJSON() {
         return JSON;
     }
 
+    @Override
     public void setJSON(String JSON) {
         this.JSON = JSON;
     }
 
+    @Override
     public String getIpLocal() {
         return ipLocal;
     }
 
+    @Override
     public void setIpLocal(String ipLocal) {
         this.ipLocal = ipLocal;
     }
 
+    @Override
     public String getIpDestino() {
         return ipDestino;
     }
 
+    @Override
     public void setIpDestino(String ipDestino) {
         this.ipDestino = ipDestino;
     }
 
-    public int getPuerto() {
-        return puerto;
+    @Override
+    public int getPuertoLocal() {
+        return puertoLocal;
     }
 
-    public void setPuerto(int puerto) {
-        this.puerto = puerto;
+    @Override
+    public void setPuertoLocal(int puertoLocal) {
+        this.puertoLocal = puertoLocal;
+    }
+
+    @Override
+    public int getPuertoDestino() {
+        return puertoDestino;
+    }
+
+    @Override
+    public void setPuertoDestino(int puertoDestino) {
+        this.puertoDestino = puertoDestino;
     }
 
     @Override
     public String toString() {
-        return "Evento{" + "topico=" + topico + ", evento=" + evento + ", JSON=" + JSON + ", ipLocal=" + ipLocal + ", ipDestino=" + ipDestino + '}';
+        return "Evento{" + "topico=" + topico + ", evento=" + evento + ", JSON=" + JSON + ", ipLocal=" + ipLocal + ", ipDestino=" + ipDestino + ", puertoLocal=" + puertoLocal + ", puertoDestino=" + puertoDestino + '}';
     }
-
-    @Override
-    public String getTipo() {
-        return evento;
-    }
-
 }

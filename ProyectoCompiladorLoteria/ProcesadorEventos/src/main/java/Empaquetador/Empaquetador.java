@@ -5,6 +5,7 @@ import colaGenerica.TipoAdd;
 import interfacesGlobales.IEmpaquetador;
 import interfacesGlobales.IEvento;
 import Helper.HelperJSON;
+import eventoRed.EventoRed;
 
 /**
  * Clase encargada de convertir (empaquetar) objetos que implementan IEvento a
@@ -13,45 +14,40 @@ import Helper.HelperJSON;
 public class Empaquetador implements IEmpaquetador {
 
     /**
-     * Cola donde se publicarán los mensajes ya empaquetados en JSON.
+     * Cola donde se publicarán los mensajes EventoRed
      */
-    private ColaDePrioridad<String> colaSalida = null;
-    private String json;
+    private ColaDePrioridad<EventoRed> colaSalida = null;
 
     /**
-     * Constructor por defecto.
+     * Constructor
      */
-    public Empaquetador() {
-    }
-
-    /**
-     * Asigna la cola de salida donde se enviarán los mensajes JSON.
-     *
-     * @param colaSalida Cola de prioridad usada como canal de salida.
-     */
-    public void setColaSalida(ColaDePrioridad<String> colaSalida) {
+    public Empaquetador(ColaDePrioridad<EventoRed> colaSalida) {
         this.colaSalida = colaSalida;
     }
 
     /**
-     * Convierte un objeto IEvento a una cadena JSON y lo envía a la cola de
-     * salida.
+     * Convierte un objeto IEvento a una cadena JSON y usa sus datos para crear
+     * un EventoRed. Posteriormente lo envía a la cola de salida.
      *
      * @param evento Objeto que implementa IEvento y será transformado a JSON.
      */
     @Override
     public void empaquetar(IEvento evento) {
         try {
-            if (colaSalida == null) {
-                throw new IllegalStateException("[Empaquetador] La cola de salida no ha sido inicializada.");
-            }
-            System.out.println("\n EMPAQUETADOR LO METI A LA COLA SALIDA!");
+
             // Se convierte el evento a JSON mediante HelperJSON
             String json = HelperJSON.toJSON(evento);
+            EventoRed eventoRed = new EventoRed(json, evento.getIpDestino(), evento.getPuertoDestino());
 
-            // Se agrega a la cola de salida con prioridad indicada
-            colaSalida.add(json, TipoAdd.Salida);
-            
+            System.out.println("\n [Empaquetador] EventoRed creado: " + eventoRed);
+            System.out.println("\n [Empaquetador] Metiendo a cola");
+
+            // Se agrega a la cola de salida
+            colaSalida.add(eventoRed, TipoAdd.Salida);
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("[Empaquetador] Hilo interrumpido al encolar evento.");
         } catch (Exception e) {
             System.err.println("[Empaquetador] Error al empaquetar evento: " + e.getMessage());
         }

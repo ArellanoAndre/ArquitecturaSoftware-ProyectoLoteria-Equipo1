@@ -17,9 +17,13 @@ import java.util.logging.Logger;
 public class EventBuilder {
 
     private String ipDestino;
+    private int puertoDestino;
+    private int puertoLocal;
     
-    public EventBuilder(String ipDestino) {
+    public EventBuilder(String ipDestino, int puertoDestino, int puertoLocal) {
         this.ipDestino = ipDestino;
+        this.puertoDestino = puertoDestino;
+        this.puertoLocal = puertoLocal;
     }
     
     public Evento crearEvento() {
@@ -28,7 +32,8 @@ public class EventBuilder {
             
             e.setIpLocal(InetAddress.getLocalHost().getHostAddress());
             e.setIpDestino(ipDestino);
-            e.setPuerto(5000);
+            e.setPuertoLocal(puertoLocal);
+            e.setPuertoDestino(puertoDestino);
             
         } catch (UnknownHostException ex) {
             Logger.getLogger(EventBuilder.class.getName()).log(Level.SEVERE, null, ex);
