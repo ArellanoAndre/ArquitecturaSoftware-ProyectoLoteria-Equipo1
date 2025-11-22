@@ -3,11 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Desempaquetador;
+
 import Helper.HelperJSON;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverEntrada;
 import interfacesGlobales.IEvento;
 import interfacesGlobales.IManejadorEvento;
+import org.json.JSONObject;
 
 /**
  *
@@ -17,7 +19,7 @@ public class Desempaquetador implements ObserverEntrada {
 
     private ColaDePrioridad<String> colaEntrada;
     private IManejadorEvento componenteSuperior; // broker o logica de juego
-     
+
     public Desempaquetador(ColaDePrioridad<String> colaEntrada, IManejadorEvento componenteSuperior) {
         this.colaEntrada = colaEntrada;
         this.componenteSuperior = componenteSuperior;
@@ -25,40 +27,44 @@ public class Desempaquetador implements ObserverEntrada {
 
     public Desempaquetador() {
     }
-    
-
-    
 
     public void setColaEntrada(ColaDePrioridad<String> colaEntrada) {
         this.colaEntrada = colaEntrada;
     }
 
     @Override
-    public void updateEntrada( ) {
-        
+    public void updateEntrada() {
+
         try {
-            
-            String eventojson =  colaEntrada.poll();
-            System.out.println("\n DESEMPAQUETADOR, YA SAQUE EL EVENTO DE LA COLA ENTRADA CARNAL!");
-             if (eventojson == null) {
-                 return;
-             }
-             
-             IEvento evento = HelperJSON.toEvento(eventojson); 
-            
-             System.out.println(evento.toString());
+            String eventojson = colaEntrada.poll();
+            System.out.println("\n DESEMPAQUETADOR, YA SAQUE EL EVENTO DE LA COLA ENTRADA!");
 
-            if (eventojson != null  ) {
-                componenteSuperior.manejar(evento); // falta implementar como lo agarra y asi
-                System.out.println("Evento entregado a " + componenteSuperior.getClass().getSimpleName());
-
+            if (eventojson == null) {
+                return;
             }
+
+            // Convertir al objeto Evento
+            IEvento evento = HelperJSON.toEvento(eventojson);
+            if (evento == null) {
+                System.err.println("ERROR: No pude convertir el JSON a Evento");
+                return;
+            }
+
+            // Obtener solo el payload interno (el JSON)
+            String payload = evento.getJSON();
+
+            System.out.println("Payload extraido: " + payload);
+
+            if (payload != null) {
+                componenteSuperior.manejar(payload);
+                System.out.println("Payload entregado al modelo");
+            } else {
+                System.err.println("ERROR: payload es null en Evento");
+            }
+
         } catch (Exception e) {
-            System.err.println("[Empaquetador] Error al desempaquetar evento: " + e.getMessage());
+            System.err.println("ERROR extrayendo payload: " + e.getMessage());
         }
-
     }
-
-     
 
 }

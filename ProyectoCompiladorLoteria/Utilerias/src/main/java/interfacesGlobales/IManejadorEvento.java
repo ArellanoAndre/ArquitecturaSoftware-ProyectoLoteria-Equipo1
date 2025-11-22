@@ -10,6 +10,6 @@ package interfacesGlobales;
  */
 public interface IManejadorEvento {
     
-    void manejar(IEvento evento);
+    void manejar(String payloadJSON);
     
 }
