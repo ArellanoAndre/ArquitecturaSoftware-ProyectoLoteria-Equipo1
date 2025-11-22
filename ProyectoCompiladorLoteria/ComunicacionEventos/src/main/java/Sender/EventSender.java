@@ -16,10 +16,10 @@ public class EventSender implements ObserverSalida {
     private ColaDePrioridad<EventoRed> colaSalida;
 
     /**
-     * @param colaEntrada Cola de donde se tomaran los mensajes.
+     * @param colaSalida Cola de donde se tomaran los mensajes.
      */
-    public EventSender(ColaDePrioridad<EventoRed> colaEntrada) {
-        this.colaSalida = colaEntrada;
+    public EventSender(ColaDePrioridad<EventoRed> colaSalida) {
+        this.colaSalida = colaSalida;
     }
 
     /**
@@ -31,16 +31,14 @@ public class EventSender implements ObserverSalida {
             // Recupera el mensaje recien agregado (o el primero)
             EventoRed evento = colaSalida.take();
 
-            if (evento == null) {
-                System.err.println("[Sender] No hay mensaje disponible en la cola.");
-                return;
-            }
-
-            System.out.println("\n [Sender] Enviando a dispatcher");
+            System.out.println("\n [EventSender] Evento tomado de la cola. Enviando a dispatcher...");
             send(evento);
 
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("[EventSender] Hilo interrumpido al tomar la cola.");
         } catch (Exception e) {
-            System.err.println("[Sender] Error procesando entrada: " + e.getMessage());
+            System.err.println("[EventSender] Error procesando evento: " + e.getMessage());
         }
     }
 
@@ -51,11 +49,16 @@ public class EventSender implements ObserverSalida {
      * @param eventoRed EventoRed ya empaquetado para mandar a dispatcher
      */
     public void send(EventoRed eventoRed) {
+        if (dispatcher == null) {
+            System.err.println("[EventSender] Dispatcher no inicializado. Evento no enviado.");
+            return;
+        }
+
         try {
             dispatcher.dispatch(eventoRed);
-            System.out.println("[Sender] Mensaje enviado al Dispatcher.");
+            System.out.println("[EventSender] Mensaje enviado al Dispatcher.");
         } catch (Exception e) {
-            System.err.println("[Sender] Error al enviar JSON: " + e.getMessage());
+            System.err.println("[EventSender] Error al enviar JSON: " + e.getMessage());
         }
     }
 

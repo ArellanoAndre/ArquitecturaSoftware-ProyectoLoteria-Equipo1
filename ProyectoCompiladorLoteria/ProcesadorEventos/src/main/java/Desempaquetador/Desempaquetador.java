@@ -53,11 +53,11 @@ public class Desempaquetador implements ObserverEntrada {
             // Obtener solo el payload interno (el JSON)
             String payload = evento.getJSON();
 
-            System.out.println("Payload extraido: " + payload);
+            System.out.println("Entregando payload al modelo");
 
             if (payload != null) {
                 componenteSuperior.manejar(payload);
-                System.out.println("Payload entregado al modelo");
+                
             } else {
                 System.err.println("ERROR: payload es null en Evento");
             }

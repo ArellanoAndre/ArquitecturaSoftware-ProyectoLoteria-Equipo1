@@ -5,21 +5,17 @@ import Controlador.ControlVista;
 import Desempaquetador.Desempaquetador;
 import Evento.Evento;
 import Helper.HelperJSON;
-import Interfaces.IControlVista;
 import ModeloJuego.ModeloJuego;
-import ModeloJuego.entidades.Carta;
 import ModeloJuego.entidades.Jugador;
 import ModeloJuego.entidades.Tarjeta;
 import ModeloVista.ModeloVista;
 import Presentacion.JPantallaJuego;
 import colaGenerica.ColaDePrioridad;
-import interfacesGlobales.IManejadorEvento;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import javax.swing.SwingUtilities;
 import listener.EventListener;
-import org.json.JSONObject;
 
 public class prueba_DesempaquetadorMVC {
 
@@ -113,8 +109,8 @@ public class prueba_DesempaquetadorMVC {
                     int casillaRandom = random.nextInt(15) + 1;
 
                     Evento eRandom = new Evento();
-                    eRandom.setTopico("Juego");
-                    eRandom.setEvento("CasillaSeleccionada");
+                    eRandom.setTopico("Juego-in");
+                    eRandom.setEvento("Juego");
                     eRandom.setJSON(
                             "{ \"TipoEvento\": \"CasillaSeleccionadaValida\", "
                             + "\"Jugador\": 2, \"Casilla\": " + casillaRandom + " }"
