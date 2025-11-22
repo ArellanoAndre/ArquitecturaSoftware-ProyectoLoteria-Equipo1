@@ -29,7 +29,7 @@ public class FiltroSuscripcion implements IFiltro{
         String topico = evento.getTopico();
         if(topico.equals("suscripcion")){
         String IP_SUSCRIPTOR= evento.getIpLocal();
-        int PUERTO_SUSCRIPTOR = evento.getPuerto();
+        int PUERTO_SUSCRIPTOR = evento.getPuertoLocal();
         Suscripcion suscriptor = new Suscripcion(IP_SUSCRIPTOR,PUERTO_SUSCRIPTOR);
         broker.registrarSuscripcion(topico, suscriptor);
         }

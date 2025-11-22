@@ -5,11 +5,17 @@
 package pruebas;
 
 import Evento.Evento;
+import Helper.HelperJSON;
+import colaGenerica.ColaDePrioridad;
+import colaGenerica.TipoAdd;
 import interfaces.IBroker;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import responsabilityChainBroker.FiltroGenericoEvento;
 import responsabilityChainBroker.FiltroSuscripcion;
 import responsabilityChainBroker.IFiltro;
 
@@ -20,12 +26,20 @@ import responsabilityChainBroker.IFiltro;
 public class LaSecuelaDelBroker implements IBroker{
     
     private final Map<String, CopyOnWriteArrayList<Suscripcion>> suscripciones = new ConcurrentHashMap<>();
+    private final ColaDePrioridad<Evento> colaSalida = new ColaDePrioridad<>(); 
     private final IFiltro filtroInicio = new FiltroSuscripcion(); 
+    private final IFiltro filtroGenericoEvento = new FiltroGenericoEvento();
     
+    public LaSecuelaDelBroker(){
+        filtroInicio.setBroker(this);
+        filtroGenericoEvento.setBroker(this);
+        //01 - "Armamos" la cadena de filtros
+        filtroInicio.setNext(filtroGenericoEvento);
+  
+    }
     @Override
     public void registrarSuscripcion(String topico, Suscripcion suscriptor) {
-    suscripciones.computeIfAbsent(topico, t -> new CopyOnWriteArrayList<>())
-            .addIfAbsent(suscriptor);
+    suscripciones.computeIfAbsent(topico, t -> new CopyOnWriteArrayList<>()).addIfAbsent(suscriptor);
     System.out.println("[Broker] " + suscriptor.getHost() + " suscrito a: " + topico);    }
 
     @Override
@@ -33,16 +47,22 @@ public class LaSecuelaDelBroker implements IBroker{
         
         List<Suscripcion> lista = obtenerSuscriptores(topico);
         
-        if(!suscripciones.containsValue(suscriptor)){
-            System.out.println("[Broker] tópico '" + topico + "' No existe el suscriptor");
+        if (lista == null) {
+            System.out.println("[Broker] El tópico no existe");
+            return;
+        }
+
+        if(!lista.remove(suscriptor)){
+            System.out.println("[Broker] tópico " + topico + " No existe el suscriptor");
             return;
         }
         else if(lista.isEmpty()) {
             suscripciones.remove(topico);
-            System.out.println("[Broker] tópico '" + topico + "' eliminado por quedar vacío.");
+            System.out.println("[Broker] tópico " + topico + " eliminado por quedar vacío.");
             }
+        
         System.out.println("[Broker] " + suscriptor + " desuscrito de: " + topico);
-
+        
 
     }
 
@@ -54,18 +74,23 @@ public class LaSecuelaDelBroker implements IBroker{
 
     @Override
     public void publicarEvento(Evento eventoNuevo) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            colaSalida.add(eventoNuevo, TipoAdd.Salida);
+        } catch (InterruptedException ex) {
+            System.getLogger(LaSecuelaDelBroker.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
     }
+       
 
     @Override
     public void procesarEvento(Evento evento) {
-        
-        //01 - "Armamos" la cadena de filtros
-        //Esto actualmente hace un looop pq no hay otro filtro, solo es pa que no marque error.
-        filtroInicio.setNext(filtroInicio);
-        
         //02 - Intentamos usar el filtro de mayor prioridad (Suscripcion ig)
         filtroInicio.procesarEvento(evento);
         
+    }
+    
+    @Override
+    public void manejar(String payloadJSON) {
+        procesarEvento(HelperJSON.toEvento(payloadJSON));
     }
 }

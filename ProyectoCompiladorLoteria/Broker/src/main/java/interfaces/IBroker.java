@@ -5,6 +5,7 @@
 package interfaces;
 
 import Evento.Evento;
+import interfacesGlobales.IManejadorEvento;
 import java.util.List;
 import pruebas.Suscripcion;
 
@@ -12,7 +13,7 @@ import pruebas.Suscripcion;
  *
  * @author abrilislas
  */
-public interface IBroker {
+public interface IBroker extends IManejadorEvento{
     
     void registrarSuscripcion(String topico, Suscripcion suscriptor);
     
@@ -23,4 +24,7 @@ public interface IBroker {
     void publicarEvento(Evento eventoNuevo);
     
     void procesarEvento(Evento evento);
+    
+    @Override
+    public void manejar(String payloadJSON);
 }

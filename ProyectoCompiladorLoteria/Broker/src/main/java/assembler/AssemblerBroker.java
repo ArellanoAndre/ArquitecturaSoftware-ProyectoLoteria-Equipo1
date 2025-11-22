@@ -4,10 +4,12 @@
  */
 package assembler;
 
-import Desempaquetador.Desempaquetador;
 import Server.Servidor;
 import colaGenerica.ColaDePrioridad;
-import java.util.logging.Handler;
+import interfaces.IBroker;
+import interfacesGlobales.IReceptorJSON;
+import java.io.IOException;
+import pruebas.LaSecuelaDelBroker;
 
 /**
  *
@@ -15,17 +17,15 @@ import java.util.logging.Handler;
  */
 public class AssemblerBroker {
     
-    private Handler handler;
-    private Desempaquetador desempaquetador;
-    private ColaDePrioridad colaEntrada = new ColaDePrioridad(); 
-    private Servidor servidor = new Servidor();
-    
-    public AssemblerBroker(){
-    
-        this.desempaquetador = new Desempaquetador();
-        desempaquetador.setColaEntrada(colaEntrada);
-    
+    private ColaDePrioridad<String> colaEntrada = new ColaDePrioridad<>();
+    private IBroker broker = new LaSecuelaDelBroker();
+    private Servidor servidor;
+
+    public AssemblerBroker(IReceptorJSON receptor) {
+        try {
+            servidor = new Servidor(receptor, colaEntrada, broker);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-    
-    
 }
