@@ -57,7 +57,6 @@ public class NetworkListener implements Runnable {
         if (running.compareAndSet(false, true)) {
             Thread t = new Thread(this, "NetworkListener-Thread");
             t.start();
-            System.out.println("[NetworkListener] Servidor iniciado en puerto " + puerto);
         }
     }
 
@@ -80,13 +79,15 @@ public class NetworkListener implements Runnable {
     public void run() {
         try (ServerSocket ss = new ServerSocket(puerto)) {
             this.serverSocket = ss;
-
+            
+            System.out.println("[NetworkListener] Escuchando en puerto " + puerto + "...");
+            
             while (running.get()) {
-                System.out.println("[NetworkListener] Escuchando en puerto " + puerto + "...");
+                
 
                 // Acepta la conexión de un cliente (bloqueante)
                 Socket socket = ss.accept();
-                System.out.println("[NetworkListener] Cliente conectado: " + socket.getRemoteSocketAddress());
+                System.out.println("[NetworkListener] Cliente conectado: " + socket.getInetAddress().getHostAddress());
 
                 // Crear un hilo para manejar al cliente
                 Thread clienteThread = new Thread(() -> manejarCliente(socket),
@@ -121,14 +122,10 @@ public class NetworkListener implements Runnable {
             String mensaje = reader.readLine();
 
             if (mensaje != null) {
-                System.out.println("[NetworkListener] Mensaje recibido: " + mensaje);
-
-                // Aquí podrías delegar a otro hilo también si quisieras,
-                // pero normalmente con esto basta: este hilo ya es “independiente”.
                 try {
-                    // Ojo con el TipoAdd: si es cola de ENTRADA, quizá use TipoAdd.Entrada
+                    System.out.println("[NetworkListener] Metiendo mensaje a la cola de entrada.");
                     colaEntrada.add(mensaje, TipoAdd.Entrada); 
-                    System.out.println("[NetworkListener] Mensaje encolado en cola de entrada.");
+                    
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     System.err.println("[NetworkListener] Hilo de cliente interrumpido al encolar.");

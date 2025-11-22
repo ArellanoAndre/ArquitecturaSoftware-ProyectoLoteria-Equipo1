@@ -2,6 +2,7 @@ package Sender;
 
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverSalida;
+import dispatcher.DispatcherFactory;
 import eventoRed.EventoRed;
 import interfacesGlobales.IDispatcher;
 
@@ -20,6 +21,7 @@ public class EventSender implements ObserverSalida {
      */
     public EventSender(ColaDePrioridad<EventoRed> colaSalida) {
         this.colaSalida = colaSalida;
+        this.dispatcher = DispatcherFactory.createDispatcherDefault();
     }
 
     /**

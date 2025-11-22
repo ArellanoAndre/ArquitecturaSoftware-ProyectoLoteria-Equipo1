@@ -21,7 +21,7 @@ import listener.EventListener;
  *
  * @author rodri
  */
-public class prueba_EnsamblarCapaEventos {
+public class Prueba_EnsamblarCapaEventos {
 
     /**
      * Esta clase es para probar el ensamblaje solamente de la capa de eventos,

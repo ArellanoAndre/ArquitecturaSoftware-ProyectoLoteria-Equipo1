@@ -9,7 +9,7 @@ import colaGenerica.ColaDePrioridad;
 import dispatcher.Dispatcher;
 import dispatcher.DispatcherFactory;
 import eventoRed.EventoRed;
-import interfaces.IReceptor;
+import interfacesGlobales.IReceptorJSON;
 import mecanismoRecepcion.MecanismoRecepcion;
 import networkListener.NetworkListener;
 
@@ -54,9 +54,8 @@ public class EnsambladorRed {
      *
      * @param receptor Implementación de IReceptor, que procesará los mensajes recibidos.
      */
-    public void ensamblar(IReceptor receptor) throws IOException {
-        System.out.println("[EnsambladorRed] Iniciando ensamblaje...");
-
+    public void ensamblar(IReceptorJSON receptorJSON) throws IOException {
+        
         // Crear colas de prioridad
         colaSalida = new ColaDePrioridad<>();
         colaEntrada = new ColaDePrioridad<>();
@@ -73,7 +72,7 @@ public class EnsambladorRed {
         dispatcher.setColaSalida(colaSalida);
 
         // Crear mecanismo de recepción: leerá de colaEntrada y llamará a receptor.recibir(...)
-        recepcion = new MecanismoRecepcion(colaEntrada, receptor);
+        recepcion = new MecanismoRecepcion(colaEntrada, receptorJSON);
 
         // Si MecanismoRecepcion corre en su propio hilo, podrías hacer algo así:
         // new Thread(recepcion, "MecanismoRecepcion-Thread").start();

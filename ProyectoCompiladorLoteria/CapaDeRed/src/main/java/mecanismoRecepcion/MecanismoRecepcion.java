@@ -6,44 +6,40 @@ package mecanismoRecepcion;
 
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverEntrada;
-import interfaces.IReceptor;
+import interfacesGlobales.IReceptorJSON;
 
 /**
  *
  * @author abrilislas
  */
-public class MecanismoRecepcion implements ObserverEntrada{
+public class MecanismoRecepcion implements ObserverEntrada {
 
     private final ColaDePrioridad<String> colaEntrada; //dependencia inyectable
-    private IReceptor receptor;
-    
-    
-    public MecanismoRecepcion(ColaDePrioridad<String> colaEntrada, IReceptor receptor){
-        
+    private IReceptorJSON receptor;
+
+    public MecanismoRecepcion(ColaDePrioridad<String> colaEntrada, IReceptorJSON receptor) {
+
         this.colaEntrada = colaEntrada;
         this.colaEntrada.addObserverEntrada(this);
-        this.receptor=receptor;
+        this.receptor = receptor;
         System.out.println("Se ha registrado como observador de la cola de entrada.");
-    
+
     }
 
     @Override
     public void updateEntrada() {
-            try {
-                String json = colaEntrada.take();
-                        receptor.mandarMensaje(json);
-                System.out.println("[MecanismoRecepcion] : mensaje recibido desde la cola de entrada: "+json);
+        try {
+            System.out.println("[MecanismoRecepcion] : mensaje recibido");
 
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                System.err.println("[MecanismoRecepcion] Interrumpido mientras esperaba mensajes.");
-            } catch (Exception e) {
-                System.err.println("[MecanismoRecepcion] Error procesando mensaje: " + e.getMessage());
-            }
+            String json = colaEntrada.take();
+            receptor.recibirJSON(json);
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("[MecanismoRecepcion] Interrumpido mientras esperaba mensajes.");
+        } catch (Exception e) {
+            System.err.println("[MecanismoRecepcion] Error procesando mensaje: " + e.getMessage());
+        }
     }
-    
-    public void mandarMensaje(String json) {
-        receptor.mandarMensaje(json); 
-    }
-    
+
 }

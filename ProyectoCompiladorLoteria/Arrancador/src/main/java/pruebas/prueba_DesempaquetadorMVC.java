@@ -17,7 +17,7 @@ import java.util.Random;
 import javax.swing.SwingUtilities;
 import listener.EventListener;
 
-public class prueba_DesempaquetadorMVC {
+public class Prueba_DesempaquetadorMVC {
 
     public static void main(String[] args) {
 
