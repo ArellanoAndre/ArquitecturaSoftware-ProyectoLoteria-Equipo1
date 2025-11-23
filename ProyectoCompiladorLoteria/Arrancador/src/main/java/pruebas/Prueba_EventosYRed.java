@@ -25,6 +25,7 @@ public class Prueba_EventosYRed {
 
     /**
      * @param args the command line arguments
+     * SCANNER PARA ENVIAR EL NÚMERO DE CASILLA, SOLO ACEPTA INT
      */
     public static void main(String[] args) throws IOException {
 
@@ -64,16 +65,17 @@ public class Prueba_EventosYRed {
 
         //------- Creación de un evento de seleccionar carta aleatorio----------
         while (true) {
-            System.out.println("Ingresa el tipo de evento:");
-            String tipoEvento = scan.nextLine();
+            System.out.println("Ingresa la casilla seleccionada 1 - 16:");
+            int numeroCasilla = scan.nextInt() - 1;
 
             Evento eRandom = eventBuilder.crearEvento();
 
             eRandom.setTopico("Juego-in");
             eRandom.setEvento("Juego");
             eRandom.setJSON(
-                    "{ \"TipoEvento\": " + tipoEvento + ", \"Jugador\": 2, \"Casilla\": " + 1 + " }"
-            );
+                            "{ \"TipoEvento\": \"CasillaSeleccionadaValida\", "
+                            + "\"Jugador\": 2, \"Casilla\": " + numeroCasilla + " }"
+                    );
             empaquetador.empaquetar(eRandom);
         }
 

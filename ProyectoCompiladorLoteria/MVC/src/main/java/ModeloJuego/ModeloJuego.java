@@ -4,9 +4,12 @@
  */
 package ModeloJuego;
 
+import Empaquetador.Empaquetador;
 import Interfaces.IControlVista;
 import Interfaces.IModeloJuego;
 import ModeloJuego.entidades.Jugador;
+import builder.EventBuilder;
+import interfacesGlobales.IEvento;
 import interfacesGlobales.IManejadorEvento;
 import java.util.List;
 import org.json.JSONObject;
@@ -17,6 +20,8 @@ public class ModeloJuego implements IModeloJuego, IManejadorEvento {
     private Jugador jugadorPrincipal;
     private List<Jugador> jugadoresSecundarios;
     private boolean[] casillasMarcadas = new boolean[16];
+    private EventBuilder eventBuilder;
+    private Empaquetador empaquetador;
 
 
     public ModeloJuego(IControlVista controlVista, Jugador jugadorPrincipal, List<Jugador> jugadoresSecundarios) {
@@ -26,6 +31,15 @@ public class ModeloJuego implements IModeloJuego, IManejadorEvento {
         controlVista.setJugadorPrincipal(this.jugadorPrincipal);
         controlVista.setJugadoresSecundarios(jugadoresSecundarios);
     }
+    
+    public void setEventBuilder(EventBuilder eventBuilder){
+        this.eventBuilder = eventBuilder;
+    }
+    
+    public void setEmpaquetador(Empaquetador empaquetador){
+        this.empaquetador = empaquetador;
+    }
+    
 
     /**
      * Recibe SOLO el JSON payload desde el Desempaquetador AQUI OCUPARIAMOS EL CHAIN OF RESPONSABILITY PARA MANEJAR EVENTO
@@ -61,7 +75,13 @@ public class ModeloJuego implements IModeloJuego, IManejadorEvento {
 
     @Override
     public void EnviarEventoCartaSeleccionada(int pos, int jugador) {
-        // mock vacío
+        IEvento eRandom = eventBuilder.crearEvento();
+        eRandom.setTopico("Juego-in");
+            eRandom.setEvento("Juego");
+            eRandom.setJSON(
+                            "{ \"TipoEvento\": \"CasillaSeleccionadaValida\", \"Jugador\": " + jugador + ", \"Casilla\": " + pos + " }"
+                    );
+            empaquetador.empaquetar(eRandom);
     }
 
     @Override
