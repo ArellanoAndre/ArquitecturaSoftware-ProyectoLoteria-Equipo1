@@ -10,6 +10,7 @@ import ModeloJuego.entidades.Jugador;
 import ModeloJuego.entidades.Tarjeta;
 import ModeloVista.ModeloVista;
 import Presentacion.JPantallaJuego;
+import builder.EventBuilder;
 import colaGenerica.ColaDePrioridad;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,8 @@ public class Prueba_DesempaquetadorMVC {
     public static void main(String[] args) {
 
         SwingUtilities.invokeLater(() -> {
+            
+            EventBuilder eventBuilder = new EventBuilder("127.0.0.1", 5001, 5000);
 
             // ===============================
             // 1. CREACIÓN DE JUGADORES REALES
@@ -75,6 +78,8 @@ public class Prueba_DesempaquetadorMVC {
                     = new Desempaquetador(colaEntrada, modeloJuego);
 
             colaEntrada.addObserverEntrada(desempaquetador);
+            
+            modeloJuego.setEventBuilder(eventBuilder);
 
             // ===============================
             // 5. SIMULAR PRIMER EVENTO INICIAL
