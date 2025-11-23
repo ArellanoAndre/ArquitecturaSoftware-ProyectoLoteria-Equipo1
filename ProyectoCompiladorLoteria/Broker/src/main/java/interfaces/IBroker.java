@@ -5,6 +5,7 @@
 package interfaces;
 
 import Evento.Evento;
+import eventoRed.EventoRed;
 import interfacesGlobales.IManejadorEvento;
 import java.util.List;
 import pruebas.Suscripcion;
@@ -21,7 +22,7 @@ public interface IBroker extends IManejadorEvento{
     
     List<Suscripcion> obtenerSuscriptores(String topico);
     
-    void publicarEvento(Evento eventoNuevo);
+    void publicarEvento(EventoRed eventoNuevo, String topico);
     
     void procesarEvento(Evento evento);
     

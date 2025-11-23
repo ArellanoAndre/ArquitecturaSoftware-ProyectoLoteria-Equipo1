@@ -8,9 +8,8 @@ import Evento.Evento;
 import Helper.HelperJSON;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.TipoAdd;
+import eventoRed.EventoRed;
 import interfaces.IBroker;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,12 +24,13 @@ import responsabilityChainBroker.IFiltro;
  */
 public class LaSecuelaDelBroker implements IBroker{
     
-    private final Map<String, CopyOnWriteArrayList<Suscripcion>> suscripciones = new ConcurrentHashMap<>();
-    private final ColaDePrioridad<Evento> colaSalida = new ColaDePrioridad<>(); 
+    private final Map<String, CopyOnWriteArrayList<Suscripcion>> suscripciones = new ConcurrentHashMap<>(); 
     private final IFiltro filtroInicio = new FiltroSuscripcion(); 
     private final IFiltro filtroGenericoEvento = new FiltroGenericoEvento();
+    private ColaDePrioridad<EventoRed> colaSalida ;
     
-    public LaSecuelaDelBroker(){
+    public LaSecuelaDelBroker(ColaDePrioridad<EventoRed> colaSalida ){
+        this.colaSalida=colaSalida;
         filtroInicio.setBroker(this);
         filtroGenericoEvento.setBroker(this);
         //01 - "Armamos" la cadena de filtros
@@ -73,9 +73,11 @@ public class LaSecuelaDelBroker implements IBroker{
     }
 
     @Override
-    public void publicarEvento(Evento eventoNuevo) {
+    public void publicarEvento(EventoRed eventoNuevo, String topico) {
         try {
             colaSalida.add(eventoNuevo, TipoAdd.Salida);
+            System.out.println("[Broker] Evento encolado para envío");
+
         } catch (InterruptedException ex) {
             System.getLogger(LaSecuelaDelBroker.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
@@ -93,4 +95,5 @@ public class LaSecuelaDelBroker implements IBroker{
     public void manejar(String payloadJSON) {
         procesarEvento(HelperJSON.toEvento(payloadJSON));
     }
+    
 }

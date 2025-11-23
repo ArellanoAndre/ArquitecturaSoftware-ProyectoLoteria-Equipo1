@@ -33,6 +33,7 @@ public class MecanismoRecepcion implements ObserverEntrada {
 
             String json = colaEntrada.take();
             receptor.recibirJSON(json);
+            
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

@@ -4,12 +4,14 @@
  */
 package assembler;
 
-import Server.Servidor;
+import Sender.EventSender;
 import colaGenerica.ColaDePrioridad;
+import eventoRed.EventoRed;
 import interfaces.IBroker;
 import interfacesGlobales.IReceptorJSON;
-import java.io.IOException;
+import mecanismoRecepcion.MecanismoRecepcion;
 import pruebas.LaSecuelaDelBroker;
+import listener.EventListener;
 
 /**
  *
@@ -17,15 +19,14 @@ import pruebas.LaSecuelaDelBroker;
  */
 public class AssemblerBroker {
     
+    private int PUERTO_BROKER;
     private ColaDePrioridad<String> colaEntrada = new ColaDePrioridad<>();
-    private IBroker broker = new LaSecuelaDelBroker();
-    private Servidor servidor;
-
+    private ColaDePrioridad<EventoRed> colaSalida = new ColaDePrioridad<>();
+    private IBroker broker = new LaSecuelaDelBroker(colaSalida);
+    EventListener eventListener = new EventListener(colaEntrada);
+    MecanismoRecepcion mecanismo = new MecanismoRecepcion(colaEntrada, eventListener);
+    EventSender eventSender= new EventSender(colaSalida);
+    
     public AssemblerBroker(IReceptorJSON receptor) {
-        try {
-            servidor = new Servidor(receptor, colaEntrada, broker);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
