@@ -30,8 +30,8 @@ public class Prueba_EventosYRed {
     public static void main(String[] args) throws IOException {
 
         Scanner scan = new Scanner(System.in);
-        int puertoLocal = 5000;
-        int puertoDestino = 5001;
+        int puertoLocal = 9900;
+        int puertoDestino = 9090;
 
         EnsambladorRed ensambladorRed = new EnsambladorRed(puertoLocal);
 

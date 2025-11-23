@@ -3,7 +3,7 @@ package responsabilityChainBroker;
 
 import Evento.Evento;
 import interfaces.IBroker;
-import pruebas.Suscripcion;
+import Broker.Suscripcion;
 
 /**
  *
@@ -11,7 +11,7 @@ import pruebas.Suscripcion;
  */
 public class FiltroSuscripcion implements IFiltro{
     
-    protected IFiltro sucesor; 
+    public IFiltro succesor; 
     IBroker broker;
     
     @Override
@@ -21,7 +21,7 @@ public class FiltroSuscripcion implements IFiltro{
     
     @Override
     public void setNext(IFiltro succesor) {
-        this.sucesor=sucesor; 
+        this.succesor=succesor; 
     }
 
     @Override
@@ -34,7 +34,7 @@ public class FiltroSuscripcion implements IFiltro{
         broker.registrarSuscripcion(topico, suscriptor);
         }
         else{
-            sucesor.procesarEvento(evento);
+            succesor.procesarEvento(evento);
         }
     }
     

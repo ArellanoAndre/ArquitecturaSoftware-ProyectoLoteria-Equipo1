@@ -9,7 +9,6 @@ import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverEntrada;
 import interfacesGlobales.IEvento;
 import interfacesGlobales.IManejadorEvento;
-import org.json.JSONObject;
 
 /**
  *

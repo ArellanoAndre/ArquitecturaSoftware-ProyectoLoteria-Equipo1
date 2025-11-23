@@ -5,9 +5,9 @@
 package responsabilityChainBroker;
 
 import Evento.Evento;
-import eventoRed.EventoRed;
 import interfaces.IBroker;
-import pruebas.Suscripcion;
+import Broker.Suscripcion;
+import EmpaquetadorBroker.DesempaquetadorBroker;
 
 /**
  *
@@ -15,31 +15,25 @@ import pruebas.Suscripcion;
  */
 public class FiltroGenericoEvento implements IFiltro {
     
-    protected IFiltro succesor = new FiltroGenericoEvento();
+    public IFiltro succesor; 
     IBroker broker;
     
     @Override
+    public void setBroker(IBroker broker) {
+        this.broker = broker;
+    }
+    
+    @Override
     public void setNext(IFiltro succesor) {
-        if(succesor==null){
-            setNext(succesor);
-        }
+        this.succesor=succesor; 
     }
 
     @Override
     public void procesarEvento(Evento evento) {
         String topico = evento.getTopico();
+        //hacerlo por medio de un hilo 
         for (Suscripcion suscriptores : broker.obtenerSuscriptores(topico)) {
-            EventoRed eventoRed = new EventoRed(); 
-            eventoRed.setEventoJson(evento.getJSON());
-            eventoRed.setIpDestino(evento.getIpDestino());
-            eventoRed.setPuertoDestino(suscriptores.getPuerto());
-            broker.publicarEvento(eventoRed, topico);
+            
         }
-    
     }
-    @Override
-    public void setBroker(IBroker broker) {
-        this.broker=broker;
-    }
-    
 }
