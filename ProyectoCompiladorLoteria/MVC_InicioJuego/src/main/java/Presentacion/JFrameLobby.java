@@ -1,11 +1,20 @@
 package Presentacion;
 
+import Controlador.ControladorInicio;
+
 public class JFrameLobby extends JFramePadre {
+
+    private ControladorInicio controlador;
 
     /**
      * Creates new form JFrameLobby
      */
     public JFrameLobby() {
+        this(null);
+    }
+
+    public JFrameLobby(ControladorInicio controlador) {
+        this.controlador = controlador;
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
@@ -478,12 +487,20 @@ public class JFrameLobby extends JFramePadre {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        if (controlador != null) {
+            controlador.onSalir();
+        }
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        // TODO add your handling code here:
+        if (controlador != null) {
+            controlador.onIniciarLobby();
+        }
     }//GEN-LAST:event_btnConfirmarActionPerformed
+
+    public void setNivel(String nivel) {
+        labelNivel.setText(nivel);
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

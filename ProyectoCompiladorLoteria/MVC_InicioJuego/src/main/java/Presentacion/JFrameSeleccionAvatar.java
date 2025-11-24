@@ -1,8 +1,18 @@
 package Presentacion;
 
+import Controlador.ControladorInicio;
+import javax.swing.JOptionPane;
+
 public class JFrameSeleccionAvatar extends JFramePadre {
 
+    private ControladorInicio controlador;
+
     public JFrameSeleccionAvatar() {
+        this(null);
+    }
+
+    public JFrameSeleccionAvatar(ControladorInicio controlador) {
+        this.controlador = controlador;
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
@@ -172,10 +182,18 @@ public class JFrameSeleccionAvatar extends JFramePadre {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        JFrameLobby lobby = new JFrameLobby();
-        lobby.setVisible(true);
-        this.dispose();
+        if (controlador != null) {
+            controlador.onNombreAvatarConfirmado(getNombreJugador());
+        }
     }//GEN-LAST:event_btnConfirmarActionPerformed
+
+    public String getNombreJugador() {
+        return jTextField1.getText();
+    }
+
+    public void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Validación", JOptionPane.ERROR_MESSAGE);
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

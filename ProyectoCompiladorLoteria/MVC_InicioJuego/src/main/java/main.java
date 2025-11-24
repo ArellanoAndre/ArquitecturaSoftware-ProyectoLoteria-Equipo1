@@ -1,5 +1,5 @@
 
-import Presentacion.JPantallaMenuPrincipal;
+import Controlador.ControladorInicio;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -12,8 +12,7 @@ import Presentacion.JPantallaMenuPrincipal;
  */
 public class main {
     public static void main(String[] args) {
-        JPantallaMenuPrincipal pantalla = new JPantallaMenuPrincipal();
-        pantalla.setVisible(true);
-        
+        new ControladorInicio();
+
     }
 }
