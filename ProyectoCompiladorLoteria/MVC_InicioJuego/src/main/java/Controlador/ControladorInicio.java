@@ -1,5 +1,6 @@
 package Controlador;
 
+import Interfaces.IControladorInicio;
 import ModeloVista.ModeloVista;
 import Presentacion.JFrameLobby;
 import Presentacion.JFrameSeleccionAvatar;
@@ -7,7 +8,7 @@ import Presentacion.JPantallaConfigurarPartida;
 import java.util.Map;
 import javax.swing.JOptionPane;
 
-public class ControladorInicio {
+public class ControladorInicio implements IControladorInicio {
 
     private final ModeloVista modeloVista;
     private JPantallaConfigurarPartida pantallaConfig;
@@ -20,6 +21,7 @@ public class ControladorInicio {
         pantallaConfig.setVisible(true);
     }
 
+    @Override
     public void onConfigChanged(String dificultad, Integer numeroJugadores, Integer puntuacionMaxima,
             Map<String, Integer> puntuaciones) {
         modeloVista.setDificultad(dificultad);
@@ -29,6 +31,7 @@ public class ControladorInicio {
         actualizarLobby();
     }
 
+    @Override
     public void onConfirmarConfig() {
         String dificultad = pantallaConfig.getDificultadSeleccionada();
         Integer numeroJugadores = pantallaConfig.getNumeroJugadoresSeleccionado();
@@ -64,6 +67,7 @@ public class ControladorInicio {
         pantallaConfig.dispose();
     }
 
+    @Override
     public void onSalir() {
         if (pantallaConfig != null) {
             pantallaConfig.dispose();
@@ -77,6 +81,7 @@ public class ControladorInicio {
         System.exit(0);
     }
 
+    @Override
     public void onNombreAvatarConfirmado(String nombre) {
         if (nombre == null || nombre.trim().isEmpty()) {
             if (seleccionAvatar != null) {
@@ -92,6 +97,7 @@ public class ControladorInicio {
         }
     }
 
+    @Override
     public void onIniciarLobby() {
         JOptionPane.showMessageDialog(lobby, "Partida lista para iniciar. Jugador: " + modeloVista.getNombreJugador(),
                 "Lobby", JOptionPane.INFORMATION_MESSAGE);
