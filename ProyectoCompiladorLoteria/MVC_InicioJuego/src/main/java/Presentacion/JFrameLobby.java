@@ -502,6 +502,25 @@ public class JFrameLobby extends JFramePadre {
         labelNivel.setText(nivel);
     }
 
+    public void setDatosPartida(String dificultad, Integer jugadores, Integer puntuacionMaxima, String nombreJugador) {
+        if (dificultad != null) {
+            setNivel(dificultad);
+            labelNivel11.setText(dificultad);
+        }
+
+        if (jugadores != null) {
+            labelNivel12.setText(jugadores.toString());
+        }
+
+        if (puntuacionMaxima != null) {
+            labelNivel13.setText(puntuacionMaxima.toString());
+        }
+
+        if (nombreJugador != null && !nombreJugador.isBlank()) {
+            labelNivel15.setText(nombreJugador);
+        }
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;

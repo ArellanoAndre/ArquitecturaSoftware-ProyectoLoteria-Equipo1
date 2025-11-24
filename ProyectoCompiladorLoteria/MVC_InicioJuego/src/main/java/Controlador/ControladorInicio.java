@@ -26,9 +26,7 @@ public class ControladorInicio {
         modeloVista.setNumeroJugadores(numeroJugadores);
         modeloVista.setPuntuacionMaxima(puntuacionMaxima);
         modeloVista.setPuntuaciones(puntuaciones);
-        if (lobby != null && dificultad != null) {
-            lobby.setNivel(dificultad);
-        }
+        actualizarLobby();
     }
 
     public void onConfirmarConfig() {
@@ -99,6 +97,13 @@ public class ControladorInicio {
                 "Lobby", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    private void actualizarLobby() {
+        if (lobby != null) {
+            lobby.setDatosPartida(modeloVista.getDificultad(), modeloVista.getNumeroJugadores(),
+                    modeloVista.getPuntuacionMaxima(), modeloVista.getNombreJugador());
+        }
+    }
+
     private void abrirSeleccionAvatar() {
         if (seleccionAvatar == null) {
             seleccionAvatar = new JFrameSeleccionAvatar(this);
@@ -110,7 +115,7 @@ public class ControladorInicio {
         if (lobby == null) {
             lobby = new JFrameLobby(this);
         }
-        lobby.setNivel(modeloVista.getDificultad());
+        actualizarLobby();
         lobby.setVisible(true);
     }
 }
