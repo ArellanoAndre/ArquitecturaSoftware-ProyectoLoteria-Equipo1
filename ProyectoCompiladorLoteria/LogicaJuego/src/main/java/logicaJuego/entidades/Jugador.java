@@ -85,4 +85,16 @@ public class Jugador {
         this.numJugador = numJugador;
     }
 
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setPuntaje(double puntaje) {
+        this.puntaje = puntaje;
+    }
+
+    public void setTarjeta(Tarjeta tarjeta) {
+        this.tarjeta = tarjeta;
+    }
+
 }

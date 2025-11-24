@@ -4,29 +4,35 @@
  */
 package logicaJuego;
 
-
+import interfacesGlobales.ILogicaJuego;
+import interfacesGlobales.IManejadorEvento;
+import interfacesGlobales.IModeloLogica;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.Timer;
 import logicaJuego.entidades.Carta;
 import logicaJuego.entidades.Jugador;
+import logicaJuego.entidades.Tarjeta;
 import modeloJuego.ModeloLogica;
-import modeloJuego.IModeloLogica;
 
 /**
  *
  * @author rodri
  */
-public class LogicaDeJuego {
+public class LogicaDeJuego implements ILogicaJuego, IManejadorEvento{
 
     private List<Carta> mazo;
     private List<Jugador> jugadores;
     private Carta cartaActual;
     private int contador = 0;
     private Timer timer;
-    
-    private IModeloLogica modeloJuego;
+
+    private IModeloLogica modeloLogica;
+
+    public void setModeloLogica(IModeloLogica modelo) {
+        this.modeloLogica = modelo;
+    }
 
     /**
      * Constructor que inicializa el modelo con la vista, el jugador principal y
@@ -38,17 +44,22 @@ public class LogicaDeJuego {
         this.mazo = crearMazo();
         barajear();
         this.jugadores = new ArrayList<>();
-        this.modeloJuego = new ModeloLogica();
+
     }
+    
+    public void setModelo(IModeloLogica modelo) {
+        this.modeloLogica = modelo;
+    }
+
+    
 
     /**
      * Inicia el juego mostrando la primera carta y repitiendo el proceso
      * automáticamente cada cierto tiempo.
      */
+    
     public void iniciarJuego() {
         siguienteCarta();
-
-        // Cada segundo cambia la carta cantada
         timer = new Timer(2500, e -> siguienteCarta());
         timer.start();
     }
@@ -64,6 +75,10 @@ public class LogicaDeJuego {
         if (contador == 54) {
             contador = 0;
         }
+        if (modeloLogica != null) {
+            // Usamos tipos primitivos (int, String) como definimos en la interfaz
+            modeloLogica.notificarCartaCantada(cartaActual.getNumCarta(), cartaActual.getNombreCarta());
+        }
     }
 
     /**
@@ -74,15 +89,15 @@ public class LogicaDeJuego {
      * @param casillaSeleccionada número de casilla seleccionada (1–16).
      */
     public void verificarCarta(int jugadorId, int casillaSeleccionada) {
-        
+
         Jugador jugadorP = null;
-        
+
         for (Jugador jugadorL : jugadores) {
             if (jugadorId == jugadorL.getNumJugador()) {
                 jugadorP = jugadorL;
             }
         }
-        
+
         // Ajustar la posición a índice (de 1-16 a 0-15)
         int indice = casillaSeleccionada - 1;
 
@@ -99,9 +114,9 @@ public class LogicaDeJuego {
                 // Comparar el número de la carta cantada con el valor en la posición seleccionada
                 if (cartaActual != null && casillas[indice] == cartaActual.getNumCarta()) {
                     jugadorP.getTarjeta().marcarCasilla(casillaSeleccionada - 1);
-                    
-                    modeloJuego.EnviarEventoCartaSeleccionada(casillaSeleccionada, jugadorId);
-                    
+
+                    modeloLogica.EnviarEventoCartaSeleccionada(casillaSeleccionada, jugadorId);
+
                     System.out.println("ModeloJuego.si");
                 } else {
                     System.out.println("ModeloJuego.no - No coincide la carta cantada (" + cartaActual.getNumCarta() + ") con la casilla " + casillas[indice]);
@@ -112,6 +127,9 @@ public class LogicaDeJuego {
         } else {
             System.out.println("ModeloJuego.error - Índice inválido: " + indice);
         }
+
+        System.out.println("Comparando: CartaActual=" + cartaActual.getNumCarta()
+                + " vs CasillaJugador=" + casillas[indice]);
     }
 
     /**
@@ -119,6 +137,10 @@ public class LogicaDeJuego {
      */
     public Carta getCartaActual() {
         return cartaActual;
+    }
+
+    public List<Jugador> getJugadores() {
+        return jugadores;
     }
 
     /**
@@ -167,6 +189,47 @@ public class LogicaDeJuego {
     public void barajear() {
         Collections.shuffle(mazo);
     }
+
+    private void verificarGanador(Jugador jugador) {
+
+        boolean victoria = true;
+        for (boolean marcada : jugador.getTarjeta().getMarcadas()) {
+            if (!marcada) {
+                victoria = false;
+            } else {
+                if (victoria) {
+                    timer.stop();
+                    if (modeloLogica != null) {
+                       
+                         
+                        modeloLogica.notificarGanador(jugador.getNombre());
+                    }
+                }
+            }
+        }
+    }
+
+    public void agregarJugador(String nombre) {
+         
+       int[] fijos = {46, 6, 38, 3, 8, 11, 33, 35, 21, 54, 50, 29, 30, 40, 36, 26};
+        Tarjeta tarjeta = new Tarjeta(fijos, "/img/Tableros/Tablero01.png");
+        
+         
+        int nuevoId = jugadores.size() + 1;
+        
+        Jugador nuevo = new Jugador(nombre, tarjeta, nuevoId);
+        jugadores.add(nuevo);
+        
+        System.out.println("[Logica] Jugador agregado: " + nombre + " (ID: " + nuevoId + ")");
+
+    }
+
+    @Override
+    public void manejar(String payloadJSON) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
     
+    
+
 }

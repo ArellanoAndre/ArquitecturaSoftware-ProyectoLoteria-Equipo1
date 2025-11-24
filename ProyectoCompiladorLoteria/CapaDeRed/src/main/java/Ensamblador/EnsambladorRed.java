@@ -33,12 +33,17 @@ public class EnsambladorRed {
     private Sender sender;
     private NetworkListener listener;
     private MecanismoRecepcion recepcion;
+    
 
     // Cola de salida: aquí se encolarán los eventos de red a enviar
     private ColaDePrioridad<EventoRed> colaSalida;
 
     // Cola de entrada: aquí se encolarán los JSON (String) recibidos por red
     private ColaDePrioridad<String> colaEntrada;
+
+    public ColaDePrioridad<String> getColaEntrada() {
+        return colaEntrada;
+    }
 
     /**
      * Constructor para el ensamblador de red.

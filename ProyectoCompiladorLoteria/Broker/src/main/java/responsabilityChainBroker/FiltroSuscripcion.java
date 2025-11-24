@@ -11,8 +11,8 @@ import Broker.Suscripcion;
  */
 public class FiltroSuscripcion implements IFiltro{
     
-    public IFiltro succesor; 
-    IBroker broker;
+    private IFiltro succesor; 
+    private IBroker broker;
     
     @Override
     public void setBroker(IBroker broker) {

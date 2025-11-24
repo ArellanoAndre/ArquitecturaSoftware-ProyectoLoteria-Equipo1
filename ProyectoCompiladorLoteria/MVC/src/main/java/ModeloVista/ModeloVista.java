@@ -1,6 +1,7 @@
 package ModeloVista;
 
 
+import Interfaces.IControlVista;
 import ModeloJuego.ModeloJuego;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +26,17 @@ public class ModeloVista implements IModeloVista {
     
     //NUEVO
     private IModeloJuego modeloJuego;
+    private IControlVista controlVista;
+     
 
     /**
      * Constructor vacío del modeloVista.
      */
     public ModeloVista() {
+    }
+
+    public void setControlVista(IControlVista controlVista) {
+        this.controlVista = controlVista;
     }
 
     /**

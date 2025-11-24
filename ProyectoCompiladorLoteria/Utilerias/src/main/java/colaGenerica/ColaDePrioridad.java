@@ -4,6 +4,8 @@
  */
 package colaGenerica;
 
+import static colaGenerica.TipoAdd.Entrada;
+import static colaGenerica.TipoAdd.Salida;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
