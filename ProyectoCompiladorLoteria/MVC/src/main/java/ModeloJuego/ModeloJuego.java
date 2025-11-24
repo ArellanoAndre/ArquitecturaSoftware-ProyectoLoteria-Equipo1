@@ -74,14 +74,14 @@ public class ModeloJuego implements IModeloJuego, IManejadorEvento {
 
 
     @Override
-    public void EnviarEventoCartaSeleccionada(int pos, int jugador) {
-        IEvento eRandom = eventBuilder.crearEvento();
-        eRandom.setTopico("Juego-in");
-            eRandom.setEvento("Juego");
-            eRandom.setJSON(
-                            "{ \"TipoEvento\": \"CasillaSeleccionadaValida\", \"Jugador\": " + jugador + ", \"Casilla\": " + pos + " }"
+    public void EnviarEventoCartaSeleccionada(int pos) {
+        IEvento evento = eventBuilder.crearEvento();
+        evento.setTopico("Juego-in");
+            evento.setEvento("Juego");
+            evento.setJSON(
+                            "{ \"TipoEvento\": \"CasillaSeleccionadaValida\", \"Jugador\": " + jugadorPrincipal.getNumJugador() + ", \"Casilla\": " + pos + " }"
                     );
-            empaquetador.empaquetar(eRandom);
+            empaquetador.empaquetar(evento);
     }
 
     @Override

@@ -6,7 +6,6 @@ package ModeloVista.entidadesVista;
  */
 public class JugadorVista {
 
-    private int numJugador;         // Número identificador del jugador
     private String nombre;          // Nombre del jugador
     private double puntaje;         // Puntaje actual
     private TarjetaVista tarjeta;   // Tarjeta visual asociada al jugador
@@ -18,9 +17,8 @@ public class JugadorVista {
      *
      * @param nombre Nombre del jugador.
      * @param tarjeta Tarjeta asociada al jugador.
-     * @param numJugador Número identificador del jugador.
      */
-    public JugadorVista(String nombre, TarjetaVista tarjeta, int numJugador) {
+    public JugadorVista(String nombre, TarjetaVista tarjeta) {
         this.nombre = nombre;
         this.tarjeta = tarjeta;
         this.puntaje = 0;
@@ -72,20 +70,6 @@ public class JugadorVista {
     }
 
     /**
-     * @return Número identificador del jugador.
-     */
-    public int getNumJugador() {
-        return numJugador;
-    }
-
-    /**
-     * @param numJugador Nuevo número para el jugador.
-     */
-    public void setNumJugador(int numJugador) {
-        this.numJugador = numJugador;
-    }
-
-    /**
      * @return Ruta de la imagen del avatar del jugador.
      */
     public String getRutaAvatar() {
@@ -97,5 +81,10 @@ public class JugadorVista {
      */
     public void setRutaAvatar(String rutaAvatar) {
         this.rutaAvatar = rutaAvatar;
+    }
+
+    @Override
+    public String toString() {
+        return "JugadorVista{" + "nombre=" + nombre + ", puntaje=" + puntaje + ", tarjeta=" + tarjeta + ", principal=" + principal + ", rutaAvatar=" + rutaAvatar + '}';
     }
 }

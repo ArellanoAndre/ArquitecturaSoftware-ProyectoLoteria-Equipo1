@@ -139,7 +139,7 @@ public class ModeloVista implements IModeloVista {
     public void seleccionarCarta(int pos) {
         // VER SI ES NECESARIO ENVIAR STRING CON NOMBRE CARTA
         // Y SI ES AGREGAR ESA FUNCIONALIDAD
-        modeloJuego.EnviarEventoCartaSeleccionada(pos, jugadorPrincipal.getNumJugador());
+        modeloJuego.EnviarEventoCartaSeleccionada(pos);
     }
 
     /**

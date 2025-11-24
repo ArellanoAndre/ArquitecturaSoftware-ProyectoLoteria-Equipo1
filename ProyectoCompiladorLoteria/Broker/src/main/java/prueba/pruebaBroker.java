@@ -1,3 +1,6 @@
+
+package prueba;
+
 import Broker.Broker;
 import Broker.Suscripcion;
 import assembler.AssemblerBroker;
@@ -41,6 +44,8 @@ public class pruebaBroker {
         broker.eliminarSuscripcion("Memes", s1);
 
         System.out.println("✅ PRUEBA FINALIZADA EXITOSAMENTE ✅");
+        
+        imprimirEstado(broker);
     }
     
 
@@ -48,9 +53,11 @@ public class pruebaBroker {
     private static void imprimirEstado(Broker broker) {
         System.out.println("\n===== ESTADO ACTUAL DEL BROKER =====");
 
-        if (broker.obtenerSuscriptores("Deportes").isEmpty()) {
+        if (broker.obtenerSuscriptores("Loteria").isEmpty()) {
             System.out.println("🚫 No hay tópicos registrados.");
             return;
+        }else{
+            System.out.println("Si hay");
         }
 
         System.out.println("====================================\n");

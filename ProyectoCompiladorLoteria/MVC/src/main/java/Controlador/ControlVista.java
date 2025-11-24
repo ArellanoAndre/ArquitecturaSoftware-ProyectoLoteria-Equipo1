@@ -37,7 +37,8 @@ public class ControlVista implements IControlVista {
     @Override
     public void setJugadorPrincipal(Jugador jugador) {
         TarjetaVista tarjeta = new TarjetaVista(jugador.getTarjeta().getMarcadas(), jugador.getTarjeta().getImg());
-        JugadorVista jugadorP = new JugadorVista(jugador.getNombre(), tarjeta, jugador.getNumJugador());
+        JugadorVista jugadorP = new JugadorVista(jugador.getNombre(), tarjeta);
+        
         jugadorP.setRutaAvatar("/img/Avatares/user" + jugador.getNumJugador() + ".png");
         modeloVista.setJugadorPrincipal(jugadorP);
     }
@@ -63,7 +64,7 @@ public class ControlVista implements IControlVista {
         List<JugadorVista> jugadoresV = new ArrayList<>();
         for (Jugador jugador : jugadores) {
             TarjetaVista tarjeta = new TarjetaVista(jugador.getTarjeta().getMarcadas(), jugador.getTarjeta().getImg());
-            JugadorVista jugadorSV = new JugadorVista(jugador.getNombre(), tarjeta, jugador.getNumJugador());
+            JugadorVista jugadorSV = new JugadorVista(jugador.getNombre(), tarjeta);
             jugadorSV.setRutaAvatar("/img/Avatares/user" + jugador.getNumJugador() + ".png");
             jugadoresV.add(jugadorSV);
         }

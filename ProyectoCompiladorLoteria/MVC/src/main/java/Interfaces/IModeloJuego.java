@@ -14,7 +14,7 @@ public interface IModeloJuego {
     
     void setControlVista (IControlVista controlVista);
     
-    void EnviarEventoCartaSeleccionada(int pos, int idJugador);
+    void EnviarEventoCartaSeleccionada(int pos);
     
     
 }
