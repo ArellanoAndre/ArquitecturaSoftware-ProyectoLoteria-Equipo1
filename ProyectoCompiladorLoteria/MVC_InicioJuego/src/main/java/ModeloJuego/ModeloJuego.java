@@ -11,6 +11,10 @@ public class ModeloJuego implements IModeloJuego, IManejadorEvento {
     private EventBuilder eventBuilder;
     private Empaquetador empaquetador;
 
+    public ModeloJuego() {
+    }
+    
+
     @Override
     public void setEventBuilder(EventBuilder eventBuilder) {
         this.eventBuilder = eventBuilder;
@@ -38,6 +42,22 @@ public class ModeloJuego implements IModeloJuego, IManejadorEvento {
         evento.setEvento("Juego");
         evento.setJSON("{ \"TipoEvento\": \"CasillaSeleccionadaValida\", \"Jugador\": " + jugador
                 + ", \"Casilla\": " + pos + " }");
+        empaquetador.empaquetar(evento);
+    }
+
+    @Override
+    public void enviarEventoInicioPartida(String jugador, String dificultad, Integer numeroJugadores, Integer puntuacionMaxima) {
+        if (eventBuilder == null || empaquetador == null) {
+            System.err.println("[ModeloJuego] Error: faltan dependencias (EventBuilder o Empaquetador).");
+            return;
+        }
+
+        IEvento evento = eventBuilder.crearEvento();
+        evento.setTopico("Juego-in");
+        evento.setEvento("Juego");
+        evento.setJSON("{ \"TipoEvento\": \"InicioPartida\", \"Jugador\": \"" + jugador
+                + "\", \"Dificultad\": \"" + dificultad + "\", \"Jugadores\": " + numeroJugadores
+                + ", \"PuntuacionMaxima\": " + puntuacionMaxima + " }");
         empaquetador.empaquetar(evento);
     }
 }

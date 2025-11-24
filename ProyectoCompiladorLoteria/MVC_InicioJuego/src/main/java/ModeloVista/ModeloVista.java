@@ -1,5 +1,6 @@
 package ModeloVista;
 
+    
 import Interfaces.IModeloVista;
 import java.util.HashMap;
 import java.util.Map;

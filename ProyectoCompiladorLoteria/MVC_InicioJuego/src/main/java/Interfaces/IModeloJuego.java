@@ -12,4 +12,6 @@ public interface IModeloJuego {
     void manejar(String payloadJSON);
 
     void enviarEventoCartaSeleccionada(int pos, int jugador);
+
+    void enviarEventoInicioPartida(String jugador, String dificultad, Integer numeroJugadores, Integer puntuacionMaxima);
 }

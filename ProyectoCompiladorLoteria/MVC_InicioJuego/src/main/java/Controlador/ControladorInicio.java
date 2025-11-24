@@ -1,25 +1,41 @@
 package Controlador;
 
 import Interfaces.IControladorInicio;
+import Interfaces.IModeloJuego;
 import ModeloVista.ModeloVista;
 import Presentacion.JFrameLobby;
 import Presentacion.JFrameSeleccionAvatar;
 import Presentacion.JPantallaConfigurarPartida;
+import Presentacion.JPantallaMenuPrincipal;
 import java.util.Map;
 import javax.swing.JOptionPane;
 
 public class ControladorInicio implements IControladorInicio {
 
     private final ModeloVista modeloVista;
+    private final IModeloJuego modeloJuego;
+    private JPantallaMenuPrincipal inicio;
     private JPantallaConfigurarPartida pantallaConfig;
     private JFrameSeleccionAvatar seleccionAvatar;
     private JFrameLobby lobby;
 
-    public ControladorInicio() {
-        modeloVista = new ModeloVista();
-        pantallaConfig = new JPantallaConfigurarPartida(this);
-        pantallaConfig.setVisible(true);
+    public ControladorInicio(IModeloJuego modeloJuego) {
+        this.modeloJuego = modeloJuego;
+        this.modeloVista = new ModeloVista();
+        
     }
+
+    public ControladorInicio(ModeloVista modeloVista, IModeloJuego modeloJuego) {
+        this.modeloVista = modeloVista;
+        this.modeloJuego = modeloJuego;
+    }
+
+    public ControladorInicio(IModeloJuego modeloJuego, JPantallaMenuPrincipal inicio) {
+        this.modeloJuego = modeloJuego;
+        this.inicio = inicio;
+        this.modeloVista = null;
+    }
+
 
     @Override
     public void onConfigChanged(String dificultad, Integer numeroJugadores, Integer puntuacionMaxima,
@@ -99,6 +115,8 @@ public class ControladorInicio implements IControladorInicio {
 
     @Override
     public void onIniciarLobby() {
+        modeloJuego.enviarEventoInicioPartida(modeloVista.getNombreJugador(), modeloVista.getDificultad(),
+                modeloVista.getNumeroJugadores(), modeloVista.getPuntuacionMaxima());
         JOptionPane.showMessageDialog(lobby, "Partida lista para iniciar. Jugador: " + modeloVista.getNombreJugador(),
                 "Lobby", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -124,4 +142,15 @@ public class ControladorInicio implements IControladorInicio {
         actualizarLobby();
         lobby.setVisible(true);
     }
+
+    public JPantallaConfigurarPartida getPantallaConfig() {
+        return pantallaConfig;
+    }
+
+    public void setPantallaConfig(JPantallaConfigurarPartida pantallaConfig) {
+        this.pantallaConfig = pantallaConfig;
+    }
+    
+    
+    
 }

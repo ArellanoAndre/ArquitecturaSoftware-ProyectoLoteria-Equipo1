@@ -519,6 +519,7 @@ public class JPantallaConfigurarPartida extends JFramePadre {
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         if (controlador != null) {
+            controlador.setPantallaConfig(this);
             controlador.onConfirmarConfig();
         }
     }//GEN-LAST:event_btnConfirmarActionPerformed
