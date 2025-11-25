@@ -35,8 +35,7 @@ public class LogicaDeJuego implements ILogicaJuego, IManejadorEvento{
     }
 
     /**
-     * Constructor que inicializa el modelo con la vista, el jugador principal y
-     * la lista de jugadores secundarios.
+     * Constructor que inicializa el modelo con la vista y los jugadores
      *
      * @param jugadores lista de jugadores secundarios.
      */
@@ -215,7 +214,7 @@ public class LogicaDeJuego implements ILogicaJuego, IManejadorEvento{
         Tarjeta tarjeta = new Tarjeta(fijos, "/img/Tableros/Tablero01.png");
         
          
-        int nuevoId = jugadores.size() + 1;
+        int nuevoId = 1;
         
         Jugador nuevo = new Jugador(nombre, tarjeta, nuevoId);
         jugadores.add(nuevo);
@@ -227,6 +226,10 @@ public class LogicaDeJuego implements ILogicaJuego, IManejadorEvento{
     @Override
     public void manejar(String payloadJSON) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void setJugadores(List<Jugador> jugadores) {
+        this.jugadores = jugadores;
     }
     
     

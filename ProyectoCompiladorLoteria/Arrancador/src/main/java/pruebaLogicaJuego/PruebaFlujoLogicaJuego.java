@@ -34,6 +34,9 @@ public class PruebaFlujoLogicaJuego {
 
         
         int puertoHost = 6000;
+        int puertoDestino = 6001;
+        
+        
         EnsambladorRed ensamblador = new EnsambladorRed(puertoHost);
         ensamblador.ensamblar(json -> {
         });
@@ -57,19 +60,17 @@ public class PruebaFlujoLogicaJuego {
         modelo.setLogicaDeJuego(logica);
         modelo.setEmpaquetador(empaquetador);
         // El Host responderá al puerto 6001 (donde vive el cliente)
-        modelo.setEventBuilder(new EventBuilder("127.0.0.1", 6001, puertoHost));
+        modelo.setEventBuilder(new EventBuilder("127.0.0.1", puertoDestino, puertoHost));
 
         // -----------------------------------------------------------
         // 3. JUGADORES (ESTO ES IMPORTANTE)
         // -----------------------------------------------------------
-        // Creamos al Jugador 1 (Host)
-        logica.agregarJugador("JugadorHost");
 
-        // Creamos al Jugador 2 (Cliente Remoto)
+        // Creamos al Jugador 1 (Cliente Remoto)
         // Necesitamos agregarlo para que cuando llegue el ID=2, la lógica sepa quién es.
-        logica.agregarJugador("JugadorRemoto");
+        logica.agregarJugador("Rodri");
 
-        var jugador2 = logica.getJugadores().get(1); // Índice 1 es el jugador 2
+        var jugador2 = logica.getJugadores().get(0); // Índice 0 es el jugador 1
         System.out.println("[INFO] Esperando jugadas del ID 2. Su tarjeta es: "
                 + java.util.Arrays.toString(jugador2.getTarjeta().getCasillas()));
 

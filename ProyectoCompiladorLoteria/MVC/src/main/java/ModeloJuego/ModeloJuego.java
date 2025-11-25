@@ -7,6 +7,7 @@ package ModeloJuego;
 import Empaquetador.Empaquetador;
 import Interfaces.IControlVista;
 import Interfaces.IModeloJuego;
+import ModeloJuego.entidades.Carta;
 import ModeloJuego.entidades.Jugador;
 import builder.EventBuilder;
 import interfacesGlobales.IEvento;
@@ -65,6 +66,13 @@ public class ModeloJuego implements IModeloJuego, IManejadorEvento {
 
                 // Actualiza la vista
                 controlVista.actualizarTarjetaJugadorPrincipal(casillasMarcadas);
+            }
+            if (tipo.equals("CARTA_CANTADA")) {
+                int numCarta = obj.getInt("IdCarta");
+                String nombreCarta = obj.getString("Nombre");
+                
+                Carta cartaActual = new Carta(numCarta, nombreCarta);
+                controlVista.actualizarCartaCantada(cartaActual);
             }
 
         } catch (Exception e) {

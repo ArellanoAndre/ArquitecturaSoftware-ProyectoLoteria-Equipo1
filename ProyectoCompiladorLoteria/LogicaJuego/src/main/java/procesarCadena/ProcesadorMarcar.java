@@ -22,7 +22,7 @@ public class ProcesadorMarcar implements IProcesadorEvento {
 
     @Override
     public void procesar(String tipoEvento, JSONObject datos, LogicaDeJuego logica) {
-        if ("INTENTO_MARCAR".equals(tipoEvento)) {
+        if ("CasillaSeleccionadaValida".equals(tipoEvento)) {
             int idJugador = datos.getInt("Jugador");
             int casilla = datos.getInt("Casilla");
             System.out.println("[Chain] Jugador " + idJugador + " intenta marcar casilla " + casilla);

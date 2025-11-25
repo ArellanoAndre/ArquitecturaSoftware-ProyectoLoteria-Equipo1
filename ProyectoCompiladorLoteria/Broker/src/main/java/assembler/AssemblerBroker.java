@@ -21,7 +21,6 @@ import listener.EventListener;
  */
 public class AssemblerBroker {
     
-    private int PUERTO_BROKER;
     private ColaDePrioridad<String> colaEntrada = new ColaDePrioridad<>();
     private ColaDePrioridad<EventoRed> colaSalida = new ColaDePrioridad<>();
     private Broker broker;
@@ -55,6 +54,6 @@ public class AssemblerBroker {
             }
         }).start();
 
-        System.out.println("[AssemblerBroker] Broker iniciado");
+        System.out.println("[AssemblerBroker] Broker ensamblado");
     }
 }

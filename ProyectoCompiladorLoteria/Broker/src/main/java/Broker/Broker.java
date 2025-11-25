@@ -26,7 +26,7 @@ import responsabilityChainBroker.IFiltro;
 public class Broker implements IBroker, IManejadorEvento{
     
     private final Map<String, CopyOnWriteArrayList<Suscripcion>> suscripciones = new ConcurrentHashMap<>(); 
-    private final IFiltro filtroInicio = new FiltroSuscripcion(); 
+    private final IFiltro filtroSuscripcion = new FiltroSuscripcion(); 
     private final IFiltro filtroGenericoEvento = new FiltroGenericoEvento();
     private final IFiltro filtroDesuscripcion = new FiltroDesuscripcion();
     private DesempaquetadorBroker desempacador;
@@ -39,12 +39,12 @@ public class Broker implements IBroker, IManejadorEvento{
         this.desempacador=desempacador;
         
         //01 - Asigamos los filtros al broker
-        filtroInicio.setBroker(this);
+        filtroSuscripcion.setBroker(this);
         filtroGenericoEvento.setBroker(this);
         filtroDesuscripcion.setBroker(this);
         
         //02 - "Armamos" la cadena de filtros
-        filtroInicio.setNext(filtroDesuscripcion);
+        filtroSuscripcion.setNext(filtroDesuscripcion);
         filtroDesuscripcion.setNext(filtroGenericoEvento);
         filtroGenericoEvento.setNext(null);
   
@@ -88,7 +88,7 @@ public class Broker implements IBroker, IManejadorEvento{
     @Override
     public void procesarEvento(Evento evento) {
         //02 - Intentamos usar el filtro de mayor prioridad (Suscripcion ig)
-        filtroInicio.procesarEvento(evento);
+        filtroSuscripcion.procesarEvento(evento);
         
     }
 

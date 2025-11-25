@@ -20,8 +20,8 @@ public class pruebaBroker {
         Broker broker = assembler.getBroker();
 
         // 3️⃣ Crear suscriptores de prueba
-        Suscripcion s1 = new Suscripcion("localhost", 9001);
-        Suscripcion s2 = new Suscripcion("localhost", 9002);
+        Suscripcion s1 = new Suscripcion("localhost", 6001);
+        Suscripcion s2 = new Suscripcion("localhost", 6002);
         Suscripcion s3 = new Suscripcion("localhost", 9003);
         Suscripcion s4 = new Suscripcion("localhost", 9004);
 

@@ -32,8 +32,8 @@ public class Prueba_MVC {
             //Ya está lista para que la prueben con Prueva_EventosYRed, la 1 no la 2
             //======================================================================
             String ipDestino = "127.0.0.1";
-            int puertoLocal = 5001;
-            int puertoDestino = 5000;
+            int puertoLocal = 6001;
+            int puertoDestino = 6000;
 
             // ===============================
             // 1. CREACIÓN DE JUGADORES REALES
