@@ -10,7 +10,6 @@ import EmpaquetadorBroker.EmpaquetadorBroker;
 import Sender.EventSender;
 import colaGenerica.ColaDePrioridad;
 import eventoRed.EventoRed;
-import interfaces.IBroker;
 import mecanismoRecepcion.MecanismoRecepcion;
 import ProcesadorEventosBroker.Interfaces.IEmpaquetadorBroker;
 import listener.EventListener;
