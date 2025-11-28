@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package interfacesGlobales;
+package Interfaces.Red;
 
 /**
  *
  * @author rodri
  */
-public interface IReceptorEventos {
+public interface IReceptorJSON {
     
-    public void recibirEvento(IEvento ievento);
+    public void recibirJSON(String eventojson);
 }

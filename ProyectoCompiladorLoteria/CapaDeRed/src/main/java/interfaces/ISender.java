@@ -4,7 +4,8 @@
  */
 package interfaces;
 
-import eventoRed.EventoRed;
+import Evento.EventoRed;
+
 
 /**
  * @author Arell

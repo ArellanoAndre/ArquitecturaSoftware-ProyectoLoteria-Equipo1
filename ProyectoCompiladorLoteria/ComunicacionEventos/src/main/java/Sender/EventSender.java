@@ -3,8 +3,8 @@ package Sender;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverSalida;
 import dispatcher.DispatcherFactory;
-import eventoRed.EventoRed;
-import interfacesGlobales.IDispatcher;
+import Evento.EventoRed;
+import Interfaces.Red.IDispatcher;
 
 /**
  * EventSender: Toma mensajes de una cola de salida y los envia al componente de
@@ -20,8 +20,8 @@ public class EventSender implements ObserverSalida {
      * @param colaSalida Cola de donde se tomaran los mensajes.
      */
     public EventSender(ColaDePrioridad<EventoRed> colaSalida) {
-        this.colaSalida = colaSalida;
-        this.dispatcher = DispatcherFactory.createDispatcherDefault();
+//        this.colaSalida = colaSalida;
+//        this.dispatcher = DispatcherFactory.createDispatcherDefault();
     }
 
     /**

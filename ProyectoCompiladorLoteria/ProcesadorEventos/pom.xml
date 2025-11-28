@@ -27,6 +27,11 @@
             <version>20210307</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>itson</groupId>
+            <artifactId>IEventClient</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

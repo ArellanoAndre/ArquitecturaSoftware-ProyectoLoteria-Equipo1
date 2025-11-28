@@ -1,6 +1,8 @@
-package interfacesGlobales;
+package Interfaces.Red;
 
-import eventoRed.EventoRed;
+import Evento.EventoRed;
+
+
 
 public interface IDispatcher {
     void dispatch(EventoRed eventoRed);

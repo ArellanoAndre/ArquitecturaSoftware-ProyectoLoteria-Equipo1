@@ -4,12 +4,13 @@
  */
 package Ensamblador;
 
+import Evento.EventoRed;
+import Interfaces.Red.IReceptorJSON;
 import Send.Sender;
 import colaGenerica.ColaDePrioridad;
 import dispatcher.Dispatcher;
 import dispatcher.DispatcherFactory;
-import eventoRed.EventoRed;
-import interfacesGlobales.IReceptorJSON;
+
 import mecanismoRecepcion.MecanismoRecepcion;
 import networkListener.NetworkListener;
 

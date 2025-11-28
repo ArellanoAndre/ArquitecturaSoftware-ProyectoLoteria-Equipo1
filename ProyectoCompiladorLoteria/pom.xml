@@ -16,6 +16,8 @@
         <module>ProcesadorEventos</module>
         <module>MVC_InicioJuego</module>
         <module>Arrancador</module>
+        <module>IEventClient</module>
+        <module>IRed</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

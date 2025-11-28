@@ -1,8 +1,8 @@
 package modeloJuego;
 
-import builder.EventBuilder;
+import Evento.EventBuilder;
+import Interfaces.IEvento;
 import interfacesGlobales.IEmpaquetador;
-import interfacesGlobales.IEvento;
 import interfacesGlobales.IManejadorEvento;
 import interfacesGlobales.IModeloLogica;
 import logicaJuego.LogicaDeJuego;

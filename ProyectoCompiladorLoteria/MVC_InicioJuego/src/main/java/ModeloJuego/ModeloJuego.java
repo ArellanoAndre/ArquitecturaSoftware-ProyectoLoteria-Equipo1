@@ -2,8 +2,8 @@ package ModeloJuego;
 
 import Empaquetador.Empaquetador;
 import Interfaces.IModeloJuego;
-import builder.EventBuilder;
-import interfacesGlobales.IEvento;
+import Evento.EventBuilder;
+import Interfaces.IEvento;
 import interfacesGlobales.IManejadorEvento;
 
 public class ModeloJuego implements IModeloJuego, IManejadorEvento {

@@ -4,7 +4,7 @@
  */
 package Evento;
 
-import interfacesGlobales.IEvento;
+import Interfaces.IEvento;
 
 /**
  *

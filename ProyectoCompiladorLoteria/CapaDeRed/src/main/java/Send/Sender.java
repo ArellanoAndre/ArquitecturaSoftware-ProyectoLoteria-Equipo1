@@ -4,9 +4,9 @@
  */
 package Send;
 
+import Evento.EventoRed;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverSalida;
-import eventoRed.EventoRed;
 import interfaces.ISender;
 
 import java.io.BufferedWriter;
@@ -85,4 +85,5 @@ public class Sender implements ISender, ObserverSalida {
             System.err.println("[Sender] Hilo de envío interrumpido.");
         }
     }
+
 }

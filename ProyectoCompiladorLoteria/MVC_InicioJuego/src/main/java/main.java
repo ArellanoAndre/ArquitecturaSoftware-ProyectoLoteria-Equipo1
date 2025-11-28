@@ -5,9 +5,9 @@ import ModeloJuego.ModeloJuego;
 import ModeloVista.ModeloVista;
 import Presentacion.JPantallaMenuPrincipal;
 import Sender.EventSender;
-import builder.EventBuilder;
+import Evento.EventBuilder;
 import colaGenerica.ColaDePrioridad;
-import eventoRed.EventoRed;
+import Evento.EventoRed;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license

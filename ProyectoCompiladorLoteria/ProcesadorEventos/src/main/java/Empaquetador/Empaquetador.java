@@ -3,15 +3,15 @@ package Empaquetador;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.TipoAdd;
 import interfacesGlobales.IEmpaquetador;
-import interfacesGlobales.IEvento;
 import Helper.HelperJSON;
-import eventoRed.EventoRed;
+import Evento.EventoRed;
+import Interfaces.IEvento;
 
 /**
  * Clase encargada de convertir (empaquetar) objetos que implementan IEvento a
  * formato JSON utilizando HelperJSON, y enviarlos a la cola de salida.
  */
-public class Empaquetador implements IEmpaquetador {
+public class Empaquetador  {
 
     /**
      * Cola donde se publicarán los mensajes EventoRed
@@ -31,7 +31,6 @@ public class Empaquetador implements IEmpaquetador {
      *
      * @param evento Objeto que implementa IEvento y será transformado a JSON.
      */
-    @Override
     public void empaquetar(IEvento evento) {
         try {
 

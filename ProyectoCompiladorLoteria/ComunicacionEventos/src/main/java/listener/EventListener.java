@@ -6,7 +6,7 @@ package listener;
 
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.TipoAdd;
-import interfacesGlobales.IReceptorJSON;
+import Interfaces.Red.IReceptorJSON;
 
 /**
  *
