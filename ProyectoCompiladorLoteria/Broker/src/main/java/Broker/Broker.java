@@ -6,9 +6,9 @@ package Broker;
 
 import EmpaquetadorBroker.DesempaquetadorBroker;
 import Evento.Evento;
+import Interfaces.IEvento;
 import ProcesadorEventosBroker.Interfaces.IEmpaquetadorBroker;
 import interfaces.IBroker;
-import interfacesGlobales.IEvento;
 import interfacesGlobales.IManejadorEvento;
 import java.util.List;
 import java.util.Map;
@@ -92,7 +92,6 @@ public class Broker implements IBroker, IManejadorEvento{
         
     }
 
-    @Override
     public void publicarEvento(IEvento eventoNuevo, String topico) {
         try {
             for (Suscripcion suscriptor : obtenerSuscriptores(topico)) {
@@ -108,5 +107,7 @@ public class Broker implements IBroker, IManejadorEvento{
        IEvento evento = desempacador.traducirJSON(payloadJSON);
        procesarEvento((Evento) evento);
     }
+
+
     
 }

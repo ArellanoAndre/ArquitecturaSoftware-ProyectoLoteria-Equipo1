@@ -5,7 +5,7 @@
 package ProcesadorEventosBroker.Interfaces;
 
 import Broker.Suscripcion;
-import interfacesGlobales.IEvento;
+import Interfaces.IEvento;
 
 /**
  *

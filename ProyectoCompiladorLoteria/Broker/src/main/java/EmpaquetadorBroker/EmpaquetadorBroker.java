@@ -4,12 +4,12 @@
  */
 package EmpaquetadorBroker;
 
-import eventoRed.EventoRed;
 import Broker.Suscripcion;
+import Evento.EventoRed;
+import Interfaces.IEvento;
 import ProcesadorEventosBroker.Interfaces.IEmpaquetadorBroker;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.TipoAdd;
-import interfacesGlobales.IEvento;
 
 /**
  *

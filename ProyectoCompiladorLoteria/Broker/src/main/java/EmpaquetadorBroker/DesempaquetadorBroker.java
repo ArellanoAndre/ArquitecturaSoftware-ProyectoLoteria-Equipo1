@@ -5,13 +5,11 @@
 package EmpaquetadorBroker;
 
 import Broker.Broker;
-import Evento.Evento;
 import Helper.HelperJSON;
+import Interfaces.IEvento;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverEntrada;
-import interfacesGlobales.IEvento;
 import interfacesGlobales.IManejadorEvento;
-import interfacesGlobales.IReceptorJSON;
 
 /**
  *

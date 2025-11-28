@@ -8,13 +8,6 @@
     </parent>
     <artifactId>IEventClient</artifactId>
     <packaging>jar</packaging>
-    <dependencies>
-        <dependency>
-            <groupId>com.mycompany</groupId>
-            <artifactId>Eventos</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
         <exec.mainClass>itson.ieventclient.IEventClient</exec.mainClass>

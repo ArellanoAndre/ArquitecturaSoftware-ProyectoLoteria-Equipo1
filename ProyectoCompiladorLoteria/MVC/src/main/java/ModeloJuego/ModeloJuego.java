@@ -5,12 +5,13 @@
 package ModeloJuego;
 
 import Empaquetador.Empaquetador;
+import Evento.EventBuilder;
 import Interfaces.IControlVista;
+import Interfaces.IEvento;
 import Interfaces.IModeloJuego;
 import ModeloJuego.entidades.Jugador;
-import builder.EventBuilder;
-import interfacesGlobales.IEvento;
 import interfacesGlobales.IManejadorEvento;
+
 import java.util.List;
 import org.json.JSONObject;
 
@@ -86,6 +87,8 @@ public class ModeloJuego implements IModeloJuego, IManejadorEvento {
 
     @Override
     public void setControlVista(IControlVista controlVista) {
-        this.controlVista = controlVista;
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+ 
 }

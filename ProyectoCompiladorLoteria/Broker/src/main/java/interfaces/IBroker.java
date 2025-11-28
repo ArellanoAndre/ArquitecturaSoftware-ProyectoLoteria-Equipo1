@@ -7,7 +7,7 @@ package interfaces;
 import Evento.Evento;
 import java.util.List;
 import Broker.Suscripcion;
-import interfacesGlobales.IEvento;
+import Interfaces.IEvento;
 
 /**
  *
