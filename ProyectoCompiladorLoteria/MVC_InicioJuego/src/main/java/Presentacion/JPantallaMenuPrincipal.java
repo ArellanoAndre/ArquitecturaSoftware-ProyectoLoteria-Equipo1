@@ -1,14 +1,17 @@
 package Presentacion;
 
-public class JPantallaMenuPrincipal extends JFramePadre {
+import Controlador.ControladorInicio;
 
+public class JPantallaMenuPrincipal extends JFramePadre {
+ private ControladorInicio controlador;
     /**
      * Creates new form JPantallaMenuPrincipal
      */
-    public JPantallaMenuPrincipal() {
+    public JPantallaMenuPrincipal(ControladorInicio controlador) {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
+        this.controlador = controlador;
     }
 
     /**
@@ -134,9 +137,11 @@ public class JPantallaMenuPrincipal extends JFramePadre {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnJugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJugarActionPerformed
-        JPantallaConfigurarPartida pantallaConfig = new JPantallaConfigurarPartida();
+        if (controlador != null) {
+        JPantallaConfigurarPartida pantallaConfig = new JPantallaConfigurarPartida(controlador);
         pantallaConfig.setVisible(true);
         this.dispose();
+        }
     }//GEN-LAST:event_btnJugarActionPerformed
 
 

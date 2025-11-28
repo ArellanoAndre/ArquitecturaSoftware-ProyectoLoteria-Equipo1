@@ -1,14 +1,31 @@
 package Presentacion;
 
+import Controlador.ControladorInicio;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
 public class JPantallaConfigurarPartida extends JFramePadre {
+
+    private ControladorInicio controlador;
+    private final ButtonGroup grupoDificultad = new ButtonGroup();
+    private final ButtonGroup grupoJugadores = new ButtonGroup();
 
     /**
      * Creates new form JPantallaConfigurarPartida
      */
     public JPantallaConfigurarPartida() {
+        this(null);
+    }
+
+    public JPantallaConfigurarPartida(ControladorInicio controlador) {
+        this.controlador = controlador;
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
+        configurarGrupos();
     }
 
     /**
@@ -97,6 +114,11 @@ public class JPantallaConfigurarPartida extends JFramePadre {
         jRadioButton1.setBackground(new java.awt.Color(255, 232, 195));
         jRadioButton1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jRadioButton1.setText("Básico (10s)");
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
+            }
+        });
 
         jRadioButton2.setBackground(new java.awt.Color(255, 232, 195));
         jRadioButton2.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
@@ -496,34 +518,121 @@ public class JPantallaConfigurarPartida extends JFramePadre {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        JFrameSeleccionAvatar seleccionAvatar = new JFrameSeleccionAvatar();
-        seleccionAvatar.setVisible(true);
-        this.dispose();
+        if (controlador != null) {
+            controlador.setPantallaConfig(this);
+            controlador.onConfirmarConfig();
+        }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        // TODO add your handling code here:
+        if (controlador != null) {
+            controlador.onSalir();
+        }
     }//GEN-LAST:event_btnSalirActionPerformed
 
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        notificarCambio();
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
+
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-        // TODO add your handling code here:
+        notificarCambio();
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
-        // TODO add your handling code here:
+        notificarCambio();
     }//GEN-LAST:event_jRadioButton3ActionPerformed
 
     private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
-        // TODO add your handling code here:
+        notificarCambio();
     }//GEN-LAST:event_jRadioButton4ActionPerformed
 
     private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
-        // TODO add your handling code here:
+        notificarCambio();
     }//GEN-LAST:event_jRadioButton5ActionPerformed
 
     private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton6ActionPerformed
-        // TODO add your handling code here:
+        notificarCambio();
     }//GEN-LAST:event_jRadioButton6ActionPerformed
+
+    private void configurarGrupos() {
+        grupoDificultad.add(jRadioButton1);
+        grupoDificultad.add(jRadioButton2);
+        grupoDificultad.add(jRadioButton3);
+
+        grupoJugadores.add(jRadioButton4);
+        grupoJugadores.add(jRadioButton5);
+        grupoJugadores.add(jRadioButton6);
+    }
+
+    private void notificarCambio() {
+        if (controlador != null) {
+            controlador.onConfigChanged(getDificultadSeleccionada(), getNumeroJugadoresSeleccionado(),
+                    getPuntuacionMaxima(), getPuntuaciones());
+        }
+    }
+
+    public String getDificultadSeleccionada() {
+        if (jRadioButton1.isSelected()) {
+            return "BÁSICO";
+        }
+        if (jRadioButton2.isSelected()) {
+            return "INTERMEDIO";
+        }
+        if (jRadioButton3.isSelected()) {
+            return "AVANZADO";
+        }
+        return null;
+    }
+
+    public Integer getNumeroJugadoresSeleccionado() {
+        if (jRadioButton4.isSelected()) {
+            return 2;
+        }
+        if (jRadioButton5.isSelected()) {
+            return 3;
+        }
+        if (jRadioButton6.isSelected()) {
+            return 4;
+        }
+        return null;
+    }
+
+    public Integer getPuntuacionMaxima() {
+        return parsePositiveInteger(jTextField1);
+    }
+
+    public Map<String, Integer> getPuntuaciones() {
+        Map<String, Integer> puntuaciones = new HashMap<>();
+        Integer chorro = parsePositiveInteger(jTextField2);
+        Integer cruz = parsePositiveInteger(jTextField3);
+        Integer centro = parsePositiveInteger(jTextField4);
+        Integer cuatroEsquinas = parsePositiveInteger(jTextField5);
+        Integer llena = parsePositiveInteger(jTextField6);
+
+        if (chorro == null || cruz == null || centro == null || cuatroEsquinas == null || llena == null) {
+            return null;
+        }
+
+        puntuaciones.put("Chorro", chorro);
+        puntuaciones.put("Cruz", cruz);
+        puntuaciones.put("Centro", centro);
+        puntuaciones.put("Cuatro Esquinas", cuatroEsquinas);
+        puntuaciones.put("Llena", llena);
+        return puntuaciones;
+    }
+
+    public void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Validación", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private Integer parsePositiveInteger(JTextField textField) {
+        try {
+            int valor = Integer.parseInt(textField.getText().trim());
+            return valor > 0 ? valor : null;
+        } catch (NumberFormatException ex) {
+            return null;
+        }
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
