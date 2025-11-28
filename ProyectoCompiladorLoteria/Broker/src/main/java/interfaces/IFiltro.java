@@ -2,17 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package ProcesadorEventosBroker.Interfaces;
+package interfaces;
 
-import Broker.Suscripcion;
-import interfacesGlobales.IEvento;
+import Evento.Evento;
 
 /**
  *
  * @author abrilislas
  */
-public interface IEmpaquetadorBroker {
+public abstract interface IFiltro {
     
-    void empaquetarEvento(IEvento evento, Suscripcion suscriptor) throws InterruptedException;
-    
+    void setNext(IFiltro succesor);
+    void procesarEvento(Evento evento);
 }

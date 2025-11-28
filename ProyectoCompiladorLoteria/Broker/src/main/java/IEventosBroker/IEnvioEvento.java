@@ -2,14 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package interfacesGlobales;
+package IEventosBroker;
+
+import Evento.Evento;
+import interfacesGlobales.IEmpaquetador;
 
 /**
  *
- * @author isaac
+ * @author abrilislas
  */
-public interface IDesempaquetador {
+public interface IEnvioEvento extends IEmpaquetador {
     
-    public void Desempaquetar( );
+    public void empaquetar(Evento evento);
     
 }
