@@ -2,14 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package Interfaces;
-
-
+package InterfacesEventClient;
 
 /**
  *
- * @author rodri
+ * @author isaac
  */
-public interface IReceptorEventos {
+public interface IReceptorEvento {
     
+    public void manejar(IEvento evento);
 }
+

@@ -14,7 +14,7 @@ import interfacesRed.IDispatcher;
  */
 public class EventSender implements ObserverSalida {
 
-    private IDispatcher dispatcher;
+    private IDispatcher iDispatcher;
     private ColaDePrioridad<EventoRed> colaSalida;
 
     /**
@@ -22,7 +22,7 @@ public class EventSender implements ObserverSalida {
      */
     public EventSender(ColaDePrioridad<EventoRed> colaSalida) {
 //        this.colaSalida = colaSalida;
-//        this.dispatcher = DispatcherFactory.createDispatcherDefault();
+//        this.iDispatcher = DispatcherFactory.createDispatcherDefault();
     }
 
     /**
@@ -49,16 +49,16 @@ public class EventSender implements ObserverSalida {
      * Delega al metodo dispatch del Dispatcher, el cual se encarga de enviarlo
      * por red.
      *
-     * @param eventoRed EventoRed ya empaquetado para mandar a dispatcher
+     * @param eventoRed EventoRed ya empaquetado para mandar a iDispatcher
      */
     public void send(EventoRed eventoRed) {
-        if (dispatcher == null) {
+        if (iDispatcher == null) {
             System.err.println("[EventSender] Dispatcher no inicializado. Evento no enviado.");
             return;
         }
 
         try {
-            dispatcher.dispatch(eventoRed);
+            iDispatcher.dispatch(eventoRed);
             System.out.println("[EventSender] Mensaje enviado al Dispatcher.");
         } catch (Exception e) {
             System.err.println("[EventSender] Error al enviar JSON: " + e.getMessage());
@@ -66,11 +66,11 @@ public class EventSender implements ObserverSalida {
     }
 
     /**
-     * @param dispatcher Componente encargado de enviar mensajes a la capa de
+     * @param iDispatcher Componente encargado de enviar mensajes a la capa de
      * red.
      */
-    public void setDispatcher(IDispatcher dispatcher) {
-        this.dispatcher = dispatcher;
+    public void setiDispatcher(IDispatcher iDispatcher) {
+        this.iDispatcher = iDispatcher;
     }
 
 }

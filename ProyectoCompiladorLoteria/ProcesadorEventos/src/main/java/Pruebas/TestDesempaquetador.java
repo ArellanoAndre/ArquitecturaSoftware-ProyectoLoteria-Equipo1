@@ -4,13 +4,13 @@
 
 package Pruebas;
 
-import ConstructorEventos.EventBuilder;
+import eventBuilder.EventBuilder;
 import Desempaquetador.Desempaquetador;
 import Helper.HelperJSON;
+import InterfacesEventClient.IEvento;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.TipoAdd;
-import interfacesGlobales.IEvento;
-import interfacesGlobales.IManejadorEvento;
+import InterfacesEventClient.IReceptorEvento;
 
 /**
  *
@@ -23,9 +23,12 @@ public static void main(String[] args) {
 
         // 1. Cola de entrada
         ColaDePrioridad<String> colaEntrada = new ColaDePrioridad<>();
+        String ipDestino = "127.0.0.1";
+        int puertoDestino = 5001;
+        int puertoLocal = 5000;
 
         // 2. Componente superior mock (recibe IEvento completo)
-        IManejadorEvento<IEvento> modeloMock = new IManejadorEvento<IEvento>() {
+        IReceptorEvento modeloMock = new IReceptorEvento() {
             @Override
             public void manejar(IEvento evento) {
                 System.out.println("[ModeloMock] Evento recibido:");
@@ -38,7 +41,7 @@ public static void main(String[] args) {
         Desempaquetador desempaquetador = new Desempaquetador(colaEntrada, modeloMock);
 
         // 4. Crear evento *USANDO EventBuilder*
-        EventBuilder builder = new EventBuilder("127.0.0.1", 9000, 9001);
+        EventBuilder builder = new EventBuilder(ipDestino, puertoDestino, puertoLocal);
         
 
         IEvento evento = builder.crearEvento();

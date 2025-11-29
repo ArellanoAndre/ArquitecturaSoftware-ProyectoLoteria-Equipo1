@@ -3,7 +3,7 @@ package Helper;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import Evento.Evento;
-import interfacesGlobales.IEvento;
+import InterfacesEventClient.IEvento;
 
 public class HelperJSON {
     private static final Gson gson = new Gson();

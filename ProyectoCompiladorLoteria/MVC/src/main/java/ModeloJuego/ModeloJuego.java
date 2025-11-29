@@ -4,18 +4,18 @@
  */
 package ModeloJuego;
 
-import ConstructorEventos.EventBuilder;
+import eventBuilder.EventBuilder;
 import Empaquetador.Empaquetador;
 import Interfaces.IControlVista;
 import Interfaces.IModeloJuego;
+import InterfacesEventClient.IEvento;
 import ModeloJuego.entidades.Jugador;
-import interfacesGlobales.IEvento;
-import interfacesGlobales.IManejadorEvento;
 
 import java.util.List;
 import org.json.JSONObject;
+import InterfacesEventClient.IReceptorEvento;
 
-public class ModeloJuego implements IModeloJuego, IManejadorEvento<IEvento>  {
+public class ModeloJuego implements IModeloJuego, IReceptorEvento {
 
     private IControlVista controlVista;
     private Jugador jugadorPrincipal;
@@ -107,7 +107,7 @@ public void manejar(IEvento evento) {
             eRandom.setJSON(
                             "{ \"TipoEvento\": \"CasillaSeleccionadaValida\", \"Jugador\": " + jugador + ", \"Casilla\": " + pos + " }"
                     );
-            empaquetador.empaquetar(eRandom);
+            empaquetador.enviarEvento(eRandom);
     }
 
     @Override

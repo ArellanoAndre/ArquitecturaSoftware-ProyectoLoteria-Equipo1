@@ -5,8 +5,9 @@
 package logicaJuego;
 
 import Evento.Evento;
+import InterfacesEventClient.IEvento;
+import InterfacesEventClient.IReceptorEvento;
 import interfacesGlobales.ILogicaJuego;
-import interfacesGlobales.IManejadorEvento;
 import interfacesGlobales.IModeloLogica;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +21,7 @@ import logicaJuego.entidades.Tarjeta;
  *
  * @author rodri
  */
-public class LogicaDeJuego implements ILogicaJuego, IManejadorEvento<Evento>{
+public class LogicaDeJuego implements ILogicaJuego, IReceptorEvento{
 
     private List<Carta> mazo;
     private List<Jugador> jugadores;
@@ -225,7 +226,7 @@ public class LogicaDeJuego implements ILogicaJuego, IManejadorEvento<Evento>{
     }
 
     @Override
-    public void manejar(Evento evento) {
+    public void manejar(IEvento evento) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

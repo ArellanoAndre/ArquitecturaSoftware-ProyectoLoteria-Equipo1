@@ -5,9 +5,10 @@
 package filtros;
 
 import Evento.Evento;
-import IEventosBroker.IEnvioEvento;
+import InterfacesEventClient.IEnvioEvento;
+import InterfacesEventClient.IEvento;
+import InterfacesEventClient.IReceptorEvento;
 import interfaces.IFiltro;
-import interfacesGlobales.IEvento;
 
 import suscripciones.Suscripcion;
 import suscripciones.gestorDeSuscripciones;
@@ -16,7 +17,7 @@ import suscripciones.gestorDeSuscripciones;
  *
  * @author abrilislas
  */
-public abstract class FiltroGenericoEvento implements IFiltro, IEnvioEvento {
+public abstract class FiltroGenericoEvento implements IFiltro, IEnvioEvento{
     
     protected IFiltro succesor; 
     gestorDeSuscripciones gestorSuscripciones;
@@ -30,12 +31,18 @@ public abstract class FiltroGenericoEvento implements IFiltro, IEnvioEvento {
     public void procesarEvento(Evento evento) {
         String topico = evento.getTopico();
         for (Suscripcion suscriptores : gestorSuscripciones.obtenerSuscriptores(topico)) {
-            empaquetar(evento);
         }
     }
 
     @Override
-    public void empaquetar(IEvento evento) {
+    public IEvento crearEvento() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    @Override
+    public void enviarEvento(IEvento evento) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    
 }

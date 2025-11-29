@@ -3,25 +3,38 @@ package Empaquetador;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.TipoAdd;
 import Helper.HelperJSON;
+import InterfacesEventClient.IEnvioEvento;
+import InterfacesEventClient.IEvento;
 import RedEventos.EventoRed;
-import interfacesGlobales.IEvento;
+import eventBuilder.EventBuilder;
 
 /**
  * Clase encargada de convertir (empaquetar) objetos que implementan IEvento a
  * formato JSON utilizando HelperJSON, y enviarlos a la cola de salida.
  */
-public class Empaquetador  {
+public class Empaquetador implements IEnvioEvento {
 
     /**
      * Cola donde se publicarán los mensajes EventoRed
      */
     private ColaDePrioridad<EventoRed> colaSalida = null;
+    private EventBuilder builder;
 
     /**
      * Constructor
+     * @param colaSalida cola de prioridad para salida de mensajes
+     * @param ipDestino atributo para el builder
+     * @param puertoDestino atributo para el builder
+     * @param puertoLocal atributo para el builder
      */
-    public Empaquetador(ColaDePrioridad<EventoRed> colaSalida) {
+    public Empaquetador(ColaDePrioridad<EventoRed> colaSalida, String ipDestino, int puertoDestino, int puertoLocal) {
         this.colaSalida = colaSalida;
+        this.builder = new EventBuilder(ipDestino, puertoDestino, puertoLocal);
+    }
+    
+    @Override
+    public IEvento crearEvento() {
+        return builder.crearEvento();
     }
 
     /**
@@ -30,7 +43,8 @@ public class Empaquetador  {
      *
      * @param evento Objeto que implementa IEvento y será transformado a JSON.
      */
-    public void empaquetar(IEvento evento) {
+    @Override
+    public void enviarEvento(IEvento evento) {
         try {
 
             // Se convierte el evento a JSON mediante HelperJSON
@@ -50,5 +64,6 @@ public class Empaquetador  {
             System.err.println("[Empaquetador] Error al empaquetar evento: " + e.getMessage());
         }
     }
+
 
 }

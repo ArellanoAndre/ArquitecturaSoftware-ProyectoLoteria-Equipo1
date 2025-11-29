@@ -4,11 +4,11 @@
  */
 package Pruebas;
 
-import ConstructorEventos.EventBuilder;
+import eventBuilder.EventBuilder;
 import Empaquetador.Empaquetador;
+import InterfacesEventClient.IEvento;
 import RedEventos.EventoRed;
 import colaGenerica.ColaDePrioridad;
-import interfacesGlobales.IEvento;
 
 /**
  *
@@ -21,16 +21,16 @@ public class TestEnvioEmpaquetador {
 
         System.out.println("===== TEST 2: ENVÍO (EventBuilder + Empaquetador) =====\n");
 
-        // 1. Cola de salida
+        // 1. Parámetros para el empaquetador
         ColaDePrioridad<EventoRed> colaSalida = new ColaDePrioridad<>();
+        String ipDestino = "127.0.0.1";
+        int puertoDestino = 5000;
+        int puertoLocal = 5001;
 
         // 2. Crear Empaquetador
-        Empaquetador empaquetador = new Empaquetador(colaSalida);
+        Empaquetador empaquetador = new Empaquetador(colaSalida,ipDestino, puertoDestino, puertoLocal);
 
-        // 3. Crear evento con EventBuilder REAL
-        EventBuilder builder = new EventBuilder("127.0.0.1", 9000, 9001);
-
-        IEvento evento = builder.crearEvento();
+        IEvento evento = empaquetador.crearEvento();
         evento.setTopico("test.envio");
         evento.setEvento("EVENTO_ENVIADO");
         evento.setJSON("{\"TipoEvento\":\"EnvioPrueba\", \"Valor\": 123}");
@@ -40,7 +40,7 @@ public class TestEnvioEmpaquetador {
 
         // 4. Empaquetar evento → produce EventoRed en colaSalida
         System.out.println("[Test] Empaquetando IEvento...\n");
-        empaquetador.empaquetar(evento);
+        empaquetador.enviarEvento(evento);
 
         // 5. Sacamos el EventoRed creado
         Object eventoRed = colaSalida.poll();

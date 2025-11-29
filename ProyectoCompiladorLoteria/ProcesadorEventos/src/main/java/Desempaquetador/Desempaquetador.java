@@ -5,10 +5,10 @@
 package Desempaquetador;
 
 import Helper.HelperJSON;
+import InterfacesEventClient.IEvento;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverEntrada;
-import interfacesGlobales.IEvento;
-import interfacesGlobales.IManejadorEvento;
+import InterfacesEventClient.IReceptorEvento;
 
 /**
  *
@@ -17,9 +17,9 @@ import interfacesGlobales.IManejadorEvento;
 public class Desempaquetador implements ObserverEntrada {
 
     private ColaDePrioridad<String> colaEntrada;
-    private IManejadorEvento<IEvento> componenteSuperior; // broker o logica de juego
+    private IReceptorEvento componenteSuperior; // broker o logica de juego
 
-    public Desempaquetador(ColaDePrioridad<String> colaEntrada, IManejadorEvento componenteSuperior) {
+    public Desempaquetador(ColaDePrioridad<String> colaEntrada, IReceptorEvento componenteSuperior) {
         this.colaEntrada = colaEntrada;
         this.componenteSuperior = componenteSuperior;
     }
@@ -42,8 +42,8 @@ public void updateEntrada() {
         }
 
         // Convertir al objeto Evento
-        IEvento evento = HelperJSON.toEvento(eventojson);
-        if (evento == null) {
+        IEvento iEvento = HelperJSON.toEvento(eventojson);
+        if (iEvento == null) {
             System.err.println("ERROR: No pude convertir el JSON a Evento");
             return;
         }
@@ -51,7 +51,7 @@ public void updateEntrada() {
         System.out.println("Entregando EVENTO COMPLETO al componente superior...");
 
         // AHORA ENTREGAS EL EVENTO COMPLETO
-        componenteSuperior.manejar(evento);
+        componenteSuperior.manejar(iEvento);
 
     } catch (Exception e) {
         System.err.println("ERROR extrayendo evento: " + e.getMessage());
