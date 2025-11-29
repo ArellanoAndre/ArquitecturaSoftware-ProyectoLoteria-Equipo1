@@ -11,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author abrilislas
  */
 
-public abstract class gestorDeSuscripciones {
+public class gestorDeSuscripciones {
     
     private final Map<String, CopyOnWriteArrayList<Suscripcion>> suscripciones = new ConcurrentHashMap<>(); 
     

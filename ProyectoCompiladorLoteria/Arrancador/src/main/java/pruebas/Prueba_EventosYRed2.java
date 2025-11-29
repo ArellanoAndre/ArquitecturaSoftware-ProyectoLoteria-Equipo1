@@ -10,7 +10,6 @@ import Ensamblador.EnsambladorRed;
 import Evento.Evento;
 import Sender.EventSender;
 import colaGenerica.ColaDePrioridad;
-import interfacesGlobales.IManejadorEvento;
 import java.io.IOException;
 import java.util.Scanner;
 import listener.EventListener;

@@ -10,7 +10,6 @@ import Evento.Evento;
 import Helper.HelperJSON;
 import Sender.EventSender;
 import colaGenerica.ColaDePrioridad;
-import interfacesGlobales.IManejadorEvento;
 import java.util.Random;
 import listener.EventListener;
 

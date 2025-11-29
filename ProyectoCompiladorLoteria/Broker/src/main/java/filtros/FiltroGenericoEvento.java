@@ -7,9 +7,8 @@ package filtros;
 import Evento.Evento;
 import InterfacesEventClient.IEnvioEvento;
 import InterfacesEventClient.IEvento;
-import InterfacesEventClient.IReceptorEvento;
 import interfaces.IFiltro;
-
+import java.util.List;
 import suscripciones.Suscripcion;
 import suscripciones.gestorDeSuscripciones;
 
@@ -17,10 +16,10 @@ import suscripciones.gestorDeSuscripciones;
  *
  * @author abrilislas
  */
-public abstract class FiltroGenericoEvento implements IFiltro, IEnvioEvento{
+public class FiltroGenericoEvento implements IFiltro, IEnvioEvento{
     
     protected IFiltro succesor; 
-    gestorDeSuscripciones gestorSuscripciones;
+    public gestorDeSuscripciones gestorSuscripciones;
     
     @Override
     public void setNext(IFiltro succesor) {
@@ -30,7 +29,17 @@ public abstract class FiltroGenericoEvento implements IFiltro, IEnvioEvento{
     @Override
     public void procesarEvento(Evento evento) {
         String topico = evento.getTopico();
-        for (Suscripcion suscriptores : gestorSuscripciones.obtenerSuscriptores(topico)) {
+        List<Suscripcion> lista = gestorSuscripciones.obtenerSuscriptores(topico);
+
+        if (lista.isEmpty()) {
+            System.out.println("[FiltroGenericoEvento] No hay suscriptores para: " + topico);
+        } else {
+            System.out.println("[FiltroGenericoEvento] Notificando a suscriptores del topico: " + topico);
+
+            for (Suscripcion s : lista) {
+                System.out.println("  Enviando a " + s);
+                enviarEvento(evento); 
+            }
         }
     }
 
@@ -41,7 +50,7 @@ public abstract class FiltroGenericoEvento implements IFiltro, IEnvioEvento{
 
     @Override
     public void enviarEvento(IEvento evento) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        System.out.println("[EnvioEvento] Enviando evento a suscriptores: " + evento.getTopico());
     }
     
     

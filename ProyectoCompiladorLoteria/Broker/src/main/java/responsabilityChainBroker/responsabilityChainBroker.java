@@ -10,19 +10,21 @@ import InterfacesEventClient.IReceptorEvento;
 import filtros.FiltroDesuscripcion;
 import filtros.FiltroGenericoEvento;
 import filtros.FiltroSuscripcion;
- 
 
 /**
  *
  * @author abrilislas
  */
 public class responsabilityChainBroker implements IReceptorEvento {
-    
-    FiltroSuscripcion filtroSuscripcion;
-    FiltroDesuscripcion filtroDesuscripcion;
-    FiltroGenericoEvento filtroEventoGenerico;
-    
-    public responsabilityChainBroker(){
+
+    public FiltroSuscripcion filtroSuscripcion;
+    public FiltroDesuscripcion filtroDesuscripcion;
+    public FiltroGenericoEvento filtroEventoGenerico;
+
+    public responsabilityChainBroker() {
+        filtroSuscripcion = new FiltroSuscripcion();
+        filtroDesuscripcion = new FiltroDesuscripcion();
+        filtroEventoGenerico = new FiltroGenericoEvento();
         filtroSuscripcion.setNext(filtroDesuscripcion);
         filtroDesuscripcion.setNext(filtroEventoGenerico);
         filtroEventoGenerico.setNext(null);

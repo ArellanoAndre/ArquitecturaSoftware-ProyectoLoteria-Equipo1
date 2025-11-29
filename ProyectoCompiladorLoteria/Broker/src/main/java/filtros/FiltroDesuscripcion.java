@@ -6,7 +6,6 @@ package filtros;
 
 import Evento.Evento;
 import interfaces.IFiltro;
- 
 import suscripciones.Suscripcion;
 import suscripciones.gestorDeSuscripciones;
 
@@ -17,10 +16,10 @@ import suscripciones.gestorDeSuscripciones;
  * @author abrilislas
  */
 
-public abstract class FiltroDesuscripcion implements IFiltro {
+public class FiltroDesuscripcion implements IFiltro {
 
     protected IFiltro succesor;
-    gestorDeSuscripciones gestorSuscripciones;
+    public gestorDeSuscripciones gestorSuscripciones;
 
     @Override
     public void setNext(IFiltro succesor) {

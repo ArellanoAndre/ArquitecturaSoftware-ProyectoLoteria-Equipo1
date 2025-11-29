@@ -9,7 +9,6 @@ import Empaquetador.Empaquetador;
 import Ensamblador.EnsambladorRed;
 import Evento.Evento;
 import colaGenerica.ColaDePrioridad;
-import interfacesGlobales.IManejadorEvento;
 import java.io.IOException;
 import java.util.Scanner;
 
