@@ -2,7 +2,7 @@ package pruebaDesempaquetado;
 import Ensamblador.EnsambladorRed;
 import RedEventos.EventoRed;
 import dispatcher.Dispatcher;
-import interfacesGlobales.IReceptorJSON;
+import interfacesRed.IReceptorJSON;
 import java.util.Scanner;
 
 public class ClientePrueba {

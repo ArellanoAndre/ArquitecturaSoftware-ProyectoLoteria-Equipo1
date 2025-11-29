@@ -13,7 +13,7 @@ import Ensamblador.EnsambladorRed;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.TipoAdd;
 import interfacesGlobales.IEvento;
-import interfacesGlobales.IReceptorJSON;
+import interfacesRed.IReceptorJSON;
 import interfacesGlobales.IManejadorEvento;
 
 public class ClienteReceptor {

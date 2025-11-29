@@ -4,7 +4,7 @@ package Sender;
 import RedEventos.EventoRed;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverSalida;
-import interfacesGlobales.IDispatcher;
+import interfacesRed.IDispatcher;
 
 
 /**

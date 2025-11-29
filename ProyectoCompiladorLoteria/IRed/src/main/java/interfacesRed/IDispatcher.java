@@ -1,4 +1,4 @@
-package interfacesGlobales;
+package interfacesRed;
 
 import RedEventos.EventoRed;
 

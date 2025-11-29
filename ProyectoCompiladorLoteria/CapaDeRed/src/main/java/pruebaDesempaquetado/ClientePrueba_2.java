@@ -1,11 +1,23 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
 package pruebaDesempaquetado;
+
 import Ensamblador.EnsambladorRed;
 import RedEventos.EventoRed;
 import dispatcher.Dispatcher;
-import interfacesGlobales.IReceptorJSON;
-import java.util.Scanner;
-public class ClientePrueba2 {
+import interfacesRed.IReceptorJSON;
 
+/**
+ *
+ * @author rodri
+ */
+public class ClientePrueba_2 {
+
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
 
         IReceptorJSON receptor = new IReceptorJSON() {
@@ -44,7 +56,7 @@ public class ClientePrueba2 {
             System.out.println(eventoJSON);
 
             // Crea EventoRed con el JSON y lo envía
-            EventoRed evento = new EventoRed(eventoJSON, "192.168.1.89", 7001);
+            EventoRed evento = new EventoRed(eventoJSON, "192.168.8.99", 7001);
             dispatcher.dispatch(evento);
 
             // Mantener vivo para escuchar
@@ -56,4 +68,5 @@ public class ClientePrueba2 {
             e.printStackTrace();
         }
     }
+    
 }

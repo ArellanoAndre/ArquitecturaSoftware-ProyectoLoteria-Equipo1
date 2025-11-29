@@ -3,10 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dispatcher;
-import interfacesGlobales.IDispatcher;
 import RedEventos.EventoRed;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.TipoAdd;
+import interfacesRed.IDispatcher;
 
 /**
  * Dispatcher con inyección de dependencias con singleton

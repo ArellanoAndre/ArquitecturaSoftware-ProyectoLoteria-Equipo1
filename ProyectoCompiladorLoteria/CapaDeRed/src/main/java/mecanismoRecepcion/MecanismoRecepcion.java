@@ -4,9 +4,10 @@
  */
 package mecanismoRecepcion;
 
-import interfacesGlobales.IReceptorJSON;
+
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverEntrada;
+import interfacesRed.IReceptorJSON;
 
 /**
  *

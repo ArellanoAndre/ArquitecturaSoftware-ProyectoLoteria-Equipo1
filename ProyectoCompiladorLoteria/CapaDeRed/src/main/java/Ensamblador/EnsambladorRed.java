@@ -5,7 +5,7 @@
 package Ensamblador;
 
 import RedEventos.EventoRed;
-import interfacesGlobales.IReceptorJSON;
+import interfacesRed.IReceptorJSON;
 import Send.Sender;
 import colaGenerica.ColaDePrioridad;
 import dispatcher.Dispatcher;
