@@ -4,7 +4,7 @@
  */
 package interfaces;
 
-import Evento.EventoRed;
+import RedEventos.EventoRed;
 
 
 /**

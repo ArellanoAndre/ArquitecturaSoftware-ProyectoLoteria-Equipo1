@@ -1,54 +1,59 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package pruebaDesempaquetado;
-
 import Ensamblador.EnsambladorRed;
+import RedEventos.EventoRed;
 import dispatcher.Dispatcher;
-
-import java.io.IOException;
+import interfacesGlobales.IReceptorJSON;
 import java.util.Scanner;
-
-/**
- *
- * @author rodri
- */
 public class ClientePrueba2 {
 
-    public static void main(String[] args) throws IOException {
-//
-//        Scanner scan = new Scanner(System.in);
-//
-//        // Implementación sencilla del receptor
-//        IReceptorJSON receptor = new IReceptorJSON() {
-//            @Override
-//            public void recibirJSON(String eventojson) {
-//                System.out.println("[ReceptorCliente] Mensaje recibido del broker: " + eventojson);
-//            }
-//
-//        };
-//
-//        try {
-//            // Ensamblar la red del cliente
-//            EnsambladorRed ensamblador = new EnsambladorRed(5001);
-//            ensamblador.ensamblar(receptor);
-//
-//            Dispatcher dispatcher = ensamblador.getDispatcher();
-//
-//            // Enviar algunos mensajes hacia el broker
-//            System.out.println("[Cliente] Enviando mensajes al broker...");
-//
-//            while (true) {
-//                String mensaje = scan.nextLine();
-//
-//                EventoRed eventoRed = new EventoRed(mensaje, "127.0.0.1", 5000);
-//
-//                dispatcher.dispatch(eventoRed);
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-   }
+    public static void main(String[] args) {
+
+        IReceptorJSON receptor = new IReceptorJSON() {
+            @Override
+            public void recibirJSON(String eventojson) {
+                System.out.println("\n[ClientePrueba2 - 192.168.1.88:7002]");
+                System.out.println("JSON recibido en respuesta:");
+                System.out.println(eventojson);
+            }
+        };
+
+        try {
+            System.out.println("[ClientePrueba2] Iniciando en 192.168.1.88 puerto 7002...");
+
+            // Ensambla red en el puerto de esta laptop
+            EnsambladorRed ensamblador = new EnsambladorRed(7002);
+            ensamblador.ensamblar(receptor);
+
+            Dispatcher dispatcher = ensamblador.getDispatcher();
+
+            // JSON automático (sin pedir input)
+            String jsonInterno = "{ \\\"mensaje\\\": \\\"Hola desde ClientePrueba2 (Laptop 2)\\\" }";
+
+            String eventoJSON =
+                "{"
+                + "\"topico\":\"prueba.red\","
+                + "\"evento\":\"MENSAJE_AUTOMATICO\","
+                + "\"JSON\":\"" + jsonInterno + "\","
+                + "\"ipLocal\":\"192.168.1.88\","
+                + "\"ipDestino\":\"192.168.1.89\","
+                + "\"puertoLocal\":7002,"
+                + "\"puertoDestino\":7001"
+                + "}";
+
+            System.out.println("[ClientePrueba2] Enviando JSON automáticamente...");
+            System.out.println(eventoJSON);
+
+            // Crea EventoRed con el JSON y lo envía
+            EventoRed evento = new EventoRed(eventoJSON, "192.168.1.89", 7001);
+            dispatcher.dispatch(evento);
+
+            // Mantener vivo para escuchar
+            while (true) {
+                Thread.sleep(1000);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

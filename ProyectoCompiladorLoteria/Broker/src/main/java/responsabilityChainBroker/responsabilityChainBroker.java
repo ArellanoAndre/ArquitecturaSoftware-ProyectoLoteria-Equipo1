@@ -5,11 +5,11 @@
 package responsabilityChainBroker;
 
 import Evento.Evento;
-import Interfaces.IEvento;
 import Interfaces.IReceptorEventos;
 import filtros.FiltroDesuscripcion;
 import filtros.FiltroGenericoEvento;
 import filtros.FiltroSuscripcion;
+import interfacesGlobales.IEvento;
  
 
 /**
@@ -28,7 +28,6 @@ public class responsabilityChainBroker implements IReceptorEventos {
         filtroEventoGenerico.setNext(null);
     }
     
-    @Override
     public void recibirEvento(IEvento ievento) {
         Evento evento = (Evento) ievento;
         filtroSuscripcion.procesarEvento(evento);

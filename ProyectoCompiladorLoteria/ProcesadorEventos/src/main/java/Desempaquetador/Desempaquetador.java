@@ -7,7 +7,7 @@ package Desempaquetador;
 import Helper.HelperJSON;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverEntrada;
-import Interfaces.IEvento;
+import interfacesGlobales.IEvento;
 import interfacesGlobales.IManejadorEvento;
 
 /**

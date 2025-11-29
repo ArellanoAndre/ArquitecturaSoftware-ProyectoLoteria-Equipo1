@@ -1,10 +1,11 @@
 package Sender;
 
+
+import RedEventos.EventoRed;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverSalida;
-import dispatcher.DispatcherFactory;
-import Evento.EventoRed;
-import Interfaces.Red.IDispatcher;
+import interfacesGlobales.IDispatcher;
+
 
 /**
  * EventSender: Toma mensajes de una cola de salida y los envia al componente de

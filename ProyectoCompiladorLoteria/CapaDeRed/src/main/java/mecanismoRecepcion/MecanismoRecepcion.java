@@ -4,7 +4,7 @@
  */
 package mecanismoRecepcion;
 
-import Interfaces.Red.IReceptorJSON;
+import interfacesGlobales.IReceptorJSON;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverEntrada;
 

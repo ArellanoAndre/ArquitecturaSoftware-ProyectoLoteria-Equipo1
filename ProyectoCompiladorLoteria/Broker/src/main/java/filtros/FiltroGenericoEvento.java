@@ -6,8 +6,8 @@ package filtros;
 
 import Evento.Evento;
 import IEventosBroker.IEnvioEvento;
-import Interfaces.IEvento;
 import interfaces.IFiltro;
+import interfacesGlobales.IEvento;
 
 import suscripciones.Suscripcion;
 import suscripciones.gestorDeSuscripciones;

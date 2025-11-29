@@ -2,10 +2,9 @@ package Empaquetador;
 
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.TipoAdd;
-import interfacesGlobales.IEmpaquetador;
 import Helper.HelperJSON;
-import Evento.EventoRed;
-import Interfaces.IEvento;
+import RedEventos.EventoRed;
+import interfacesGlobales.IEvento;
 
 /**
  * Clase encargada de convertir (empaquetar) objetos que implementan IEvento a

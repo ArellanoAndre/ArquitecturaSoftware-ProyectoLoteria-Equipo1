@@ -3,8 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dispatcher;
-import Evento.EventoRed;
-import Interfaces.Red.IDispatcher;
+import interfacesGlobales.IDispatcher;
+import RedEventos.EventoRed;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.TipoAdd;
 

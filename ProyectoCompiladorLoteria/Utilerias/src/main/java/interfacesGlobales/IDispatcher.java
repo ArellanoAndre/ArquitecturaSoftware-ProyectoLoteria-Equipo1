@@ -1,6 +1,7 @@
-package Interfaces.Red;
+package interfacesGlobales;
 
-import Evento.EventoRed;
+import RedEventos.EventoRed;
+
 
 
 

@@ -1,9 +1,10 @@
 package ModeloJuego;
 
+import ConstructorEventos.EventBuilder;
 import Empaquetador.Empaquetador;
 import Interfaces.IModeloJuego;
-import Evento.EventBuilder;
-import Interfaces.IEvento;
+import interfacesGlobales.IEvento;
+
 import interfacesGlobales.IManejadorEvento;
 
 public class ModeloJuego implements IModeloJuego, IManejadorEvento {
@@ -16,7 +17,7 @@ public class ModeloJuego implements IModeloJuego, IManejadorEvento {
     
 
     @Override
-    public void setEventBuilder(EventBuilder eventBuilder) {
+    public void  setEventBuilder(EventBuilder eventBuilder) {
         this.eventBuilder = eventBuilder;
     }
 

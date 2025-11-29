@@ -4,8 +4,8 @@
  */
 package Ensamblador;
 
-import Evento.EventoRed;
-import Interfaces.Red.IReceptorJSON;
+import RedEventos.EventoRed;
+import interfacesGlobales.IReceptorJSON;
 import Send.Sender;
 import colaGenerica.ColaDePrioridad;
 import dispatcher.Dispatcher;

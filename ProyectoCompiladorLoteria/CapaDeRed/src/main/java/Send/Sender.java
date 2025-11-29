@@ -4,7 +4,7 @@
  */
 package Send;
 
-import Evento.EventoRed;
+import RedEventos.EventoRed;
 import colaGenerica.ColaDePrioridad;
 import colaGenerica.ObserverSalida;
 import interfaces.ISender;

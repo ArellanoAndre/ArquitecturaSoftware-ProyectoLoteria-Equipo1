@@ -5,11 +5,11 @@
 package Interfaces;
 
 
+
 /**
  *
  * @author rodri
  */
 public interface IReceptorEventos {
     
-    public void recibirEvento(IEvento ievento);
 }

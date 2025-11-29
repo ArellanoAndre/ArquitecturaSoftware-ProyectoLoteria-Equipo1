@@ -4,12 +4,12 @@
  */
 package ModeloJuego;
 
+import ConstructorEventos.EventBuilder;
 import Empaquetador.Empaquetador;
-import Evento.EventBuilder;
 import Interfaces.IControlVista;
-import Interfaces.IEvento;
 import Interfaces.IModeloJuego;
 import ModeloJuego.entidades.Jugador;
+import interfacesGlobales.IEvento;
 import interfacesGlobales.IManejadorEvento;
 
 import java.util.List;
