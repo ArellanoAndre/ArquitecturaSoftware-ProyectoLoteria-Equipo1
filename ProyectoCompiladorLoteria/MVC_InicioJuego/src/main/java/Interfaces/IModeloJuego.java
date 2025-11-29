@@ -5,7 +5,7 @@ import Empaquetador.Empaquetador;
 
 public interface IModeloJuego {
 
-    void setEventBuilder(EventBuilder eventBuilder);
+  //  void setEventBuilder(EventBuilder ev);
 
     void setEmpaquetador(Empaquetador empaquetador);
 

@@ -34,7 +34,7 @@ public class ClientePrueba2 {
                 + "\"topico\":\"prueba.red\","
                 + "\"evento\":\"MENSAJE_AUTOMATICO\","
                 + "\"JSON\":\"" + jsonInterno + "\","
-                + "\"ipLocal\":\"192.168.1.88\","
+                + "\"ipLocal\":\"192.168.1.89\","
                 + "\"ipDestino\":\"192.168.1.89\","
                 + "\"puertoLocal\":7002,"
                 + "\"puertoDestino\":7001"

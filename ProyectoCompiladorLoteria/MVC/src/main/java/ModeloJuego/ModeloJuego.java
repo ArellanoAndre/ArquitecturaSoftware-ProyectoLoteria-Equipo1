@@ -15,7 +15,7 @@ import interfacesGlobales.IManejadorEvento;
 import java.util.List;
 import org.json.JSONObject;
 
-public class ModeloJuego implements IModeloJuego, IManejadorEvento {
+public class ModeloJuego implements IModeloJuego, IManejadorEvento<IEvento>  {
 
     private IControlVista controlVista;
     private Jugador jugadorPrincipal;
@@ -42,36 +42,61 @@ public class ModeloJuego implements IModeloJuego, IManejadorEvento {
     }
     
 
-    /**
-     * Recibe SOLO el JSON payload desde el Desempaquetador AQUI OCUPARIAMOS EL CHAIN OF RESPONSABILITY PARA MANEJAR EVENTO
-     */
-    @Override
-    public void manejar(String payloadJSON) {
+  @Override
+public void manejar(IEvento evento) {
 
-        System.out.println("ModeloJuegoMock recibió payload:");
-        System.out.println(payloadJSON);
+    System.out.println("[ModeloJuegoMock] Evento recibido COMPLETO:");
+    System.out.println(evento);
 
-        try {
-            JSONObject obj = new JSONObject(payloadJSON);
+    try {
+        // Extraer el JSON interno del EVENTO
+        String payloadJSON = evento.getJSON();
 
-            String tipo = obj.getString("TipoEvento");
-
-            if (tipo.equals("CasillaSeleccionadaValida")) {
-
-                int jugador = obj.getInt("Jugador");
-                int casilla = obj.getInt("Casilla");
-
-                System.out.println("Procesando casilla " + casilla + " para jugador " + jugador);
-                casillasMarcadas[casilla] = true;
-
-                // Actualiza la vista
-                controlVista.actualizarTarjetaJugadorPrincipal(casillasMarcadas);
-            }
-
-        } catch (Exception e) {
-            System.err.println("ERROR en ModeloJuegoMock.manejar(): " + e.getMessage());
+        if (payloadJSON == null) {
+            System.err.println("[ModeloJuegoMock] JSON interno es null");
+            return;
         }
+
+        JSONObject obj = new JSONObject(payloadJSON);
+
+        // Identificar el tipo de evento interno
+        String tipo = obj.getString("TipoEvento");
+
+        System.out.println("[ModeloJuegoMock] TipoEvento = " + tipo);
+
+        // ================================
+        //   CHAIN OF RESPONSIBILITY
+        // ================================
+
+        // 1. Casilla Seleccionada
+        if (tipo.equals("CasillaSeleccionadaValida")) {
+          //  manejarCasillaSeleccionada(obj);
+          System.out.println("[ModeloJuegoMock] manejarCasillaSeleccionada");
+            return;
+        }
+
+        // 2. Evento Inicio de partida
+        if (tipo.equals("InicioPartida")) {
+          //  manejarInicioPartida(obj);
+          System.out.println("[ModeloJuegoMock] manejarInicioPartida");
+            return;
+        }
+
+        // 3. Evento UnirseAlLobby
+        if (tipo.equals("UnirseLobby")) {
+         //   manejarUnirseLobby(obj);
+            System.out.println("[ModeloJuegoMock]  manejarUnirseLobby");
+            return;
+        }
+
+        // 4. Eventos no reconocidos
+        System.out.println("[ModeloJuegoMock] TipoEvento NO RECONOCIDO: " + tipo);
+
+    } catch (Exception e) {
+        System.err.println("[ModeloJuegoMock] ERROR manejando evento: " + e.getMessage());
     }
+}
+
 
 
     @Override
@@ -89,6 +114,7 @@ public class ModeloJuego implements IModeloJuego, IManejadorEvento {
     public void setControlVista(IControlVista controlVista) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
 
  
 }

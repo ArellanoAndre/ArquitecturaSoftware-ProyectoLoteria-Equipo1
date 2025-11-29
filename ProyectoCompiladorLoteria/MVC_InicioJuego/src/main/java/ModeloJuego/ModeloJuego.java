@@ -7,7 +7,7 @@ import interfacesGlobales.IEvento;
 
 import interfacesGlobales.IManejadorEvento;
 
-public class ModeloJuego implements IModeloJuego, IManejadorEvento {
+public class ModeloJuego implements IModeloJuego, IManejadorEvento<String> {
 
     private EventBuilder eventBuilder;
     private Empaquetador empaquetador;
@@ -15,10 +15,8 @@ public class ModeloJuego implements IModeloJuego, IManejadorEvento {
     public ModeloJuego() {
     }
     
-
-    @Override
-    public void  setEventBuilder(EventBuilder eventBuilder) {
-        this.eventBuilder = eventBuilder;
+    public void  setEventBuilder() {
+       // this.eventBuilder = eventBuilder;
     }
 
     @Override
@@ -61,4 +59,12 @@ public class ModeloJuego implements IModeloJuego, IManejadorEvento {
                 + ", \"PuntuacionMaxima\": " + puntuacionMaxima + " }");
         empaquetador.empaquetar(evento);
     }
+
+//    @Override
+//    public void setEventBuilder(Evento.EventBuilder eventBuilder) {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
+
+
+
 }

@@ -26,6 +26,9 @@ public class EventBuilder {
         this.puertoDestino = puertoDestino;
         this.puertoLocal = puertoLocal;
     }
+
+    public EventBuilder() {
+    }
     
     public Evento crearEvento() {
         Evento e = new Evento();

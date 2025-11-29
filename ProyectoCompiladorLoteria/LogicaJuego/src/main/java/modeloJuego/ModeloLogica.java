@@ -2,6 +2,7 @@ package modeloJuego;
 
 
 import ConstructorEventos.EventBuilder;
+import Evento.Evento;
 import interfacesGlobales.IEmpaquetador;
 import interfacesGlobales.IEvento;
 import interfacesGlobales.IManejadorEvento;
@@ -13,7 +14,7 @@ import procesarCadena.ProcesadorIniciar;
 import procesarCadena.ProcesadorMarcar;
 import procesarCadena.ProcesadorUnirse;
 
-public class ModeloLogica implements IModeloLogica, IManejadorEvento {
+public class ModeloLogica implements IModeloLogica, IManejadorEvento<Evento> {
 
     private LogicaDeJuego logicaDeJuego;
     private IEmpaquetador empaquetador;
@@ -65,7 +66,7 @@ public class ModeloLogica implements IModeloLogica, IManejadorEvento {
     }
 
     @Override
-    public void manejar(String payloadJSON) {
+    public void manejar(Evento payloadJSON) {
 
         System.out.println("[ModeloLogica-Host] Procesando payload: " + payloadJSON);
 
@@ -146,4 +147,5 @@ public class ModeloLogica implements IModeloLogica, IManejadorEvento {
 
     }
 
+ 
 }

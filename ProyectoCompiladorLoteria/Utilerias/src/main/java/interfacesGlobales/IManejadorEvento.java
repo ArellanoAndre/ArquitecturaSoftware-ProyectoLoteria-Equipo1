@@ -8,8 +8,8 @@ package interfacesGlobales;
  *
  * @author isaac
  */
-public interface IManejadorEvento {
+public interface IManejadorEvento<T> {
     
-    void manejar(String payloadJSON);
-    
+    void manejar(T evento);
 }
+

@@ -4,6 +4,7 @@
  */
 package logicaJuego;
 
+import Evento.Evento;
 import interfacesGlobales.ILogicaJuego;
 import interfacesGlobales.IManejadorEvento;
 import interfacesGlobales.IModeloLogica;
@@ -14,13 +15,12 @@ import javax.swing.Timer;
 import logicaJuego.entidades.Carta;
 import logicaJuego.entidades.Jugador;
 import logicaJuego.entidades.Tarjeta;
-import modeloJuego.ModeloLogica;
 
 /**
  *
  * @author rodri
  */
-public class LogicaDeJuego implements ILogicaJuego, IManejadorEvento{
+public class LogicaDeJuego implements ILogicaJuego, IManejadorEvento<Evento>{
 
     private List<Carta> mazo;
     private List<Jugador> jugadores;
@@ -225,9 +225,11 @@ public class LogicaDeJuego implements ILogicaJuego, IManejadorEvento{
     }
 
     @Override
-    public void manejar(String payloadJSON) {
+    public void manejar(Evento evento) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+  
     
     
     
