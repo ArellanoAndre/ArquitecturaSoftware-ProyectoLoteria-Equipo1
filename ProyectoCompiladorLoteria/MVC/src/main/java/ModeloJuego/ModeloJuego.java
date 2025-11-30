@@ -4,7 +4,6 @@
  */
 package ModeloJuego;
 
-import eventBuilder.EventBuilder;
 import Empaquetador.Empaquetador;
 import Interfaces.IControlVista;
 import Interfaces.IModeloJuego;
@@ -21,7 +20,6 @@ public class ModeloJuego implements IModeloJuego, IReceptorEvento {
     private Jugador jugadorPrincipal;
     private List<Jugador> jugadoresSecundarios;
     private boolean[] casillasMarcadas = new boolean[16];
-    private EventBuilder eventBuilder;
     private Empaquetador empaquetador;
 
 
@@ -31,10 +29,6 @@ public class ModeloJuego implements IModeloJuego, IReceptorEvento {
         this.jugadoresSecundarios = jugadoresSecundarios;
         controlVista.setJugadorPrincipal(this.jugadorPrincipal);
         controlVista.setJugadoresSecundarios(jugadoresSecundarios);
-    }
-    
-    public void setEventBuilder(EventBuilder eventBuilder){
-        this.eventBuilder = eventBuilder;
     }
     
     public void setEmpaquetador(Empaquetador empaquetador){
@@ -101,7 +95,7 @@ public void manejar(IEvento evento) {
 
     @Override
     public void EnviarEventoCartaSeleccionada(int pos, int jugador) {
-        IEvento eRandom = eventBuilder.crearEvento();
+        IEvento eRandom = empaquetador.crearEvento();
         eRandom.setTopico("Juego-in");
             eRandom.setEvento("Juego");
             eRandom.setJSON(

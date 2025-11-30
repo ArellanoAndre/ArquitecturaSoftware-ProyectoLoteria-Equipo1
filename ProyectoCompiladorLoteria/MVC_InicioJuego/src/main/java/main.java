@@ -1,25 +1,25 @@
-
-import ConstructorEventos.EventBuilder;
-import Controlador.ControladorInicio;
-import Empaquetador.Empaquetador;
-import ModeloJuego.ModeloJuego;
-import ModeloVista.ModeloVista;
-import Presentacion.JPantallaMenuPrincipal;
-import RedEventos.EventoRed;
-import Sender.EventSender;
-import colaGenerica.ColaDePrioridad;
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author jorge
- */
-public class main {
-    public static void main(String[] args) {
+//
+//
+//import Controlador.ControladorInicio;
+//import Empaquetador.Empaquetador;
+//import ModeloJuego.ModeloJuego;
+//import ModeloVista.ModeloVista;
+//import Presentacion.JPantallaMenuPrincipal;
+//import RedEventos.EventoRed;
+//import Sender.EventSender;
+//import colaGenerica.ColaDePrioridad;
+//
+///*
+// * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+// * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+// */
+//
+///**
+// *
+// * @author jorge
+// */
+//public class main {
+//    public static void main(String[] args) {
 //        // Configuración de red (puede ajustarse según el entorno de pruebas)
 //        String ipDestino = "127.0.0.1";
 //        int puertoDestino = 5000;
@@ -49,5 +49,5 @@ public class main {
 //        JPantallaMenuPrincipal menu = new JPantallaMenuPrincipal(ci);
 //        menu.setVisible(true);
 //        }
-    }
-}
+//    }
+//}

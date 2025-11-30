@@ -97,8 +97,14 @@ public class EnsambladorRed {
     }
 
     private Dispatcher DispatcherFactorySingleton() {
-        // Ajusta esto según tu implementación real
-        return DispatcherFactory.createDispatcherDefault();
+        Dispatcher dispatcher = DispatcherFactory.createDispatcherDefault();
+        if (dispatcher == null) {
+            System.out.println("No hay dispatcher");
+        }
+        else {
+            System.out.println("Si hay dispatcher");
+        }
+        return dispatcher;
     }
 
     // Getters para que otras capas puedan interactuar con la red:

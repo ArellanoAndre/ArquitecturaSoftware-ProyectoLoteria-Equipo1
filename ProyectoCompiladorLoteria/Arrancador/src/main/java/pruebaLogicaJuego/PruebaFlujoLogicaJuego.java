@@ -1,31 +1,31 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
-package pruebaLogicaJuego;
-
-import Desempaquetador.Desempaquetador;
-import Empaquetador.Empaquetador;
-import Ensamblador.EnsambladorRed;
-import Helper.HelperJSON;
-import colaGenerica.ColaDePrioridad;
-import colaGenerica.TipoAdd;
-import java.io.IOException;
-import logicaJuego.LogicaDeJuego;
-import modeloJuego.ModeloLogica;
-
-/**
- *
- * @author isaac
- */
-/**
- * Prueba unificada de 1 jugador (Host). Simula el ciclo completo: 1. La lógica
- * genera una carta. 2. Simulamos que el jugador ve la carta e intenta marcarla
- * (Inyección de evento de red). 3. La lógica valida y confirma.
- */
-public class PruebaFlujoLogicaJuego {
-
-    public static void main(String[] args) throws IOException, InterruptedException {
+///*
+// * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+// * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+// */
+//package pruebaLogicaJuego;
+//
+//import Desempaquetador.Desempaquetador;
+//import Empaquetador.Empaquetador;
+//import Ensamblador.EnsambladorRed;
+//import Helper.HelperJSON;
+//import colaGenerica.ColaDePrioridad;
+//import colaGenerica.TipoAdd;
+//import java.io.IOException;
+//import logicaJuego.LogicaDeJuego;
+//import modeloJuego.ModeloLogica;
+//
+///**
+// *
+// * @author isaac
+// */
+///**
+// * Prueba unificada de 1 jugador (Host). Simula el ciclo completo: 1. La lógica
+// * genera una carta. 2. Simulamos que el jugador ve la carta e intenta marcarla
+// * (Inyección de evento de red). 3. La lógica valida y confirma.
+// */
+//public class PruebaFlujoLogicaJuego {
+//
+//    public static void main(String[] args) throws IOException, InterruptedException {
 //
 //        System.out.println("=== SERVIDOR HOST INICIADO (PUERTO 6000) ===");
 //
@@ -85,5 +85,5 @@ public class PruebaFlujoLogicaJuego {
 //            // La lógica funciona con un Timer en otro hilo, así que esto no bloquea el juego.
 //            Thread.sleep(1000);
 //        }
-    }
-}
+//    }
+//}

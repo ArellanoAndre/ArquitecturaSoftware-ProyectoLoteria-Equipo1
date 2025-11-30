@@ -1,6 +1,5 @@
 package Interfaces;
 
-import ConstructorEventos.EventBuilder;
 import Empaquetador.Empaquetador;
 
 public interface IModeloJuego {
