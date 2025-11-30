@@ -16,14 +16,15 @@ import suscripciones.gestorDeSuscripciones;
  *
  * @author abrilislas
  */
-public class FiltroGenericoEvento implements IFiltro, IEnvioEvento{
-    
-    protected IFiltro succesor; 
-    public gestorDeSuscripciones gestorSuscripciones;
-    
+public class FiltroGenericoEvento implements IFiltro {
+
+    protected IFiltro succesor;
+    private gestorDeSuscripciones gestorSuscripciones;
+    private IEnvioEvento empaquetador;
+
     @Override
     public void setNext(IFiltro succesor) {
-        this.succesor=succesor; 
+        this.succesor = succesor;
     }
 
     @Override
@@ -31,27 +32,46 @@ public class FiltroGenericoEvento implements IFiltro, IEnvioEvento{
         String topico = evento.getTopico();
         List<Suscripcion> lista = gestorSuscripciones.obtenerSuscriptores(topico);
 
-        if (lista.isEmpty()) {
+        if (lista == null || lista.isEmpty()) {
             System.out.println("[FiltroGenericoEvento] No hay suscriptores para: " + topico);
-        } else {
-            System.out.println("[FiltroGenericoEvento] Notificando a suscriptores del topico: " + topico);
+            return;
+        }
 
-            for (Suscripcion s : lista) {
-                System.out.println("  Enviando a " + s);
-                enviarEvento(evento); 
-            }
+        System.out.println("[FiltroGenericoEvento] Notificando a suscriptores del topico: " + topico);
+
+        for (Suscripcion s : lista) {
+
+            System.out.println("  Enviando a " + s);
+
+            // ⭐ Clonamos el evento
+            Evento copia = new Evento();
+            copia.setTopico(evento.getTopico());
+            copia.setEvento(evento.getEvento());
+            copia.setJSON(evento.getJSON());
+            copia.setIpLocal(evento.getIpLocal());
+            copia.setPuertoLocal(evento.getPuertoLocal());
+
+            // ⭐ Datos destino
+            copia.setIpDestino(s.getHost());
+            copia.setPuertoDestino(s.getPuerto());
+
+            enviarEvento(copia);
         }
     }
 
-    @Override
-    public IEvento crearEvento() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void enviarEvento(IEvento evento) {
+        if (empaquetador != null) {
+            empaquetador.enviarEvento(evento);
+        }
+        //System.out.println("[EnvioEvento] Enviando evento a suscriptores: " + evento.getTopico());
     }
 
-    @Override
-    public void enviarEvento(IEvento evento) {
-        System.out.println("[EnvioEvento] Enviando evento a suscriptores: " + evento.getTopico());
+    public void setEmpaquetador(IEnvioEvento empaquetador) {
+        this.empaquetador = empaquetador;
     }
-    
-    
+
+    public void setGestorSuscripciones(gestorDeSuscripciones gestorSuscripciones) {
+        this.gestorSuscripciones = gestorSuscripciones;
+    }
+
 }

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package responsabilityChainBroker;
 
 import Evento.Evento;
@@ -17,9 +13,9 @@ import filtros.FiltroSuscripcion;
  */
 public class responsabilityChainBroker implements IReceptorEvento {
 
-    public FiltroSuscripcion filtroSuscripcion;
-    public FiltroDesuscripcion filtroDesuscripcion;
-    public FiltroGenericoEvento filtroEventoGenerico;
+    private FiltroSuscripcion filtroSuscripcion;
+    private FiltroDesuscripcion filtroDesuscripcion;
+    private FiltroGenericoEvento filtroEventoGenerico;
 
     public responsabilityChainBroker() {
         filtroSuscripcion = new FiltroSuscripcion();
@@ -35,4 +31,20 @@ public class responsabilityChainBroker implements IReceptorEvento {
         Evento evento = (Evento) ievento;
         filtroSuscripcion.procesarEvento(evento);
     }
+
+    public void setFiltroSuscripcion(FiltroSuscripcion filtroSuscripcion) {
+        this.filtroSuscripcion = filtroSuscripcion;
+    }
+
+    public void setFiltroDesuscripcion(FiltroDesuscripcion filtroDesuscripcion) {
+        this.filtroDesuscripcion = filtroDesuscripcion;
+    }
+
+    public void setFiltroEventoGenerico(FiltroGenericoEvento filtroEventoGenerico) {
+        this.filtroEventoGenerico = filtroEventoGenerico;
+    }
+    
+    
+    
+    
 }

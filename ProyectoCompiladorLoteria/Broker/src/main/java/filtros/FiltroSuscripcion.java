@@ -13,39 +13,38 @@ import suscripciones.gestorDeSuscripciones;
 public class FiltroSuscripcion implements IFiltro {
 
     protected IFiltro succesor;
-    public gestorDeSuscripciones gestorSuscripciones;
+    private gestorDeSuscripciones gestorSuscripciones;
 
     @Override
     public void setNext(IFiltro succesor) {
         this.succesor = succesor;
     }
 
-    @Override
     public void procesarEvento(Evento evento) {
-        String accion = evento.getEvento();
-        String topico = evento.getTopico(); // juego-in, juego-out
 
-        // ⛑ Evita null pointers
-        if (accion == null || topico == null) {
-            if (succesor != null) {
-                succesor.procesarEvento(evento);
-            }
-            return;
-        }
+        String accion = evento.getEvento();  // “suscripcion”
+        String topico = evento.getTopico();  // “juego-in”
 
-        // 🟢 SUSCRIPCIÓN
-        if (accion.equalsIgnoreCase("suscribir")) {
+        // Validación segura
+        if (accion != null && accion.equalsIgnoreCase("suscripcion")) {
 
-            Suscripcion suscriptor
-                    = new Suscripcion(evento.getIpLocal(), evento.getPuertoLocal());
+            Suscripcion s = new Suscripcion(
+                    evento.getIpLocal(),
+                    evento.getPuertoLocal()
+            );
 
-            gestorSuscripciones.agregarElemento(topico, suscriptor);
+            gestorSuscripciones.agregarElemento(topico, s);
 
             System.out.println("[FiltroSuscripcion] Nuevo suscriptor a: "
-                    + topico + " -> " + suscriptor);
+                    + topico + " -> " + s);
+
         } else {
             succesor.procesarEvento(evento);
         }
+    }
+
+    public void setGestorSuscripciones(gestorDeSuscripciones gestorSuscripciones) {
+        this.gestorSuscripciones = gestorSuscripciones;
     }
 
 }

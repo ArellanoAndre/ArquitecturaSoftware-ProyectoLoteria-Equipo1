@@ -19,7 +19,7 @@ import suscripciones.gestorDeSuscripciones;
 public class FiltroDesuscripcion implements IFiltro {
 
     protected IFiltro succesor;
-    public gestorDeSuscripciones gestorSuscripciones;
+    private gestorDeSuscripciones gestorSuscripciones;
 
     @Override
     public void setNext(IFiltro succesor) {
@@ -41,5 +41,11 @@ public class FiltroDesuscripcion implements IFiltro {
             succesor.procesarEvento(evento);
         }
     }
+
+    public void setGestorSuscripciones(gestorDeSuscripciones gestorSuscripciones) {
+        this.gestorSuscripciones = gestorSuscripciones;
+    }
+    
+    
 }
 

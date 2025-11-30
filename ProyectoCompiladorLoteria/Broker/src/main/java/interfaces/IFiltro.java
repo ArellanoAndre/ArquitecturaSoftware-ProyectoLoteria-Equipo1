@@ -5,6 +5,7 @@
 package interfaces;
 
 import Evento.Evento;
+import suscripciones.gestorDeSuscripciones;
 
 /**
  *
@@ -14,4 +15,5 @@ public abstract interface IFiltro {
     
     void setNext(IFiltro succesor);
     void procesarEvento(Evento evento);
+    void setGestorSuscripciones(gestorDeSuscripciones gestorSuscripciones);
 }

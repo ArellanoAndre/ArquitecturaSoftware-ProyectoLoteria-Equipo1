@@ -18,6 +18,7 @@
         <module>Arrancador</module>
         <module>IEventClient</module>
         <module>IRed</module>
+        <module>ArrancadorBroker</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
