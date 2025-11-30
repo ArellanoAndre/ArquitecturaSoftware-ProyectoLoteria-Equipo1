@@ -33,7 +33,7 @@ public class Prueba_MVC {
             //======================================================================
             String ipDestino = "127.0.0.1";
             int puertoLocal = 5001;
-            int puertoDestino = 5000;
+            int puertoDestino = 7000;
 
             // ===============================
             // 1. CREACIÓN DE JUGADORES REALES

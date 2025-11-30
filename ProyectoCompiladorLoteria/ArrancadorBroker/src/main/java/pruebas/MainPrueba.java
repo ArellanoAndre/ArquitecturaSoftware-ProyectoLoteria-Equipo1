@@ -18,22 +18,32 @@ public class MainPrueba {
         System.out.println("===== PRUEBA 1: SUSCRIPCIÓN =====");
         Evento evSub = new Evento();
 
-        evSub.setTopico("juego-in");
+        evSub.setTopico("Juego-in");
         evSub.setEvento("suscripcion");
         evSub.setIpLocal("127.0.0.1");
-        evSub.setPuertoLocal(6001);
+        evSub.setPuertoLocal(5000);
 
         broker.manejar(evSub);
+        
+        System.out.println("===== PRUEBA 2: SUSCRIPCIÓN =====");
+        Evento evSub2 = new Evento();
 
-        System.out.println("\n===== PRUEBA 2: EVENTO NORMAL =====");
-        Evento evNormal = new Evento();
+        evSub2.setTopico("Juego-out");
+        evSub2.setEvento("suscripcion");
+        evSub2.setIpLocal("127.0.0.1");
+        evSub2.setPuertoLocal(5001);
 
-        evNormal.setTopico("juego-in");
-        evNormal.setEvento("jugadaRealizada");
-        evNormal.setIpLocal("127.0.0.1");
-        evNormal.setPuertoLocal(6001);
+        broker.manejar(evSub2);
 
-        broker.manejar(evNormal);
+//        System.out.println("\n===== PRUEBA 2: EVENTO NORMAL =====");
+//        Evento evNormal = new Evento();
+//
+//        evNormal.setTopico("juego-in");
+//        evNormal.setEvento("jugadaRealizada");
+//        evNormal.setIpLocal("127.0.0.1");
+//        evNormal.setPuertoLocal(6001);
+//
+//        broker.manejar(evNormal);
 
     }
 }

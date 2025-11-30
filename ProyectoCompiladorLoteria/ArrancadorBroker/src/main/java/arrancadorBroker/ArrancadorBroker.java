@@ -4,11 +4,15 @@ import Desempaquetador.Desempaquetador;
 import Empaquetador.Empaquetador;
 import Ensamblador.EnsambladorRed;
 import RedEventos.EventoRed;
+import Sender.EventSender;
 import colaGenerica.ColaDePrioridad;
+import dispatcher.Dispatcher;
 import filtros.FiltroDesuscripcion;
 import filtros.FiltroGenericoEvento;
 import filtros.FiltroSuscripcion;
-import interfacesRed.IReceptorJSON;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import listener.EventListener;
 import responsabilityChainBroker.responsabilityChainBroker;
 import suscripciones.gestorDeSuscripciones;
@@ -24,23 +28,18 @@ public class ArrancadorBroker {
 
     private int puerto;
 
-    public ArrancadorBroker(int puertoRed) {
-        this.puerto = puertoRed;
-        this.ensambladorRed = new EnsambladorRed(puertoRed);
+    public ArrancadorBroker(int puertoLocal) {
+        this.puerto = puertoLocal;
     }
 
-    public void ensamblar() throws Exception {
+    public void ensamblar() {
 
         // 1) Crear ensamblador de red REAL
         ensambladorRed = new EnsambladorRed(puerto);
 
-        // 2) Ensamblar red, pero todavía no tenemos receptorJSON real
-        //    Usaremos null porque NO lo usas (EventListener no usa ese receptor).
-        ensambladorRed.ensamblar(null);
-
-        // 3) Obtener colas
-        ColaDePrioridad<EventoRed> colaSalida = ensambladorRed.getColaSalida();
-        ColaDePrioridad<String> colaEntrada = ensambladorRed.getColaEntrada();
+        // 2) Crear Colas
+        ColaDePrioridad<EventoRed> colaSalida = new ColaDePrioridad();
+        ColaDePrioridad<String> colaEntrada = new ColaDePrioridad();
 
         // 4) Gestor de suscripciones
         gestor = new gestorDeSuscripciones();
@@ -56,13 +55,11 @@ public class ArrancadorBroker {
         filtroGen.setGestorSuscripciones(gestor);
 
         // 6) Empaquetador (hacia red)
-        empaquetador = new Empaquetador(
-                colaSalida,
-                "127.0.0.1",
-                9999,
-                puerto
-        );
+        empaquetador = new Empaquetador(colaSalida, "127.0.0.1", 9999, puerto);
         filtroGen.setEmpaquetador(empaquetador);
+
+        EventSender eventSender = new EventSender(colaSalida);
+        colaSalida.addObserverSalida(eventSender);
 
         // 7) Encadenar filtros
         filtroSus.setNext(filtroDes);
@@ -78,6 +75,20 @@ public class ArrancadorBroker {
         // 9) Crear desempaquetador COMO OBSERVER de la colaEntrada
         desempaquetador = new Desempaquetador(colaEntrada, broker);
         colaEntrada.addObserverEntrada(desempaquetador);
+        
+        EventListener eventListener = new EventListener(colaEntrada);
+
+        //----------------------------------------------------------------------
+        try {
+            ensambladorRed.ensamblar(eventListener);
+            Dispatcher dispatcher = ensambladorRed.getDispatcher();
+            eventSender.setiDispatcher(dispatcher);
+        } catch (IOException ex) {
+            Logger.getLogger(ArrancadorBroker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+
+        
 
         System.out.println("[EnsambladorBroker] Broker ensamblado y conectado a la red.");
     }
