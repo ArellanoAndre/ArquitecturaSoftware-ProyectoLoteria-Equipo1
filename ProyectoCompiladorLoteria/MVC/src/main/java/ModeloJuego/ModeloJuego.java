@@ -13,6 +13,7 @@ import ModeloJuego.entidades.Jugador;
 import java.util.List;
 import org.json.JSONObject;
 import InterfacesEventClient.IReceptorEvento;
+import ModeloJuego.entidades.Carta;
 
 public class ModeloJuego implements IModeloJuego, IReceptorEvento {
 
@@ -77,6 +78,14 @@ public class ModeloJuego implements IModeloJuego, IReceptorEvento {
                         }
                     }
                 }
+            }
+            
+            else if (tipo.equals("CARTA_CANTADA")) {
+                int numCarta = obj.getInt("IdCarta");
+                String nombreCarta = obj.getString("Nombre");
+                
+                Carta cartaActual = new Carta(numCarta, nombreCarta);
+                controlVista.actualizarCartaCantada(cartaActual);
             }
 
             // 2. Evento Inicio de partida
