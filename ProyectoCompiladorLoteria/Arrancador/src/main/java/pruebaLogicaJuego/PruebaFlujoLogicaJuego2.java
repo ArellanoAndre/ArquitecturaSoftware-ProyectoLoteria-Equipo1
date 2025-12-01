@@ -56,8 +56,7 @@ public class PruebaFlujoLogicaJuego2 {
         modelo.setEmpaquetador(empaquetador);
 
         // 4. JUGADORES
-        logica.agregarJugador("JugadorHost");
-        logica.agregarJugador("JugadorRemoto");
+        logica.agregarJugadores();
 
         var jugador2 = logica.getJugadores().get(1);
         System.out.println("[INFO] Esperando jugadas del ID 2. Tarjeta: "

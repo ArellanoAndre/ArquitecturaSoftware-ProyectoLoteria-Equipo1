@@ -26,7 +26,7 @@ public class ProcesadorUnirse implements IProcesadorEvento {
         if ("SOLICITUD_UNIRSE".equals(tipoEvento)) {
             String nombre = datos.getString("Nombre");
             System.out.println("[Chain] Solicitud de unión: " + nombre);
-            logica.agregarJugador(nombre);
+            logica.agregarJugadores();
         } else if (siguiente != null) {
             siguiente.procesar(tipoEvento, datos, logica);
         }

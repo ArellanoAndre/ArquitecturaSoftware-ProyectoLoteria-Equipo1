@@ -103,7 +103,7 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         JSONObject json = new JSONObject();
         json.put("TipoEvento", "CasillaSeleccionadaValida");
         json.put("Jugador", idJugador);
-        json.put("Casilla", posicion - 1);
+        json.put("Casilla", posicion);
 
         enviarEventoBroadcast(json.toString(), "Juego-out");
 

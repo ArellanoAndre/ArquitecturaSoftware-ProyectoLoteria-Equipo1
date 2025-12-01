@@ -116,7 +116,7 @@ public class LogicaDeJuego implements ILogicaJuego, IReceptorEvento{
                 if (cartaActual != null && casillas[indice] == cartaActual.getNumCarta()) {
                     jugadorP.getTarjeta().marcarCasilla(casillaSeleccionada - 1);
 
-                    modeloLogica.EnviarEventoCartaSeleccionada(casillaSeleccionada, jugadorId);
+                    modeloLogica.EnviarEventoCartaSeleccionada(casillaSeleccionada - 1, jugadorId);
 
                     System.out.println("ModeloJuego.si");
                 } else {
@@ -210,19 +210,22 @@ public class LogicaDeJuego implements ILogicaJuego, IReceptorEvento{
         }
     }
 
-    public void agregarJugador(String nombre) {
-         
-       int[] fijos = {46, 6, 38, 3, 8, 11, 33, 35, 21, 54, 50, 29, 30, 40, 36, 26};
-        Tarjeta tarjeta = new Tarjeta(fijos, "/img/Tableros/Tablero01.png");
-        
-         
-        int nuevoId = jugadores.size() + 1;
-        
-        Jugador nuevo = new Jugador(nombre, tarjeta, nuevoId);
-        jugadores.add(nuevo);
-        
-        System.out.println("[Logica] Jugador agregado: " + nombre + " (ID: " + nuevoId + ")");
+    @Override
+    public void agregarJugadores() {
+        int[] casillas1 = {46, 6, 38, 3, 8, 11, 33, 35, 21, 54, 50, 29, 30, 40, 36, 26};
+            String img1 = "/img/Tableros/Tablero01.png";
+            Tarjeta tarjeta1 = new Tarjeta(casillas1, img1);
+            Jugador jugador1 = new Jugador("Rodri", tarjeta1, 1);
+            
+            jugadores.add(jugador1);
 
+            int[] casillas2 = {29, 16, 3, 10, 14, 47, 40, 4, 53, 20, 35, 27, 15, 9, 51, 36};
+            String img2 = "/img/Tableros/Tablero02.png";
+            Tarjeta tarjeta2 = new Tarjeta(casillas2, img2);
+            Jugador jugador2 = new Jugador("Isaac", tarjeta2, 2);
+        
+            jugadores.add(jugador2);
+        
     }
 
     @Override

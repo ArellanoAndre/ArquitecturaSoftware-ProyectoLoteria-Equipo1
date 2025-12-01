@@ -13,6 +13,7 @@ import Sender.EventSender;
 import colaGenerica.ColaDePrioridad;
 import interfacesRed.IReceptorJSON;
 import java.io.IOException;
+import java.util.Random;
 import java.util.Scanner;
 import listener.EventListener;
 
@@ -35,7 +36,7 @@ public class Prueba_EventosYRed {
         EnsambladorRed ensambladorRed = new EnsambladorRed(puertoLocal);
 
         // Implementación sencilla del receptor
-         IReceptorEvento manejadorEvento = new IReceptorEvento() {
+        IReceptorEvento manejadorEvento = new IReceptorEvento() {
 
             @Override
             public void manejar(IEvento evento) {
@@ -48,7 +49,7 @@ public class Prueba_EventosYRed {
         ColaDePrioridad colaSalida = new ColaDePrioridad();
         ColaDePrioridad colaEntrada = new ColaDePrioridad();
 
-        Empaquetador empaquetador = new Empaquetador(colaSalida,"127.0.0.1", puertoDestino, puertoLocal);
+        Empaquetador empaquetador = new Empaquetador(colaSalida, "127.0.0.1", puertoDestino, puertoLocal);
 
         EventSender eventSender = new EventSender(colaSalida);
         colaSalida.addObserverSalida(eventSender);
@@ -62,18 +63,22 @@ public class Prueba_EventosYRed {
         ensambladorRed.ensamblar(receptorJSON);
         eventSender.setiDispatcher(ensambladorRed.getDispatcher());
 
+        Random rand = new Random();
+        
+
         //------- Creación de un evento de seleccionar carta aleatorio----------
         while (true) {
             System.out.println("Ingresa la casilla seleccionada 1 - 16:");
-            int numeroCasilla = scan.nextInt() - 1;
+            int numero = scan.nextInt() - 1;
 
             IEvento eRandom = empaquetador.crearEvento();
-
+            int Rnumero = rand.nextInt(16) + 1; // 1 al 16
+            
             eRandom.setTopico("Juego-out");
             eRandom.setEvento("Juego");
             eRandom.setJSON(
                     "{ \"TipoEvento\": \"CasillaSeleccionadaValida\", "
-                    + "\"Jugador\": 2, \"Casilla\": " + numeroCasilla + " }"
+                    + "\"Jugador\": " + numero + ", \"Casilla\": " + Rnumero + " }"
             );
             empaquetador.enviarEvento(eRandom);
         }

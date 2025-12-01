@@ -12,7 +12,7 @@ public interface ILogicaJuego {
 
     void iniciarJuego();
 
-    void agregarJugador(String nombre);
+    void agregarJugadores();
 
     void verificarCarta(int jugadorId, int casillaSeleccionada);
 

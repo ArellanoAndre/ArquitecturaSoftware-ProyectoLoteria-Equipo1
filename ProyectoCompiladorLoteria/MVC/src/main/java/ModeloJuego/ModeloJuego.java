@@ -66,9 +66,9 @@ public class ModeloJuego implements IModeloJuego, IReceptorEvento {
                 int casilla = obj.getInt("Casilla");
 
                 System.out.println("Procesando casilla " + casilla + " para jugador " + jugador);
-                casillasMarcadas[casilla] = true;
 
                 if (jugadorPrincipal.getNumJugador() == jugador) {
+                    casillasMarcadas[casilla] = true;
                     controlVista.actualizarTarjetaJugadorPrincipal(casillasMarcadas);
                 } else {
                     for (Jugador jugadoresSecundario : jugadoresSecundarios) {
@@ -78,32 +78,26 @@ public class ModeloJuego implements IModeloJuego, IReceptorEvento {
                         }
                     }
                 }
-            }
-            
-            else if (tipo.equals("CARTA_CANTADA")) {
+            } else if (tipo.equals("CARTA_CANTADA")) {
                 int numCarta = obj.getInt("IdCarta");
                 String nombreCarta = obj.getString("Nombre");
-                
+
                 Carta cartaActual = new Carta(numCarta, nombreCarta);
                 controlVista.actualizarCartaCantada(cartaActual);
-            }
-
-            // 2. Evento Inicio de partida
+            } // 2. Evento Inicio de partida
             else if (tipo.equals("InicioPartida")) {
                 //  manejarInicioPartida(obj);
                 System.out.println("[ModeloJuegoMock] manejarInicioPartida");
                 return;
-            }
-
-            // 3. Evento UnirseAlLobby
+            } // 3. Evento UnirseAlLobby
             else if (tipo.equals("UnirseLobby")) {
                 //   manejarUnirseLobby(obj);
                 System.out.println("[ModeloJuegoMock]  manejarUnirseLobby");
                 return;
+            } // 4. Eventos no reconocidos
+            else {
+                System.out.println("[ModeloJuegoMock] TipoEvento NO RECONOCIDO: " + tipo);
             }
-
-            // 4. Eventos no reconocidos
-            else {System.out.println("[ModeloJuegoMock] TipoEvento NO RECONOCIDO: " + tipo);}
 
         } catch (Exception e) {
             System.err.println("[ModeloJuegoMock] ERROR manejando evento: " + e.getMessage());

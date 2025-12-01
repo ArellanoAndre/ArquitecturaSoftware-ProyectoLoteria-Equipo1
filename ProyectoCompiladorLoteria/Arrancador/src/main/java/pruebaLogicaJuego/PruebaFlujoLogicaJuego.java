@@ -76,11 +76,7 @@ public class PruebaFlujoLogicaJuego {
         modelo.setLogicaDeJuego(logica);
         modelo.setEmpaquetador(empaquetador);
 
-        logica.agregarJugador("JugadorHost");
-
-        // Creamos al Jugador 2 (Cliente Remoto)
-        // Necesitamos agregarlo para que cuando llegue el ID=2, la lógica sepa quién es.
-        logica.agregarJugador("JugadorRemoto");
+        logica.agregarJugadores();
 
         var jugador2 = logica.getJugadores().get(1); // Índice 1 es el jugador 2
         System.out.println("[INFO] Esperando jugadas del ID 2. Su tarjeta es: "

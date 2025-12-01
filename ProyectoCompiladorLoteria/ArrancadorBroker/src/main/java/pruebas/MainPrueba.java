@@ -34,6 +34,15 @@ public class MainPrueba {
         evSub2.setPuertoLocal(5001);
 
         broker.manejar(evSub2);
+        
+        Evento evSub3 = new Evento();
+        
+        evSub3.setTopico("Juego-out");
+        evSub3.setEvento("suscripcion");
+        evSub3.setIpLocal("127.0.0.1");
+        evSub3.setPuertoLocal(5002);
+
+        broker.manejar(evSub3);
 
 //        System.out.println("\n===== PRUEBA 2: EVENTO NORMAL =====");
 //        Evento evNormal = new Evento();
