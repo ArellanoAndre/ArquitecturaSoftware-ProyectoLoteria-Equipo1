@@ -69,7 +69,7 @@ public class Prueba_EventosYRed {
 
             IEvento eRandom = empaquetador.crearEvento();
 
-            eRandom.setTopico("Juego-in");
+            eRandom.setTopico("Juego-out");
             eRandom.setEvento("Juego");
             eRandom.setJSON(
                     "{ \"TipoEvento\": \"CasillaSeleccionadaValida\", "

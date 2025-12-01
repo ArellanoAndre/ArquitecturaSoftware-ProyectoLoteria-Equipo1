@@ -12,3 +12,4 @@
 /ProyectoCompiladorLoteria/IEventClient/target/
 /ProyectoCompiladorLoteria/IRed/target/
 /ProyectoCompiladorLoteria/ArrancadorBroker/target/
+*.jar

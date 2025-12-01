@@ -22,7 +22,6 @@ public class ModeloJuego implements IModeloJuego, IReceptorEvento {
     private boolean[] casillasMarcadas = new boolean[16];
     private Empaquetador empaquetador;
 
-
     public ModeloJuego(IControlVista controlVista, Jugador jugadorPrincipal, List<Jugador> jugadoresSecundarios) {
         this.controlVista = controlVista;
         this.jugadorPrincipal = jugadorPrincipal;
@@ -30,78 +29,87 @@ public class ModeloJuego implements IModeloJuego, IReceptorEvento {
         controlVista.setJugadorPrincipal(this.jugadorPrincipal);
         controlVista.setJugadoresSecundarios(jugadoresSecundarios);
     }
-    
-    public void setEmpaquetador(Empaquetador empaquetador){
+
+    public void setEmpaquetador(Empaquetador empaquetador) {
         this.empaquetador = empaquetador;
     }
-    
 
-  @Override
-public void manejar(IEvento evento) {
+    @Override
+    public void manejar(IEvento evento) {
 
-    System.out.println("[ModeloJuegoMock] Evento recibido COMPLETO:");
-    System.out.println(evento);
+        System.out.println("[ModeloJuegoMock] Evento recibido COMPLETO:");
+        System.out.println(evento);
 
-    try {
-        // Extraer el JSON interno del EVENTO
-        String payloadJSON = evento.getJSON();
+        try {
+            // Extraer el JSON interno del EVENTO
+            String payloadJSON = evento.getJSON();
 
-        if (payloadJSON == null) {
-            System.err.println("[ModeloJuegoMock] JSON interno es null");
-            return;
+            if (payloadJSON == null) {
+                System.err.println("[ModeloJuegoMock] JSON interno es null");
+                return;
+            }
+
+            JSONObject obj = new JSONObject(payloadJSON);
+
+            // Identificar el tipo de evento interno
+            String tipo = obj.getString("TipoEvento");
+
+            System.out.println("[ModeloJuegoMock] TipoEvento = " + tipo);
+
+            // ================================
+            //   CHAIN OF RESPONSIBILITY
+            // ================================
+            // 1. Casilla Seleccionada
+            if (tipo.equals("CasillaSeleccionadaValida")) {
+                int jugador = obj.getInt("Jugador");
+                int casilla = obj.getInt("Casilla");
+
+                System.out.println("Procesando casilla " + casilla + " para jugador " + jugador);
+                casillasMarcadas[casilla] = true;
+
+                if (jugadorPrincipal.getNumJugador() == jugador) {
+                    controlVista.actualizarTarjetaJugadorPrincipal(casillasMarcadas);
+                } else {
+                    for (Jugador jugadoresSecundario : jugadoresSecundarios) {
+                        if (jugadoresSecundario.getNumJugador() == jugador) {
+                            jugadoresSecundario.getTarjeta().marcarCasilla(casilla);
+                            controlVista.setJugadoresSecundarios(jugadoresSecundarios);
+                        }
+                    }
+                }
+            }
+
+            // 2. Evento Inicio de partida
+            else if (tipo.equals("InicioPartida")) {
+                //  manejarInicioPartida(obj);
+                System.out.println("[ModeloJuegoMock] manejarInicioPartida");
+                return;
+            }
+
+            // 3. Evento UnirseAlLobby
+            else if (tipo.equals("UnirseLobby")) {
+                //   manejarUnirseLobby(obj);
+                System.out.println("[ModeloJuegoMock]  manejarUnirseLobby");
+                return;
+            }
+
+            // 4. Eventos no reconocidos
+            else {System.out.println("[ModeloJuegoMock] TipoEvento NO RECONOCIDO: " + tipo);}
+
+        } catch (Exception e) {
+            System.err.println("[ModeloJuegoMock] ERROR manejando evento: " + e.getMessage());
         }
-
-        JSONObject obj = new JSONObject(payloadJSON);
-
-        // Identificar el tipo de evento interno
-        String tipo = obj.getString("TipoEvento");
-
-        System.out.println("[ModeloJuegoMock] TipoEvento = " + tipo);
-
-        // ================================
-        //   CHAIN OF RESPONSIBILITY
-        // ================================
-
-        // 1. Casilla Seleccionada
-        if (tipo.equals("CasillaSeleccionadaValida")) {
-          //  manejarCasillaSeleccionada(obj);
-          System.out.println("[ModeloJuegoMock] manejarCasillaSeleccionada");
-            return;
-        }
-
-        // 2. Evento Inicio de partida
-        if (tipo.equals("InicioPartida")) {
-          //  manejarInicioPartida(obj);
-          System.out.println("[ModeloJuegoMock] manejarInicioPartida");
-            return;
-        }
-
-        // 3. Evento UnirseAlLobby
-        if (tipo.equals("UnirseLobby")) {
-         //   manejarUnirseLobby(obj);
-            System.out.println("[ModeloJuegoMock]  manejarUnirseLobby");
-            return;
-        }
-
-        // 4. Eventos no reconocidos
-        System.out.println("[ModeloJuegoMock] TipoEvento NO RECONOCIDO: " + tipo);
-
-    } catch (Exception e) {
-        System.err.println("[ModeloJuegoMock] ERROR manejando evento: " + e.getMessage());
     }
-}
-
-
 
     @Override
     public void EnviarEventoCartaSeleccionada(int pos, int jugador) {
         IEvento eRandom = empaquetador.crearEvento();
         eRandom.setTopico("Juego-in");
-            eRandom.setEvento("Juego");
-            eRandom.setJSON(
-                            "{ \"TipoEvento\": \"CasillaSeleccionadaValida\", \"Jugador\": " + jugador + ", \"Casilla\": " + pos + " }"
-                    );
-            empaquetador.enviarEvento(eRandom);
+        eRandom.setEvento("Juego");
+        eRandom.setJSON(
+                "{ \"TipoEvento\": \"CasillaSeleccionadaValida\", \"Jugador\": " + jugadorPrincipal.getNumJugador() + ", \"Casilla\": " + pos + " }"
+        );
+        empaquetador.enviarEvento(eRandom);
     }
 
     @Override
@@ -109,6 +117,4 @@ public void manejar(IEvento evento) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-
- 
 }
