@@ -1,0 +1,241 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package logicaJuego;
+
+import Evento.Evento;
+import InterfacesEventClient.IEvento;
+import InterfacesEventClient.IReceptorEvento;
+import interfacesGlobales.ILogicaJuego;
+import interfacesGlobales.IModeloLogica;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javax.swing.Timer;
+import logicaJuego.entidades.Carta;
+import logicaJuego.entidades.Jugador;
+import logicaJuego.entidades.Tarjeta;
+
+/**
+ *
+ * @author rodri
+ */
+public class LogicaDeJuego implements ILogicaJuego, IReceptorEvento{
+
+    private List<Carta> mazo;
+    private List<Jugador> jugadores;
+    private Carta cartaActual;
+    private int contador = 0;
+    private Timer timer;
+
+    private IModeloLogica modeloLogica;
+
+    public void setModeloLogica(IModeloLogica modelo) {
+        this.modeloLogica = modelo;
+    }
+
+    /**
+     * Constructor que inicializa el modelo con la vista, el jugador principal y
+     * la lista de jugadores secundarios.
+     *
+     * @param jugadores lista de jugadores secundarios.
+     */
+    public LogicaDeJuego() {
+        this.mazo = crearMazo();
+        barajear();
+        this.jugadores = new ArrayList<>();
+
+    }
+    
+    public void setModelo(IModeloLogica modelo) {
+        this.modeloLogica = modelo;
+    }
+
+    
+
+    /**
+     * Inicia el juego mostrando la primera carta y repitiendo el proceso
+     * automáticamente cada cierto tiempo.
+     */
+    
+    public void iniciarJuego() {
+        siguienteCarta();
+        timer = new Timer(2500, e -> siguienteCarta());
+        timer.start();
+    }
+
+    /**
+     * Obtiene la siguiente carta del mazo y la envía a la vista.
+     */
+    public void siguienteCarta() {
+        cartaActual = mazo.get(contador);
+//        controlVista.actualizarCartaCantada(cartaActual); Llamar a modeloJuego
+        contador++;
+
+        if (contador == 54) {
+            contador = 0;
+        }
+        if (modeloLogica != null) {
+            // Usamos tipos primitivos (int, String) como definimos en la interfaz
+            modeloLogica.notificarCartaCantada(cartaActual.getNumCarta(), cartaActual.getNombreCarta());
+        }
+    }
+
+    /**
+     * Verifica si la carta seleccionada por el jugador coincide con la carta
+     * actual.
+     *
+     * @param jugadorId número de jugador que hizo la jugada.
+     * @param casillaSeleccionada número de casilla seleccionada (1–16).
+     */
+    public void verificarCarta(int jugadorId, int casillaSeleccionada) {
+
+        Jugador jugadorP = null;
+
+        for (Jugador jugadorL : jugadores) {
+            if (jugadorId == jugadorL.getNumJugador()) {
+                jugadorP = jugadorL;
+            }
+        }
+
+        // Ajustar la posición a índice (de 1-16 a 0-15)
+        int indice = casillaSeleccionada - 1;
+
+        // Obtener el arreglo de casillas de la tarjeta
+        int[] casillas = jugadorP.getTarjeta().getCasillas();
+
+        // Verificar que el índice sea válido
+        if (indice >= 0 && indice < casillas.length) {
+            // Obtener el estado de las casillas marcadas
+            boolean[] marcadas = jugadorP.getTarjeta().getMarcadas();
+
+            // Validar que la casilla no esté ya marcada
+            if (!marcadas[indice]) {
+                // Comparar el número de la carta cantada con el valor en la posición seleccionada
+                if (cartaActual != null && casillas[indice] == cartaActual.getNumCarta()) {
+                    jugadorP.getTarjeta().marcarCasilla(casillaSeleccionada - 1);
+
+                    modeloLogica.EnviarEventoCartaSeleccionada(casillaSeleccionada - 1, jugadorId);
+
+                    System.out.println("ModeloJuego.si");
+                } else {
+                    System.out.println("ModeloJuego.no - No coincide la carta cantada (" + cartaActual.getNumCarta() + ") con la casilla " + casillas[indice]);
+                }
+            } else {
+                System.out.println("ModeloJuego.skip - Casilla " + casillaSeleccionada + " ya está marcada");
+            }
+        } else {
+            System.out.println("ModeloJuego.error - Índice inválido: " + indice);
+        }
+
+        System.out.println("Comparando: CartaActual=" + cartaActual.getNumCarta()
+                + " vs CasillaJugador=" + casillas[indice]);
+    }
+
+    /**
+     * @return carta actual cantada.
+     */
+    public Carta getCartaActual() {
+        return cartaActual;
+    }
+
+    public List<Jugador> getJugadores() {
+        return jugadores;
+    }
+
+    /**
+     * @return lista de cartas del mazo.
+     */
+    public List<Carta> getMazo() {
+        return mazo;
+    }
+
+    /**
+     * Asigna un nuevo mazo.
+     */
+    public void setMazo(List<Carta> mazo) {
+        this.mazo = mazo;
+    }
+
+    /**
+     * Crea un nuevo mazo de 54 cartas de lotería.
+     *
+     * @return lista con las cartas generadas.
+     */
+    public List<Carta> crearMazo() {
+        String[] nombres = {
+            "El Gallo", "El Diablito", "La Dama", "El Catrín", "El Paraguas", "La Sirena",
+            "La Escalera", "La Botella", "El Barril", "El Árbol", "El Melón", "El Valiente",
+            "El Gorrito", "La Muerte", "La Pera", "La Bandera", "El Bandolón", "El Violoncello",
+            "La Garza", "El Pájaro", "La Mano", "La Bota", "La Luna", "El Cotorro",
+            "El Borracho", "El Negrito", "El Corazón", "La Sandía", "El Tambor", "El Camarón",
+            "Las Jaras", "El Músico", "La Araña", "El Soldado", "La Estrella", "El Cazo",
+            "El Mundo", "El Apache", "El Nopal", "El Alacrán", "La Rosa", "La Calavera",
+            "La Campana", "El Cantarito", "El Venado", "El Sol", "La Corona", "La Chalupa",
+            "El Pino", "El Pescado", "La Palma", "La Maceta", "El Arpa", "La Rana"
+        };
+
+        List<Carta> mazo = new ArrayList<>();
+        for (int i = 0; i < nombres.length; i++) {
+            mazo.add(new Carta(i + 1, nombres[i]));
+        }
+        return mazo;
+
+    }
+
+    /**
+     * Mezcla las cartas del mazo.
+     */
+    public void barajear() {
+        Collections.shuffle(mazo);
+    }
+
+    private void verificarGanador(Jugador jugador) {
+
+        boolean victoria = true;
+        for (boolean marcada : jugador.getTarjeta().getMarcadas()) {
+            if (!marcada) {
+                victoria = false;
+            } else {
+                if (victoria) {
+                    timer.stop();
+                    if (modeloLogica != null) {
+                       
+                         
+                        modeloLogica.notificarGanador(jugador.getNombre());
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void agregarJugadores() {
+        int[] casillas1 = {46, 6, 38, 3, 8, 11, 33, 35, 21, 54, 50, 29, 30, 40, 36, 26};
+            String img1 = "/img/Tableros/Tablero01.png";
+            Tarjeta tarjeta1 = new Tarjeta(casillas1, img1);
+            Jugador jugador1 = new Jugador("Rodri", tarjeta1, 1);
+            
+            jugadores.add(jugador1);
+
+            int[] casillas2 = {29, 16, 3, 10, 14, 47, 40, 4, 53, 20, 35, 27, 15, 9, 51, 36};
+            String img2 = "/img/Tableros/Tablero02.png";
+            Tarjeta tarjeta2 = new Tarjeta(casillas2, img2);
+            Jugador jugador2 = new Jugador("Isaac", tarjeta2, 2);
+        
+            jugadores.add(jugador2);
+        
+    }
+
+    @Override
+    public void manejar(IEvento evento) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+  
+    
+    
+    
+
+}
