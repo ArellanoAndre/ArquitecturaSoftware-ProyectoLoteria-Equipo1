@@ -5,7 +5,7 @@ import InterfacesEventClient.IEnvioEvento;
 import InterfacesEventClient.IEvento;
 import InterfacesEventClient.IReceptorEvento;
 import eventBuilder.EventBuilder;
-import interfacesGlobales.IModeloLogica;
+import interfacesLogica.IModeloLogica;
 import logicaJuego.LogicaDeJuego;
 import org.json.JSONObject;
 import procesarCadena.IProcesadorEvento;
