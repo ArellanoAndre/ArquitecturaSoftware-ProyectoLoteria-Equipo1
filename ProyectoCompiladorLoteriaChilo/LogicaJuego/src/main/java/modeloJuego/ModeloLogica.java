@@ -10,6 +10,7 @@ import logicaJuego.LogicaDeJuego;
 import org.json.JSONObject;
 import procesarCadena.IProcesadorEvento;
 import procesarCadena.ProcesadorIniciar;
+import procesarCadena.ProcesadorIniciarRonda;
 import procesarCadena.ProcesadorMarcar;
 import procesarCadena.ProcesadorUnirse;
 
@@ -30,15 +31,17 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
 
     public ModeloLogica() {
         // armar cadena de responsabilidad aqui
+        IProcesadorEvento iniciarRonda = new ProcesadorIniciarRonda();
         IProcesadorEvento marcar = new ProcesadorMarcar();
         IProcesadorEvento unirse = new ProcesadorUnirse();
         IProcesadorEvento iniciar = new ProcesadorIniciar();
 
         // Conectamos los eslabones
+        iniciarRonda.setSiguiente(marcar);
         marcar.setSiguiente(unirse);
         unirse.setSiguiente(iniciar);
 
-        this.cadenaProcesamiento = marcar; // Guardamos la referencia al primero
+        this.cadenaProcesamiento = iniciarRonda; // Guardamos la referencia al primero
     }
 
     public void setLogicaDeJuego(LogicaDeJuego logica) {
@@ -101,7 +104,7 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
     public void notificarJugadaValida(int posicion, int idJugador) {
 
         JSONObject json = new JSONObject();
-        json.put("TipoEvento", "CasillaSeleccionadaValida");
+        json.put("TipoEvento", "CASILLA_SELECCIONADA");
         json.put("Jugador", idJugador);
         json.put("Casilla", posicion);
 

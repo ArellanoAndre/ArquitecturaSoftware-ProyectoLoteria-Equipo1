@@ -1,12 +1,12 @@
 package Controlador;
 
-import ModeloJuego.entidades.Carta;
-import ModeloJuego.entidades.Jugador;
 import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import ModeloVista.entidadesVista.TarjetaVista;
-import Interfaces.IControlVista;
+import interfacesComunicacionModelo.IControlVista;
 import Interfaces.IModeloVista;
+import interfacesEntidades.ICarta;
+import interfacesEntidades.IJugador;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class ControlVista implements IControlVista {
      * @param jugador jugador principal del modelo.
      */
     @Override
-    public void setJugadorPrincipal(Jugador jugador) {
+    public void setJugadorPrincipal(IJugador jugador) {
         TarjetaVista tarjeta = new TarjetaVista(jugador.getTarjeta().getMarcadas(), jugador.getTarjeta().getImg());
         JugadorVista jugadorP = new JugadorVista(jugador.getNombre(), tarjeta, jugador.getNumJugador());
         jugadorP.setRutaAvatar("/img/Avatares/user" + jugador.getNumJugador() + ".png");
@@ -59,9 +59,9 @@ public class ControlVista implements IControlVista {
      * @param jugadores lista de jugadores del modelo.
      */
     @Override
-    public void setJugadoresSecundarios(List<Jugador> jugadores) {
+    public void setJugadoresSecundarios(List<IJugador> jugadores) {
         List<JugadorVista> jugadoresV = new ArrayList<>();
-        for (Jugador jugador : jugadores) {
+        for (IJugador jugador : jugadores) {
             TarjetaVista tarjeta = new TarjetaVista(jugador.getTarjeta().getMarcadas(), jugador.getTarjeta().getImg());
             JugadorVista jugadorSV = new JugadorVista(jugador.getNombre(), tarjeta, jugador.getNumJugador());
             jugadorSV.setRutaAvatar("/img/Avatares/user" + jugador.getNumJugador() + ".png");
@@ -77,7 +77,7 @@ public class ControlVista implements IControlVista {
      * @param cartaActual carta que fue cantada en el modelo del juego.
      */
     @Override
-    public void actualizarCartaCantada(Carta cartaActual) {
+    public void actualizarCartaCantada(ICarta cartaActual) {
         CartaVista cv = new CartaVista(
                 cartaActual.getNumCarta(),
                 cartaActual.getNombreCarta(),

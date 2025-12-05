@@ -62,9 +62,6 @@ public class PruebaFlujoLogicaJuego2 {
         System.out.println("[INFO] Esperando jugadas del ID 2. Tarjeta: "
                 + java.util.Arrays.toString(jugador2.getTarjeta().getCasillas()));
 
-        // 5. ARRANQUE
-        System.out.println("[ACCION] Iniciando la Lotería...");
-        logica.iniciarJuego();
 
         // MODO ESPERA
         while (true) {

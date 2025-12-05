@@ -1,7 +1,6 @@
 package Controlador;
 
 import Interfaces.IControladorInicio;
-import Interfaces.IModeloJuego;
 import ModeloVista.ModeloVista;
 import Presentacion.JFrameLobby;
 import Presentacion.JFrameSeleccionAvatar;
@@ -9,28 +8,29 @@ import Presentacion.JPantallaConfigurarPartida;
 import Presentacion.JPantallaMenuPrincipal;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import Interfaces.IModeloJuegoInicio;
 
 public class ControladorInicio implements IControladorInicio {
 
     private final ModeloVista modeloVista;
-    private final IModeloJuego modeloJuego;
+    private final IModeloJuegoInicio modeloJuego;
     private JPantallaMenuPrincipal inicio;
     private JPantallaConfigurarPartida pantallaConfig;
     private JFrameSeleccionAvatar seleccionAvatar;
     private JFrameLobby lobby;
 
-    public ControladorInicio(IModeloJuego modeloJuego) {
+    public ControladorInicio(IModeloJuegoInicio modeloJuego) {
         this.modeloJuego = modeloJuego;
         this.modeloVista = new ModeloVista();
         
     }
 
-    public ControladorInicio(ModeloVista modeloVista, IModeloJuego modeloJuego) {
+    public ControladorInicio(ModeloVista modeloVista, IModeloJuegoInicio modeloJuego) {
         this.modeloVista = modeloVista;
         this.modeloJuego = modeloJuego;
     }
 
-    public ControladorInicio(IModeloJuego modeloJuego, JPantallaMenuPrincipal inicio) {
+    public ControladorInicio(IModeloJuegoInicio modeloJuego, JPantallaMenuPrincipal inicio) {
         this.modeloJuego = modeloJuego;
         this.inicio = inicio;
         this.modeloVista = null;

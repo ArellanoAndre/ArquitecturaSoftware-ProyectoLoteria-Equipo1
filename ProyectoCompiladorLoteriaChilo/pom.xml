@@ -19,6 +19,8 @@
         <module>IEventClient</module>
         <module>IRed</module>
         <module>ArrancadorBroker</module>
+        <module>ModeloJuegoMVC</module>
+        <module>IComunicacionModelo</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

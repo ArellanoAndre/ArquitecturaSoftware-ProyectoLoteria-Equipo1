@@ -9,9 +9,9 @@ import org.json.JSONObject;
 
 /**
  *
- * @author isaac
+ * @author rodri
  */
-public class ProcesadorMarcar implements IProcesadorEvento {
+public class ProcesadorIniciarRonda implements IProcesadorEvento {
 
     private IProcesadorEvento siguiente;
 
@@ -22,13 +22,14 @@ public class ProcesadorMarcar implements IProcesadorEvento {
 
     @Override
     public void procesar(String tipoEvento, JSONObject datos, LogicaDeJuego logica) {
-        if ("CASILLA_SELECCIONADA".equals(tipoEvento)) {
-            int idJugador = datos.getInt("Jugador");
-            int casilla = datos.getInt("Casilla");
-            System.out.println("[Chain] Jugador " + idJugador + " intenta marcar casilla " + casilla);
-            logica.verificarCarta(idJugador, casilla);
+        if ("INICIAR_RONDA".equals(tipoEvento)) {
+            System.out.println("[Chain] Iniciando ronda...");
+            logica.iniciarRonda();
         } else if (siguiente != null) {
             siguiente.procesar(tipoEvento, datos, logica);
+        } else {
+            System.out.println("[Chain] Evento desconocido: " + tipoEvento);
         }
     }
+
 }

@@ -29,8 +29,8 @@ public class Prueba_EventosYRed2 {
     public static void main(String[] args) throws IOException {
 
         Scanner scan = new Scanner(System.in);
-        int puertoLocal = 5001;
-        int puertoDestino = 5000;
+        int puertoLocal = 5000;
+        int puertoDestino = 7000;
 
         EnsambladorRed ensambladorRed = new EnsambladorRed(puertoLocal);
 
@@ -69,11 +69,11 @@ public class Prueba_EventosYRed2 {
 
             IEvento eRandom = empaquetador.crearEvento();
 
-            eRandom.setTopico("Juego-in");
+            eRandom.setTopico("Juego-out");
             eRandom.setEvento("Juego");
             eRandom.setJSON(
                     "{ \"TipoEvento\": \"CasillaSeleccionadaValida\", "
-                    + "\"Jugador\": 2, \"Casilla\": " + numeroCasilla + " }"
+                    + "\"Jugador\": 1, \"Casilla\": " + numeroCasilla + " }"
             );
             empaquetador.enviarEvento(eRandom);
         }

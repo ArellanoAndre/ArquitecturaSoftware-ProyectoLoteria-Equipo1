@@ -10,3 +10,5 @@
 /ProyectoCompiladorLoteria/MVC_InicioJuego/target/
 /ProyectoCompiladorLoteria/Arrancador/target/
 *.jar
+/ProyectoCompiladorLoteriaChilo/IComunicacionModelo/target/
+/ProyectoCompiladorLoteriaChilo/ModeloJuegoMVC/target/

@@ -2,19 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package Interfaces;
-
-import Interfaces.IControlVista;
+package interfacesEntidades;
 
 /**
  *
  * @author rodri
  */
-public interface IModeloJuego {
+public interface ICarta {
+
+    public int getNumCarta();
+
+    public void setNumCarta(int numCarta);
     
-    void setControlVista (IControlVista controlVista);
-    
-    void EnviarEventoCartaSeleccionada(int pos, int idJugador);
-    
-    
+    public String getNombreCarta();
+
+    public void setNombreCarta(String nombreCarta);
 }

@@ -1,15 +1,18 @@
-package ModeloJuego.entidades;
+package ModeloJuegoEntidades;
+
+import interfacesEntidades.IJugador;
+import interfacesEntidades.ITarjeta;
 
 /**
  * Representa a un jugador dentro del ModeloJuego. Contiene información como su
  * nombre, número, puntaje, tarjeta.
  */
-public class Jugador {
+public class Jugador implements IJugador{
 
     private int numJugador;
     private String nombre;
     private double puntaje;
-    private Tarjeta tarjeta;
+    private ITarjeta tarjeta;
     private boolean principal;
 
     /**
@@ -19,7 +22,7 @@ public class Jugador {
      * @param tarjeta Tarjeta asignada al jugador.
      * @param numJugador Número identificador del jugador.
      */
-    public Jugador(String nombre, Tarjeta tarjeta, int numJugador) {
+    public Jugador(String nombre, ITarjeta tarjeta, int numJugador) {
         this.nombre = nombre;
         this.tarjeta = tarjeta;
         this.puntaje = 0;
@@ -30,6 +33,7 @@ public class Jugador {
     /**
      * @return Nombre del jugador.
      */
+    @Override
     public String getNombre() {
         return nombre;
     }
@@ -37,6 +41,7 @@ public class Jugador {
     /**
      * @return Puntaje actual del jugador.
      */
+    @Override
     public double getPuntaje() {
         return puntaje;
     }
@@ -46,6 +51,7 @@ public class Jugador {
      *
      * @param puntos Cantidad de puntos a agregar.
      */
+    @Override
     public void addPuntos(double puntos) {
         this.puntaje += puntos;
     }
@@ -53,13 +59,15 @@ public class Jugador {
     /**
      * @return Tarjeta del jugador.
      */
-    public Tarjeta getTarjeta() {
+    @Override
+    public ITarjeta getTarjeta() {
         return tarjeta;
     }
 
     /**
      * @return true si es el jugador principal, false en caso contrario.
      */
+    @Override
     public boolean isPrincipal() {
         return principal;
     }
@@ -67,6 +75,7 @@ public class Jugador {
     /**
      * @param principal Define si el jugador es el principal.
      */
+    @Override
     public void setPrincipal(boolean principal) {
         this.principal = principal;
     }
@@ -74,6 +83,7 @@ public class Jugador {
     /**
      * @return Número del jugador.
      */
+    @Override
     public int getNumJugador() {
         return numJugador;
     }
@@ -81,6 +91,7 @@ public class Jugador {
     /**
      * @param numJugador Nuevo número del jugador.
      */
+    @Override
     public void setNumJugador(int numJugador) {
         this.numJugador = numJugador;
     }

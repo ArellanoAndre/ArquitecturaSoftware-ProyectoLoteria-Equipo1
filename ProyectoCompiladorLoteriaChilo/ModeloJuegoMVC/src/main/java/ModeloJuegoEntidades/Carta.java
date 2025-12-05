@@ -1,9 +1,11 @@
-package ModeloJuego.entidades;
+package ModeloJuegoEntidades;
+
+import interfacesEntidades.ICarta;
 
 /**
  * Representa una carta del ModeloJuego, con un número y un nombre asociado.
  */
-public class Carta {
+public class Carta implements ICarta{
 
     private int numCarta;
     private String nombreCarta;
@@ -22,6 +24,7 @@ public class Carta {
     /**
      * @return Número de la carta.
      */
+    @Override
     public int getNumCarta() {
         return numCarta;
     }
@@ -29,6 +32,7 @@ public class Carta {
     /**
      * @param numCarta Nuevo número de la carta.
      */
+    @Override
     public void setNumCarta(int numCarta) {
         this.numCarta = numCarta;
     }
@@ -36,6 +40,7 @@ public class Carta {
     /**
      * @return Nombre de la carta.
      */
+    @Override
     public String getNombreCarta() {
         return nombreCarta;
     }
@@ -43,6 +48,7 @@ public class Carta {
     /**
      * @param nombreCarta Nuevo nombre de la carta.
      */
+    @Override
     public void setNombreCarta(String nombreCarta) {
         this.nombreCarta = nombreCarta;
     }

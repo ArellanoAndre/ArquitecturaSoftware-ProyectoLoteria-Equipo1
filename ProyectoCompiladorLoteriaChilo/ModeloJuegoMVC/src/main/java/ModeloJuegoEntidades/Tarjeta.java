@@ -1,11 +1,13 @@
-package ModeloJuego.entidades;
+package ModeloJuegoEntidades;
+
+import interfacesEntidades.ITarjeta;
 
 /**
  * Representa una tarjeta del ModeloJuego con sus casillas, marcas y la imagen
  * asociada. Cada tarjeta contiene una cuadrícula de números (casillas) y un
  * arreglo de booleanos que indica qué posiciones han sido marcadas.
  */
-public class Tarjeta {
+public class Tarjeta implements ITarjeta{
 
     private int[] casillas;   // Números en la tarjeta (ej. 4x4)
     private boolean[] marcadas; // Indica si una casilla fue marcada
@@ -29,6 +31,7 @@ public class Tarjeta {
      * @param numCasilla Índice de la casilla.
      * @return Valor de la casilla.
      */
+    @Override
     public int getCasilla(int numCasilla) {
         return casillas[numCasilla];
     }
@@ -38,6 +41,7 @@ public class Tarjeta {
      *
      * @param numCasilla Índice de la casilla a marcar.
      */
+    @Override
     public void marcarCasilla(int numCasilla) {
         marcadas[numCasilla] = true;
     }
@@ -45,6 +49,7 @@ public class Tarjeta {
     /**
      * @return Arreglo con las casillas marcadas.
      */
+    @Override
     public boolean[] getMarcadas() {
         return marcadas;
     }
@@ -52,6 +57,7 @@ public class Tarjeta {
     /**
      * @return Arreglo con los números de las casillas.
      */
+    @Override
     public int[] getCasillas() {
         return casillas;
     }
@@ -59,6 +65,7 @@ public class Tarjeta {
     /**
      * @return Imagen asociada a la tarjeta.
      */
+    @Override
     public String getImg() {
         return img;
     }
@@ -66,12 +73,14 @@ public class Tarjeta {
     /**
      * @param img Nueva imagen para la tarjeta.
      */
+    @Override
     public void setImg(String img) {
         this.img = img;
     }
 
     /**
-     * @param marcadas Nuevo arreglo de casillas marcadas.
+     * @return Representación en texto de la tarjeta.
+     * @return 
      */
     @Override
     public String toString() {
@@ -79,8 +88,9 @@ public class Tarjeta {
     }
 
     /**
-     * @return Representación en texto de la tarjeta.
+     * @param marcadas Nuevo arreglo de casillas marcadas.
      */
+    @Override
     public void setMarcadas(boolean[] marcadas) {
         this.marcadas = marcadas;
     }

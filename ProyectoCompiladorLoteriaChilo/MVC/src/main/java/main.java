@@ -1,8 +1,5 @@
 
 import Controlador.ControlSeleccionarCarta;
-import ModeloJuego.entidades.Jugador;
-import ModeloJuego.entidades.Tarjeta;
-import ModeloJuego.ModeloJuego;
 import Controlador.ControlVista;
 import ModeloVista.ModeloVista;
 import Presentacion.JPantallaJuego;

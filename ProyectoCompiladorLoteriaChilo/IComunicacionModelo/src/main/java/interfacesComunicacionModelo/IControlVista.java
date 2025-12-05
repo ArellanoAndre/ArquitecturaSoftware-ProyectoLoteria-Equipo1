@@ -1,7 +1,7 @@
-package Interfaces;
+package interfacesComunicacionModelo;
 
-import ModeloJuego.entidades.Carta;
-import ModeloJuego.entidades.Jugador;
+import interfacesEntidades.ICarta;
+import interfacesEntidades.IJugador;
 import java.util.List;
 
 /**
@@ -15,7 +15,7 @@ public interface IControlVista {
      *
      * @param jugador Jugador principal del juego.
      */
-    void setJugadorPrincipal(Jugador jugador);
+    void setJugadorPrincipal(IJugador jugador);
 
     /**
      * Actualiza las casillas marcadas de la tarjeta del jugador principal.
@@ -29,12 +29,12 @@ public interface IControlVista {
      *
      * @param jugadores Lista de jugadores secundarios.
      */
-    void setJugadoresSecundarios(List<Jugador> jugadores);
+    void setJugadoresSecundarios(List<IJugador> jugadores);
 
     /**
      * Actualiza la carta cantada actual en la vista.
      *
      * @param cartaActual Carta que fue cantada en el juego.
      */
-    void actualizarCartaCantada(Carta cartaActual);
+    void actualizarCartaCantada(ICarta cartaActual);
 }

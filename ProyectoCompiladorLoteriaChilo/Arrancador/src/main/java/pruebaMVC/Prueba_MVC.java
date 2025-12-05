@@ -5,14 +5,14 @@ import Controlador.ControlVista;
 import Desempaquetador.Desempaquetador;
 import Empaquetador.Empaquetador;
 import Ensamblador.EnsambladorRed;
-import ModeloJuego.ModeloJuego;
-import ModeloJuego.entidades.Jugador;
-import ModeloJuego.entidades.Tarjeta;
+import ModeloJuegoEntidades.Jugador;
+import ModeloJuegoEntidades.Tarjeta;
 import ModeloVista.ModeloVista;
 import Presentacion.JPantallaJuego;
 import Sender.EventSender;
 import colaGenerica.ColaDePrioridad;
 import dispatcher.Dispatcher;
+import interfacesEntidades.IJugador;
 import interfacesRed.IReceptorJSON;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import listener.EventListener;
+import modeloJuegoMVC.ModeloJuego;
 
 public class Prueba_MVC {
 
@@ -48,7 +49,7 @@ public class Prueba_MVC {
             Tarjeta tarjeta2 = new Tarjeta(casillas2, img2);
             Jugador jugador2 = new Jugador("Isaac", tarjeta2, 2);
 
-            List<Jugador> secundarios = new ArrayList<>();
+            List<IJugador> secundarios = new ArrayList<>();
             secundarios.add(jugador2);
 
             // ===============================
@@ -100,6 +101,7 @@ public class Prueba_MVC {
             } catch (IOException ex) {
                 Logger.getLogger(Prueba_MVC.class.getName()).log(Level.SEVERE, null, ex);
             }
+            modeloJuego.EnviarEventoIniciarRonda();
 
         });
     }

@@ -24,7 +24,7 @@ public class ProcesadorIniciar implements IProcesadorEvento {
     public void procesar(String tipoEvento, JSONObject datos, LogicaDeJuego logica) {
         if ("INICIAR_PARTIDA".equals(tipoEvento)) {
             System.out.println("[Chain] Iniciando partida...");
-            logica.iniciarJuego();
+            logica.iniciarRonda();
         } else if (siguiente != null) {
             siguiente.procesar(tipoEvento, datos, logica);
         } else {

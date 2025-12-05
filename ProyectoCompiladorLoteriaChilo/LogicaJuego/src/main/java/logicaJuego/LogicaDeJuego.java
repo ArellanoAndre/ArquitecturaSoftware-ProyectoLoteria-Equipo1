@@ -4,13 +4,10 @@
  */
 package logicaJuego;
 
-import Evento.Evento;
-import InterfacesEventClient.IEvento;
-import InterfacesEventClient.IReceptorEvento;
+import cantador.Griton;
 import interfacesLogica.ILogicaJuego;
 import interfacesLogica.IModeloLogica;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.swing.Timer;
 import logicaJuego.entidades.Carta;
@@ -21,12 +18,13 @@ import logicaJuego.entidades.Tarjeta;
  *
  * @author rodri
  */
-public class LogicaDeJuego implements ILogicaJuego{
-
-    private List<Carta> mazo;
+public class LogicaDeJuego implements ILogicaJuego {
+    
+    private Griton griton;
     private List<Jugador> jugadores;
     private Carta cartaActual;
     private int contador = 0;
+    private int dificultad = 2500;
     private Timer timer;
 
     private IModeloLogica modeloLogica;
@@ -42,35 +40,33 @@ public class LogicaDeJuego implements ILogicaJuego{
      * @param jugadores lista de jugadores secundarios.
      */
     public LogicaDeJuego() {
-        this.mazo = crearMazo();
-        barajear();
+        this.griton = new Griton();
         this.jugadores = new ArrayList<>();
 
     }
-    
+
     public void setModelo(IModeloLogica modelo) {
         this.modeloLogica = modelo;
     }
-
-    
 
     /**
      * Inicia el juego mostrando la primera carta y repitiendo el proceso
      * automáticamente cada cierto tiempo.
      */
-    
-    public void iniciarJuego() {
+    @Override
+    public void iniciarRonda() {
+        griton.barajear();
         siguienteCarta();
-        timer = new Timer(2500, e -> siguienteCarta());
+        timer = new Timer(dificultad, e -> siguienteCarta());
         timer.start();
     }
 
     /**
      * Obtiene la siguiente carta del mazo y la envía a la vista.
      */
+    @Override
     public void siguienteCarta() {
-        cartaActual = mazo.get(contador);
-//        controlVista.actualizarCartaCantada(cartaActual); Llamar a modeloJuego
+        cartaActual = griton.getMazo().get(contador);
         contador++;
 
         if (contador == 54) {
@@ -89,6 +85,7 @@ public class LogicaDeJuego implements ILogicaJuego{
      * @param jugadorId número de jugador que hizo la jugada.
      * @param casillaSeleccionada número de casilla seleccionada (1–16).
      */
+    @Override
     public void verificarCarta(int jugadorId, int casillaSeleccionada) {
 
         Jugador jugadorP = null;
@@ -144,53 +141,6 @@ public class LogicaDeJuego implements ILogicaJuego{
         return jugadores;
     }
 
-    /**
-     * @return lista de cartas del mazo.
-     */
-    public List<Carta> getMazo() {
-        return mazo;
-    }
-
-    /**
-     * Asigna un nuevo mazo.
-     */
-    public void setMazo(List<Carta> mazo) {
-        this.mazo = mazo;
-    }
-
-    /**
-     * Crea un nuevo mazo de 54 cartas de lotería.
-     *
-     * @return lista con las cartas generadas.
-     */
-    public List<Carta> crearMazo() {
-        String[] nombres = {
-            "El Gallo", "El Diablito", "La Dama", "El Catrín", "El Paraguas", "La Sirena",
-            "La Escalera", "La Botella", "El Barril", "El Árbol", "El Melón", "El Valiente",
-            "El Gorrito", "La Muerte", "La Pera", "La Bandera", "El Bandolón", "El Violoncello",
-            "La Garza", "El Pájaro", "La Mano", "La Bota", "La Luna", "El Cotorro",
-            "El Borracho", "El Negrito", "El Corazón", "La Sandía", "El Tambor", "El Camarón",
-            "Las Jaras", "El Músico", "La Araña", "El Soldado", "La Estrella", "El Cazo",
-            "El Mundo", "El Apache", "El Nopal", "El Alacrán", "La Rosa", "La Calavera",
-            "La Campana", "El Cantarito", "El Venado", "El Sol", "La Corona", "La Chalupa",
-            "El Pino", "El Pescado", "La Palma", "La Maceta", "El Arpa", "La Rana"
-        };
-
-        List<Carta> mazo = new ArrayList<>();
-        for (int i = 0; i < nombres.length; i++) {
-            mazo.add(new Carta(i + 1, nombres[i]));
-        }
-        return mazo;
-
-    }
-
-    /**
-     * Mezcla las cartas del mazo.
-     */
-    public void barajear() {
-        Collections.shuffle(mazo);
-    }
-
     private void verificarGanador(Jugador jugador) {
 
         boolean victoria = true;
@@ -201,8 +151,7 @@ public class LogicaDeJuego implements ILogicaJuego{
                 if (victoria) {
                     timer.stop();
                     if (modeloLogica != null) {
-                       
-                         
+
                         modeloLogica.notificarGanador(jugador.getNombre());
                     }
                 }
@@ -213,24 +162,28 @@ public class LogicaDeJuego implements ILogicaJuego{
     @Override
     public void agregarJugadores() {
         int[] casillas1 = {46, 6, 38, 3, 8, 11, 33, 35, 21, 54, 50, 29, 30, 40, 36, 26};
-            String img1 = "/img/Tableros/Tablero01.png";
-            Tarjeta tarjeta1 = new Tarjeta(casillas1, img1);
-            Jugador jugador1 = new Jugador("Rodri", tarjeta1, 1);
-            
-            jugadores.add(jugador1);
+        String img1 = "/img/Tableros/Tablero01.png";
+        Tarjeta tarjeta1 = new Tarjeta(casillas1, img1);
+        Jugador jugador1 = new Jugador("Rodri", tarjeta1, 1);
 
-            int[] casillas2 = {29, 16, 3, 10, 14, 47, 40, 4, 53, 20, 35, 27, 15, 9, 51, 36};
-            String img2 = "/img/Tableros/Tablero02.png";
-            Tarjeta tarjeta2 = new Tarjeta(casillas2, img2);
-            Jugador jugador2 = new Jugador("Isaac", tarjeta2, 2);
-        
-            jugadores.add(jugador2);
-        
+        jugadores.add(jugador1);
+
+        int[] casillas2 = {29, 16, 3, 10, 14, 47, 40, 4, 53, 20, 35, 27, 15, 9, 51, 36};
+        String img2 = "/img/Tableros/Tablero02.png";
+        Tarjeta tarjeta2 = new Tarjeta(casillas2, img2);
+        Jugador jugador2 = new Jugador("Isaac", tarjeta2, 2);
+
+        jugadores.add(jugador2);
+
     }
 
-  
-    
-    
-    
+    public int getDificultad() {
+        return dificultad;
+    }
 
+    public void setDificultad(int dificultad) {
+        this.dificultad = dificultad;
+    }
+    
+    
 }

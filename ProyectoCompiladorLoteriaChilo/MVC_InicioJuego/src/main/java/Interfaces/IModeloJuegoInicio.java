@@ -2,13 +2,11 @@ package Interfaces;
 
 import Empaquetador.Empaquetador;
 
-public interface IModeloJuego {
+public interface IModeloJuegoInicio {
 
   //  void setEventBuilder(EventBuilder ev);
 
     void setEmpaquetador(Empaquetador empaquetador);
-
-    void manejar(String payloadJSON);
 
     void enviarEventoCartaSeleccionada(int pos, int jugador);
 

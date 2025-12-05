@@ -9,14 +9,14 @@ import Controlador.ControlVista;
 import Desempaquetador.Desempaquetador;
 import Empaquetador.Empaquetador;
 import Ensamblador.EnsambladorRed;
-import ModeloJuego.ModeloJuego;
-import ModeloJuego.entidades.Jugador;
-import ModeloJuego.entidades.Tarjeta;
+import ModeloJuegoEntidades.Jugador;
+import ModeloJuegoEntidades.Tarjeta;
 import ModeloVista.ModeloVista;
 import Presentacion.JPantallaJuego;
 import Sender.EventSender;
 import colaGenerica.ColaDePrioridad;
 import dispatcher.Dispatcher;
+import interfacesEntidades.IJugador;
 import interfacesRed.IReceptorJSON;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import listener.EventListener;
+import modeloJuegoMVC.ModeloJuego;
 
 /**
  *
@@ -32,11 +33,9 @@ import listener.EventListener;
  */
 public class Prueba_MVC2 {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-           SwingUtilities.invokeLater(() -> {
+
+        SwingUtilities.invokeLater(() -> {
 
             //======================================================================
             //Ya está lista para que la prueben con Prueva_EventosYRed, la 1 no la 2
@@ -50,18 +49,17 @@ public class Prueba_MVC2 {
             // ===============================
             int[] casillas2 = {29, 16, 3, 10, 14, 47, 40, 4, 53, 20, 35, 27, 15, 9, 51, 36};
             String img2 = "/img/Tableros/Tablero02.png";
-            Tarjeta tarjeta1 = new Tarjeta(casillas2, img2);
-            
-            Jugador jugadorPrincipal = new Jugador("Isaac", tarjeta1, 2);
+            Tarjeta tarjeta2 = new Tarjeta(casillas2, img2);
+            Jugador jugadorPrincipal = new Jugador("Isaac", tarjeta2, 2);
 
+            
             
             int[] casillas1 = {46, 6, 38, 3, 8, 11, 33, 35, 21, 54, 50, 29, 30, 40, 36, 26};
             String img1 = "/img/Tableros/Tablero01.png";
-            Tarjeta tarjeta2 = new Tarjeta(casillas1, img1);
-            
-            Jugador jugador2 = new Jugador("Rodri", tarjeta2, 1);
+            Tarjeta tarjeta1 = new Tarjeta(casillas1, img1);
+            Jugador jugador2 = new Jugador("Rodri", tarjeta1, 1);
 
-            List<Jugador> secundarios = new ArrayList<>();
+            List<IJugador> secundarios = new ArrayList<>();
             secundarios.add(jugador2);
 
             // ===============================
@@ -116,5 +114,4 @@ public class Prueba_MVC2 {
 
         });
     }
-    
 }

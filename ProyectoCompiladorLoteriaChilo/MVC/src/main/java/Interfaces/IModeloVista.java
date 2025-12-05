@@ -2,6 +2,7 @@ package Interfaces;
 
 import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
+import interfacesComunicacionModelo.IModeloJuego;
 import java.util.List;
 
 public interface IModeloVista {

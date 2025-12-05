@@ -49,6 +49,11 @@
             <artifactId>Broker</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.mycompany</groupId>
+            <artifactId>ModeloJuegoMVC</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <properties>
         <maven.compiler.release>17</maven.compiler.release>

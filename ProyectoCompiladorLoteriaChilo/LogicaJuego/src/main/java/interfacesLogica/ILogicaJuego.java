@@ -10,14 +10,12 @@ package interfacesLogica;
  */
 public interface ILogicaJuego {
 
-    void iniciarJuego();
+    void iniciarRonda();
 
     void agregarJugadores();
 
     void verificarCarta(int jugadorId, int casillaSeleccionada);
 
     void siguienteCarta();
-
-    void barajear();
 
 }

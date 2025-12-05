@@ -1,15 +1,14 @@
 package ModeloVista;
 
 
-import Interfaces.IControlVista;
-import ModeloJuego.ModeloJuego;
+import interfacesComunicacionModelo.IControlVista;
 import java.util.ArrayList;
 import java.util.List;
 import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import Interfaces.IModeloVista;
 import Interfaces.Observer;
-import Interfaces.IModeloJuego;
+import interfacesComunicacionModelo.IModeloJuego;
 
 /**
  * Clase que representa el modeloVista del juego. Actúa como intermediario entre
