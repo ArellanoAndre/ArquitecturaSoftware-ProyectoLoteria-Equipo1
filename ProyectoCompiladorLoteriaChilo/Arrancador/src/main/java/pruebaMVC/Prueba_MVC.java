@@ -1,5 +1,6 @@
 package pruebaMVC;
 
+
 import Controlador.ControlSeleccionarCarta;
 import Controlador.ControlVista;
 import Desempaquetador.Desempaquetador;
@@ -9,6 +10,7 @@ import ModeloJuegoEntidades.Jugador;
 import ModeloJuegoEntidades.Tarjeta;
 import ModeloVista.ModeloVista;
 import Presentacion.JPantallaJuego;
+
 import Sender.EventSender;
 import colaGenerica.ColaDePrioridad;
 import dispatcher.Dispatcher;
@@ -63,7 +65,8 @@ public class Prueba_MVC {
                     jugadorPrincipal,
                     secundarios
             );
-
+             
+            
             modeloVista.setModeloJuego(modeloJuego);
 
             ControlSeleccionarCarta controlador = new ControlSeleccionarCarta(modeloVista);

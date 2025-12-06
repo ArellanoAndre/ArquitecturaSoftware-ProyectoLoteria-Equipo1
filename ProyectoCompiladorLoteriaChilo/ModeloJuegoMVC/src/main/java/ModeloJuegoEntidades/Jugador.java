@@ -14,6 +14,7 @@ public class Jugador implements IJugador{
     private double puntaje;
     private ITarjeta tarjeta;
     private boolean principal;
+    private String avatar;
 
     /**
      * Constructor que inicializa un jugador con su nombre, tarjeta y número.
@@ -28,6 +29,12 @@ public class Jugador implements IJugador{
         this.puntaje = 0;
         this.principal = false;
         this.numJugador = numJugador;
+    }
+
+    public Jugador(int numJugador, String nombre, String avatar) {
+        this.numJugador = numJugador;
+        this.nombre = nombre;
+        this.avatar = avatar;
     }
 
     /**
@@ -94,6 +101,14 @@ public class Jugador implements IJugador{
     @Override
     public void setNumJugador(int numJugador) {
         this.numJugador = numJugador;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
 }

@@ -1,22 +1,49 @@
 package Presentacion;
 
-import Controlador.ControladorInicio;
+import Interfaces.IControladorInicio;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 public class JFrameSeleccionAvatar extends JFramePadre {
 
-    private ControladorInicio controlador;
+    private IControladorInicio controlador;
+    private String Avatar;
+    private List<String> rutasAvatares = new ArrayList<>();
+
 
     public JFrameSeleccionAvatar() {
         this(null);
     }
 
-    public JFrameSeleccionAvatar(ControladorInicio controlador) {
-        this.controlador = controlador;
-        initComponents();
-        setLocationRelativeTo(null);
-        setResizable(false);
-    }
+    public JFrameSeleccionAvatar(IControladorInicio controlador) {
+    this.controlador = controlador;
+    initComponents();
+
+    // Usamos GridLayout para 3 avatares arriba y 3 abajo
+    pnlAvatares.setLayout(new java.awt.GridLayout(2, 3, 20, 20));
+    pnlAvatares.setPreferredSize(new Dimension(450, 300));
+
+    // Cargar imágenes
+    cargarAvatares();
+
+    setLocationRelativeTo(null);
+    setResizable(false);
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -182,9 +209,38 @@ public class JFrameSeleccionAvatar extends JFramePadre {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        if (controlador != null) {
-            controlador.onNombreAvatarConfirmado(getNombreJugador());
-        }
+        
+    String nombre = getNombreJugador();
+    String avatar = getAvatar();
+
+    // Validar nombre vacío
+    if (nombre == null || nombre.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(
+            this,
+            "Por favor, ingresa un nombre de jugador.",
+            "Validación",
+            JOptionPane.WARNING_MESSAGE
+        );
+        return;
+    }
+
+    // Validar avatar no seleccionado
+    if (avatar == null) {
+        JOptionPane.showMessageDialog(
+            this,
+            "Por favor, selecciona un avatar antes de continuar.",
+            "Validación",
+            JOptionPane.WARNING_MESSAGE
+        );
+        return;
+    }
+
+    // Si todo está correcto → llamar al controlador
+    if (controlador != null) {
+        controlador.EnviarNombreAvatarConfirmado(nombre, avatar);
+    } else {
+        System.err.println("[ERROR] controlador es null en JFrameSeleccionAvatar");
+    }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     public String getNombreJugador() {
@@ -193,6 +249,101 @@ public class JFrameSeleccionAvatar extends JFramePadre {
 
     public void mostrarError(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Validación", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void cargarAvatares() {
+
+    System.out.println("Entrando a cargarAvatares()...");
+
+    pnlAvatares.removeAll(); // Limpia si recarga
+
+    // Avatares disponibles (puedes agregar más)
+    agregarAvatar("avatar1.png");
+    agregarAvatar("avatar2.png");
+    agregarAvatar("avatar3.png");
+    agregarAvatar("avatar4.png");
+    agregarAvatar("avatar5.png");
+    agregarAvatar("avatar6.png");
+
+    pnlAvatares.revalidate();
+    pnlAvatares.repaint();
+
+    System.out.println("Avatares cargados correctamente.");
+}
+
+
+
+    private void agregarAvatar(String nombreArchivo) {
+
+    URL url = getClass().getClassLoader().getResource("img/" + nombreArchivo);
+
+    if (url == null) {
+        System.err.println("[ERROR] No se encontró la imagen: img/" + nombreArchivo);
+        return;
+    }
+
+    // Crear icono desde recurso
+    ImageIcon originalIcon = new ImageIcon(url);
+
+    // Escalar imagen a tamaño uniforme
+    Image img = originalIcon.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+    JLabel lbl = new JLabel(new ImageIcon(img));
+
+    lbl.setHorizontalAlignment(JLabel.CENTER);
+    lbl.setVerticalAlignment(JLabel.CENTER);
+    lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+    // Listener de selección
+    lbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            Avatar = nombreArchivo;
+            marcarSeleccion(lbl);
+            System.out.println("[Avatar] Seleccionado: " + nombreArchivo);
+        }
+    });
+
+    pnlAvatares.add(lbl);
+
+    System.out.println("Avatar agregado: " + nombreArchivo);
+}
+
+
+private void marcarSeleccion(JLabel seleccionado) {
+
+    for (Component comp : pnlAvatares.getComponents()) {
+        if (comp instanceof JLabel lbl) {
+            lbl.setBorder(null); // Quitamos borde previo
+        }
+    }
+
+    // Aplicar borde verde al seleccionado
+    seleccionado.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+}
+
+
+    private void seleccionarAvatar(String ruta, JPanel panelSeleccionado) {
+
+    this.Avatar = ruta;  
+    System.out.println("[Avatar] Seleccionado: " + ruta);
+
+    // Desmarcar todos
+    for (Component comp : pnlAvatares.getComponents()) {
+        if (comp instanceof JPanel) {
+            ((JPanel) comp).setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
+        }
+    }
+
+    // Marcar seleccionado
+    panelSeleccionado.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+}
+
+    public String getAvatar() {
+        return Avatar;
+    }
+
+    public void setAvatar(String Avatar) {
+        this.Avatar = Avatar;
     }
 
 

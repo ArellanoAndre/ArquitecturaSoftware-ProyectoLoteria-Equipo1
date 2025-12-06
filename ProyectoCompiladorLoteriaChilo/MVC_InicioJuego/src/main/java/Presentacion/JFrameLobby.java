@@ -1,10 +1,17 @@
 package Presentacion;
 
-import Controlador.ControladorInicio;
+import Interfaces.IControladorInicio;
+import interfacesEntidades.IJugador;
+import java.awt.Image;
+import java.net.URL;
+import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class JFrameLobby extends JFramePadre {
 
-    private ControladorInicio controlador;
+    private IControladorInicio controlador;
 
     /**
      * Creates new form JFrameLobby
@@ -13,7 +20,7 @@ public class JFrameLobby extends JFramePadre {
         this(null);
     }
 
-    public JFrameLobby(ControladorInicio controlador) {
+    public JFrameLobby(IControladorInicio controlador) {
         this.controlador = controlador;
         initComponents();
         setLocationRelativeTo(null);
@@ -497,6 +504,39 @@ public class JFrameLobby extends JFramePadre {
             controlador.onIniciarLobby();
         }
     }//GEN-LAST:event_btnConfirmarActionPerformed
+
+    public void actualizarJugadores(List<IJugador> jugadores) {
+
+    JPanel[] paneles = { panelJugador1, panelJugador2, panelJugador3, panelJugador4 };
+    JLabel[] labelsNombre = { labelNivel1, labelNivel3, labelNivel4, labelNivel5 };
+    JLabel[] labelsIcono = { jLabel1, jLabel3, jLabel4, jLabel5 };
+
+    // Ocultar todos primero
+    for (int i = 0; i < paneles.length; i++) {
+        paneles[i].setVisible(false);
+    }
+
+    // Mostrar solo los necesarios
+    for (int i = 0; i < jugadores.size(); i++) {
+
+        IJugador j = jugadores.get(i);
+
+        paneles[i].setVisible(true);
+        labelsNombre[i].setText(j.getNombre());
+
+        // Cargar avatar desde resources
+        try {
+            URL url = getClass().getClassLoader().getResource("img/" + j.getAvatar());
+            if (url != null) {
+                ImageIcon icon = new ImageIcon(url);
+                Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+                labelsIcono[i].setIcon(new ImageIcon(img));
+            }
+        } catch (Exception e) {
+            labelsIcono[i].setText("icono");
+        }
+    }
+}
 
     public void setNivel(String nivel) {
         labelNivel.setText(nivel);

@@ -4,6 +4,10 @@
  */
 package interfacesLogica;
 
+import interfacesEntidades.IJugador;
+import java.util.List;
+import logicaJuego.entidades.Jugador;
+
 /**
  *
  * @author isaac
@@ -17,5 +21,10 @@ public interface IModeloLogica {
     void notificarJugadaValida(int posicion, int idJugador);
 
     void notificarGanador(String nombreGanador);
+    
+     void enviarConfirmacionReglas(
+        String dificultad,
+        int puntuacionMaxima,
+        List<Jugador> jugadores);
 
 }

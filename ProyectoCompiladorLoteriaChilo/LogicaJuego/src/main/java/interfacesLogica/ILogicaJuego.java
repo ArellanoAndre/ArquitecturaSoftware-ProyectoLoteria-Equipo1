@@ -10,7 +10,7 @@ package interfacesLogica;
  */
 public interface ILogicaJuego {
 
-    void iniciarRonda();
+     void iniciarRonda();
 
     void agregarJugadores();
 

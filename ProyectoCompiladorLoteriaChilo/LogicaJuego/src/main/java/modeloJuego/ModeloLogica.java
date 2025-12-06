@@ -4,15 +4,19 @@ import Evento.Evento;
 import InterfacesEventClient.IEnvioEvento;
 import InterfacesEventClient.IEvento;
 import InterfacesEventClient.IReceptorEvento;
-import eventBuilder.EventBuilder;
+import interfacesEntidades.IJugador;
 import interfacesLogica.IModeloLogica;
+import java.util.List;
 import logicaJuego.LogicaDeJuego;
+import logicaJuego.entidades.Jugador;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import procesarCadena.IProcesadorEvento;
 import procesarCadena.ProcesadorIniciar;
 import procesarCadena.ProcesadorIniciarRonda;
 import procesarCadena.ProcesadorMarcar;
 import procesarCadena.ProcesadorUnirse;
+import procesarCadena.ProcesadorUnirsePartida;
 
 public class ModeloLogica implements IModeloLogica, IReceptorEvento {
 
@@ -34,13 +38,14 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         IProcesadorEvento iniciarRonda = new ProcesadorIniciarRonda();
         IProcesadorEvento marcar = new ProcesadorMarcar();
         IProcesadorEvento unirse = new ProcesadorUnirse();
-        IProcesadorEvento iniciar = new ProcesadorIniciar();
-
+        IProcesadorEvento iniciar = new ProcesadorIniciar(); 
+        IProcesadorEvento unirsePartida = new ProcesadorUnirsePartida();
         // Conectamos los eslabones
         iniciarRonda.setSiguiente(marcar);
         marcar.setSiguiente(unirse);
         unirse.setSiguiente(iniciar);
-
+        unirse.setSiguiente(unirsePartida);
+        
         this.cadenaProcesamiento = iniciarRonda; // Guardamos la referencia al primero
     }
 
@@ -161,6 +166,36 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
             System.err.println("Error procesando entrada" + e.getMessage());
         }
     }
+    
+    @Override
+public void enviarConfirmacionReglas(
+        String dificultad,
+        int puntuacionMaxima,
+        List<Jugador> jugadores) {
+
+    JSONObject json = new JSONObject();
+    json.put("TipoEvento", "Confirmacion_Reglas");
+    json.put("Dificultad", dificultad);
+    json.put("PuntuacionMaxima", puntuacionMaxima);
+
+    // Construir arreglo JSON "Jugadores"
+    JSONArray arr = new JSONArray();
+    for (Jugador j : jugadores) {
+        JSONObject jugadorJson = new JSONObject();
+        jugadorJson.put("IdJugador", j.getNumJugador());
+        jugadorJson.put("Nombre", j.getNombre());
+        jugadorJson.put("Avatar", j.getAvatar());
+        arr.put(jugadorJson);
+    }
+
+    json.put("Jugadores", arr);
+
+    enviarEventoBroadcast(json.toString(), "Juego-out");
+
+    System.out.println("[ModeloLogica] → Enviando ConfirmacionReglas: " + json.toString());
+}
+
+
 
     
 }

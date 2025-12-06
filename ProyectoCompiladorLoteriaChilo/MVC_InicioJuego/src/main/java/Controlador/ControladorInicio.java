@@ -6,31 +6,35 @@ import Presentacion.JFrameLobby;
 import Presentacion.JFrameSeleccionAvatar;
 import Presentacion.JPantallaConfigurarPartida;
 import Presentacion.JPantallaMenuPrincipal;
+import interfacesComunicacionModelo.IModeloJuego;
+import interfacesComunicacionModelo.IModeloVista;
 import java.util.Map;
-import javax.swing.JOptionPane;
-import Interfaces.IModeloJuegoInicio;
 
 public class ControladorInicio implements IControladorInicio {
 
-    private final ModeloVista modeloVista;
-    private final IModeloJuegoInicio modeloJuego;
+    private final IModeloVista modeloVista;
+    private  IModeloJuego modeloJuego = null;
     private JPantallaMenuPrincipal inicio;
     private JPantallaConfigurarPartida pantallaConfig;
     private JFrameSeleccionAvatar seleccionAvatar;
     private JFrameLobby lobby;
 
-    public ControladorInicio(IModeloJuegoInicio modeloJuego) {
+    public ControladorInicio(IModeloVista modeloVista) {
+        this.modeloVista = modeloVista;
+    }
+
+    public ControladorInicio(IModeloJuego modeloJuego) {
         this.modeloJuego = modeloJuego;
         this.modeloVista = new ModeloVista();
         
     }
 
-    public ControladorInicio(ModeloVista modeloVista, IModeloJuegoInicio modeloJuego) {
+    public ControladorInicio(ModeloVista modeloVista, IModeloJuego modeloJuego) {
         this.modeloVista = modeloVista;
         this.modeloJuego = modeloJuego;
     }
 
-    public ControladorInicio(IModeloJuegoInicio modeloJuego, JPantallaMenuPrincipal inicio) {
+    public ControladorInicio(IModeloJuego modeloJuego, JPantallaMenuPrincipal inicio) {
         this.modeloJuego = modeloJuego;
         this.inicio = inicio;
         this.modeloVista = null;
@@ -39,48 +43,48 @@ public class ControladorInicio implements IControladorInicio {
 
     @Override
     public void onConfigChanged(String dificultad, Integer numeroJugadores, Integer puntuacionMaxima,
-            Map<String, Integer> puntuaciones) {
-        modeloVista.setDificultad(dificultad);
-        modeloVista.setNumeroJugadores(numeroJugadores);
-        modeloVista.setPuntuacionMaxima(puntuacionMaxima);
-        modeloVista.setPuntuaciones(puntuaciones);
-        actualizarLobby();
+          Map<String, Integer> puntuaciones) {
+//        modeloVista.setDificultad(dificultad);
+//        modeloVista.setNumeroJugadores(numeroJugadores);
+//        modeloVista.setPuntuacionMaxima(puntuacionMaxima);
+//        modeloVista.setPuntuaciones(puntuaciones);
+//        actualizarLobby();
     }
 
     @Override
     public void onConfirmarConfig() {
-        String dificultad = pantallaConfig.getDificultadSeleccionada();
-        Integer numeroJugadores = pantallaConfig.getNumeroJugadoresSeleccionado();
-        Integer puntuacionMaxima = pantallaConfig.getPuntuacionMaxima();
-        Map<String, Integer> puntuaciones = pantallaConfig.getPuntuaciones();
-
-        if (dificultad == null) {
-            pantallaConfig.mostrarError("Selecciona un nivel de dificultad.");
-            return;
-        }
-
-        if (numeroJugadores == null) {
-            pantallaConfig.mostrarError("Selecciona la cantidad de jugadores.");
-            return;
-        }
-
-        if (puntuacionMaxima == null || puntuacionMaxima <= 0) {
-            pantallaConfig.mostrarError("Ingresa una puntuación máxima válida (mayor a 0).");
-            return;
-        }
-
-        if (puntuaciones == null || puntuaciones.values().stream().anyMatch(v -> v == null || v <= 0)) {
-            pantallaConfig.mostrarError("Todas las puntuaciones deben ser números mayores a 0.");
-            return;
-        }
-
-        modeloVista.setDificultad(dificultad);
-        modeloVista.setNumeroJugadores(numeroJugadores);
-        modeloVista.setPuntuacionMaxima(puntuacionMaxima);
-        modeloVista.setPuntuaciones(puntuaciones);
-
-        abrirSeleccionAvatar();
-        pantallaConfig.dispose();
+//        String dificultad = pantallaConfig.getDificultadSeleccionada();
+//        Integer numeroJugadores = pantallaConfig.getNumeroJugadoresSeleccionado();
+//        Integer puntuacionMaxima = pantallaConfig.getPuntuacionMaxima();
+//        Map<String, Integer> puntuaciones = pantallaConfig.getPuntuaciones();
+//
+//        if (dificultad == null) {
+//            pantallaConfig.mostrarError("Selecciona un nivel de dificultad.");
+//            return;
+//        }
+//
+//        if (numeroJugadores == null) {
+//            pantallaConfig.mostrarError("Selecciona la cantidad de jugadores.");
+//            return;
+//        }
+//
+//        if (puntuacionMaxima == null || puntuacionMaxima <= 0) {
+//            pantallaConfig.mostrarError("Ingresa una puntuación máxima válida (mayor a 0).");
+//            return;
+//        }
+//
+//        if (puntuaciones == null || puntuaciones.values().stream().anyMatch(v -> v == null || v <= 0)) {
+//            pantallaConfig.mostrarError("Todas las puntuaciones deben ser números mayores a 0.");
+//            return;
+//        }
+//
+//        modeloVista.setDificultad(dificultad);
+//        modeloVista.setNumeroJugadores(numeroJugadores);
+//        modeloVista.setPuntuacionMaxima(puntuacionMaxima);
+//        modeloVista.setPuntuaciones(puntuaciones);
+//
+//        abrirSeleccionAvatar();
+//        pantallaConfig.dispose();
     }
 
     @Override
@@ -98,34 +102,26 @@ public class ControladorInicio implements IControladorInicio {
     }
 
     @Override
-    public void onNombreAvatarConfirmado(String nombre) {
-        if (nombre == null || nombre.trim().isEmpty()) {
-            if (seleccionAvatar != null) {
-                seleccionAvatar.mostrarError("Ingresa un nombre de jugador.");
-            }
-            return;
-        }
+    public void EnviarNombreAvatarConfirmado(String nombre,String avatar) {
+    System.out.println("[ControlInicio] → Enviando UNIRSE_PARTIDA");
 
-        modeloVista.setNombreJugador(nombre.trim());
-        abrirLobby();
-        if (seleccionAvatar != null) {
-            seleccionAvatar.dispose();
-        }
+    if (modeloVista != null) {
+        modeloVista.EnviarNombreAvatarConfirmado(nombre, avatar);
     }
+}
 
-    @Override
     public void onIniciarLobby() {
-        modeloJuego.enviarEventoInicioPartida(modeloVista.getNombreJugador(), modeloVista.getDificultad(),
-                modeloVista.getNumeroJugadores(), modeloVista.getPuntuacionMaxima());
-        JOptionPane.showMessageDialog(lobby, "Partida lista para iniciar. Jugador: " + modeloVista.getNombreJugador(),
-                "Lobby", JOptionPane.INFORMATION_MESSAGE);
+//        modeloJuego.enviarEventoInicioPartida(modeloVista.getNombreJugador(), modeloVista.getDificultad(),
+//                modeloVista.getNumeroJugadores(), modeloVista.getPuntuacionMaxima());
+//        JOptionPane.showMessageDialog(lobby, "Partida lista para iniciar. Jugador: " + modeloVista.getNombreJugador(),
+//                "Lobby", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void actualizarLobby() {
-        if (lobby != null) {
-            lobby.setDatosPartida(modeloVista.getDificultad(), modeloVista.getNumeroJugadores(),
-                    modeloVista.getPuntuacionMaxima(), modeloVista.getNombreJugador());
-        }
+//        if (lobby != null) {
+//            lobby.setDatosPartida(modeloVista.getDificultad(), modeloVista.getNumeroJugadores(),
+//                    modeloVista.getPuntuacionMaxima(), modeloVista.getNombreJugador());
+//        }
     }
 
     private void abrirSeleccionAvatar() {

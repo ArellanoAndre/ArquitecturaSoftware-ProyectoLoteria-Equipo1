@@ -11,6 +11,7 @@ public class Jugador {
     private double puntaje;
     private Tarjeta tarjeta;
     private boolean principal;
+    private String avatar;
 
     /**
      * Constructor que inicializa un jugador con su nombre, tarjeta y número.
@@ -96,5 +97,20 @@ public class Jugador {
     public void setTarjeta(Tarjeta tarjeta) {
         this.tarjeta = tarjeta;
     }
+
+    public Jugador(int numJugador, String nombre, String avatar) {
+        this.numJugador = numJugador;
+        this.nombre = nombre;
+        this.avatar = avatar;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+    
 
 }

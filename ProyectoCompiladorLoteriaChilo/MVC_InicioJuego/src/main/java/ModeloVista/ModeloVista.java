@@ -1,61 +1,36 @@
 package ModeloVista;
 
     
-import Interfaces.IModeloVista;
-import java.util.HashMap;
-import java.util.Map;
+import interfacesComunicacionModelo.IModeloJuego;
+import interfacesComunicacionModelo.IModeloVista;
+import interfacesEntidades.IJugador;
+import java.util.List;
+import modeloJuegoMVC.ModeloJuego;
 
 public class ModeloVista implements IModeloVista {
+    private IModeloJuego modeloJuego;
 
-    private String dificultad;
-    private Integer numeroJugadores;
-    private Integer puntuacionMaxima;
-    private Map<String, Integer> puntuaciones;
-    private String nombreJugador;
-
-    public ModeloVista() {
-        puntuaciones = new HashMap<>();
+    public IModeloJuego getModeloJuego() {
+        return modeloJuego;
     }
 
-    public String getDificultad() {
-        return dificultad;
+    public void setModeloJuego(IModeloJuego modeloJuego) {
+        this.modeloJuego = modeloJuego;
     }
 
-    public void setDificultad(String dificultad) {
-        this.dificultad = dificultad;
-    }
+    
+    public void EnviarNombreAvatarConfirmado(String nombre, String avatar) {
+    System.out.println("[ModeloVista] → Solicitando UNIRSE_PARTIDA");
 
-    public Integer getNumeroJugadores() {
-        return numeroJugadores;
+    if (modeloJuego != null) {
+        modeloJuego.EnviarNombreAvatarConfirmado(nombre, avatar);
     }
+}
 
-    public void setNumeroJugadores(Integer numeroJugadores) {
-        this.numeroJugadores = numeroJugadores;
+    @Override
+    public void actualizarConfiguracion(String dificultad, List<IJugador> jugadores, int puntuacionMaxima) {
+        
     }
+    
 
-    public Integer getPuntuacionMaxima() {
-        return puntuacionMaxima;
-    }
-
-    public void setPuntuacionMaxima(Integer puntuacionMaxima) {
-        this.puntuacionMaxima = puntuacionMaxima;
-    }
-
-    public Map<String, Integer> getPuntuaciones() {
-        return puntuaciones;
-    }
-
-    public void setPuntuaciones(Map<String, Integer> puntuaciones) {
-        if (puntuaciones != null) {
-            this.puntuaciones = new HashMap<>(puntuaciones);
-        }
-    }
-
-    public String getNombreJugador() {
-        return nombreJugador;
-    }
-
-    public void setNombreJugador(String nombreJugador) {
-        this.nombreJugador = nombreJugador;
-    }
 }

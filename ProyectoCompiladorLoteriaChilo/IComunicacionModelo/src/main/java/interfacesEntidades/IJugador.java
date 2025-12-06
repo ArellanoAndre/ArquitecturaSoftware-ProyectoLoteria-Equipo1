@@ -25,4 +25,9 @@ public interface IJugador {
     public int getNumJugador();
 
     public void setNumJugador(int numJugador);
+    
+    
+    public String getAvatar();
+
+    public void setAvatar(String avatar);
 }

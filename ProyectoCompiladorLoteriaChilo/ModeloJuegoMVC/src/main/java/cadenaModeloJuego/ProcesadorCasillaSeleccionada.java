@@ -4,6 +4,8 @@
  */
 package cadenaModeloJuego;
 
+
+import interfacesComunicacionModelo.IControlIModeloVista;
 import interfacesComunicacionModelo.IControlVista;
 import interfacesEntidades.IJugador;
 import modeloJuegoMVC.ModeloJuego;
@@ -23,7 +25,7 @@ public class ProcesadorCasillaSeleccionada implements IModeloChain {
     }
 
     @Override
-    public void procesar(String tipoEvento, JSONObject datos, IControlVista controlVista, ModeloJuego modeloJuego) {
+    public void procesar(String tipoEvento, JSONObject datos, IControlVista controlVista, ModeloJuego modeloJuego,IControlIModeloVista modelovista) {
         if ("CASILLA_SELECCIONADA".equals(tipoEvento)) {
             int jugador = datos.getInt("Jugador");
             int casilla = datos.getInt("Casilla");
@@ -41,7 +43,7 @@ public class ProcesadorCasillaSeleccionada implements IModeloChain {
                 }
             }
         } else if (siguiente != null) {
-            siguiente.procesar(tipoEvento, datos, controlVista, modeloJuego);
+            siguiente.procesar(tipoEvento, datos, controlVista, modeloJuego, modelovista);
         } else {
             System.out.println("[Chain] Evento desconocido: " + tipoEvento);
         }

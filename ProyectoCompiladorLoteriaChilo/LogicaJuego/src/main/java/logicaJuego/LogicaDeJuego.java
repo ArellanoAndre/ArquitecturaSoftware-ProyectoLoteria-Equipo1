@@ -24,8 +24,10 @@ public class LogicaDeJuego implements ILogicaJuego {
     private List<Jugador> jugadores;
     private Carta cartaActual;
     private int contador = 0;
-    private int dificultad = 2500;
+    private String dificultad = "";
     private Timer timer;
+    private int punMax;
+    private int numJugadores;
 
     private IModeloLogica modeloLogica;
 
@@ -45,21 +47,87 @@ public class LogicaDeJuego implements ILogicaJuego {
 
     }
 
+    public int getNumJugadores() {
+        return numJugadores;
+    }
+
+    public void setNumJugadores(int numJugadores) {
+        this.numJugadores = numJugadores;
+    }
+
+    public Griton getGriton() {
+        return griton;
+    }
+
+    public void setGriton(Griton griton) {
+        this.griton = griton;
+    }
+
+    public int getContador() {
+        return contador;
+    }
+
+    public void setContador(int contador) {
+        this.contador = contador;
+    }
+
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public void setTimer(Timer timer) {
+        this.timer = timer;
+    }
+
+    public int getPunMax() {
+        return punMax;
+    }
+
+    public void setPunMax(int punMax) {
+        this.punMax = punMax;
+    }
+
     public void setModelo(IModeloLogica modelo) {
         this.modeloLogica = modelo;
     }
 
-    /**
-     * Inicia el juego mostrando la primera carta y repitiendo el proceso
-     * automáticamente cada cierto tiempo.
-     */
     @Override
-    public void iniciarRonda() {
-        griton.barajear();
-        siguienteCarta();
-        timer = new Timer(dificultad, e -> siguienteCarta());
-        timer.start();
+public void iniciarRonda() {
+
+    // 1) Convertir la dificultad textual a milisegundos
+    int delay;
+
+    switch (dificultad.toLowerCase()) {
+        case "básico":
+        case "basico":
+            delay = 10000;   // 10 segundos
+            break;
+
+        case "intermedio":
+            delay = 7000;    // 7 segundos
+            break;
+
+        case "avanzado":
+            delay = 4000;    // 4 segundos
+            break;
+
+        default:
+            System.err.println("[LogicaDeJuego] Dificultad desconocida: " + dificultad);
+            delay = 8000;  // Valor por defecto razonable
     }
+
+    System.out.println("[LogicaDeJuego] Iniciando ronda con dificultad '" 
+        + dificultad + "' (" + delay + " ms)");
+
+    // 2) Barajear y cantar primera carta
+    griton.barajear();
+    siguienteCarta();
+
+    // 3) Crear timer con el tiempo según la dificultad
+    timer = new Timer(delay, e -> siguienteCarta());
+    timer.start();
+}
+
 
     /**
      * Obtiene la siguiente carta del mazo y la envía a la vista.
@@ -177,13 +245,37 @@ public class LogicaDeJuego implements ILogicaJuego {
 
     }
 
-    public int getDificultad() {
+    public String getDificultad() {
         return dificultad;
     }
 
-    public void setDificultad(int dificultad) {
+    public void setDificultad(String dificultad) {
         this.dificultad = dificultad;
     }
+
+   
     
-    
+    public void agregarJugador(String nombre, String avatar) {
+
+    int id = jugadores.size() + 1;
+
+    Jugador jugador = new Jugador(id, nombre, avatar);
+    jugadores.add(jugador);
+
+    System.out.println("[Logica] Jugador agregado:");
+    System.out.println("        ID: " + id);
+    System.out.println("        Nombre: " + nombre);
+    System.out.println("        Avatar: " + avatar);
+
+    notificarConfirmacionReglas();
+}
+
+    public void notificarConfirmacionReglas() {
+    modeloLogica.enviarConfirmacionReglas(
+        this.dificultad,
+        this.punMax,
+        this.jugadores
+    );
+}
+
 }
