@@ -138,8 +138,7 @@ public class JPantallaMenuPrincipal extends JFramePadre {
 
     private void btnJugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJugarActionPerformed
         if (controlador != null) {
-        JPantallaConfigurarPartida pantallaConfig = new JPantallaConfigurarPartida(controlador);
-        pantallaConfig.setVisible(true);
+        controlador.onJugar();
         this.dispose();
         }
     }//GEN-LAST:event_btnJugarActionPerformed

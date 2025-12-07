@@ -8,11 +8,14 @@ import cantador.Griton;
 import interfacesLogica.ILogicaJuego;
 import interfacesLogica.IModeloLogica;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import javax.swing.Timer;
 import logicaJuego.entidades.Carta;
 import logicaJuego.entidades.Jugador;
 import logicaJuego.entidades.Tarjeta;
+import org.json.JSONObject;
 
 /**
  *
@@ -28,6 +31,10 @@ public class LogicaDeJuego implements ILogicaJuego {
     private Timer timer;
     private int punMax;
     private int numJugadores;
+    private List<String> imagenesTarjetas;
+    private boolean partidaConfigurada = false;
+    private Map<String, Integer> puntuaciones;
+
 
     private IModeloLogica modeloLogica;
 
@@ -44,6 +51,7 @@ public class LogicaDeJuego implements ILogicaJuego {
     public LogicaDeJuego() {
         this.griton = new Griton();
         this.jugadores = new ArrayList<>();
+        this.imagenesTarjetas = TarjetasLoteria();
 
     }
 
@@ -274,8 +282,90 @@ public void iniciarRonda() {
     modeloLogica.enviarConfirmacionReglas(
         this.dificultad,
         this.punMax,
-        this.jugadores
+        this.jugadores,
+        this.TarjetasLoteria()
     );
 }
+
+    public List<String> getImagenesTarjetas() {
+        return imagenesTarjetas;
+    }
+
+    public void setImagenesTarjetas(List<String> imagenesTarjetas) {
+        this.imagenesTarjetas = imagenesTarjetas;
+    }
+    
+    public void configurarPartida(String dificultad,
+                              int numJugadores,
+                              int puntMax,
+                              JSONObject puntuaciones) {
+
+    System.out.println("[Lógica] Configurando partida...");
+
+    this.dificultad = dificultad;
+    this.numJugadores = numJugadores;
+    this.punMax = puntMax;
+
+    // Guardamos las puntuaciones
+    this.puntuaciones = (Map<String, Integer>) puntuaciones;
+    System.out.println("[Lógica] Partida configurada correctamente.");
+    
+    // Enviar confirmación de reglas al Cliente
+    notificarConfirmacionReglas();
+}
+
+    
+    
+      public List<String> TarjetasLoteria() {
+    // Creamos la lista completa con los 54 tableros (01 al 54)
+    List<String> todosLosTableros = new ArrayList<>();
+    todosLosTableros.add("/img/Tableros/Tablero01.png");
+    todosLosTableros.add("/img/Tableros/Tablero02.png");
+    todosLosTableros.add("/img/Tableros/Tablero03.png");
+    todosLosTableros.add("/img/Tableros/Tablero04.png");
+    todosLosTableros.add("/img/Tableros/Tablero05.png");
+    todosLosTableros.add("/img/Tableros/Tablero06.png");
+    todosLosTableros.add("/img/Tableros/Tablero07.png");
+    todosLosTableros.add("/img/Tableros/Tablero08.png");
+    todosLosTableros.add("/img/Tableros/Tablero09.png");
+    todosLosTableros.add("/img/Tableros/Tablero10.png");
+    todosLosTableros.add("/img/Tableros/Tablero11.png");
+    todosLosTableros.add("/img/Tableros/Tablero12.png");
+
+    // Mezclamos la lista para que sea aleatorio
+    Collections.shuffle(todosLosTableros);
+
+    // Tomamos solo los primeros 3 (ya están en orden aleatorio)
+    return todosLosTableros.subList(0, 3);
+}
+
+    public void setJugadores(List<Jugador> jugadores) {
+        this.jugadores = jugadores;
+    }
+    public void AgregarJugadorTest(){
+     // 1. CREACIÓN DE JUGADORES REALES
+            // ===============================
+            int[] casillas1 = {46, 6, 38, 3, 8, 11, 33, 35, 21, 54, 50, 29, 30, 40, 36, 26};
+            String img1 = "/img/Tableros/Tablero01.png";
+            Tarjeta tarjeta1 = new Tarjeta(casillas1, img1);
+            Jugador jugador = new Jugador("Rodri", tarjeta1, 1); jugador.setAvatar("avatar1.png");
+            
+            jugadores.add(jugador);
+    }
+    
+    @Override
+public boolean estaConfiguradaPartida() {
+    return partidaConfigurada;
+}
+
+    @Override
+    public void enviarAbrirPantallaConfig() {
+        modeloLogica.enviarAbrirPantallaConfig();
+    }
+
+    @Override
+    public void enviarAbrirPantallaSeleccionAvatar() {
+        modeloLogica.enviarAbrirPantallaSeleccionAvatar();
+    }
 
 }

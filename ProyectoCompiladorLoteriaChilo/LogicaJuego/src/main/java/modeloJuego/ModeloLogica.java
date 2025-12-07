@@ -12,11 +12,13 @@ import logicaJuego.entidades.Jugador;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import procesarCadena.IProcesadorEvento;
+import procesarCadena.ProcesadorConfigurarPartida;
 import procesarCadena.ProcesadorIniciar;
 import procesarCadena.ProcesadorIniciarRonda;
 import procesarCadena.ProcesadorMarcar;
 import procesarCadena.ProcesadorUnirse;
 import procesarCadena.ProcesadorUnirsePartida;
+import procesarCadena.ProcesarJugar;
 
 public class ModeloLogica implements IModeloLogica, IReceptorEvento {
 
@@ -39,13 +41,16 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         IProcesadorEvento marcar = new ProcesadorMarcar();
         IProcesadorEvento unirse = new ProcesadorUnirse();
         IProcesadorEvento iniciar = new ProcesadorIniciar(); 
-        IProcesadorEvento unirsePartida = new ProcesadorUnirsePartida();
+        IProcesadorEvento unirsePartida = new ProcesadorUnirsePartida(); 
+        IProcesadorEvento Jugar = new ProcesarJugar(); 
+        IProcesadorEvento configurar = new ProcesadorConfigurarPartida();
         // Conectamos los eslabones
         iniciarRonda.setSiguiente(marcar);
         marcar.setSiguiente(unirse);
         unirse.setSiguiente(iniciar);
-        unirse.setSiguiente(unirsePartida);
-        
+        iniciar.setSiguiente(unirsePartida);
+        unirsePartida.setSiguiente(Jugar);
+        Jugar.setSiguiente(configurar);
         this.cadenaProcesamiento = iniciarRonda; // Guardamos la referencia al primero
     }
 
@@ -167,32 +172,75 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         }
     }
     
-    @Override
+ @Override
 public void enviarConfirmacionReglas(
         String dificultad,
         int puntuacionMaxima,
-        List<Jugador> jugadores) {
+        List<Jugador> jugadores,
+        List<String> tarjetas) {
 
     JSONObject json = new JSONObject();
     json.put("TipoEvento", "Confirmacion_Reglas");
     json.put("Dificultad", dificultad);
     json.put("PuntuacionMaxima", puntuacionMaxima);
 
+    // -------------------------------------------------------
     // Construir arreglo JSON "Jugadores"
-    JSONArray arr = new JSONArray();
+    // -------------------------------------------------------
+    JSONArray arrJugadores = new JSONArray();
+
     for (Jugador j : jugadores) {
         JSONObject jugadorJson = new JSONObject();
         jugadorJson.put("IdJugador", j.getNumJugador());
         jugadorJson.put("Nombre", j.getNombre());
         jugadorJson.put("Avatar", j.getAvatar());
-        arr.put(jugadorJson);
+        arrJugadores.put(jugadorJson);
     }
 
-    json.put("Jugadores", arr);
+    json.put("Jugadores", arrJugadores);
 
+    // -------------------------------------------------------
+    // Construir arreglo JSON "Tarjetas" (lista de imágenes)
+    // -------------------------------------------------------
+    JSONArray arrTarjetas = new JSONArray();
+
+    if (tarjetas != null) {
+        for (String ruta : tarjetas) {
+            arrTarjetas.put(ruta);
+        }
+    }
+
+    json.put("Tarjetas", arrTarjetas);
+
+    // -------------------------------------------------------
+    // Enviar evento a todos los clientes
+    // -------------------------------------------------------
     enviarEventoBroadcast(json.toString(), "Juego-out");
 
     System.out.println("[ModeloLogica] → Enviando ConfirmacionReglas: " + json.toString());
+}
+
+
+@Override
+public void enviarAbrirPantallaConfig() {
+
+    JSONObject json = new JSONObject();
+    json.put("TipoEvento", "CONFIGURAR_PARTIDA");
+
+    enviarEventoBroadcast(json.toString(), "Juego-out");
+
+    System.out.println("[Host] → Indicando al cliente que abra CONFIGURAR PARTIDA");
+}
+
+@Override
+public void enviarAbrirPantallaSeleccionAvatar() {
+
+    JSONObject json = new JSONObject();
+    json.put("TipoEvento", "UNIRSE_PARTIDA");
+
+    enviarEventoBroadcast(json.toString(), "Juego-out");
+
+    System.out.println("[Host] → Indicando al cliente que abra SELECCION DE AVATAR");
 }
 
 

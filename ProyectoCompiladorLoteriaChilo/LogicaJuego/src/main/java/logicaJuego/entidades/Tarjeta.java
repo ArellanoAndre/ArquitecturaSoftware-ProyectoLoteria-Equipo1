@@ -5,7 +5,7 @@ package logicaJuego.entidades;
  * asociada. Cada tarjeta contiene una cuadrícula de números (casillas) y un
  * arreglo de booleanos que indica qué posiciones han sido marcadas.
  */
-public class Tarjeta {
+public class Tarjeta  {
 
     private int[] casillas;   // Números en la tarjeta (ej. 4x4)
     private boolean[] marcadas; // Indica si una casilla fue marcada

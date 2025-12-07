@@ -25,6 +25,11 @@ public interface IModeloLogica {
      void enviarConfirmacionReglas(
         String dificultad,
         int puntuacionMaxima,
-        List<Jugador> jugadores);
+        List<Jugador> jugadores,
+        List<String> tarjetas);
+     
+       void enviarAbrirPantallaConfig();
+
+    void enviarAbrirPantallaSeleccionAvatar();
 
 }

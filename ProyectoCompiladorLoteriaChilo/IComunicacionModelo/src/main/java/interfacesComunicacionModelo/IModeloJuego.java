@@ -4,6 +4,7 @@
  */
 package interfacesComunicacionModelo;
 
+import java.util.Map;
 import org.json.JSONObject;
 
 /**
@@ -33,4 +34,15 @@ public interface IModeloJuego {
     public void setControlVistaInicio(IControlVistaMVC_Inicio controlVistaInicio);
     
     public void setControlVistaJuego(IControlVistaMVC_Juego controlVistaJuego);
+    
+    void enviarEventoJugar();
+    
+    void abrirPantallaConfig();
+    
+    void abrirPantallaAvatar();
+    
+public void EnviarEventoConfigurarPartida(String dificultad, int numJugadores,
+                                          int puntuacionMax,
+                                          Map<String, Integer> puntuaciones);
+
 }

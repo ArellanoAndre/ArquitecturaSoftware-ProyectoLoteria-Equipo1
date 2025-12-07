@@ -4,67 +4,49 @@
  */
 package Controlador;
 
-import ModeloVista.ConfiguracionPartida;
-import Presentacion.JFrameLobby;
+import ModeloVista.ModeloVistaInicio;
 import interfacesEntidades.IConfiguracionPartida;
-import interfacesEntidades.IJugador;
-import java.util.List;
 import interfacesComunicacionModelo.IControlVistaMVC_Inicio;
 
 /**
  *
  * @author Arell
  */
-public class ControlIModeloVista implements IControlVistaMVC_Inicio{
-     private  IConfiguracionPartida config;
-     private JFrameLobby lobby;
+public class ControlIModeloVista implements IControlVistaMVC_Inicio {
 
-    public ControlIModeloVista() {
-    }
-     
+    private final ModeloVistaInicio modeloVista;
+    private IConfiguracionPartida config;
 
-    public ControlIModeloVista(IConfiguracionPartida configPartida) {
-        this.config = configPartida;
+    public ControlIModeloVista(ModeloVistaInicio modeloVista, IConfiguracionPartida config) {
+        this.modeloVista = modeloVista;
+        this.config = config;
     }
 
-    public void actualizarPantalla(String dificultad, List<IJugador> jugadores, int puntuacionMax) {
-
-        // Actualiza el modelo (ConfiguraciónPartida)
-        config.setDificultad(dificultad);
-        config.setJugadores(jugadores);
-        config.setPuntuacionMaxima(puntuacionMax);
-
-        // Crear lobby si no existe
-        if (lobby == null) {
-            lobby = new JFrameLobby();
-        }
-
-        // Pasarle los datos al Lobby
-        lobby.setDatosPartida(dificultad, jugadores.size(), puntuacionMax, jugadores.get(0).getNombre());
-
-        // Mostrar jugadores visualmente
-        lobby.actualizarJugadores(jugadores);
-
-        lobby.setVisible(true);
-    }
-
-    public JFrameLobby getLobby() {
-        return lobby;
-    }
-    
-
-
-    public IConfiguracionPartida getConfigPartida() {
-        return config;
-    }
-
-   
-
-    @Override
     public void setConfig(IConfiguracionPartida config) {
         this.config = config;
     }
 
+    @Override
+    public void actualizarPantalla(IConfiguracionPartida nuevaConfig) {
+        if (nuevaConfig != null) {
+            this.config = nuevaConfig;
+        }
+
+        System.out.println("[ControlIModeloVista] Actualizando pantalla (delegando en ModeloVistaInicio)...");
+        System.out.println("  -> ModeloVistaInicio instancia = " + modeloVista);
+        System.out.println("  -> Observers registrados = " + modeloVista.getObservers().size());
+
+        modeloVista.actualizarConfiguracion(this.config);
+    }
     
-    
+    @Override
+public void abrirPantallaConfig() {
+    modeloVista.abrirPantallaConfig();
+}
+
+@Override
+public void abrirPantallaAvatar() {
+    modeloVista.abrirPantallaAvatar();
+}
+
 }

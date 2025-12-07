@@ -7,6 +7,7 @@ package modeloJuegoMVC;
 import InterfacesEventClient.IEnvioEvento;
 import InterfacesEventClient.IEvento;
 import ModeloJuegoEntidades.Carta;
+import ModeloJuegoEntidades.ConfiguracionPartida;
 import ModeloJuegoEntidades.Jugador;
 import java.util.List;
 import interfacesEntidades.IJugador;
@@ -16,6 +17,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import interfacesComunicacionModelo.IControlVistaMVC_Juego;
 import interfacesComunicacionModelo.IControlVistaMVC_Inicio;
+import java.util.Map;
+ 
 
 public class ModeloJuego implements IModeloJuego {
     
@@ -139,8 +142,58 @@ public class ModeloJuego implements IModeloJuego {
 
         System.out.println("[Cliente] Suscripción enviada a Juego-out");
     }
-
     
+    @Override
+public void enviarEventoJugar() {
+    System.out.println("[ModeloJuego] → Enviando evento JUGAR");
+
+    try {
+        // Construir JSON
+        JSONObject json = new JSONObject();
+        json.put("TipoEvento", "JUGAR");
+
+        // Enviar usando el método centralizado
+        enviarEventoBroadcast(json.toString(), "Juego-in");
+
+        System.out.println("[ModeloJuego] JSON enviado: " + json.toString());
+
+    } catch (Exception e) {
+        System.err.println("[ModeloJuego] Error enviando JUGAR: " + e.getMessage());
+    }
+}
+
+@Override
+public void EnviarEventoConfigurarPartida(String dificultad, int numJugadores,
+                                          int puntuacionMax,
+                                          Map<String, Integer> puntuaciones) {
+
+    System.out.println("[ModeloJuego] → Enviando CONFIGURAR_PARTIDA al Host...");
+
+    try {
+        JSONObject json = new JSONObject();
+        json.put("TipoEvento", "CONFIGURAR_PARTIDA");
+        json.put("Dificultad", dificultad);
+        json.put("NumeroJugadores", numJugadores);
+        json.put("PuntuacionMaxima", puntuacionMax);
+
+        // Puntuaciones (Chorro, Cruz, Llena, etc.)
+        JSONObject jsonPunts = new JSONObject();
+        for (Map.Entry<String, Integer> entry : puntuaciones.entrySet()) {
+            jsonPunts.put(entry.getKey(), entry.getValue());
+        }
+        json.put("Puntuaciones", jsonPunts);
+
+        // Enviar por Juego-in al Host
+        enviarEventoBroadcast(json.toString(), "Juego-in");
+
+    } catch (Exception e) {
+        System.err.println("[ModeloJuego] ERROR enviando CONFIGURAR_PARTIDA: " + e.getMessage());
+    }
+}
+
+
+
+    // Control Vista Seccion ---------
     //-------------------------------------------------------------------------------------------------------------------------------------
     
     @Override
@@ -171,40 +224,64 @@ public class ModeloJuego implements IModeloJuego {
             }
     }
     
-    @Override
-    public void actualizarConfiguracion(JSONObject datos){
-        System.out.println("[FiltroUnirsePartida] → Evento ConfirmacionReglas recibido");
+   @Override
+public void actualizarConfiguracion(JSONObject datos) {
 
-            // === 1) Leer datos del JSON ===
-            String dificultad = datos.optString("Dificultad", null);
-            int puntuacionMax = datos.optInt("PuntuacionMaxima", 0);
+    System.out.println("[FiltroUnirsePartida] → Evento ConfirmacionReglas recibido");
 
-            // === 2) Convertir jugadores JSON -> Lista<IJugador> ===
-            List<IJugador> listaJugadores = new ArrayList<>();
+    // === 1) Leer datos generales ===
+    String dificultad = datos.optString("Dificultad", null);
+    int puntuacionMax = datos.optInt("PuntuacionMaxima", 0);
 
-            if (datos.has("Jugadores")) {
-                JSONArray arr = datos.getJSONArray("Jugadores");
+    // === 2) Convertir jugadores JSON -> List<IJugador> ===
+    List<IJugador> listaJugadores = new ArrayList<>();
 
-                for (int i = 0; i < arr.length(); i++) {
-                    JSONObject obj = arr.getJSONObject(i);
+    if (datos.has("Jugadores")) {
+        JSONArray arr = datos.getJSONArray("Jugadores");
 
-                    int id = obj.getInt("IdJugador");
-                    String nombre = obj.getString("Nombre");
-                    String avatar = obj.getString("Avatar");
+        for (int i = 0; i < arr.length(); i++) {
+            JSONObject obj = arr.getJSONObject(i);
 
-                    listaJugadores.add(new Jugador(id, nombre, avatar));
-                }
-            }
+            int id = obj.getInt("IdJugador");
+            String nombre = obj.getString("Nombre");
+            String avatar = obj.getString("Avatar"); // ← YA SE LEE AVATAR
 
-            System.out.println("[FiltroUnirsePartida] Datos procesados:");
-            System.out.println(" - Dificultad: " + dificultad);
-            System.out.println(" - PuntMax: " + puntuacionMax);
-            System.out.println(" - Jugadores: " + listaJugadores.size());
-
-            // === 3) Llamar al ControlModeloVista según diagrama ===
-            // controlVistaInicio.getControl() representa ControlModeloVista
-            controlVistaInicio.actualizarPantalla(dificultad, listaJugadores, puntuacionMax);
+            listaJugadores.add(new Jugador(id, nombre, avatar));
+        }
     }
+
+    // === 3) Leer Tarjetas ===
+    List<String> tarjetas = new ArrayList<>();
+
+    if (datos.has("Tarjetas")) {
+        JSONArray arrTarjetas = datos.getJSONArray("Tarjetas");
+
+        for (int i = 0; i < arrTarjetas.length(); i++) {
+            tarjetas.add(arrTarjetas.getString(i)); // Rutas de imagen
+        }
+    }
+
+    System.out.println("[FiltroUnirsePartida] Datos procesados:");
+    System.out.println(" - Dificultad: " + dificultad);
+    System.out.println(" - PuntMax: " + puntuacionMax);
+    System.out.println(" - Jugadores: " + listaJugadores.size());
+    System.out.println(" - Tarjetas: " + tarjetas.size());
+
+    // === 4) Crear objeto ConfiguracionPartida ===
+    ConfiguracionPartida configuracion = new ConfiguracionPartida();
+    int numJugadores;
+    configuracion.setDatos(
+            dificultad,
+            listaJugadores,
+            puntuacionMax,
+            tarjetas,
+             numJugadores = listaJugadores.size() // ← NUEVO CAMPO AGREGADO
+    );
+
+    // === 5) Notificar a ControlModeloVista para actualizar pantalla ===
+    controlVistaInicio.actualizarPantalla(configuracion);
+}
+
 
     @Override
     public void setControlVistaInicio(IControlVistaMVC_Inicio controlVistaInicio) {
@@ -215,5 +292,16 @@ public class ModeloJuego implements IModeloJuego {
     public void setControlVistaJuego(IControlVistaMVC_Juego controlVistaJuego) {
         this.controlVistaJuego = controlVistaJuego;
     }
+    
+    @Override
+public void abrirPantallaConfig() {
+    controlVistaInicio.abrirPantallaConfig();
+}
+
+@Override
+public void abrirPantallaAvatar() {
+    controlVistaInicio.abrirPantallaAvatar();
+}
+
     
 }

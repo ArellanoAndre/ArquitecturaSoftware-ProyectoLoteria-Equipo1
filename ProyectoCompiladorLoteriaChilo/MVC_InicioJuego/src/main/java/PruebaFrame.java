@@ -1,7 +1,7 @@
 
 import Controlador.ControladorInicio;
-import Interfaces.IControladorInicio;
-import ModeloVista.ModeloVista;
+import interfacesComunicacionModelo.IControladorInicio;
+import ModeloVista.ModeloVistaInicio;
 import Presentacion.JFrameLobby;
 import Presentacion.JFrameSeleccionAvatar;
 import modeloJuegoMVC.ModeloJuego;
@@ -20,20 +20,20 @@ public class PruebaFrame {
          // ======================================
             // 1. MVC Inicio (Modelo + Control + Pantalla)
             // ======================================
-            ModeloVista modeloVista = new ModeloVista();
-
-            IControladorInicio controlVista =
-                    new ControladorInicio(modeloVista);
-
-            // MODELO JUEGO del cliente
-            ModeloJuego modeloJuego = new ModeloJuego();
-
-            modeloVista.setModeloJuego(modeloJuego);
-
-            // Crear pantalla inicial (selección avatar)
-            JFrameLobby pantalla =
-                    new JFrameLobby(controlVista);
-
-            pantalla.setVisible(true);
+//            ModeloVistaInicio modeloVista = new ModeloVistaInicio();
+//
+//            IControladorInicio controlVista =
+//                    new ControladorInicio(modeloVista);
+//
+//            // MODELO JUEGO del cliente
+//            ModeloJuego modeloJuego = new ModeloJuego();
+//
+//            modeloVista.setModeloJuego(modeloJuego);
+//
+//            // Crear pantalla inicial (selección avatar)
+//            JFrameLobby pantalla =
+//                    new JFrameLobby(controlVista,modeloVista);
+//
+//            pantalla.setVisible(true);
        }
 }

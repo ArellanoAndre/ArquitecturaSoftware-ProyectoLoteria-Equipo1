@@ -17,5 +17,11 @@ public interface ILogicaJuego {
     void verificarCarta(int jugadorId, int casillaSeleccionada);
 
     void siguienteCarta();
+    
+    boolean estaConfiguradaPartida();
+
+    void enviarAbrirPantallaConfig();
+
+    void enviarAbrirPantallaSeleccionAvatar();
 
 }

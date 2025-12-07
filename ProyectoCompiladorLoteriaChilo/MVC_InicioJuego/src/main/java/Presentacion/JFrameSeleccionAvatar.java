@@ -1,11 +1,13 @@
 package Presentacion;
 
-import Interfaces.IControladorInicio;
+import Interfaces.IObserver;
+import ModeloVista.ModeloVistaInicio;
+import interfacesComunicacionModelo.IControladorInicio;
+import interfacesComunicacionModelo.IModeloVistaInicio;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -14,15 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class JFrameSeleccionAvatar extends JFramePadre {
+public class JFrameSeleccionAvatar extends JFrame  implements IObserver {
 
     private IControladorInicio controlador;
     private String Avatar;
     private List<String> rutasAvatares = new ArrayList<>();
+    private IModeloVistaInicio modeloVista;
+
 
 
     public JFrameSeleccionAvatar() {
@@ -43,6 +48,22 @@ public class JFrameSeleccionAvatar extends JFramePadre {
     setLocationRelativeTo(null);
     setResizable(false);
 }
+
+    public IControladorInicio getControlador() {
+        return controlador;
+    }
+
+    public void setControlador(IControladorInicio controlador) {
+        this.controlador = controlador;
+    }
+
+    public IModeloVistaInicio getModeloVista() {
+        return modeloVista;
+    }
+
+    public void setModeloVista(IModeloVistaInicio modeloVista) {
+        this.modeloVista = modeloVista;
+    }
 
 
     /**
@@ -345,7 +366,9 @@ private void marcarSeleccion(JLabel seleccionado) {
     public void setAvatar(String Avatar) {
         this.Avatar = Avatar;
     }
-
+    @Override
+    public void update() {
+        System.out.println("");    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirmar;
@@ -358,4 +381,6 @@ private void marcarSeleccion(JLabel seleccionado) {
     private javax.swing.JPanel pnlNombre;
     private javax.swing.JPanel pnlTitulo;
     // End of variables declaration//GEN-END:variables
+
+
 }

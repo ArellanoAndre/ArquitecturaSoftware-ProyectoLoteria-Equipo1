@@ -1,4 +1,4 @@
-package Interfaces;
+package interfacesComunicacionModelo;
 
 import java.util.Map;
 
@@ -14,4 +14,15 @@ public interface IControladorInicio {
     void EnviarNombreAvatarConfirmado(String nombre,String avatar);
 
     void onIniciarLobby();
+    
+    void onJugar();
+    
+    public void onConfirmarConfig(
+        String dificultad,
+        int numJugadores,
+        int puntuacionMax,
+        Map<String, Integer> puntuaciones
+);
+void abrirLobby();
+void abrirSeleccionAvatar();
 }

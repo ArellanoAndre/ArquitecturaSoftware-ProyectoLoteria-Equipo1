@@ -5,14 +5,14 @@
 package interfacesComunicacionModelo;
 
 import interfacesEntidades.IConfiguracionPartida;
-import interfacesEntidades.IJugador;
-import java.util.List;
 
 /**
  *
  * @author Arell
  */
 public interface IControlVistaMVC_Inicio {
-    void actualizarPantalla(String dificultad, List<IJugador> jugadores, int puntuacionMaxima);
+    void actualizarPantalla(IConfiguracionPartida configuracion);
      void setConfig(IConfiguracionPartida config);
+      void abrirPantallaConfig();
+      void abrirPantallaAvatar();
 }

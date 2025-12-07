@@ -4,10 +4,11 @@ import Controlador.ControladorInicio;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ButtonGroup;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-public class JPantallaConfigurarPartida extends JFramePadre {
+public class JPantallaConfigurarPartida extends JFrame {
 
     private ControladorInicio controlador;
     private final ButtonGroup grupoDificultad = new ButtonGroup();
@@ -518,10 +519,19 @@ public class JPantallaConfigurarPartida extends JFramePadre {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        if (controlador != null) {
-            controlador.setPantallaConfig(this);
-            controlador.onConfirmarConfig();
+            if (controlador != null) {
+
+        if (!configuracionCompleta()) {
+            mostrarError("Debes completar todos los campos de manera correcta antes de continuar.");
+            return;
         }
+        controlador.onConfirmarConfig(
+                getDificultadSeleccionada(),
+                getNumeroJugadoresSeleccionado(),
+                getPuntuacionMaxima(),
+                getPuntuaciones()
+        );
+    }    
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -633,6 +643,13 @@ public class JPantallaConfigurarPartida extends JFramePadre {
             return null;
         }
     }
+
+    public boolean configuracionCompleta() {
+    return getDificultadSeleccionada() != null
+            && getNumeroJugadoresSeleccionado() != null
+            && getPuntuacionMaxima() != null
+            && getPuntuaciones() != null;
+}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

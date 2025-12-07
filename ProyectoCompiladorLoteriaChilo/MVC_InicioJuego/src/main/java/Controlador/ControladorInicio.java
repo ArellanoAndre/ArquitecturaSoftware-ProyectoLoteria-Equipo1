@@ -1,35 +1,39 @@
 package Controlador;
 
-import Interfaces.IControladorInicio;
-import ModeloVista.ModeloVista;
+import interfacesComunicacionModelo.IControladorInicio;
+import ModeloVista.ModeloVistaInicio;
 import Presentacion.JFrameLobby;
 import Presentacion.JFrameSeleccionAvatar;
 import Presentacion.JPantallaConfigurarPartida;
 import Presentacion.JPantallaMenuPrincipal;
 import interfacesComunicacionModelo.IModeloJuego;
-import interfacesComunicacionModelo.IModeloVista;
+import interfacesComunicacionModelo.IModeloVistaInicio;
 import java.util.Map;
 
 public class ControladorInicio implements IControladorInicio {
 
-    private final IModeloVista modeloVista;
+    private  IModeloVistaInicio modeloVista = null;
     private  IModeloJuego modeloJuego = null;
     private JPantallaMenuPrincipal inicio;
     private JPantallaConfigurarPartida pantallaConfig;
     private JFrameSeleccionAvatar seleccionAvatar;
     private JFrameLobby lobby;
 
-    public ControladorInicio(IModeloVista modeloVista) {
+    public ControladorInicio(IModeloVistaInicio modeloVista) {
         this.modeloVista = modeloVista;
+
     }
 
     public ControladorInicio(IModeloJuego modeloJuego) {
         this.modeloJuego = modeloJuego;
-        this.modeloVista = new ModeloVista();
         
     }
 
-    public ControladorInicio(ModeloVista modeloVista, IModeloJuego modeloJuego) {
+    public void setModeloJuego(IModeloJuego modeloJuego) {
+        this.modeloJuego = modeloJuego;
+    }
+
+    public ControladorInicio(ModeloVistaInicio modeloVista, IModeloJuego modeloJuego) {
         this.modeloVista = modeloVista;
         this.modeloJuego = modeloJuego;
     }
@@ -37,7 +41,6 @@ public class ControladorInicio implements IControladorInicio {
     public ControladorInicio(IModeloJuego modeloJuego, JPantallaMenuPrincipal inicio) {
         this.modeloJuego = modeloJuego;
         this.inicio = inicio;
-        this.modeloVista = null;
     }
 
 
@@ -52,39 +55,31 @@ public class ControladorInicio implements IControladorInicio {
     }
 
     @Override
-    public void onConfirmarConfig() {
-//        String dificultad = pantallaConfig.getDificultadSeleccionada();
-//        Integer numeroJugadores = pantallaConfig.getNumeroJugadoresSeleccionado();
-//        Integer puntuacionMaxima = pantallaConfig.getPuntuacionMaxima();
-//        Map<String, Integer> puntuaciones = pantallaConfig.getPuntuaciones();
-//
-//        if (dificultad == null) {
-//            pantallaConfig.mostrarError("Selecciona un nivel de dificultad.");
-//            return;
-//        }
-//
-//        if (numeroJugadores == null) {
-//            pantallaConfig.mostrarError("Selecciona la cantidad de jugadores.");
-//            return;
-//        }
-//
-//        if (puntuacionMaxima == null || puntuacionMaxima <= 0) {
-//            pantallaConfig.mostrarError("Ingresa una puntuación máxima válida (mayor a 0).");
-//            return;
-//        }
-//
-//        if (puntuaciones == null || puntuaciones.values().stream().anyMatch(v -> v == null || v <= 0)) {
-//            pantallaConfig.mostrarError("Todas las puntuaciones deben ser números mayores a 0.");
-//            return;
-//        }
-//
-//        modeloVista.setDificultad(dificultad);
-//        modeloVista.setNumeroJugadores(numeroJugadores);
-//        modeloVista.setPuntuacionMaxima(puntuacionMaxima);
-//        modeloVista.setPuntuaciones(puntuaciones);
-//
-//        abrirSeleccionAvatar();
-//        pantallaConfig.dispose();
+    public void onConfirmarConfig(String dificultad, int numJugadores, int puntuacionMax, Map<String, Integer> puntuaciones) {
+       
+        if (dificultad == null) {
+            pantallaConfig.mostrarError("Selecciona un nivel de dificultad.");
+            return;
+        }
+
+        if (numJugadores <= 0) {
+            pantallaConfig.mostrarError("Selecciona la cantidad de jugadores.");
+            return;
+        }
+
+        if ( puntuacionMax <= 0) {
+            pantallaConfig.mostrarError("Ingresa una puntuación máxima válida (mayor a 0).");
+            return;
+        }
+
+        if (puntuaciones == null || puntuaciones.values().stream().anyMatch(v -> v == null || v <= 0)) {
+            pantallaConfig.mostrarError("Todas las puntuaciones deben ser números mayores a 0.");
+            return;
+        }
+        
+     modeloVista.CrearPartida(dificultad, numJugadores, puntuacionMax, puntuaciones);
+
+     //   pantallaConfig.dispose();
     }
 
     @Override
@@ -110,6 +105,7 @@ public class ControladorInicio implements IControladorInicio {
     }
 }
 
+    @Override
     public void onIniciarLobby() {
 //        modeloJuego.enviarEventoInicioPartida(modeloVista.getNombreJugador(), modeloVista.getDificultad(),
 //                modeloVista.getNumeroJugadores(), modeloVista.getPuntuacionMaxima());
@@ -124,20 +120,8 @@ public class ControladorInicio implements IControladorInicio {
 //        }
     }
 
-    private void abrirSeleccionAvatar() {
-        if (seleccionAvatar == null) {
-            seleccionAvatar = new JFrameSeleccionAvatar(this);
-        }
-        seleccionAvatar.setVisible(true);
-    }
 
-    private void abrirLobby() {
-        if (lobby == null) {
-            lobby = new JFrameLobby(this);
-        }
-        actualizarLobby();
-        lobby.setVisible(true);
-    }
+    
 
     public JPantallaConfigurarPartida getPantallaConfig() {
         return pantallaConfig;
@@ -147,6 +131,42 @@ public class ControladorInicio implements IControladorInicio {
         this.pantallaConfig = pantallaConfig;
     }
     
+    @Override
+public void onJugar() {
+
+    System.out.println("[Inicio] Botón JUGAR presionado");
+
+    if (modeloVista != null) {
+        modeloVista.solicitarIniciarJuego();
+    }
+}
+
+    @Override
+    public void onConfirmarConfig() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void abrirLobby() {
+        if (lobby == null) {
+            lobby = new JFrameLobby();
+        }
+        actualizarLobby();
+        lobby.setVisible(true);    }
+
+    
+    @Override
+    public void abrirSeleccionAvatar() {
+        if (seleccionAvatar == null) {
+            seleccionAvatar = new JFrameSeleccionAvatar(); }
+        
+        seleccionAvatar.setModeloVista(modeloVista);
+        seleccionAvatar.setVisible(true);    }
+
+    
+
+
+
     
     
 }

@@ -4,12 +4,8 @@
  */
 package cadenaModeloJuego;
 
-import ModeloJuegoEntidades.Jugador;
+
 import interfacesComunicacionModelo.IModeloJuego;
-import interfacesEntidades.IJugador;
-import java.util.ArrayList;
-import java.util.List;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**

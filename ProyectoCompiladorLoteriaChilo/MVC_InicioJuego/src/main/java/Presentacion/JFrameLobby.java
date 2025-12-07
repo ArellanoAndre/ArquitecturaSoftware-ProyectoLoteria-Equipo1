@@ -1,23 +1,41 @@
 package Presentacion;
 
-import Interfaces.IControladorInicio;
+import EntidadesInicio.ConfiguracionVista;
+import interfacesComunicacionModelo.IControladorInicio;
+import Interfaces.IObserver;
+import ModeloVista.ModeloVistaInicio;
+import interfacesComunicacionModelo.IModeloVistaInicio;
 import interfacesEntidades.IJugador;
 import java.awt.Image;
 import java.net.URL;
 import java.util.List;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class JFrameLobby extends JFramePadre {
-
+public class JFrameLobby extends JFramePadre implements IObserver{
+    
+    private ModeloVistaInicio modeloVista;
     private IControladorInicio controlador;
+    private int tarjetaSeleccionada = -1; // 0,1,2private int indiceTarjetaSeleccionada = -1; // 0, 1 o 2
+    private String tarjetaSeleccionadaRuta = null; // Aquí guardamos la ruta real de la imagen
 
     /**
      * Creates new form JFrameLobby
      */
     public JFrameLobby() {
-        this(null);
+        this(null,null);
+    }
+
+    public JFrameLobby(IControladorInicio controlador,ModeloVistaInicio modeloVista) {
+        this.controlador = controlador;
+        this.modeloVista = modeloVista;
+        initComponents();
+        setLocationRelativeTo(null);
+        setResizable(false);
+        //this.modeloVista.addObserver(this);   // Se registra como observador
     }
 
     public JFrameLobby(IControladorInicio controlador) {
@@ -26,7 +44,12 @@ public class JFrameLobby extends JFramePadre {
         setLocationRelativeTo(null);
         setResizable(false);
     }
+    
 
+    public void setModeloVista(ModeloVistaInicio modeloVista) {
+    this.modeloVista = modeloVista;
+     modeloVista.addObserver(this); // ← SIN ESTO NO HAY UPDATE
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -56,18 +79,18 @@ public class JFrameLobby extends JFramePadre {
         labelNivel5 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         pnlTarjetas = new javax.swing.JPanel();
-        pnlTarjeta1 = new javax.swing.JPanel();
         labelNivel6 = new javax.swing.JLabel();
-        pnlTarjeta2 = new javax.swing.JPanel();
-        pnlTarjeta3 = new javax.swing.JPanel();
+        labelTarjeta1 = new javax.swing.JLabel();
+        labelTarjeta3 = new javax.swing.JLabel();
+        labelTarjeta2 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         labelNivel7 = new javax.swing.JLabel();
         labelNivel8 = new javax.swing.JLabel();
         labelNivel9 = new javax.swing.JLabel();
         labelNivel10 = new javax.swing.JLabel();
-        labelNivel11 = new javax.swing.JLabel();
+        labelDificultad = new javax.swing.JLabel();
         labelNivel12 = new javax.swing.JLabel();
-        labelNivel13 = new javax.swing.JLabel();
+        labelPuntuacion = new javax.swing.JLabel();
         labelNivel14 = new javax.swing.JLabel();
         labelNivel15 = new javax.swing.JLabel();
 
@@ -252,57 +275,29 @@ public class JFrameLobby extends JFramePadre {
 
         pnlTarjetas.setBackground(new java.awt.Color(255, 250, 242));
 
-        javax.swing.GroupLayout pnlTarjeta1Layout = new javax.swing.GroupLayout(pnlTarjeta1);
-        pnlTarjeta1.setLayout(pnlTarjeta1Layout);
-        pnlTarjeta1Layout.setHorizontalGroup(
-            pnlTarjeta1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 190, Short.MAX_VALUE)
-        );
-        pnlTarjeta1Layout.setVerticalGroup(
-            pnlTarjeta1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
         labelNivel6.setFont(new java.awt.Font("Sarabun", 2, 18)); // NOI18N
         labelNivel6.setForeground(new java.awt.Color(51, 51, 51));
         labelNivel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labelNivel6.setText("Escoge tu tarjeta y ¡Mucha Suerte!");
 
-        javax.swing.GroupLayout pnlTarjeta2Layout = new javax.swing.GroupLayout(pnlTarjeta2);
-        pnlTarjeta2.setLayout(pnlTarjeta2Layout);
-        pnlTarjeta2Layout.setHorizontalGroup(
-            pnlTarjeta2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 190, Short.MAX_VALUE)
-        );
-        pnlTarjeta2Layout.setVerticalGroup(
-            pnlTarjeta2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        labelTarjeta1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        pnlTarjeta3.setPreferredSize(new java.awt.Dimension(190, 0));
+        labelTarjeta3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        javax.swing.GroupLayout pnlTarjeta3Layout = new javax.swing.GroupLayout(pnlTarjeta3);
-        pnlTarjeta3.setLayout(pnlTarjeta3Layout);
-        pnlTarjeta3Layout.setHorizontalGroup(
-            pnlTarjeta3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 190, Short.MAX_VALUE)
-        );
-        pnlTarjeta3Layout.setVerticalGroup(
-            pnlTarjeta3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        labelTarjeta2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         javax.swing.GroupLayout pnlTarjetasLayout = new javax.swing.GroupLayout(pnlTarjetas);
         pnlTarjetas.setLayout(pnlTarjetasLayout);
         pnlTarjetasLayout.setHorizontalGroup(
             pnlTarjetasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(labelNivel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(labelNivel6, javax.swing.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
             .addGroup(pnlTarjetasLayout.createSequentialGroup()
-                .addComponent(pnlTarjeta1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(labelTarjeta1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlTarjeta2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(labelTarjeta2, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlTarjeta3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(labelTarjeta3, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         pnlTarjetasLayout.setVerticalGroup(
@@ -310,11 +305,17 @@ public class JFrameLobby extends JFramePadre {
             .addGroup(pnlTarjetasLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(labelNivel6)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlTarjetasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlTarjeta1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlTarjeta2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlTarjeta3, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)))
+                    .addGroup(pnlTarjetasLayout.createSequentialGroup()
+                        .addComponent(labelTarjeta1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(pnlTarjetasLayout.createSequentialGroup()
+                        .addComponent(labelTarjeta3, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
+                        .addGap(14, 14, 14))
+                    .addGroup(pnlTarjetasLayout.createSequentialGroup()
+                        .addComponent(labelTarjeta2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
 
         jPanel5.setBackground(new java.awt.Color(255, 232, 195));
@@ -339,20 +340,20 @@ public class JFrameLobby extends JFramePadre {
         labelNivel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labelNivel10.setText("Puntuacion Maxima");
 
-        labelNivel11.setFont(new java.awt.Font("Sarabun", 2, 18)); // NOI18N
-        labelNivel11.setForeground(new java.awt.Color(102, 102, 102));
-        labelNivel11.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        labelNivel11.setText("Básico");
+        labelDificultad.setFont(new java.awt.Font("Sarabun", 2, 18)); // NOI18N
+        labelDificultad.setForeground(new java.awt.Color(102, 102, 102));
+        labelDificultad.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        labelDificultad.setText("Básico");
 
         labelNivel12.setFont(new java.awt.Font("Sarabun", 2, 18)); // NOI18N
         labelNivel12.setForeground(new java.awt.Color(102, 102, 102));
         labelNivel12.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         labelNivel12.setText("4");
 
-        labelNivel13.setFont(new java.awt.Font("Sarabun", 2, 18)); // NOI18N
-        labelNivel13.setForeground(new java.awt.Color(102, 102, 102));
-        labelNivel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelNivel13.setText("10000");
+        labelPuntuacion.setFont(new java.awt.Font("Sarabun", 2, 18)); // NOI18N
+        labelPuntuacion.setForeground(new java.awt.Color(102, 102, 102));
+        labelPuntuacion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelPuntuacion.setText("10000");
 
         labelNivel14.setFont(new java.awt.Font("Sarabun", 1, 18)); // NOI18N
         labelNivel14.setForeground(new java.awt.Color(51, 51, 51));
@@ -383,7 +384,7 @@ public class JFrameLobby extends JFramePadre {
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(labelNivel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(labelNivel11))
+                                .addComponent(labelDificultad))
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(labelNivel14)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -391,7 +392,7 @@ public class JFrameLobby extends JFramePadre {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addGap(0, 14, Short.MAX_VALUE)
-                        .addComponent(labelNivel13, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(labelPuntuacion, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(9, 9, 9)))
                 .addContainerGap())
         );
@@ -403,7 +404,7 @@ public class JFrameLobby extends JFramePadre {
                 .addGap(35, 35, 35)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelNivel8)
-                    .addComponent(labelNivel11))
+                    .addComponent(labelDificultad))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelNivel9)
@@ -415,7 +416,7 @@ public class JFrameLobby extends JFramePadre {
                 .addGap(44, 44, 44)
                 .addComponent(labelNivel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(labelNivel13)
+                .addComponent(labelPuntuacion)
                 .addContainerGap(66, Short.MAX_VALUE))
         );
 
@@ -444,7 +445,7 @@ public class JFrameLobby extends JFramePadre {
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(108, 108, 108)
                         .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -482,7 +483,7 @@ public class JFrameLobby extends JFramePadre {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -500,9 +501,17 @@ public class JFrameLobby extends JFramePadre {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        if (controlador != null) {
-            controlador.onIniciarLobby();
-        }
+        if (tarjetaSeleccionadaRuta == null) {
+        JOptionPane.showMessageDialog(this, 
+            "Por favor, selecciona una tarjeta antes de continuar.", 
+            "Tarjeta requerida", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    if (controlador != null) {
+       // controlador.onIniciarPartidaConTarjeta(tarjetaSeleccionadaRuta); // o como lo necesites
+        System.out.println("Hasta aqui llego yo mi apa");
+    }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     public void actualizarJugadores(List<IJugador> jugadores) {
@@ -541,11 +550,48 @@ public class JFrameLobby extends JFramePadre {
     public void setNivel(String nivel) {
         labelNivel.setText(nivel);
     }
+private void actualizarTarjetas(List<String> rutas) {
+    if (rutas == null || rutas.isEmpty()) {
+        System.err.println("[Lobby] No hay rutas de tarjetas para mostrar.");
+        return;
+    }
+
+    JLabel[] labels = { labelTarjeta1, labelTarjeta2, labelTarjeta3 };
+
+    for (int i = 0; i < labels.length; i++) {
+        if (i < rutas.size()) {
+            String ruta = rutas.get(i);
+            try {
+                ImageIcon icono = new ImageIcon(getClass().getResource(ruta));
+                Image img = icono.getImage().getScaledInstance(
+                    labels[i].getWidth(), labels[i].getHeight(), Image.SCALE_SMOOTH);
+                labels[i].setIcon(new ImageIcon(img));
+                labels[i].setText("");
+            } catch (Exception e) {
+                labels[i].setIcon(null);
+                labels[i].setText("Error");
+            }
+        } else {
+            labels[i].setIcon(null);
+            labels[i].setText("");
+        }
+        // Borde inicial sutil por defecto
+        labels[i].setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+    }
+
+    // Reiniciar selección
+    tarjetaSeleccionada = -1;
+    tarjetaSeleccionadaRuta = null;
+
+    // Activar clics
+    prepararSeleccionTarjetas();
+}
+
 
     public void setDatosPartida(String dificultad, Integer jugadores, Integer puntuacionMaxima, String nombreJugador) {
         if (dificultad != null) {
             setNivel(dificultad);
-            labelNivel11.setText(dificultad);
+            labelDificultad.setText(dificultad);
         }
 
         if (jugadores != null) {
@@ -553,36 +599,115 @@ public class JFrameLobby extends JFramePadre {
         }
 
         if (puntuacionMaxima != null) {
-            labelNivel13.setText(puntuacionMaxima.toString());
+            labelPuntuacion.setText(puntuacionMaxima.toString());
         }
 
         if (nombreJugador != null && !nombreJugador.isBlank()) {
             labelNivel15.setText(nombreJugador);
         }
     }
+    
+    @Override
+public void update() {
+    System.out.println("[JFrameLobby] UI actualizada con nueva configuración.");
+    if (modeloVista == null) return;
+
+    ConfiguracionVista config = modeloVista.getConfiguracion();
+    if (config == null) return;
+
+    // Mostrar lobby automáticamente cuando llegue una config válida
+    this.setVisible(true);
+
+    // Ocultar la pantalla de avatar
+    if (modeloVista.getPantallaAvatar() != null)
+        modeloVista.getPantallaAvatar().setVisible(false);
+
+    // --- Resto de la actualización ---
+    labelDificultad.setText(config.getDificultad());
+    labelNivel12.setText(String.valueOf(config.getNumJugadores()));
+    labelPuntuacion.setText(String.valueOf(config.getPuntuacionMaxima()));
+    actualizarJugadores(config.getJugadores());
+    actualizarTarjetas(config.getImagenesTarjetas());
+
+    System.out.println("[JFrameLobby] UI actualizada con nueva configuración.");
+}
+
+private void prepararSeleccionTarjetas() {
+    JLabel[] labels = { labelTarjeta1, labelTarjeta2, labelTarjeta3 };
+
+    for (int i = 0; i < labels.length; i++) {
+        final int index = i; // Necesario para lambda o clase anónima
+        labels[i].setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        labels[i].addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                seleccionarTarjeta(index);
+            }
+        });
+    }
+}
+private void seleccionarTarjeta(int index) {
+    JLabel[] labels = { labelTarjeta1, labelTarjeta2, labelTarjeta3 };
+    List<String> rutas = modeloVista.getConfiguracion().getImagenesTarjetas();
+
+    // Quitar borde de todas
+    for (JLabel label : labels) {
+        label.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4)); // o un borde gris sutil si prefieres
+    }
+
+    // Poner borde verde grueso a la seleccionada
+    labels[index].setBorder(BorderFactory.createLineBorder(new java.awt.Color(0, 180, 0), 6));
+
+    // Guardar datos
+    tarjetaSeleccionada = index;
+    if (rutas != null && index < rutas.size()) {
+        tarjetaSeleccionadaRuta = rutas.get(index);
+    } else {
+        tarjetaSeleccionadaRuta = null;
+    }
+
+    System.out.println("Tarjeta seleccionada: " + tarjetaSeleccionadaRuta);
+}
+
+    public int getTarjetaSeleccionada() {
+        return tarjetaSeleccionada;
+    }
+
+    public void setTarjetaSeleccionada(int tarjetaSeleccionada) {
+        this.tarjetaSeleccionada = tarjetaSeleccionada;
+    }
+
+    public String getTarjetaSeleccionadaRuta() {
+        return tarjetaSeleccionadaRuta;
+    }
+
+    public void setTarjetaSeleccionadaRuta(String tarjetaSeleccionadaRuta) {
+        this.tarjetaSeleccionadaRuta = tarjetaSeleccionadaRuta;
+    }
+
+
+
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnConfirmar;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JLabel labelDificultad;
     private javax.swing.JLabel labelNivel;
     private javax.swing.JLabel labelNivel1;
     private javax.swing.JLabel labelNivel10;
-    private javax.swing.JLabel labelNivel11;
     private javax.swing.JLabel labelNivel12;
-    private javax.swing.JLabel labelNivel13;
     private javax.swing.JLabel labelNivel14;
     private javax.swing.JLabel labelNivel15;
-    private javax.swing.JLabel labelNivel2;
     private javax.swing.JLabel labelNivel3;
     private javax.swing.JLabel labelNivel4;
     private javax.swing.JLabel labelNivel5;
@@ -590,15 +715,17 @@ public class JFrameLobby extends JFramePadre {
     private javax.swing.JLabel labelNivel7;
     private javax.swing.JLabel labelNivel8;
     private javax.swing.JLabel labelNivel9;
+    private javax.swing.JLabel labelPuntuacion;
     private javax.swing.JLabel labelSubtitulo;
+    private javax.swing.JLabel labelTarjeta1;
+    private javax.swing.JLabel labelTarjeta2;
+    private javax.swing.JLabel labelTarjeta3;
     private javax.swing.JLabel labelTitulo;
     private javax.swing.JPanel panelJugador1;
     private javax.swing.JPanel panelJugador2;
     private javax.swing.JPanel panelJugador3;
     private javax.swing.JPanel panelJugador4;
-    private javax.swing.JPanel pnlTarjeta1;
-    private javax.swing.JPanel pnlTarjeta2;
-    private javax.swing.JPanel pnlTarjeta3;
     private javax.swing.JPanel pnlTarjetas;
     // End of variables declaration//GEN-END:variables
+
 }

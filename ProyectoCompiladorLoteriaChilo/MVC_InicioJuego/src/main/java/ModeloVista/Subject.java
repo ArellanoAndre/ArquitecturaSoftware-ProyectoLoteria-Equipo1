@@ -21,9 +21,13 @@ public abstract class Subject {
     }
 
     public void notifyObservers() {
-        for (IObserver o : observers) {
-            o.update();
-        }
+    System.out.println("[Subject] Notificando a " + observers.size() + " observers.");
+
+    for (IObserver o : observers) {
+        System.out.println("[Subject] Notificando a → " + o.getClass().getSimpleName());
+        o.update();
     }
+}
+
 }
 

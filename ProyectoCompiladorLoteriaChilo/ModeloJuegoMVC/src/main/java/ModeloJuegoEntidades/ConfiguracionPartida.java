@@ -1,0 +1,83 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package ModeloJuegoEntidades;
+
+
+import interfacesEntidades.IConfiguracionPartida;
+import interfacesEntidades.IJugador;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ * @author Arell
+ */
+public class ConfiguracionPartida  implements IConfiguracionPartida{
+
+    private String dificultad;
+    private List<IJugador> jugadores = new ArrayList<>();
+    private int puntuacionMaxima;
+    private List<String> imagenesTarjetas = new ArrayList<>();
+    private int numJugadores;
+
+    @Override
+    public List<String> getImagenesTarjetas() {
+        return imagenesTarjetas;
+    }
+
+    @Override
+    public void setImagenesTarjetas(List<String> imagenesTarjetas) {
+        this.imagenesTarjetas = imagenesTarjetas;
+    }
+
+   @Override
+    public void setDatos(String dificultad,
+                     List<IJugador> jugadores,
+                     int puntuacion,
+                     List<String> tarjetas,
+                     int numJugadores) {
+
+    this.dificultad = dificultad;
+    this.jugadores = jugadores != null ? jugadores : new ArrayList<>();
+    this.puntuacionMaxima = puntuacion;
+    this.imagenesTarjetas = tarjetas != null ? tarjetas : new ArrayList<>();
+    this.numJugadores = numJugadores;
+}
+
+
+    @Override
+    public void setDificultad(String dificultad) {
+        this.dificultad = dificultad;
+    }
+
+    @Override
+    public void setJugadores(List<IJugador> jugadores) {
+        this.jugadores = jugadores;
+    }
+
+    @Override
+    public void setPuntuacionMaxima(int puntuacionMaxima) {
+        this.puntuacionMaxima = puntuacionMaxima;
+    }
+
+    @Override
+    public String getDificultad() { return dificultad; }
+    @Override
+    public List<IJugador> getJugadores() { return jugadores; }
+    @Override
+    public int getPuntuacionMaxima() { return puntuacionMaxima; }
+
+    @Override
+    public int getNumJugadores() {
+        return numJugadores;
+    }
+
+    @Override
+    public void setNumJugadores(int numJugadores) {
+        this.numJugadores = numJugadores;
+    }
+    
+    
+}

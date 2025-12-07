@@ -9,6 +9,7 @@ import InterfacesEventClient.IReceptorEvento;
 import cadenaModeloJuego.IModeloChain;
 import cadenaModeloJuego.ProcesadorCartaCantada;
 import cadenaModeloJuego.ProcesadorCasillaSeleccionada;
+import cadenaModeloJuego.ProcesadorConfigurarPartida;
 import cadenaModeloJuego.ProcesadorUnirsePartida;
 import interfacesComunicacionModelo.IModeloJuego;
 import org.json.JSONObject;
@@ -30,10 +31,12 @@ public class ReceptorModelo implements IReceptorEvento {
     public void armarFiltros(){
         IModeloChain cartaCantada = new ProcesadorCartaCantada();
         IModeloChain casillaSeleccionada = new ProcesadorCasillaSeleccionada(); 
-        IModeloChain unirsepartida = new ProcesadorUnirsePartida();
+        IModeloChain unirsepartida = new ProcesadorUnirsePartida(); 
+        IModeloChain configurar = new ProcesadorConfigurarPartida();
         cartaCantada.setSiguiente(casillaSeleccionada);
-        casillaSeleccionada.setSiguiente(unirsepartida);
-        
+        casillaSeleccionada.setSiguiente(unirsepartida); 
+        unirsepartida.setSiguiente(configurar);
+                
         this.cadenaProcesamiento = cartaCantada;
     }
     

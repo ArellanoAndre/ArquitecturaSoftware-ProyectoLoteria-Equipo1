@@ -17,7 +17,7 @@ import java.io.IOException;
 import logicaJuego.LogicaDeJuego;
 import modeloJuego.ModeloLogica;
 
-public class PruebaHostPartidaYaConfigurada {
+public class PruebaPartidaYaConfigurada {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -58,6 +58,7 @@ public class PruebaHostPartidaYaConfigurada {
 
         // 4) CONEXIONES ENTRE LÓGICA Y MODELO
         logica.setModelo(modelo);           // LogicaDeJuego conoce a ModeloLogica
+        logica.AgregarJugadorTest();
         modelo.setLogicaDeJuego(logica);    // ModeloLogica conoce a LogicaDeJuego
         modelo.setEmpaquetador(empaquetador); // ModeloLogica puede mandar eventos al broker
         
@@ -68,7 +69,9 @@ public class PruebaHostPartidaYaConfigurada {
         logica.setDificultad("BASICO");
         logica.setPunMax(1000); // puntuación máxima (puedes ajustar)
         logica.setNumJugadores(4);// jugadores esperados (puedes ajustar)
-     
+        logica.AgregarJugadorTest();
+        // ===============================
+           
         
 
         System.out.println("[HOST] Partida ya está configurada.");
