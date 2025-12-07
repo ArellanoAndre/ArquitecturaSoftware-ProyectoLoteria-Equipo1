@@ -1,7 +1,6 @@
 package ModeloVista;
 
 
-import interfacesComunicacionModelo.IControlVista;
 import java.util.ArrayList;
 import java.util.List;
 import ModeloVista.entidadesVista.CartaVista;
@@ -9,6 +8,7 @@ import ModeloVista.entidadesVista.JugadorVista;
 import Interfaces.IModeloVista;
 import Interfaces.Observer;
 import interfacesComunicacionModelo.IModeloJuego;
+import interfacesComunicacionModelo.IControlVistaMVC_Juego;
 
 /**
  * Clase que representa el modeloVista del juego. Actúa como intermediario entre
@@ -25,7 +25,7 @@ public class ModeloVista implements IModeloVista {
     
     //NUEVO
     private IModeloJuego modeloJuego;
-    private IControlVista controlVista;
+    private IControlVistaMVC_Juego controlVista;
      
 
     /**
@@ -34,7 +34,7 @@ public class ModeloVista implements IModeloVista {
     public ModeloVista() {
     }
 
-    public void setControlVista(IControlVista controlVista) {
+    public void setControlVista(IControlVistaMVC_Juego controlVista) {
         this.controlVista = controlVista;
     }
 

@@ -3,19 +3,19 @@ package Controlador;
 import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import ModeloVista.entidadesVista.TarjetaVista;
-import interfacesComunicacionModelo.IControlVista;
 import Interfaces.IModeloVista;
 import interfacesEntidades.ICarta;
 import interfacesEntidades.IJugador;
 import java.util.ArrayList;
 import java.util.List;
+import interfacesComunicacionModelo.IControlVistaMVC_Juego;
 
 /**
  * Clase que actúa como controlador entre el modelo del juego y la vista.
  * Convierte los datos del modelo (jugadores y cartas) en sus versiones visuales
  * para mostrarlos en pantalla.
  */
-public class ControlVista implements IControlVista {
+public class ControlVista implements IControlVistaMVC_Juego {
 
     private IModeloVista modeloVista;
 

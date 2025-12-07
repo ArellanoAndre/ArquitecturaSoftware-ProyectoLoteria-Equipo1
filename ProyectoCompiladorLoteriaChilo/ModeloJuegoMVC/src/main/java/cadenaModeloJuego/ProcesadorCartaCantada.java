@@ -5,9 +5,7 @@
 package cadenaModeloJuego;
 
 import ModeloJuegoEntidades.Carta;
-import interfacesComunicacionModelo.IControlIModeloVista;
-import interfacesComunicacionModelo.IControlVista;
-import modeloJuegoMVC.ModeloJuego;
+import interfacesComunicacionModelo.IModeloJuego;
 import org.json.JSONObject;
 
 /**
@@ -24,15 +22,11 @@ public class ProcesadorCartaCantada implements IModeloChain {
     }
 
     @Override
-    public void procesar(String tipoEvento, JSONObject datos, IControlVista controlVista, ModeloJuego modeloJuego,IControlIModeloVista modelovista) {
+    public void procesar(String tipoEvento, JSONObject datos, IModeloJuego modeloJuego) {
         if ("CARTA_CANTADA".equals(tipoEvento)) {
-            int numCarta = datos.getInt("IdCarta");
-            String nombreCarta = datos.getString("Nombre");
-
-            Carta cartaActual = new Carta(numCarta, nombreCarta);
-            controlVista.actualizarCartaCantada(cartaActual);
+            modeloJuego.actualizarCartaCantada(datos);
         } else if (siguiente != null) {
-            siguiente.procesar(tipoEvento, datos, controlVista, modeloJuego, modelovista);
+            siguiente.procesar(tipoEvento, datos, modeloJuego);
         } else {
             System.out.println("[Chain] Evento desconocido: " + tipoEvento);
         }

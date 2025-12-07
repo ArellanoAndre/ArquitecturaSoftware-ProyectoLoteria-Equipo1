@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import listener.EventListener;
 import modeloJuegoMVC.ModeloJuego;
+import receptor.ReceptorModelo;
 
 public class Prueba_MVC {
 
@@ -65,7 +66,8 @@ public class Prueba_MVC {
                     jugadorPrincipal,
                     secundarios
             );
-             
+            
+            ReceptorModelo receptorModelo = new ReceptorModelo(modeloJuego);
             
             modeloVista.setModeloJuego(modeloJuego);
 
@@ -89,7 +91,7 @@ public class Prueba_MVC {
             EventSender eventSender = new EventSender(colaSalida);
             colaSalida.addObserverSalida(eventSender);
 
-            Desempaquetador desempaquetador = new Desempaquetador(colaEntrada, modeloJuego);
+            Desempaquetador desempaquetador = new Desempaquetador(colaEntrada, receptorModelo);
             colaEntrada.addObserverEntrada(desempaquetador);
 
             EventListener eventListener = new EventListener(colaEntrada);

@@ -104,16 +104,16 @@ public void iniciarRonda() {
             break;
 
         case "intermedio":
-            delay = 7000;    // 7 segundos
+            delay = 5000;    // 7 segundos
             break;
 
         case "avanzado":
-            delay = 4000;    // 4 segundos
+            delay = 2500;    // 4 segundos
             break;
 
         default:
             System.err.println("[LogicaDeJuego] Dificultad desconocida: " + dificultad);
-            delay = 8000;  // Valor por defecto razonable
+            delay = 5000;  // Valor por defecto razonable
     }
 
     System.out.println("[LogicaDeJuego] Iniciando ronda con dificultad '" 

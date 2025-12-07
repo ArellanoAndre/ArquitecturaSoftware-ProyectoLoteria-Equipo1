@@ -13,13 +13,14 @@ import RedEventos.EventoRed;
 import Sender.EventSender;
 import colaGenerica.ColaDePrioridad;
 import dispatcher.Dispatcher;
-import interfacesComunicacionModelo.IControlIModeloVista;
 import interfacesComunicacionModelo.IModeloVista;
 import interfacesEntidades.IConfiguracionPartida;
 import java.io.IOException;
 import javax.swing.SwingUtilities;
 import modeloJuegoMVC.ModeloJuego;
 import listener.EventListener;
+import receptor.ReceptorModelo;
+import interfacesComunicacionModelo.IControlVistaMVC_Inicio;
 
 
 /*
@@ -48,9 +49,11 @@ public class main {
             IControladorInicio controlVista = new ControladorInicio(modeloVista);
             ModeloJuego modeloJuego = new ModeloJuego();
             IConfiguracionPartida config = new ConfiguracionPartida();
-            IControlIModeloVista controlModeloVista = new ControlIModeloVista(config);
+            IControlVistaMVC_Inicio controlModeloVista = new ControlIModeloVista(config);
 
             modeloVista.setModeloJuego(modeloJuego);
+            
+            ReceptorModelo receptorModelo = new ReceptorModelo(modeloJuego);
 
             JFrameSeleccionAvatar pantalla = new JFrameSeleccionAvatar(controlVista);
             pantalla.setVisible(true);
@@ -73,7 +76,7 @@ public class main {
             // ======================================================
             // 4. Desempaquetador → recibe del broker
             // ======================================================
-            Desempaquetador desempaquetador = new Desempaquetador(colaEntrada, modeloJuego);
+            Desempaquetador desempaquetador = new Desempaquetador(colaEntrada, receptorModelo);
             colaEntrada.addObserverEntrada(desempaquetador);
 
             EventListener eventListener = new EventListener(colaEntrada);
@@ -98,7 +101,7 @@ public class main {
             // ======================================================
             modeloJuego.setEmpaquetador(empaquetador);
             // Pasar estos a ModeloJuego
-            modeloJuego.setControlmodelovista(controlModeloVista);
+            modeloJuego.setControlVistaInicio(controlModeloVista);
 
             // También pasar config a ModeloVista si lo necesitas:
             controlModeloVista.setConfig(config);

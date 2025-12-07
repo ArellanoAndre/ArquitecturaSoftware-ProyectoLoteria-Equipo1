@@ -6,16 +6,16 @@ package Controlador;
 
 import ModeloVista.ConfiguracionPartida;
 import Presentacion.JFrameLobby;
-import interfacesComunicacionModelo.IControlIModeloVista;
 import interfacesEntidades.IConfiguracionPartida;
 import interfacesEntidades.IJugador;
 import java.util.List;
+import interfacesComunicacionModelo.IControlVistaMVC_Inicio;
 
 /**
  *
  * @author Arell
  */
-public class ControlIModeloVista implements IControlIModeloVista{
+public class ControlIModeloVista implements IControlVistaMVC_Inicio{
      private  IConfiguracionPartida config;
      private JFrameLobby lobby;
 

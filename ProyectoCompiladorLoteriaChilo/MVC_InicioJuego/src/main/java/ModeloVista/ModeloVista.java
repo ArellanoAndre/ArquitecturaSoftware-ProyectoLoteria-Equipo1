@@ -14,11 +14,13 @@ public class ModeloVista implements IModeloVista {
         return modeloJuego;
     }
 
+    @Override
     public void setModeloJuego(IModeloJuego modeloJuego) {
         this.modeloJuego = modeloJuego;
     }
 
     
+    @Override
     public void EnviarNombreAvatarConfirmado(String nombre, String avatar) {
     System.out.println("[ModeloVista] → Solicitando UNIRSE_PARTIDA");
 

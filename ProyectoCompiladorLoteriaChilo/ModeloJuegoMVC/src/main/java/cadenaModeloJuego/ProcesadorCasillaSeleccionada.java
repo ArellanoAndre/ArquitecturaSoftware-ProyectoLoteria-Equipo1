@@ -5,10 +5,8 @@
 package cadenaModeloJuego;
 
 
-import interfacesComunicacionModelo.IControlIModeloVista;
-import interfacesComunicacionModelo.IControlVista;
+import interfacesComunicacionModelo.IModeloJuego;
 import interfacesEntidades.IJugador;
-import modeloJuegoMVC.ModeloJuego;
 import org.json.JSONObject;
 
 /**
@@ -25,25 +23,11 @@ public class ProcesadorCasillaSeleccionada implements IModeloChain {
     }
 
     @Override
-    public void procesar(String tipoEvento, JSONObject datos, IControlVista controlVista, ModeloJuego modeloJuego,IControlIModeloVista modelovista) {
+    public void procesar(String tipoEvento, JSONObject datos, IModeloJuego modeloJuego) {
         if ("CASILLA_SELECCIONADA".equals(tipoEvento)) {
-            int jugador = datos.getInt("Jugador");
-            int casilla = datos.getInt("Casilla");
-
-            if (modeloJuego.getJugadorPrincipal().getNumJugador() == jugador) {
-                modeloJuego.getJugadorPrincipal().getTarjeta().marcarCasilla(casilla);
-
-                controlVista.actualizarTarjetaJugadorPrincipal(modeloJuego.getJugadorPrincipal().getTarjeta().getMarcadas());
-            } else {
-                for (IJugador jugadoresSecundario : modeloJuego.getJugadoresSecundarios()) {
-                    if (jugadoresSecundario.getNumJugador() == jugador) {
-                        jugadoresSecundario.getTarjeta().marcarCasilla(casilla);
-                        controlVista.setJugadoresSecundarios(modeloJuego.getJugadoresSecundarios());
-                    }
-                }
-            }
+            modeloJuego.actualizarCasillaSeleccionada(datos);
         } else if (siguiente != null) {
-            siguiente.procesar(tipoEvento, datos, controlVista, modeloJuego, modelovista);
+            siguiente.procesar(tipoEvento, datos, modeloJuego);
         } else {
             System.out.println("[Chain] Evento desconocido: " + tipoEvento);
         }
