@@ -18,16 +18,15 @@ import org.json.JSONObject;
 import interfacesComunicacionModelo.IControlVistaMVC_Juego;
 import interfacesComunicacionModelo.IControlVistaMVC_Inicio;
 import java.util.Map;
- 
 
 public class ModeloJuego implements IModeloJuego {
-    
+
     private IControlVistaMVC_Inicio controlVistaInicio;
     private IControlVistaMVC_Juego controlVistaJuego;
     private Jugador jugadorPrincipal;
     private List<IJugador> jugadoresSecundarios;
     private IEnvioEvento empaquetador;
-    
+
     //Banderita
     private boolean host = false;
 
@@ -142,146 +141,142 @@ public class ModeloJuego implements IModeloJuego {
 
         System.out.println("[Cliente] Suscripción enviada a Juego-out");
     }
-    
+
     @Override
-public void enviarEventoJugar() {
-    System.out.println("[ModeloJuego] → Enviando evento JUGAR");
+    public void enviarEventoJugar() {
+        System.out.println("[ModeloJuego] → Enviando evento JUGAR");
 
-    try {
-        // Construir JSON
-        JSONObject json = new JSONObject();
-        json.put("TipoEvento", "JUGAR");
+        try {
+            // Construir JSON
+            JSONObject json = new JSONObject();
+            json.put("TipoEvento", "JUGAR");
 
-        // Enviar usando el método centralizado
-        enviarEventoBroadcast(json.toString(), "Juego-in");
+            // Enviar usando el método centralizado
+            enviarEventoBroadcast(json.toString(), "Juego-in");
 
-        System.out.println("[ModeloJuego] JSON enviado: " + json.toString());
+            System.out.println("[ModeloJuego] JSON enviado: " + json.toString());
 
-    } catch (Exception e) {
-        System.err.println("[ModeloJuego] Error enviando JUGAR: " + e.getMessage());
-    }
-}
-
-@Override
-public void EnviarEventoConfigurarPartida(String dificultad, int numJugadores,
-                                          int puntuacionMax,
-                                          Map<String, Integer> puntuaciones) {
-
-    System.out.println("[ModeloJuego] → Enviando CONFIGURAR_PARTIDA al Host...");
-
-    try {
-        JSONObject json = new JSONObject();
-        json.put("TipoEvento", "CONFIGURAR_PARTIDA");
-        json.put("Dificultad", dificultad);
-        json.put("NumeroJugadores", numJugadores);
-        json.put("PuntuacionMaxima", puntuacionMax);
-
-        // Puntuaciones (Chorro, Cruz, Llena, etc.)
-        JSONObject jsonPunts = new JSONObject();
-        for (Map.Entry<String, Integer> entry : puntuaciones.entrySet()) {
-            jsonPunts.put(entry.getKey(), entry.getValue());
+        } catch (Exception e) {
+            System.err.println("[ModeloJuego] Error enviando JUGAR: " + e.getMessage());
         }
-        json.put("Puntuaciones", jsonPunts);
-
-        // Enviar por Juego-in al Host
-        enviarEventoBroadcast(json.toString(), "Juego-in");
-
-    } catch (Exception e) {
-        System.err.println("[ModeloJuego] ERROR enviando CONFIGURAR_PARTIDA: " + e.getMessage());
     }
-}
 
+    @Override
+    public void EnviarEventoConfigurarPartida(String dificultad, int numJugadores,
+            int puntuacionMax,
+            Map<String, Integer> puntuaciones) {
 
+        System.out.println("[ModeloJuego] → Enviando CONFIGURAR_PARTIDA al Host...");
+
+        try {
+            JSONObject json = new JSONObject();
+            json.put("TipoEvento", "CONFIGURAR_PARTIDA");
+            json.put("Dificultad", dificultad);
+            json.put("NumeroJugadores", numJugadores);
+            json.put("PuntuacionMaxima", puntuacionMax);
+
+            // Puntuaciones (Chorro, Cruz, Llena, etc.)
+            JSONObject jsonPunts = new JSONObject();
+            for (Map.Entry<String, Integer> entry : puntuaciones.entrySet()) {
+                jsonPunts.put(entry.getKey(), entry.getValue());
+            }
+            json.put("Puntuaciones", jsonPunts);
+
+            // Enviar por Juego-in al Host
+            enviarEventoBroadcast(json.toString(), "Juego-in");
+
+        } catch (Exception e) {
+            System.err.println("[ModeloJuego] ERROR enviando CONFIGURAR_PARTIDA: " + e.getMessage());
+        }
+    }
 
     // Control Vista Seccion ---------
     //-------------------------------------------------------------------------------------------------------------------------------------
-    
     @Override
-    public void actualizarCartaCantada(JSONObject datos){
+    public void actualizarCartaCantada(JSONObject datos) {
         int numCarta = datos.getInt("IdCarta");
-            String nombreCarta = datos.getString("Nombre");
+        String nombreCarta = datos.getString("Nombre");
 
-            Carta cartaActual = new Carta(numCarta, nombreCarta);
-            controlVistaJuego.actualizarCartaCantada(cartaActual);
+        Carta cartaActual = new Carta(numCarta, nombreCarta);
+        controlVistaJuego.actualizarCartaCantada(cartaActual);
     }
-    
+
     @Override
-    public void actualizarCasillaSeleccionada(JSONObject datos){
+    public void actualizarCasillaSeleccionada(JSONObject datos) {
         int jugador = datos.getInt("Jugador");
-            int casilla = datos.getInt("Casilla");
+        int casilla = datos.getInt("Casilla");
 
-            if (jugadorPrincipal.getNumJugador() == jugador) {
-                jugadorPrincipal.getTarjeta().marcarCasilla(casilla);
+        if (jugadorPrincipal.getNumJugador() == jugador) {
+            jugadorPrincipal.getTarjeta().marcarCasilla(casilla);
 
-                controlVistaJuego.actualizarTarjetaJugadorPrincipal(jugadorPrincipal.getTarjeta().getMarcadas());
-            } else {
-                for (IJugador jugadoresSecundario : jugadoresSecundarios) {
-                    if (jugadoresSecundario.getNumJugador() == jugador) {
-                        jugadoresSecundario.getTarjeta().marcarCasilla(casilla);
-                        controlVistaJuego.setJugadoresSecundarios(jugadoresSecundarios);
-                    }
+            controlVistaJuego.actualizarTarjetaJugadorPrincipal(jugadorPrincipal.getTarjeta().getMarcadas());
+        } else {
+            for (IJugador jugadoresSecundario : jugadoresSecundarios) {
+                if (jugadoresSecundario.getNumJugador() == jugador) {
+                    jugadoresSecundario.getTarjeta().marcarCasilla(casilla);
+                    controlVistaJuego.setJugadoresSecundarios(jugadoresSecundarios);
                 }
             }
-    }
-    
-   @Override
-public void actualizarConfiguracion(JSONObject datos) {
-
-    System.out.println("[FiltroUnirsePartida] → Evento ConfirmacionReglas recibido");
-
-    // === 1) Leer datos generales ===
-    String dificultad = datos.optString("Dificultad", null);
-    int puntuacionMax = datos.optInt("PuntuacionMaxima", 0);
-
-    // === 2) Convertir jugadores JSON -> List<IJugador> ===
-    List<IJugador> listaJugadores = new ArrayList<>();
-
-    if (datos.has("Jugadores")) {
-        JSONArray arr = datos.getJSONArray("Jugadores");
-
-        for (int i = 0; i < arr.length(); i++) {
-            JSONObject obj = arr.getJSONObject(i);
-
-            int id = obj.getInt("IdJugador");
-            String nombre = obj.getString("Nombre");
-            String avatar = obj.getString("Avatar"); // ← YA SE LEE AVATAR
-
-            listaJugadores.add(new Jugador(id, nombre, avatar));
         }
     }
 
-    // === 3) Leer Tarjetas ===
-    List<String> tarjetas = new ArrayList<>();
+    @Override
+    public void actualizarConfiguracion(JSONObject datos) {
 
-    if (datos.has("Tarjetas")) {
-        JSONArray arrTarjetas = datos.getJSONArray("Tarjetas");
+        System.out.println("[FiltroUnirsePartida] → Evento ConfirmacionReglas recibido");
 
-        for (int i = 0; i < arrTarjetas.length(); i++) {
-            tarjetas.add(arrTarjetas.getString(i)); // Rutas de imagen
+        // === 1) Leer datos generales ===
+        String dificultad = datos.optString("Dificultad", null);
+        int puntuacionMax = datos.optInt("PuntuacionMaxima", 0);
+
+        // === 2) Convertir jugadores JSON -> List<IJugador> ===
+        List<IJugador> listaJugadores = new ArrayList<>();
+
+        if (datos.has("Jugadores")) {
+            JSONArray arr = datos.getJSONArray("Jugadores");
+
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
+
+                int id = obj.getInt("IdJugador");
+                String nombre = obj.getString("Nombre");
+                String avatar = obj.getString("Avatar"); // ← YA SE LEE AVATAR
+
+                listaJugadores.add(new Jugador(id, nombre, avatar));
+            }
         }
+
+        // === 3) Leer Tarjetas ===
+        List<String> tarjetas = new ArrayList<>();
+
+        if (datos.has("Tarjetas")) {
+            JSONArray arrTarjetas = datos.getJSONArray("Tarjetas");
+
+            for (int i = 0; i < arrTarjetas.length(); i++) {
+                tarjetas.add(arrTarjetas.getString(i)); // Rutas de imagen
+            }
+        }
+
+        System.out.println("[FiltroUnirsePartida] Datos procesados:");
+        System.out.println(" - Dificultad: " + dificultad);
+        System.out.println(" - PuntMax: " + puntuacionMax);
+        System.out.println(" - Jugadores: " + listaJugadores.size());
+        System.out.println(" - Tarjetas: " + tarjetas.size());
+
+        // === 4) Crear objeto ConfiguracionPartida ===
+        ConfiguracionPartida configuracion = new ConfiguracionPartida();
+        int numJugadores;
+        configuracion.setDatos(
+                dificultad,
+                listaJugadores,
+                puntuacionMax,
+                tarjetas,
+                numJugadores = listaJugadores.size() // ← NUEVO CAMPO AGREGADO
+        );
+
+        // === 5) Notificar a ControlModeloVista para actualizar pantalla ===
+        controlVistaInicio.actualizarPantalla(configuracion);
     }
-
-    System.out.println("[FiltroUnirsePartida] Datos procesados:");
-    System.out.println(" - Dificultad: " + dificultad);
-    System.out.println(" - PuntMax: " + puntuacionMax);
-    System.out.println(" - Jugadores: " + listaJugadores.size());
-    System.out.println(" - Tarjetas: " + tarjetas.size());
-
-    // === 4) Crear objeto ConfiguracionPartida ===
-    ConfiguracionPartida configuracion = new ConfiguracionPartida();
-    int numJugadores;
-    configuracion.setDatos(
-            dificultad,
-            listaJugadores,
-            puntuacionMax,
-            tarjetas,
-             numJugadores = listaJugadores.size() // ← NUEVO CAMPO AGREGADO
-    );
-
-    // === 5) Notificar a ControlModeloVista para actualizar pantalla ===
-    controlVistaInicio.actualizarPantalla(configuracion);
-}
-
 
     @Override
     public void setControlVistaInicio(IControlVistaMVC_Inicio controlVistaInicio) {
@@ -292,16 +287,70 @@ public void actualizarConfiguracion(JSONObject datos) {
     public void setControlVistaJuego(IControlVistaMVC_Juego controlVistaJuego) {
         this.controlVistaJuego = controlVistaJuego;
     }
-    
+
     @Override
-public void abrirPantallaConfig() {
-    controlVistaInicio.abrirPantallaConfig();
-}
+    public void abrirPantallaConfig() {
+        controlVistaInicio.abrirPantallaConfig();
+    }
 
-@Override
-public void abrirPantallaAvatar() {
-    controlVistaInicio.abrirPantallaAvatar();
-}
+    @Override
+    public void abrirPantallaAvatar() {
+        controlVistaInicio.abrirPantallaAvatar();
+    }
 
-    
+    @Override
+    public void notificarFinRonda(int ronda, String ganador) {
+
+        if (controlVistaJuego != null) {
+            controlVistaJuego.mostrarMensajeFinRonda(ronda, ganador);
+
+        }
+    }
+
+    @Override
+    public void notificarFinPartida(List<IJugador> ranking) {
+
+        if (controlVistaJuego != null) {
+            controlVistaJuego.procesarFinPartida(ranking);
+        }
+    }
+
+    @Override
+    public void EnviarEventoCantarLoteria() {
+
+        if (empaquetador == null) {
+            System.err.println("[ModeloJuego] Error: Empaquetador no inicializado.");
+            return;
+        }
+
+        IEvento evento = empaquetador.crearEvento();
+        evento.setTopico("Juego-in");
+        evento.setEvento("Juego");
+
+        // El JSON que espera el Host
+        evento.setJSON("{ \"TipoEvento\": \"INTENTO_LOTERIA\", \"Jugador\": " + jugadorPrincipal.getNumJugador() + " }"
+        );
+
+        empaquetador.enviarEvento(evento);
+        System.out.println("[ModeloJuego] Enviado: INTENTO_LOTERIA por jugador" + jugadorPrincipal.getNumJugador());
+
+    }
+
+    @Override
+    public void EnviarEventoIniciarSiguienteRonda() {
+        
+        if (empaquetador == null) {
+            return;
+        }
+
+        IEvento evento = empaquetador.crearEvento();
+        evento.setTopico("Juego-in");
+        evento.setEvento("Juego");
+
+        evento.setJSON("{ \"TipoEvento\": \"INICIAR_SIGUIENTE_RONDA\" }");
+
+        empaquetador.enviarEvento(evento);
+        System.out.println("[ModeloJuego] Enviado: INICIAR_SIGUIENTE_RONDA");
+    }
+
 }

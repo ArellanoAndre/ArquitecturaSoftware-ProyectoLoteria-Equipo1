@@ -6,6 +6,7 @@ import Controlador.ControlVista;
 import Desempaquetador.Desempaquetador;
 import Empaquetador.Empaquetador;
 import Ensamblador.EnsambladorRed;
+import Interfaces.IOyenteVista;
 import ModeloJuegoEntidades.Jugador;
 import ModeloJuegoEntidades.Tarjeta;
 import ModeloVista.ModeloVista;
@@ -59,6 +60,8 @@ public class Prueba_MVC {
             // 2. CREACIÓN DEL MVC REAL
             // ===============================
             ModeloVista modeloVista = new ModeloVista();
+            modeloVista.setHost(true);
+            
             ControlVista controlVista = new ControlVista(modeloVista);
 
             ModeloJuego modeloJuego = new ModeloJuego(
@@ -77,6 +80,7 @@ public class Prueba_MVC {
             // 3. CREAR LA PANTALLA DEL JUEGO
             // ===============================
             JPantallaJuego pantalla1 = new JPantallaJuego(modeloVista, controlador);
+            pantalla1.setOyente((IOyenteVista) controlVista);
             pantalla1.setTitle("Jugador 1");
             pantalla1.setVisible(true);
 

@@ -37,4 +37,21 @@ public interface IControlVistaMVC_Juego {
      * @param cartaActual Carta que fue cantada en el juego.
      */
     void actualizarCartaCantada(ICarta cartaActual);
+
+    /**
+     * Muestra mensaje de fin de ronda en la vista.
+     *
+     *
+     */
+    void mostrarMensajeFinRonda(int ronda, String ganador);
+
+    /**
+     * Muestra mensaje de fin de partida en la vista.
+     *
+     *
+     */
+    void procesarFinPartida(List<IJugador> ranking);
+
+    
+
 }

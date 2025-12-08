@@ -4,6 +4,8 @@
  */
 package interfacesComunicacionModelo;
 
+import interfacesEntidades.IJugador;
+import java.util.List;
 import java.util.Map;
 import org.json.JSONObject;
 
@@ -24,25 +26,33 @@ public interface IModeloJuego {
     void enviarEventoBroadcast(String jsonPayload, String topico);
 
     public void suscribirseJuegoOut();
-    
+
     public void actualizarCartaCantada(JSONObject datos);
-    
+
     public void actualizarCasillaSeleccionada(JSONObject datos);
-    
+
     public void actualizarConfiguracion(JSONObject datos);
-    
+
     public void setControlVistaInicio(IControlVistaMVC_Inicio controlVistaInicio);
-    
+
     public void setControlVistaJuego(IControlVistaMVC_Juego controlVistaJuego);
-    
+
     void enviarEventoJugar();
-    
+
     void abrirPantallaConfig();
-    
+
     void abrirPantallaAvatar();
-    
-public void EnviarEventoConfigurarPartida(String dificultad, int numJugadores,
-                                          int puntuacionMax,
-                                          Map<String, Integer> puntuaciones);
+
+    public void EnviarEventoConfigurarPartida(String dificultad, int numJugadores,
+            int puntuacionMax,
+            Map<String, Integer> puntuaciones);
+
+    void notificarFinRonda(int ronda, String ganador);
+
+    void notificarFinPartida(List<IJugador> ranking);
+
+    void EnviarEventoCantarLoteria();
+
+    void EnviarEventoIniciarSiguienteRonda();
 
 }

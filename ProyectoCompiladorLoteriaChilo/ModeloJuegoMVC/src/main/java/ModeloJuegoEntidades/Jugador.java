@@ -7,7 +7,7 @@ import interfacesEntidades.ITarjeta;
  * Representa a un jugador dentro del ModeloJuego. Contiene información como su
  * nombre, número, puntaje, tarjeta.
  */
-public class Jugador implements IJugador{
+public class Jugador implements IJugador {
 
     private int numJugador;
     private String nombre;
@@ -15,6 +15,9 @@ public class Jugador implements IJugador{
     private ITarjeta tarjeta;
     private boolean principal;
     private String avatar;
+
+    public Jugador() {
+    }
 
     /**
      * Constructor que inicializa un jugador con su nombre, tarjeta y número.
@@ -43,6 +46,18 @@ public class Jugador implements IJugador{
     @Override
     public String getNombre() {
         return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setPuntaje(double puntaje) {
+        this.puntaje = puntaje;
+    }
+
+    public void setTarjeta(ITarjeta tarjeta) {
+        this.tarjeta = tarjeta;
     }
 
     /**

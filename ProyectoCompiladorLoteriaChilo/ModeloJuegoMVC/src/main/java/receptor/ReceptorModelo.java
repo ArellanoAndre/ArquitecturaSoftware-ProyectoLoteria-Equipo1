@@ -10,6 +10,8 @@ import cadenaModeloJuego.IModeloChain;
 import cadenaModeloJuego.ProcesadorCartaCantada;
 import cadenaModeloJuego.ProcesadorCasillaSeleccionada;
 import cadenaModeloJuego.ProcesadorConfigurarPartida;
+import cadenaModeloJuego.ProcesadorFinPartida;
+import cadenaModeloJuego.ProcesadorFinRonda;
 import cadenaModeloJuego.ProcesadorUnirsePartida;
 import interfacesComunicacionModelo.IModeloJuego;
 import org.json.JSONObject;
@@ -33,9 +35,15 @@ public class ReceptorModelo implements IReceptorEvento {
         IModeloChain casillaSeleccionada = new ProcesadorCasillaSeleccionada(); 
         IModeloChain unirsepartida = new ProcesadorUnirsePartida(); 
         IModeloChain configurar = new ProcesadorConfigurarPartida();
+        IModeloChain finRonda = new ProcesadorFinRonda();
+        IModeloChain finPartida = new ProcesadorFinPartida();
+        
         cartaCantada.setSiguiente(casillaSeleccionada);
         casillaSeleccionada.setSiguiente(unirsepartida); 
         unirsepartida.setSiguiente(configurar);
+        configurar.setSiguiente(finRonda);
+        finRonda.setSiguiente(configurar);
+        
                 
         this.cadenaProcesamiento = cartaCantada;
     }

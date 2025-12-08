@@ -1,13 +1,17 @@
 package Presentacion;
 
 import Controlador.ControlSeleccionarCarta;
+import Controlador.ControlVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import Interfaces.IModeloVista;
+import Interfaces.IOyenteVista;
 import Interfaces.Observer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.List;
 import javax.swing.BoxLayout;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -19,6 +23,8 @@ import javax.swing.JPanel;
 public class JPantallaJuego extends JFramePadre implements Observer {
 
     private IModeloVista modeloVista;
+    private IOyenteVista oyenteAccion;
+    private JDialog dialogoEspera;
 
     public JPantallaJuego(IModeloVista modeloVista, ControlSeleccionarCarta controlador) {
         super();
@@ -34,6 +40,10 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         crearPanelJugadorPrincipal(); // Panel jugador principal
         cargarJugadoresSecundarios(); // Panel jugadores secundarios
 
+    }
+
+    public void setOyente(IOyenteVista oyente) {
+        this.oyenteAccion = oyente;
     }
 
     /**
@@ -53,7 +63,7 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         labelNombreCartaActual = new javax.swing.JLabel();
         panelBotones = new javax.swing.JPanel();
         btnGritarJugada = new javax.swing.JButton();
-        btnGanarLoteria = new javax.swing.JButton();
+        btnIntentoLoteria = new javax.swing.JButton();
         panelJugadoresSecundarios = new javax.swing.JPanel();
         btnAbandonarPartida = new javax.swing.JButton();
 
@@ -132,13 +142,13 @@ public class JPantallaJuego extends JFramePadre implements Observer {
             }
         });
 
-        btnGanarLoteria.setBackground(new java.awt.Color(191, 233, 150));
-        btnGanarLoteria.setFont(new java.awt.Font("Sarabun", 1, 24)); // NOI18N
-        btnGanarLoteria.setForeground(new java.awt.Color(0, 42, 0));
-        btnGanarLoteria.setText("¡LOTERÍA!");
-        btnGanarLoteria.addActionListener(new java.awt.event.ActionListener() {
+        btnIntentoLoteria.setBackground(new java.awt.Color(191, 233, 150));
+        btnIntentoLoteria.setFont(new java.awt.Font("Sarabun", 1, 24)); // NOI18N
+        btnIntentoLoteria.setForeground(new java.awt.Color(0, 42, 0));
+        btnIntentoLoteria.setText("¡LOTERÍA!");
+        btnIntentoLoteria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGanarLoteriaActionPerformed(evt);
+                btnIntentoLoteriaActionPerformed(evt);
             }
         });
 
@@ -149,7 +159,7 @@ public class JPantallaJuego extends JFramePadre implements Observer {
             .addGroup(panelBotonesLayout.createSequentialGroup()
                 .addGroup(panelBotonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnGritarJugada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnGanarLoteria, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
+                    .addComponent(btnIntentoLoteria, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
                 .addGap(0, 19, Short.MAX_VALUE))
         );
         panelBotonesLayout.setVerticalGroup(
@@ -158,7 +168,7 @@ public class JPantallaJuego extends JFramePadre implements Observer {
                 .addContainerGap()
                 .addComponent(btnGritarJugada, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnGanarLoteria, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnIntentoLoteria, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -236,9 +246,12 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnGanarLoteriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGanarLoteriaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnGanarLoteriaActionPerformed
+    private void btnIntentoLoteriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIntentoLoteriaActionPerformed
+
+        if (oyenteAccion != null) {
+            oyenteAccion.solicitarIntentoLoteria();
+        }
+    }//GEN-LAST:event_btnIntentoLoteriaActionPerformed
 
     private void btnGritarJugadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGritarJugadaActionPerformed
         // TODO add your handling code here:
@@ -249,8 +262,8 @@ public class JPantallaJuego extends JFramePadre implements Observer {
     }//GEN-LAST:event_btnAbandonarPartidaActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbandonarPartida;
-    private javax.swing.JButton btnGanarLoteria;
     private javax.swing.JButton btnGritarJugada;
+    private javax.swing.JButton btnIntentoLoteria;
     private javax.swing.JPanel jPanelFondo;
     private javax.swing.JLabel labelNombreCartaActual;
     private javax.swing.JPanel panelBotones;
@@ -267,6 +280,54 @@ public class JPantallaJuego extends JFramePadre implements Observer {
      */
     @Override
     public void update() {
+
+        // ---------------------------------------------------------
+        // 1. PRIORIDAD: FIN DE PARTIDA (Ranking)
+        // ---------------------------------------------------------
+        if (modeloVista.isJuegoTerminado()) {
+
+            if (dialogoEspera != null) {
+                dialogoEspera.dispose();
+            }
+
+            JPantallaFinJuego dialogFinPartida = new JPantallaFinJuego(this, true);
+            dialogFinPartida.mostrarRanking(modeloVista.getListaRanking());
+            this.dispose();
+            dialogFinPartida.setVisible(true);
+            return;
+        }
+
+        // ---------------------------------------------------------
+        // 2. FIN DE RONDA (Mostrar Alerta)
+        // ---------------------------------------------------------
+        if (modeloVista.isFinDeRonda()) {
+
+            String ganadorRonda = modeloVista.getGanadorRonda();
+            int ronda = modeloVista.getNumRonda();
+
+            // Solo mostramos si no está visible ya (para evitar que parpadee o se duplique)
+            if (dialogoEspera == null || !dialogoEspera.isVisible()) {
+                mostrarJOptionPaneFinRonda(ronda, ganadorRonda);
+            }
+        }  
+         
+        else if (dialogoEspera != null && dialogoEspera.isVisible()) {
+
+            System.out.println("[Vista] Cerrando diálogo de espera y limpiando tablero...");
+
+            // 1. Cerrar ventana
+            dialogoEspera.setVisible(false);
+            dialogoEspera.dispose();
+            dialogoEspera = null;
+
+            // 2. LIMPIAR TABLERO VISUALMENTE
+            modeloVista.reiniciarTableroJugador();
+
+        }
+         
+
+        this.repaint();
+
     }
 
     /**
@@ -388,6 +449,82 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         // Borde opcional muy sutil para conservar el layout visual (puedes quitarlo):
         // p.setBorder(BorderFactory.createEmptyBorder(8, 0, 8, 0));
         return p;
+    }
+
+    /**
+     * Muestra una alerta modal indicando quién ganó la ronda. Si el usuario es
+     * HOST, muestra un botón para continuar. Si es CLIENTE, muestra un mensaje
+     * de espera.
+     */
+    public void mostrarJOptionPaneFinRonda(int ronda, String ganador) {
+
+        String titulo = "Fin de la Ronda " + ronda;
+        String mensaje = "¡El jugador " + ganador.toUpperCase() + " ha ganado la ronda!";
+
+        if (modeloVista.isHost()) {
+            // --- CASO HOST ---
+            Object[] opciones = {"Iniciar Siguiente Ronda"};
+
+            int seleccion = JOptionPane.showOptionDialog(
+                    this,
+                    mensaje + "\n\nPresiona para continuar la partida.",
+                    titulo,
+                    JOptionPane.OK_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    opciones,
+                    opciones[0]
+            );
+
+            // SI PRESIONA EL BOTÓN:
+            if (seleccion == JOptionPane.OK_OPTION) {
+                
+                // 1. APAGAR LA BANDERA INMEDIATAMENTE
+                // Esto evita que el update() vuelva a abrir la ventana
+                modeloVista.limpiarEstadoRonda(); 
+                
+                // 2. LIMPIAR TABLERO VISUALMENTE
+                limpiarTableroVisual(); 
+
+                // 3. ENVIAR ORDEN AL SERVIDOR
+                if (oyenteAccion != null) {
+                    oyenteAccion.solicitarSiguienteRonda();
+                }
+            }
+
+        } else {
+            // --- CASO CLIENTE (Sin cambios, esto ya estaba bien con el dialogoEspera) ---
+            if (dialogoEspera != null && dialogoEspera.isVisible()) return;
+
+            JOptionPane pane = new JOptionPane(
+                    mensaje + "\n\nEsperando al anfitrión para continuar...",
+                    JOptionPane.INFORMATION_MESSAGE,
+                    JOptionPane.DEFAULT_OPTION,
+                    null,
+                    new Object[]{},
+                    null
+            );
+            dialogoEspera = pane.createDialog(this, titulo);
+            dialogoEspera.setDefaultCloseOperation(javax.swing.JDialog.DO_NOTHING_ON_CLOSE);
+            dialogoEspera.setModal(false);
+            dialogoEspera.setVisible(true);
+        }
+    }
+
+    /**
+     * Pone todas las casillas del jugador principal en falso visualmente para
+     * iniciar la nueva ronda.
+     */
+    private void limpiarTableroVisual() {
+         
+        var jugador = modeloVista.getJugadorPrincipal();
+
+        if (jugador != null && jugador.getTarjeta() != null) {
+            
+            boolean[] vacias = new boolean[16];
+
+            modeloVista.actualizarTarjetaJugadorP(vacias);
+        }
     }
 
 }

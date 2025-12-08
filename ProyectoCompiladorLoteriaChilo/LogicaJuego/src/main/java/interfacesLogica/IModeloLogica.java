@@ -21,15 +21,23 @@ public interface IModeloLogica {
     void notificarJugadaValida(int posicion, int idJugador);
 
     void notificarGanador(String nombreGanador);
-    
-     void enviarConfirmacionReglas(
-        String dificultad,
-        int puntuacionMaxima,
-        List<Jugador> jugadores,
-        List<String> tarjetas);
-     
-       void enviarAbrirPantallaConfig();
+
+    void enviarConfirmacionReglas(
+            String dificultad,
+            int puntuacionMaxima,
+            List<Jugador> jugadores,
+            List<String> tarjetas);
+
+    void enviarAbrirPantallaConfig();
 
     void enviarAbrirPantallaSeleccionAvatar();
 
+    void EnviarEventoIniciarSiguienteRonda();
+
+    void EnviarEventoCantarLoteria();
+    
+    void notificarFinDeRonda(int ronda, String nombreGanador);
+    
+    void notificarFinPartida(List<Jugador> ranking);
+    
 }

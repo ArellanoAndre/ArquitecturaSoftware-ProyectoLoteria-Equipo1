@@ -15,6 +15,8 @@ import procesarCadena.IProcesadorEvento;
 import procesarCadena.ProcesadorConfigurarPartida;
 import procesarCadena.ProcesadorIniciar;
 import procesarCadena.ProcesadorIniciarRonda;
+import procesarCadena.ProcesadorInicioSiguienteRonda;
+import procesarCadena.ProcesadorIntentoLoteria;
 import procesarCadena.ProcesadorMarcar;
 import procesarCadena.ProcesadorUnirse;
 import procesarCadena.ProcesadorUnirsePartida;
@@ -24,7 +26,7 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
 
     private LogicaDeJuego logicaDeJuego;
     private IEnvioEvento empaquetador;
-    
+
     private IProcesadorEvento cadenaProcesamiento;
 
     public LogicaDeJuego getLogicaDeJuego() {
@@ -40,10 +42,14 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         IProcesadorEvento iniciarRonda = new ProcesadorIniciarRonda();
         IProcesadorEvento marcar = new ProcesadorMarcar();
         IProcesadorEvento unirse = new ProcesadorUnirse();
-        IProcesadorEvento iniciar = new ProcesadorIniciar(); 
-        IProcesadorEvento unirsePartida = new ProcesadorUnirsePartida(); 
-        IProcesadorEvento Jugar = new ProcesarJugar(); 
+        IProcesadorEvento iniciar = new ProcesadorIniciar();
+        IProcesadorEvento unirsePartida = new ProcesadorUnirsePartida();
+        IProcesadorEvento Jugar = new ProcesarJugar();
         IProcesadorEvento configurar = new ProcesadorConfigurarPartida();
+        IProcesadorEvento intentoLoteria = new ProcesadorIntentoLoteria();
+        IProcesadorEvento inicioSiguienteRonda = new ProcesadorInicioSiguienteRonda();
+        
+        
         // Conectamos los eslabones
         iniciarRonda.setSiguiente(marcar);
         marcar.setSiguiente(unirse);
@@ -51,6 +57,8 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         iniciar.setSiguiente(unirsePartida);
         unirsePartida.setSiguiente(Jugar);
         Jugar.setSiguiente(configurar);
+        configurar.setSiguiente(intentoLoteria);
+        intentoLoteria.setSiguiente(inicioSiguienteRonda);
         this.cadenaProcesamiento = iniciarRonda; // Guardamos la referencia al primero
     }
 
@@ -68,8 +76,7 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         System.out.println("[ModeloLogica-Host] Reenviando confirmación de selección...");
         notificarJugadaValida(pos, idJugador);
     }
-    
-    
+
     public void manejar(Evento payloadJSON) {
 
         System.out.println("[ModeloLogica-Host] Procesando payload: " + payloadJSON);
@@ -135,9 +142,9 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
 
     private void enviarEventoBroadcast(String jsonPayload, String topico) { // para no repetir codigo
 
-       if (empaquetador == null) {
-           return;
-       }
+        if (empaquetador == null) {
+            return;
+        }
 
         IEvento evento = empaquetador.crearEvento();
         evento.setTopico(topico);
@@ -151,99 +158,152 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
 
     @Override
     public void manejar(IEvento evento) {
-         
+
         String jsonPayload = evento.getJSON();
         System.out.println("ModeloLogica: Evento recibido: " + jsonPayload);
-        
-        if (logicaDeJuego == null ) {
+
+        if (logicaDeJuego == null) {
             System.out.println("logicajuego nula");
             return;
         }
-        
-        try { 
+
+        try {
             JSONObject peticion = new JSONObject(jsonPayload);
-            
-            if ( peticion.has("TipoEvento")) {
+
+            if (peticion.has("TipoEvento")) {
                 String tipo = peticion.getString("TipoEvento");
                 cadenaProcesamiento.procesar(tipo, peticion, logicaDeJuego);
             }
-        } catch (Exception e)  {
+        } catch (Exception e) {
             System.err.println("Error procesando entrada" + e.getMessage());
         }
     }
-    
- @Override
-public void enviarConfirmacionReglas(
-        String dificultad,
-        int puntuacionMaxima,
-        List<Jugador> jugadores,
-        List<String> tarjetas) {
 
-    JSONObject json = new JSONObject();
-    json.put("TipoEvento", "Confirmacion_Reglas");
-    json.put("Dificultad", dificultad);
-    json.put("PuntuacionMaxima", puntuacionMaxima);
+    @Override
+    public void enviarConfirmacionReglas(
+            String dificultad,
+            int puntuacionMaxima,
+            List<Jugador> jugadores,
+            List<String> tarjetas) {
 
-    // -------------------------------------------------------
-    // Construir arreglo JSON "Jugadores"
-    // -------------------------------------------------------
-    JSONArray arrJugadores = new JSONArray();
+        JSONObject json = new JSONObject();
+        json.put("TipoEvento", "Confirmacion_Reglas");
+        json.put("Dificultad", dificultad);
+        json.put("PuntuacionMaxima", puntuacionMaxima);
 
-    for (Jugador j : jugadores) {
-        JSONObject jugadorJson = new JSONObject();
-        jugadorJson.put("IdJugador", j.getNumJugador());
-        jugadorJson.put("Nombre", j.getNombre());
-        jugadorJson.put("Avatar", j.getAvatar());
-        arrJugadores.put(jugadorJson);
+        // -------------------------------------------------------
+        // Construir arreglo JSON "Jugadores"
+        // -------------------------------------------------------
+        JSONArray arrJugadores = new JSONArray();
+
+        for (Jugador j : jugadores) {
+            JSONObject jugadorJson = new JSONObject();
+            jugadorJson.put("IdJugador", j.getNumJugador());
+            jugadorJson.put("Nombre", j.getNombre());
+            jugadorJson.put("Avatar", j.getAvatar());
+            arrJugadores.put(jugadorJson);
+        }
+
+        json.put("Jugadores", arrJugadores);
+
+        // -------------------------------------------------------
+        // Construir arreglo JSON "Tarjetas" (lista de imágenes)
+        // -------------------------------------------------------
+        JSONArray arrTarjetas = new JSONArray();
+
+        if (tarjetas != null) {
+            for (String ruta : tarjetas) {
+                arrTarjetas.put(ruta);
+            }
+        }
+
+        json.put("Tarjetas", arrTarjetas);
+
+        // -------------------------------------------------------
+        // Enviar evento a todos los clientes
+        // -------------------------------------------------------
+        enviarEventoBroadcast(json.toString(), "Juego-out");
+
+        System.out.println("[ModeloLogica] → Enviando ConfirmacionReglas: " + json.toString());
     }
 
-    json.put("Jugadores", arrJugadores);
+    @Override
+    public void enviarAbrirPantallaConfig() {
 
-    // -------------------------------------------------------
-    // Construir arreglo JSON "Tarjetas" (lista de imágenes)
-    // -------------------------------------------------------
-    JSONArray arrTarjetas = new JSONArray();
+        JSONObject json = new JSONObject();
+        json.put("TipoEvento", "CONFIGURAR_PARTIDA");
 
-    if (tarjetas != null) {
-        for (String ruta : tarjetas) {
-            arrTarjetas.put(ruta);
+        enviarEventoBroadcast(json.toString(), "Juego-out");
+
+        System.out.println("[Host] → Indicando al cliente que abra CONFIGURAR PARTIDA");
+    }
+
+    @Override
+    public void enviarAbrirPantallaSeleccionAvatar() {
+
+        JSONObject json = new JSONObject();
+        json.put("TipoEvento", "UNIRSE_PARTIDA");
+
+        enviarEventoBroadcast(json.toString(), "Juego-out");
+
+        System.out.println("[Host] → Indicando al cliente que abra SELECCION DE AVATAR");
+    }
+
+    @Override
+    public void EnviarEventoIniciarSiguienteRonda() {
+        IEvento evento = empaquetador.crearEvento();
+        evento.setTopico("Juego-in");
+        evento.setJSON("{ \"TipoEvento\": \"INICIAR_SIGUIENTE_RONDA\" }");
+
+        empaquetador.enviarEvento(evento);
+
+    }
+
+    @Override
+    public void EnviarEventoCantarLoteria() {
+
+        IEvento evento = empaquetador.crearEvento();
+        evento.setTopico("Juego-in");
+        evento.setJSON("{ \"TipoEvento\": \"INTENTO_LOTERIA\" }");
+
+        empaquetador.enviarEvento(evento);
+
+    }
+
+    @Override
+    public void notificarFinDeRonda(int ronda, String ganadorRonda) {
+
+        JSONObject json = new JSONObject();
+
+        json.put("TipoEvento", "FIN_RONDA");
+
+        json.put("Ronda", ronda);
+        json.put("Ganador", ganadorRonda);
+
+        enviarEventoBroadcast(json.toString(), "Juego-out");
+
+        System.out.println("[ModeloLogica] Enviado FIN_RONDA: " + json.toString());
+
+    }
+
+    @Override
+    public void notificarFinPartida(List<Jugador> ranking) {
+
+        JSONObject json = new JSONObject();
+        json.put("TipoEvento", "FIN_PARTIDA");
+
+        JSONArray arrayRanking = new JSONArray();
+
+        for (Jugador j : ranking) {
+            JSONObject jugadorJson = new JSONObject();
+
+            jugadorJson.put("Id", j.getNumJugador());
+            jugadorJson.put("Nombre", j.getNombre());
+            jugadorJson.put("Puntos", j.getPuntaje());
+            jugadorJson.put("Avatar", j.getAvatar());
+
+            arrayRanking.put(jugadorJson);
         }
     }
 
-    json.put("Tarjetas", arrTarjetas);
-
-    // -------------------------------------------------------
-    // Enviar evento a todos los clientes
-    // -------------------------------------------------------
-    enviarEventoBroadcast(json.toString(), "Juego-out");
-
-    System.out.println("[ModeloLogica] → Enviando ConfirmacionReglas: " + json.toString());
-}
-
-
-@Override
-public void enviarAbrirPantallaConfig() {
-
-    JSONObject json = new JSONObject();
-    json.put("TipoEvento", "CONFIGURAR_PARTIDA");
-
-    enviarEventoBroadcast(json.toString(), "Juego-out");
-
-    System.out.println("[Host] → Indicando al cliente que abra CONFIGURAR PARTIDA");
-}
-
-@Override
-public void enviarAbrirPantallaSeleccionAvatar() {
-
-    JSONObject json = new JSONObject();
-    json.put("TipoEvento", "UNIRSE_PARTIDA");
-
-    enviarEventoBroadcast(json.toString(), "Juego-out");
-
-    System.out.println("[Host] → Indicando al cliente que abra SELECCION DE AVATAR");
-}
-
-
-
-    
 }

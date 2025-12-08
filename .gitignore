@@ -12,3 +12,6 @@
 *.jar
 /ProyectoCompiladorLoteriaChilo/IComunicacionModelo/target/
 /ProyectoCompiladorLoteriaChilo/ModeloJuegoMVC/target/
+/ProyectoCompiladorLoteriaChilo/Arrancador/target/
+/ProyectoCompiladorLoteriaChilo/MVC_InicioJuego/target/
+/ProyectoCompiladorLoteriaChilo/ArrancadorBroker/target/

@@ -201,7 +201,7 @@
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="btnGritarJugada" max="32767" attributes="0"/>
-                          <Component id="btnGanarLoteria" pref="228" max="32767" attributes="0"/>
+                          <Component id="btnIntentoLoteria" pref="228" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="19" max="32767" attributes="0"/>
                   </Group>
@@ -213,7 +213,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnGritarJugada" min="-2" pref="59" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnGanarLoteria" min="-2" pref="59" max="-2" attributes="0"/>
+                      <Component id="btnIntentoLoteria" min="-2" pref="59" max="-2" attributes="0"/>
                       <EmptySpace pref="25" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -237,7 +237,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGritarJugadaActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="btnGanarLoteria">
+            <Component class="javax.swing.JButton" name="btnIntentoLoteria">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="96" green="e9" red="bf" type="rgb"/>
@@ -251,7 +251,7 @@
                 <Property name="text" type="java.lang.String" value="&#xa1;LOTER&#xcd;A!"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGanarLoteriaActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnIntentoLoteriaActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

@@ -22,7 +22,7 @@ import org.json.JSONObject;
  * @author rodri
  */
 public class LogicaDeJuego implements ILogicaJuego {
-    
+
     private Griton griton;
     private List<Jugador> jugadores;
     private Carta cartaActual;
@@ -34,7 +34,8 @@ public class LogicaDeJuego implements ILogicaJuego {
     private List<String> imagenesTarjetas;
     private boolean partidaConfigurada = false;
     private Map<String, Integer> puntuaciones;
-
+    private int rondaActual = 1;
+    private int MAX_RONDAS;
 
     private IModeloLogica modeloLogica;
 
@@ -52,6 +53,7 @@ public class LogicaDeJuego implements ILogicaJuego {
         this.griton = new Griton();
         this.jugadores = new ArrayList<>();
         this.imagenesTarjetas = TarjetasLoteria();
+        this.MAX_RONDAS = 2; // por mientras prueba
 
     }
 
@@ -100,42 +102,45 @@ public class LogicaDeJuego implements ILogicaJuego {
     }
 
     @Override
-public void iniciarRonda() {
+    public void iniciarRonda() {
 
-    // 1) Convertir la dificultad textual a milisegundos
-    int delay;
+        if (timer != null) {
+            timer.stop();
+        }
 
-    switch (dificultad.toLowerCase()) {
-        case "básico":
-        case "basico":
-            delay = 10000;   // 10 segundos
-            break;
+        // 1) Convertir la dificultad textual a milisegundos
+        int delay;
 
-        case "intermedio":
-            delay = 5000;    // 7 segundos
-            break;
+        switch (dificultad.toLowerCase()) {
+            case "básico":
+            case "basico":
+                delay = 10000;   // 10 segundos
+                break;
 
-        case "avanzado":
-            delay = 2500;    // 4 segundos
-            break;
+            case "intermedio":
+                delay = 5000;    // 7 segundos
+                break;
 
-        default:
-            System.err.println("[LogicaDeJuego] Dificultad desconocida: " + dificultad);
-            delay = 5000;  // Valor por defecto razonable
+            case "avanzado":
+                delay = 2500;    // 4 segundos
+                break;
+
+            default:
+                System.err.println("[LogicaDeJuego] Dificultad desconocida: " + dificultad);
+                delay = 5000;  // Valor por defecto razonable
+        }
+
+        System.out.println("[LogicaDeJuego] Iniciando ronda con dificultad '"
+                + dificultad + "' (" + delay + " ms)");
+
+        // 2) Barajear y cantar primera carta
+        // griton.barajear(); lo comente pq se llama en iniciarSiguienteRonda y pasa una maniacada
+        siguienteCarta();
+
+        // 3) Crear timer con el tiempo según la dificultad
+        timer = new Timer(delay, e -> siguienteCarta());
+        timer.start();
     }
-
-    System.out.println("[LogicaDeJuego] Iniciando ronda con dificultad '" 
-        + dificultad + "' (" + delay + " ms)");
-
-    // 2) Barajear y cantar primera carta
-    griton.barajear();
-    siguienteCarta();
-
-    // 3) Crear timer con el tiempo según la dificultad
-    timer = new Timer(delay, e -> siguienteCarta());
-    timer.start();
-}
-
 
     /**
      * Obtiene la siguiente carta del mazo y la envía a la vista.
@@ -261,31 +266,29 @@ public void iniciarRonda() {
         this.dificultad = dificultad;
     }
 
-   
-    
     public void agregarJugador(String nombre, String avatar) {
 
-    int id = jugadores.size() + 1;
+        int id = jugadores.size() + 1;
 
-    Jugador jugador = new Jugador(id, nombre, avatar);
-    jugadores.add(jugador);
+        Jugador jugador = new Jugador(id, nombre, avatar);
+        jugadores.add(jugador);
 
-    System.out.println("[Logica] Jugador agregado:");
-    System.out.println("        ID: " + id);
-    System.out.println("        Nombre: " + nombre);
-    System.out.println("        Avatar: " + avatar);
+        System.out.println("[Logica] Jugador agregado:");
+        System.out.println("        ID: " + id);
+        System.out.println("        Nombre: " + nombre);
+        System.out.println("        Avatar: " + avatar);
 
-    notificarConfirmacionReglas();
-}
+        notificarConfirmacionReglas();
+    }
 
     public void notificarConfirmacionReglas() {
-    modeloLogica.enviarConfirmacionReglas(
-        this.dificultad,
-        this.punMax,
-        this.jugadores,
-        this.TarjetasLoteria()
-    );
-}
+        modeloLogica.enviarConfirmacionReglas(
+                this.dificultad,
+                this.punMax,
+                this.jugadores,
+                this.TarjetasLoteria()
+        );
+    }
 
     public List<String> getImagenesTarjetas() {
         return imagenesTarjetas;
@@ -294,69 +297,69 @@ public void iniciarRonda() {
     public void setImagenesTarjetas(List<String> imagenesTarjetas) {
         this.imagenesTarjetas = imagenesTarjetas;
     }
-    
+
     public void configurarPartida(String dificultad,
-                              int numJugadores,
-                              int puntMax,
-                              JSONObject puntuaciones) {
+            int numJugadores,
+            int puntMax,
+            JSONObject puntuaciones) {
 
-    System.out.println("[Lógica] Configurando partida...");
+        System.out.println("[Lógica] Configurando partida...");
 
-    this.dificultad = dificultad;
-    this.numJugadores = numJugadores;
-    this.punMax = puntMax;
+        this.dificultad = dificultad;
+        this.numJugadores = numJugadores;
+        this.punMax = puntMax;
 
-    // Guardamos las puntuaciones
-    this.puntuaciones = (Map<String, Integer>) puntuaciones;
-    System.out.println("[Lógica] Partida configurada correctamente.");
-    
-    // Enviar confirmación de reglas al Cliente
-    notificarConfirmacionReglas();
-}
+        // Guardamos las puntuaciones
+        this.puntuaciones = (Map<String, Integer>) puntuaciones;
+        System.out.println("[Lógica] Partida configurada correctamente.");
 
-    
-    
-      public List<String> TarjetasLoteria() {
-    // Creamos la lista completa con los 54 tableros (01 al 54)
-    List<String> todosLosTableros = new ArrayList<>();
-    todosLosTableros.add("/img/Tableros/Tablero01.png");
-    todosLosTableros.add("/img/Tableros/Tablero02.png");
-    todosLosTableros.add("/img/Tableros/Tablero03.png");
-    todosLosTableros.add("/img/Tableros/Tablero04.png");
-    todosLosTableros.add("/img/Tableros/Tablero05.png");
-    todosLosTableros.add("/img/Tableros/Tablero06.png");
-    todosLosTableros.add("/img/Tableros/Tablero07.png");
-    todosLosTableros.add("/img/Tableros/Tablero08.png");
-    todosLosTableros.add("/img/Tableros/Tablero09.png");
-    todosLosTableros.add("/img/Tableros/Tablero10.png");
-    todosLosTableros.add("/img/Tableros/Tablero11.png");
-    todosLosTableros.add("/img/Tableros/Tablero12.png");
+        // Enviar confirmación de reglas al Cliente
+        notificarConfirmacionReglas();
+    }
 
-    // Mezclamos la lista para que sea aleatorio
-    Collections.shuffle(todosLosTableros);
+    public List<String> TarjetasLoteria() {
+        // Creamos la lista completa con los 54 tableros (01 al 54)
+        List<String> todosLosTableros = new ArrayList<>();
+        todosLosTableros.add("/img/Tableros/Tablero01.png");
+        todosLosTableros.add("/img/Tableros/Tablero02.png");
+        todosLosTableros.add("/img/Tableros/Tablero03.png");
+        todosLosTableros.add("/img/Tableros/Tablero04.png");
+        todosLosTableros.add("/img/Tableros/Tablero05.png");
+        todosLosTableros.add("/img/Tableros/Tablero06.png");
+        todosLosTableros.add("/img/Tableros/Tablero07.png");
+        todosLosTableros.add("/img/Tableros/Tablero08.png");
+        todosLosTableros.add("/img/Tableros/Tablero09.png");
+        todosLosTableros.add("/img/Tableros/Tablero10.png");
+        todosLosTableros.add("/img/Tableros/Tablero11.png");
+        todosLosTableros.add("/img/Tableros/Tablero12.png");
 
-    // Tomamos solo los primeros 3 (ya están en orden aleatorio)
-    return todosLosTableros.subList(0, 3);
-}
+        // Mezclamos la lista para que sea aleatorio
+        Collections.shuffle(todosLosTableros);
+
+        // Tomamos solo los primeros 3 (ya están en orden aleatorio)
+        return todosLosTableros.subList(0, 3);
+    }
 
     public void setJugadores(List<Jugador> jugadores) {
         this.jugadores = jugadores;
     }
-    public void AgregarJugadorTest(){
-     // 1. CREACIÓN DE JUGADORES REALES
-            // ===============================
-            int[] casillas1 = {46, 6, 38, 3, 8, 11, 33, 35, 21, 54, 50, 29, 30, 40, 36, 26};
-            String img1 = "/img/Tableros/Tablero01.png";
-            Tarjeta tarjeta1 = new Tarjeta(casillas1, img1);
-            Jugador jugador = new Jugador("Rodri", tarjeta1, 1); jugador.setAvatar("avatar1.png");
-            
-            jugadores.add(jugador);
+
+    public void AgregarJugadorTest() {
+        // 1. CREACIÓN DE JUGADORES REALES
+        // ===============================
+        int[] casillas1 = {46, 6, 38, 3, 8, 11, 33, 35, 21, 54, 50, 29, 30, 40, 36, 26};
+        String img1 = "/img/Tableros/Tablero01.png";
+        Tarjeta tarjeta1 = new Tarjeta(casillas1, img1);
+        Jugador jugador = new Jugador("Rodri", tarjeta1, 1);
+        jugador.setAvatar("avatar1.png");
+
+        jugadores.add(jugador);
     }
-    
+
     @Override
-public boolean estaConfiguradaPartida() {
-    return partidaConfigurada;
-}
+    public boolean estaConfiguradaPartida() {
+        return partidaConfigurada;
+    }
 
     @Override
     public void enviarAbrirPantallaConfig() {
@@ -366,6 +369,102 @@ public boolean estaConfiguradaPartida() {
     @Override
     public void enviarAbrirPantallaSeleccionAvatar() {
         modeloLogica.enviarAbrirPantallaSeleccionAvatar();
+    }
+
+    public void procesarIntentoLoteria(int idJugador) {
+        Jugador jugador = buscarJugador(idJugador);
+
+        if (jugador != null) {
+
+            if (jugador.getTarjeta().esLoteria()) {
+                System.out.println("" + jugador.getNombre() + " ganó la ronda " + rondaActual);
+
+                jugador.addPuntos(100);
+                finalizarRonda(jugador.getNombre());
+            }
+
+        }
+    }
+
+    /**
+     * Maneja la transición cuando alguien gana una ronda. Detiene el juego y
+     * decide si sigue la siguiente ronda o se acaba la partida.
+     */
+    private void finalizarRonda(String nombreGanador) {
+
+        if (timer != null) {
+            timer.stop();
+        }
+
+        System.out.println("===== FIN DE LA RONDA " + rondaActual + " =====");
+
+        if (modeloLogica != null) {
+            modeloLogica.notificarFinDeRonda(rondaActual, nombreGanador);
+        }
+
+        if (rondaActual >= MAX_RONDAS) {
+
+            finalizarPartida();
+        } else {
+            rondaActual++;
+            reiniciarTableros();
+        }
+    }
+
+    /**
+     * Se llama cuando el Host presiona "Continuar" en el JOptionPane. Reactiva
+     * el flujo del juego.
+     */
+    public void iniciarSiguienteRonda() {
+        System.out.println("====== Iniciando ronda " + rondaActual + " ======");
+
+        griton.barajear();
+        contador = 0;
+        iniciarRonda();
+    }
+
+    /**
+     * Caso de Uso: Ganar Partida. Calcula el ranking final y lo envía para
+     * mostrar la copa.
+     */
+    private void finalizarPartida() {
+        System.out.println("=== PARTIDA TERMINADA ===");
+
+        List<Jugador> ranking = getListaRanking();
+
+        if (!ranking.isEmpty()) {
+            System.out.println("Ganador Supremo: " + ranking.get(0).getNombre());
+        }
+
+        if (modeloLogica != null) {
+            modeloLogica.notificarFinPartida(ranking);
+        }
+    }
+
+    /**
+     * Ordena los jugadores de mayor a menor puntaje para el podio.
+     */
+    public List<Jugador> getListaRanking() {
+
+        List<Jugador> rankingOrdenado = new ArrayList<>(this.jugadores);
+
+        rankingOrdenado.sort((j1, j2) -> Double.compare(j2.getPuntaje(), j1.getPuntaje()));
+
+        return rankingOrdenado;
+    }
+
+    private void reiniciarTableros() {
+        for (Jugador jugador : jugadores) {
+            jugador.getTarjeta().limpiar();
+
+        }
+    }
+
+    private Jugador buscarJugador(int id) {
+        return jugadores.stream()
+                .filter(jugador -> jugador.getNumJugador() == id)
+                .findFirst()
+                .orElse(null);
     }
 
 }

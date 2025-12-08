@@ -5,7 +5,7 @@ package logicaJuego.entidades;
  * asociada. Cada tarjeta contiene una cuadrícula de números (casillas) y un
  * arreglo de booleanos que indica qué posiciones han sido marcadas.
  */
-public class Tarjeta  {
+public class Tarjeta {
 
     private int[] casillas;   // Números en la tarjeta (ej. 4x4)
     private boolean[] marcadas; // Indica si una casilla fue marcada
@@ -83,6 +83,24 @@ public class Tarjeta  {
      */
     public void setMarcadas(boolean[] marcadas) {
         this.marcadas = marcadas;
+    }
+
+    public boolean esLoteria() {
+
+        for (boolean marcada : marcadas) {
+            if (!marcada) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void limpiar() {
+        if (marcadas != null) {
+            for (int i = 0; i < marcadas.length; i++) {
+                marcadas[i] = false;
+            }
+        }
     }
 
 }

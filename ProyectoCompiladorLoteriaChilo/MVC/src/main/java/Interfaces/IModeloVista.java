@@ -87,4 +87,27 @@ public interface IModeloVista {
      * su interfaz.
      */
     void notificar();
+    
+    
+    // --- metodos para el estado de las rondas ---
+    void setDatosFinRonda(int ronda, String ganador);
+    boolean isFinDeRonda();
+    String getGanadorRonda();
+    int getNumRonda();
+    void limpiarEstadoRonda();
+    void reiniciarTableroJugador();
+
+    // --- metodos para el estado de la partida ---
+    void setRankingFinal(List<JugadorVista> ranking);
+    boolean isJuegoTerminado();
+    List<JugadorVista> getListaRanking();
+
+    // --- DATOS GLOBALES ---
+    boolean isHost(); 
+    
+    // --- PUENTES DE COMUNICACIÓN (Salida) ---
+    void solicitarEnvioCantarLoteria();
+    void solicitarEnvioSiguienteRonda();
+    
+    
 }

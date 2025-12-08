@@ -4,6 +4,7 @@ import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import ModeloVista.entidadesVista.TarjetaVista;
 import Interfaces.IModeloVista;
+import Interfaces.IOyenteVista;
 import interfacesEntidades.ICarta;
 import interfacesEntidades.IJugador;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import interfacesComunicacionModelo.IControlVistaMVC_Juego;
  * Convierte los datos del modelo (jugadores y cartas) en sus versiones visuales
  * para mostrarlos en pantalla.
  */
-public class ControlVista implements IControlVistaMVC_Juego {
+public class ControlVista implements IControlVistaMVC_Juego, IOyenteVista {
 
     private IModeloVista modeloVista;
 
@@ -86,5 +87,55 @@ public class ControlVista implements IControlVistaMVC_Juego {
 
         modeloVista.setCartaCantada(cv);
     }
+
+    @Override
+    public void mostrarMensajeFinRonda(int ronda, String ganador) {
+
+        modeloVista.setDatosFinRonda(ronda, ganador);
+    }
+
+    @Override
+    public void procesarFinPartida(List<IJugador> ranking) {
+
+        List<JugadorVista> rankingVisual = new ArrayList<>();
+
+        for (IJugador jugador : ranking) {
+            // Creamos una tarjeta vacía o dummy para la vista del ranking (no necesitamos ver las casillas ahí)
+            TarjetaVista tarjetaDummy = new TarjetaVista(new boolean[16], "dummy.png");
+
+            JugadorVista jugadorVista = new JugadorVista(jugador.getNombre(), tarjetaDummy, jugador.getNumJugador());
+            jugadorVista.setPuntaje(jugador.getPuntaje());
+
+            // Asignamos el avatar (que viene del servidor o se construye la ruta)
+            // Si el servidor manda "avatar1.png", construimos la ruta completa si es necesario
+            String avatar = jugador.getAvatar();
+            if (avatar != null && !avatar.startsWith("/img")) {
+
+                jugadorVista.setRutaAvatar("/img/Avatares/user" + jugador.getNumJugador() + ".png");
+            } else {
+                jugadorVista.setRutaAvatar(avatar);
+            }
+
+            rankingVisual.add(jugadorVista);
+        }
+
+        modeloVista.setRankingFinal(rankingVisual);
+    }
+
+   
+
+    @Override
+    public void solicitarSiguienteRonda() {
+        
+        modeloVista.solicitarEnvioSiguienteRonda();
+    }
+
+    @Override
+    public void solicitarIntentoLoteria() {
+        
+        modeloVista.solicitarEnvioCantarLoteria();
+    }
+
+    
 
 }

@@ -34,6 +34,18 @@ public class JugadorVista {
         return nombre;
     }
 
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setPuntaje(double puntaje) {
+        this.puntaje = puntaje;
+    }
+
+    public void setTarjeta(TarjetaVista tarjeta) {
+        this.tarjeta = tarjeta;
+    }
+
     /**
      * @return Puntaje actual del jugador.
      */

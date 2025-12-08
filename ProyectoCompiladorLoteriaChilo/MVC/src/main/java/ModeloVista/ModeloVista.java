@@ -1,6 +1,5 @@
 package ModeloVista;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import ModeloVista.entidadesVista.CartaVista;
@@ -22,11 +21,22 @@ public class ModeloVista implements IModeloVista {
     private JugadorVista jugadorPrincipal;
     private List<JugadorVista> jugadoresSecundarios;
     private List<Observer> observers = new ArrayList<>();
-    
-    //NUEVO
+
     private IModeloJuego modeloJuego;
     private IControlVistaMVC_Juego controlVista;
-     
+
+    // para el estado de la ronda y partida
+    private boolean finDeRonda = false;
+    private boolean juegoTerminado = false;
+    private String ganadorRonda;
+
+    private int numRonda;
+    private boolean host = false;
+    private List<JugadorVista> rankingFinal;
+
+    public void setHost(boolean host) {
+        this.host = host;
+    }
 
     /**
      * Constructor vacío del modeloVista.
@@ -53,6 +63,13 @@ public class ModeloVista implements IModeloVista {
     @Override
     public void setCartaCantada(CartaVista carta) {
         cartaCantada = carta;
+        
+        // checar si esta bien o mal hacer esto
+        // si llega una carta nueva, entonces la ronda de espera termino
+        // o se puede hacer todo en pantallajuego nose
+        if (this.finDeRonda) {
+            this.finDeRonda = false; 
+        }
         notificar();
     }
 
@@ -159,6 +176,102 @@ public class ModeloVista implements IModeloVista {
     public void notificar() {
         for (Observer o : observers) {
             o.update();
+        }
+    }
+
+    // ----------------------- metodos de la ronda ----------------------------------
+    @Override
+    public void setDatosFinRonda(int ronda, String ganador) {
+
+        this.numRonda = ronda;
+        this.ganadorRonda = ganador;
+        this.finDeRonda = true;
+        notificar();
+    }
+
+    @Override
+    public boolean isFinDeRonda() {
+
+        return finDeRonda;
+    }
+
+    @Override
+    public String getGanadorRonda() {
+
+        return ganadorRonda;
+    }
+
+    @Override
+    public int getNumRonda() {
+        return numRonda;
+    }
+
+    @Override
+    public void limpiarEstadoRonda() {
+
+        this.finDeRonda = false;
+    }
+
+    @Override
+    public void setRankingFinal(List<JugadorVista> ranking) {
+
+        this.rankingFinal = ranking;
+        this.juegoTerminado = true;
+        notificar();
+    }
+
+    @Override
+    public boolean isJuegoTerminado() {
+
+        return juegoTerminado;
+    }
+
+    @Override
+    public List<JugadorVista> getListaRanking() {
+
+        return rankingFinal;
+    }
+
+    @Override
+    public boolean isHost() {
+
+        return host;
+    }
+
+    @Override
+    public void solicitarEnvioCantarLoteria() {
+
+        if (modeloJuego != null) {
+            modeloJuego.EnviarEventoCantarLoteria();
+        }
+    }
+
+    @Override
+    public void solicitarEnvioSiguienteRonda() {
+
+        if (modeloJuego != null) {
+            modeloJuego.EnviarEventoIniciarSiguienteRonda();
+        }
+    }
+
+    public void reiniciarTableroUsuario() {
+        if (jugadorPrincipal != null && jugadorPrincipal.getTarjeta() != null) {
+
+            boolean[] vacias = new boolean[16];
+            jugadorPrincipal.getTarjeta().setMarcadas(vacias);
+
+            notificar();
+        }
+    }
+
+    @Override
+    public void reiniciarTableroJugador() {
+        if (jugadorPrincipal != null && jugadorPrincipal.getTarjeta() != null) {
+
+            boolean[] vacias = new boolean[16];
+            jugadorPrincipal.getTarjeta().setMarcadas(vacias);
+
+            notificar();
         }
     }
 
