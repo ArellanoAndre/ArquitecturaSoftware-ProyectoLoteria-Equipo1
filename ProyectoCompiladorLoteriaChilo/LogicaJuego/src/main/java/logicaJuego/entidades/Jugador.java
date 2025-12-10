@@ -28,6 +28,15 @@ public class Jugador {
         this.numJugador = numJugador;
     }
 
+    public Jugador(int numJugador, String nombre, Tarjeta tarjeta, String avatar) {
+        this.numJugador = numJugador;
+        this.nombre = nombre;
+        this.tarjeta = tarjeta;
+        this.avatar = avatar;
+    }
+    
+    
+
     /**
      * @return Nombre del jugador.
      */

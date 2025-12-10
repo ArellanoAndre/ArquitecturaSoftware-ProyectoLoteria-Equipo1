@@ -17,8 +17,6 @@ public interface IModeloJuego {
 
     void EnviarNombreAvatarConfirmado(String nombre, String avatar);
 
-    void EnviarEventoConfigurarPartida();
-
     void EnviarEventoIniciarRonda();
 
     void EnviarEventoCartaSeleccionada(int pos, int jugador);

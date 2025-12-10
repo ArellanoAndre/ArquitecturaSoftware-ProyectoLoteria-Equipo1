@@ -68,11 +68,6 @@ public class ModeloJuego implements IModeloJuego {
     }
 
     @Override
-    public void EnviarEventoConfigurarPartida() {
-        host = true;
-    }
-
-    @Override
     public void EnviarEventoIniciarRonda() {
         IEvento eventoInicioRonda = empaquetador.crearEvento();
         eventoInicioRonda.setTopico("Juego-in");
@@ -167,7 +162,7 @@ public class ModeloJuego implements IModeloJuego {
             Map<String, Integer> puntuaciones) {
 
         System.out.println("[ModeloJuego] → Enviando CONFIGURAR_PARTIDA al Host...");
-
+        System.out.println(numJugadores);
         try {
             JSONObject json = new JSONObject();
             json.put("TipoEvento", "CONFIGURAR_PARTIDA");
@@ -184,7 +179,7 @@ public class ModeloJuego implements IModeloJuego {
 
             // Enviar por Juego-in al Host
             enviarEventoBroadcast(json.toString(), "Juego-in");
-
+            host = true;
         } catch (Exception e) {
             System.err.println("[ModeloJuego] ERROR enviando CONFIGURAR_PARTIDA: " + e.getMessage());
         }
@@ -251,6 +246,7 @@ public class ModeloJuego implements IModeloJuego {
         // === 1) Leer datos generales ===
         String dificultad = datos.optString("Dificultad", null);
         int puntuacionMax = datos.optInt("PuntuacionMaxima", 0);
+        int numJugadores = datos.optInt("NumeroJugadores", 0);
 
         // === 2) Convertir jugadores JSON -> List<IJugador> ===
         List<IJugador> listaJugadores = new ArrayList<>();
@@ -284,17 +280,17 @@ public class ModeloJuego implements IModeloJuego {
         System.out.println(" - Dificultad: " + dificultad);
         System.out.println(" - PuntMax: " + puntuacionMax);
         System.out.println(" - Jugadores: " + listaJugadores.size());
+        System.out.println(" - NumJugadores: " + numJugadores);
         System.out.println(" - Tarjetas: " + tarjetas.size());
 
         // === 4) Crear objeto ConfiguracionPartida ===
         ConfiguracionPartida configuracion = new ConfiguracionPartida();
-        int numJugadores;
         configuracion.setDatos(
                 dificultad,
                 listaJugadores,
                 puntuacionMax,
                 tarjetas,
-                numJugadores = listaJugadores.size() // ← NUEVO CAMPO AGREGADO
+                numJugadores
         );
 
         // === 5) Notificar a ControlModeloVista para actualizar pantalla ===

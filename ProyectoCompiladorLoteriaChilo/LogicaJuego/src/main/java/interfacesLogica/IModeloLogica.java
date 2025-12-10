@@ -26,6 +26,7 @@ public interface IModeloLogica {
             String dificultad,
             int puntuacionMaxima,
             List<Jugador> jugadores,
+            int numJugadores,
             List<String> tarjetas);
 
     void enviarAbrirPantallaConfig();

@@ -24,6 +24,7 @@ public class ModeloVistaInicio extends Subject implements IModeloVistaInicio {
     private IControladorInicio controlador;
     private JPantallaConfigurarPartida pantallaConfig;
     private JPantallaMenuPrincipal MenuPrincipal;
+    private String jugador;
 
     public ModeloVistaInicio() {
         // NO LLAMAR notifyObservers() AQUÍ
@@ -56,6 +57,7 @@ public class ModeloVistaInicio extends Subject implements IModeloVistaInicio {
     @Override
     public void EnviarNombreAvatarConfirmado(String nombre, String avatar) {
         System.out.println("[ModeloVista] → Solicitando UNIRSE_PARTIDA");
+        this.jugador = nombre;
         if (modeloJuego != null) {
             modeloJuego.EnviarNombreAvatarConfirmado(nombre, avatar);
         }
@@ -96,6 +98,16 @@ public class ModeloVistaInicio extends Subject implements IModeloVistaInicio {
     public List<IObserver> getObservers() {
         return observers;
     }
+
+    public String getJugador() {
+        return jugador;
+    }
+
+    public void setJugador(String jugador) {
+        this.jugador = jugador;
+    }
+    
+    
 
     public JFrameSeleccionAvatar getPantallaAvatar() { return pantallaAvatar; }
 

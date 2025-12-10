@@ -92,7 +92,7 @@ public class JFrameLobby extends JFramePadre implements IObserver{
         labelNivel12 = new javax.swing.JLabel();
         labelPuntuacion = new javax.swing.JLabel();
         labelNivel14 = new javax.swing.JLabel();
-        labelNivel15 = new javax.swing.JLabel();
+        labelNombre = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -307,15 +307,10 @@ public class JFrameLobby extends JFramePadre implements IObserver{
                 .addComponent(labelNivel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlTarjetasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlTarjetasLayout.createSequentialGroup()
-                        .addComponent(labelTarjeta1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(pnlTarjetasLayout.createSequentialGroup()
-                        .addComponent(labelTarjeta3, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
-                        .addGap(14, 14, 14))
-                    .addGroup(pnlTarjetasLayout.createSequentialGroup()
-                        .addComponent(labelTarjeta2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                    .addComponent(labelTarjeta1, javax.swing.GroupLayout.DEFAULT_SIZE, 303, Short.MAX_VALUE)
+                    .addComponent(labelTarjeta3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labelTarjeta2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel5.setBackground(new java.awt.Color(255, 232, 195));
@@ -360,10 +355,10 @@ public class JFrameLobby extends JFramePadre implements IObserver{
         labelNivel14.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         labelNivel14.setText("Nombre:");
 
-        labelNivel15.setFont(new java.awt.Font("Sarabun", 2, 14)); // NOI18N
-        labelNivel15.setForeground(new java.awt.Color(102, 102, 102));
-        labelNivel15.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        labelNivel15.setText("Jugador1");
+        labelNombre.setFont(new java.awt.Font("Sarabun", 2, 14)); // NOI18N
+        labelNombre.setForeground(new java.awt.Color(102, 102, 102));
+        labelNombre.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        labelNombre.setText("Jugador1");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -373,7 +368,7 @@ public class JFrameLobby extends JFramePadre implements IObserver{
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(labelNivel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(labelNivel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(labelNivel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -388,13 +383,10 @@ public class JFrameLobby extends JFramePadre implements IObserver{
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(labelNivel14)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(labelNivel15)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addGap(0, 14, Short.MAX_VALUE)
-                        .addComponent(labelPuntuacion, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(9, 9, 9)))
+                                .addComponent(labelNombre)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addComponent(labelPuntuacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -412,7 +404,7 @@ public class JFrameLobby extends JFramePadre implements IObserver{
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelNivel14)
-                    .addComponent(labelNivel15))
+                    .addComponent(labelNombre))
                 .addGap(44, 44, 44)
                 .addComponent(labelNivel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -603,7 +595,7 @@ private void actualizarTarjetas(List<String> rutas) {
         }
 
         if (nombreJugador != null && !nombreJugador.isBlank()) {
-            labelNivel15.setText(nombreJugador);
+            labelNombre.setText(nombreJugador);
         }
     }
     
@@ -625,7 +617,9 @@ public void update() {
     // --- Resto de la actualización ---
     labelDificultad.setText(config.getDificultad());
     labelNivel12.setText(String.valueOf(config.getNumJugadores()));
+    labelNivel.setText(config.getDificultad());
     labelPuntuacion.setText(String.valueOf(config.getPuntuacionMaxima()));
+    labelNombre.setText(modeloVista.getJugador());
     actualizarJugadores(config.getJugadores());
     actualizarTarjetas(config.getImagenesTarjetas());
 
@@ -707,7 +701,6 @@ private void seleccionarTarjeta(int index) {
     private javax.swing.JLabel labelNivel10;
     private javax.swing.JLabel labelNivel12;
     private javax.swing.JLabel labelNivel14;
-    private javax.swing.JLabel labelNivel15;
     private javax.swing.JLabel labelNivel3;
     private javax.swing.JLabel labelNivel4;
     private javax.swing.JLabel labelNivel5;
@@ -715,6 +708,7 @@ private void seleccionarTarjeta(int index) {
     private javax.swing.JLabel labelNivel7;
     private javax.swing.JLabel labelNivel8;
     private javax.swing.JLabel labelNivel9;
+    private javax.swing.JLabel labelNombre;
     private javax.swing.JLabel labelPuntuacion;
     private javax.swing.JLabel labelSubtitulo;
     private javax.swing.JLabel labelTarjeta1;

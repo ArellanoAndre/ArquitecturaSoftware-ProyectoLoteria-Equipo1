@@ -246,6 +246,7 @@ public class LogicaDeJuego implements ILogicaJuego {
         String img1 = "/img/Tableros/Tablero01.png";
         Tarjeta tarjeta1 = new Tarjeta(casillas1, img1);
         Jugador jugador1 = new Jugador("Rodri", tarjeta1, 1);
+        jugador1.setAvatar("avatar1.png");
 
         jugadores.add(jugador1);
 
@@ -253,7 +254,7 @@ public class LogicaDeJuego implements ILogicaJuego {
         String img2 = "/img/Tableros/Tablero02.png";
         Tarjeta tarjeta2 = new Tarjeta(casillas2, img2);
         Jugador jugador2 = new Jugador("Isaac", tarjeta2, 2);
-
+        jugador2.setAvatar("avatar2.png");
         jugadores.add(jugador2);
 
     }
@@ -286,6 +287,7 @@ public class LogicaDeJuego implements ILogicaJuego {
                 this.dificultad,
                 this.punMax,
                 this.jugadores,
+                this.numJugadores,
                 this.TarjetasLoteria()
         );
     }
@@ -301,7 +303,7 @@ public class LogicaDeJuego implements ILogicaJuego {
     public void configurarPartida(String dificultad,
             int numJugadores,
             int puntMax,
-            JSONObject puntuaciones) {
+            Map<String, Integer> puntuaciones) {
 
         System.out.println("[Lógica] Configurando partida...");
 
@@ -310,11 +312,11 @@ public class LogicaDeJuego implements ILogicaJuego {
         this.punMax = puntMax;
 
         // Guardamos las puntuaciones
-        this.puntuaciones = (Map<String, Integer>) puntuaciones;
+        this.puntuaciones = puntuaciones;
         System.out.println("[Lógica] Partida configurada correctamente.");
 
         // Enviar confirmación de reglas al Cliente
-        notificarConfirmacionReglas();
+        
     }
 
     public List<String> TarjetasLoteria() {

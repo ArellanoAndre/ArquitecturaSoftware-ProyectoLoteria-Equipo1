@@ -4,6 +4,8 @@
  */
 package procesarCadena;
 
+import java.util.HashMap;
+import java.util.Map;
 import logicaJuego.LogicaDeJuego;
 import org.json.JSONObject;
 
@@ -35,6 +37,11 @@ public class ProcesadorConfigurarPartida implements IProcesadorEvento {
             // Puntuaciones
             JSONObject puntuacionesJSON = datos.getJSONObject("Puntuaciones");
 
+            Map<String, Integer> puntuacionesMap = new HashMap<>();
+            for (String key : puntuacionesJSON.keySet()) {
+                puntuacionesMap.put(key, puntuacionesJSON.getInt(key));
+            }
+
             System.out.println("[Chain] Configuración recibida:");
             System.out.println("        Dificultad: " + dificultad);
             System.out.println("        Jugadores: " + numJugadores);
@@ -46,7 +53,7 @@ public class ProcesadorConfigurarPartida implements IProcesadorEvento {
                     dificultad,
                     numJugadores,
                     puntMax,
-                    puntuacionesJSON
+                    puntuacionesMap
             );
 
             return;
@@ -58,4 +65,3 @@ public class ProcesadorConfigurarPartida implements IProcesadorEvento {
         }
     }
 }
-

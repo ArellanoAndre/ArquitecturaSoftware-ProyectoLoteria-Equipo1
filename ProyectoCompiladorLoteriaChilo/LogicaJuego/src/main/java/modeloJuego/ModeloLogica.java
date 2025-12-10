@@ -184,12 +184,14 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
             String dificultad,
             int puntuacionMaxima,
             List<Jugador> jugadores,
+            int numJugadores,
             List<String> tarjetas) {
 
         JSONObject json = new JSONObject();
         json.put("TipoEvento", "Confirmacion_Reglas");
         json.put("Dificultad", dificultad);
         json.put("PuntuacionMaxima", puntuacionMaxima);
+        json.put("NumeroJugadores", numJugadores);
 
         // -------------------------------------------------------
         // Construir arreglo JSON "Jugadores"
