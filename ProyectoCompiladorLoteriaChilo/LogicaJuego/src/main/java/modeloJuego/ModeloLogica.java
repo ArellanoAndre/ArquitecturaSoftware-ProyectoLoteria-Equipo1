@@ -300,10 +300,17 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
             jugadorJson.put("Id", j.getNumJugador());
             jugadorJson.put("Nombre", j.getNombre());
             jugadorJson.put("Puntos", j.getPuntaje());
-            jugadorJson.put("Avatar", j.getAvatar());
+            
+            String avatar = (j.getAvatar() != null) ? j.getAvatar() : "avatar1.png"; // Default si es null
+            jugadorJson.put("Avatar", avatar); // por mientras pq si no tira error
 
             arrayRanking.put(jugadorJson);
         }
+        
+        json.put("Ranking", arrayRanking);
+        enviarEventoBroadcast(json.toString(), "Juego-out");
+        
+        System.out.println("[ModeloLogica] Enviado FIN_PARTIDA: " + json.toString());
     }
 
 }

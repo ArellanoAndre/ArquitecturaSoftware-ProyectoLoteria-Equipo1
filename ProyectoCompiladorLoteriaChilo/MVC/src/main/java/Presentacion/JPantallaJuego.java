@@ -4,15 +4,17 @@ import Controlador.ControlSeleccionarCarta;
 import Controlador.ControlVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import Interfaces.IModeloVista;
-import Interfaces.IOyenteVista;
 import Interfaces.Observer;
+import interfacesComunicacionModelo.IControlVistaMVC_Juego;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  * JFrame principal del juego de Lotería. Contiene la interfaz completa: tablero
@@ -23,8 +25,10 @@ import javax.swing.JPanel;
 public class JPantallaJuego extends JFramePadre implements Observer {
 
     private IModeloVista modeloVista;
-    private IOyenteVista oyenteAccion;
+    private IControlVistaMVC_Juego control;
     private JDialog dialogoEspera;
+    private JPanelTarjeta panelTarjeta;
+    private JPanel contenedorJugadores;
 
     public JPantallaJuego(IModeloVista modeloVista, ControlSeleccionarCarta controlador) {
         super();
@@ -42,8 +46,8 @@ public class JPantallaJuego extends JFramePadre implements Observer {
 
     }
 
-    public void setOyente(IOyenteVista oyente) {
-        this.oyenteAccion = oyente;
+    public void setControl(IControlVistaMVC_Juego control) {
+        this.control = control;
     }
 
     /**
@@ -248,8 +252,8 @@ public class JPantallaJuego extends JFramePadre implements Observer {
 
     private void btnIntentoLoteriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIntentoLoteriaActionPerformed
 
-        if (oyenteAccion != null) {
-            oyenteAccion.solicitarIntentoLoteria();
+        if (control != null) {
+            control.solicitarIntentoLoteria();
         }
     }//GEN-LAST:event_btnIntentoLoteriaActionPerformed
 
@@ -280,54 +284,68 @@ public class JPantallaJuego extends JFramePadre implements Observer {
      */
     @Override
     public void update() {
+        // Usamos invokeLater para que Swing maneje los gráficos en orden
+        SwingUtilities.invokeLater(() -> {
 
-        // ---------------------------------------------------------
-        // 1. PRIORIDAD: FIN DE PARTIDA (Ranking)
-        // ---------------------------------------------------------
-        if (modeloVista.isJuegoTerminado()) {
+            // 1. FIN DE PARTIDA
+            if (modeloVista.isJuegoTerminado()) {
+                if (dialogoEspera != null) {
+                    dialogoEspera.dispose();
+                }
+                JPantallaFinJuego dialogFinPartida = new JPantallaFinJuego((java.awt.Frame) null, true);
 
-            if (dialogoEspera != null) {
+                dialogFinPartida.mostrarRanking(modeloVista.getListaRanking());
+
+                this.dispose();
+                dialogFinPartida.setVisible(true);
+
+                return;
+            }
+
+            // 2. FIN DE RONDA
+            if (modeloVista.isFinDeRonda()) {
+                if (dialogoEspera == null || !dialogoEspera.isVisible()) {
+                    mostrarJOptionPaneFinRonda(modeloVista.getNumRonda(), modeloVista.getGanadorRonda());
+                }
+            } // 3. INICIO NUEVA RONDA (Limpieza Total)
+            else if (dialogoEspera != null && dialogoEspera.isVisible()) {
                 dialogoEspera.dispose();
+                dialogoEspera = null;
+
+                modeloVista.reiniciarTableroJugador(); // Limpia datos
+                forzarActualizacionVisualTableros();   // Limpia visual (reconstruye paneles)
             }
 
-            JPantallaFinJuego dialogFinPartida = new JPantallaFinJuego(this, true);
-            dialogFinPartida.mostrarRanking(modeloVista.getListaRanking());
-            this.dispose();
-            dialogFinPartida.setVisible(true);
-            return;
-        }
+            // 4, actualizacion 
+            List<JugadorVista> datosFrescos = modeloVista.getJugadoresSecundarios();
 
-        // ---------------------------------------------------------
-        // 2. FIN DE RONDA (Mostrar Alerta)
-        // ---------------------------------------------------------
-        if (modeloVista.isFinDeRonda()) {
+            // Verificamos si el contenedor existe y tiene hijos
+            if (datosFrescos != null && contenedorJugadores != null && contenedorJugadores.getComponentCount() > 0) {
 
-            String ganadorRonda = modeloVista.getGanadorRonda();
-            int ronda = modeloVista.getNumRonda();
+                // >>> CAMBIO CLAVE: Iteramos sobre contenedorJugadores, NO panelJugadoresSecundarios <<<
+                for (java.awt.Component comp : contenedorJugadores.getComponents()) {
 
-            // Solo mostramos si no está visible ya (para evitar que parpadee o se duplique)
-            if (dialogoEspera == null || !dialogoEspera.isVisible()) {
-                mostrarJOptionPaneFinRonda(ronda, ganadorRonda);
+                    if (comp instanceof PanelJugadorSecundario) {
+                        PanelJugadorSecundario panel = (PanelJugadorSecundario) comp;
+                        int idPanel = panel.getIdJugador();
+
+                        for (JugadorVista data : datosFrescos) {
+                            if (data.getNumJugador() == idPanel) {
+                                // ¡Ahora sí lo va a encontrar!
+                                panel.recibirDatosNuevos(data);
+                                break;
+                            }
+                        }
+                    }
+                }
+            } else {
+                // Si no hay contenedor, creamos todo (ej. inicio del juego)
+                cargarJugadoresSecundarios();
             }
-        }  
-         
-        else if (dialogoEspera != null && dialogoEspera.isVisible()) {
 
-            System.out.println("[Vista] Cerrando diálogo de espera y limpiando tablero...");
-
-            // 1. Cerrar ventana
-            dialogoEspera.setVisible(false);
-            dialogoEspera.dispose();
-            dialogoEspera = null;
-
-            // 2. LIMPIAR TABLERO VISUALMENTE
-            modeloVista.reiniciarTableroJugador();
-
-        }
-         
-
-        this.repaint();
-
+            this.repaint();
+            this.revalidate();
+        });
     }
 
     /**
@@ -344,10 +362,15 @@ public class JPantallaJuego extends JFramePadre implements Observer {
      */
     public void crearPanelTarjeta() {
         //Agregar panel tarjeta jugador principal
-        JPanelTarjeta panelTarjeta = new JPanelTarjeta(modeloVista);
+        panelTarjeta = new JPanelTarjeta(modeloVista); // usa el atributo ahora 
         panelTarjeta.setPreferredSize(new Dimension(370, 525));
         panelTableroImagen.setLayout(new BorderLayout());
+
+        panelTableroImagen.removeAll();
         panelTableroImagen.add(panelTarjeta, BorderLayout.CENTER);
+
+        panelTableroImagen.revalidate();
+        panelTableroImagen.repaint();
     }
 
     /**
@@ -379,10 +402,17 @@ public class JPantallaJuego extends JFramePadre implements Observer {
     public void cargarJugadoresSecundarios() {
         List<JugadorVista> jugadores = modeloVista.getJugadoresSecundarios();
 
-        // Contenedor vertical para los "slots"
-        JPanel contenedor = new JPanel();
-        contenedor.setLayout(new BoxLayout(contenedor, BoxLayout.Y_AXIS));
-        contenedor.setOpaque(false);
+        if (jugadores == null) {
+            jugadores = new ArrayList<>();
+        }
+
+        if (contenedorJugadores == null) {
+            contenedorJugadores = new JPanel();
+            contenedorJugadores.setLayout(new BoxLayout(contenedorJugadores, BoxLayout.Y_AXIS));
+            contenedorJugadores.setOpaque(false);
+        } else {
+            contenedorJugadores.removeAll();
+        }
 
         // 1) Agrega los jugadores reales
         int count = 0;
@@ -390,21 +420,18 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         for (JugadorVista j : jugadores) {
             PanelJugadorSecundario item = new PanelJugadorSecundario(j, modeloVista);
 
-            // Que se pegue a la izquierda y no se centre raro
             item.setAlignmentX(JPanel.LEFT_ALIGNMENT);
 
             // guardamos el alto del primer panel para copiarlo a los vacíos
             if (slotDim == null) {
-                // Tomamos su preferredHeight.
-                // Si tu panel tiene layout del editor, esto ya trae un alto coherente.
+
                 slotDim = new Dimension(300, item.getPreferredSize().height);
-                // ancho "base"; puedes ignorarlo; el importante es el alto
+
             }
 
-            // deja que se estire a lo ancho si el contenedor lo permite
             item.setMaximumSize(new Dimension(Integer.MAX_VALUE, item.getPreferredSize().height));
 
-            contenedor.add(item);
+            contenedorJugadores.add(item);
             count++;
         }
 
@@ -419,16 +446,22 @@ public class JPantallaJuego extends JFramePadre implements Observer {
             JPanel placeholder = crearPlaceholder(slotDim.height);
             placeholder.setAlignmentX(JPanel.LEFT_ALIGNMENT);
             placeholder.setMaximumSize(new Dimension(Integer.MAX_VALUE, slotDim.height));
-            contenedor.add(placeholder);
+            contenedorJugadores.add(placeholder);
             count++;
         }
 
         // 3) Monta el contenedor en el panel derecho
         panelJugadoresSecundarios.removeAll();
-        panelJugadoresSecundarios.setLayout(new BorderLayout());
-        panelJugadoresSecundarios.add(contenedor, BorderLayout.NORTH); // anclado arriba
+
+        if (!(panelJugadoresSecundarios.getLayout() instanceof BorderLayout)) {
+            panelJugadoresSecundarios.setLayout(new BorderLayout());
+        }
+
+        panelJugadoresSecundarios.add(contenedorJugadores, BorderLayout.NORTH); // anclado arriba
+
         panelJugadoresSecundarios.revalidate();
         panelJugadoresSecundarios.repaint();
+
     }
 
     /**
@@ -476,25 +509,32 @@ public class JPantallaJuego extends JFramePadre implements Observer {
                     opciones[0]
             );
 
-            // SI PRESIONA EL BOTÓN:
+            // boton ok
             if (seleccion == JOptionPane.OK_OPTION) {
-                
-                // 1. APAGAR LA BANDERA INMEDIATAMENTE
-                // Esto evita que el update() vuelva a abrir la ventana
-                modeloVista.limpiarEstadoRonda(); 
-                
-                // 2. LIMPIAR TABLERO VISUALMENTE
-                limpiarTableroVisual(); 
+
+                // apagar la bandera
+                modeloVista.limpiarEstadoRonda();
+
+                // limpiar visualmente
+                modeloVista.reiniciarTableroJugador();
+
+                // forzar que se actualizen 
+                forzarActualizacionVisualTableros();
 
                 // 3. ENVIAR ORDEN AL SERVIDOR
-                if (oyenteAccion != null) {
-                    oyenteAccion.solicitarSiguienteRonda();
+                if (control != null) {
+                    control.solicitarSiguienteRonda();
                 }
+
+                this.repaint();
+                this.revalidate();
             }
 
         } else {
             // --- CASO CLIENTE (Sin cambios, esto ya estaba bien con el dialogoEspera) ---
-            if (dialogoEspera != null && dialogoEspera.isVisible()) return;
+            if (dialogoEspera != null && dialogoEspera.isVisible()) {
+                return;
+            }
 
             JOptionPane pane = new JOptionPane(
                     mensaje + "\n\nEsperando al anfitrión para continuar...",
@@ -511,20 +551,27 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         }
     }
 
-    /**
-     * Pone todas las casillas del jugador principal en falso visualmente para
-     * iniciar la nueva ronda.
-     */
-    private void limpiarTableroVisual() {
-         
-        var jugador = modeloVista.getJugadorPrincipal();
+    private void forzarActualizacionVisualTableros() {
+        System.out.println("[Vista] Forzando actualización visual de tableros...");
 
-        if (jugador != null && jugador.getTarjeta() != null) {
-            
-            boolean[] vacias = new boolean[16];
-
-            modeloVista.actualizarTarjetaJugadorP(vacias);
+        // 1. Refrescar Jugador Principal
+        if (panelTarjeta != null) {
+            panelTarjeta.repaint();
+            panelTarjeta.revalidate();
         }
+
+        // 2. Refrescar el contenedor del principal
+        if (panelTableroImagen != null) {
+            panelTableroImagen.repaint();
+            panelTableroImagen.revalidate();
+        }
+
+        // 3. Refrescar Jugadores Secundarios (Reconstruir paneles)
+        cargarJugadoresSecundarios();
+
+        // 4. Refrescar ventana completa
+        this.repaint();
+        this.revalidate();
     }
 
 }

@@ -194,6 +194,7 @@ public class ModeloJuego implements IModeloJuego {
     //-------------------------------------------------------------------------------------------------------------------------------------
     @Override
     public void actualizarCartaCantada(JSONObject datos) {
+
         int numCarta = datos.getInt("IdCarta");
         String nombreCarta = datos.getString("Nombre");
 
@@ -203,19 +204,41 @@ public class ModeloJuego implements IModeloJuego {
 
     @Override
     public void actualizarCasillaSeleccionada(JSONObject datos) {
-        int jugador = datos.getInt("Jugador");
+        int idJugadorEvento = datos.getInt("Jugador");
         int casilla = datos.getInt("Casilla");
 
-        if (jugadorPrincipal.getNumJugador() == jugador) {
-            jugadorPrincipal.getTarjeta().marcarCasilla(casilla);
+        System.out.println("[ModeloJuego] ActualizarCasilla -> Jugador: " + idJugadorEvento + ", Casilla: " + casilla);
 
+        // 1. CASO JUGADOR PRINCIPAL (TÚ)
+        if (jugadorPrincipal.getNumJugador() == idJugadorEvento) {
+            System.out.println("   -> Es el jugador PRINCIPAL. Actualizando...");
+            jugadorPrincipal.getTarjeta().marcarCasilla(casilla);
             controlVistaJuego.actualizarTarjetaJugadorPrincipal(jugadorPrincipal.getTarjeta().getMarcadas());
-        } else {
-            for (IJugador jugadoresSecundario : jugadoresSecundarios) {
-                if (jugadoresSecundario.getNumJugador() == jugador) {
-                    jugadoresSecundario.getTarjeta().marcarCasilla(casilla);
-                    controlVistaJuego.setJugadoresSecundarios(jugadoresSecundarios);
+        } // 2. CASO JUGADORES SECUNDARIOS (RIVALES)
+        else {
+            System.out.println("   -> Es un jugador SECUNDARIO. Buscando en lista de tamaño: " + (jugadoresSecundarios != null ? jugadoresSecundarios.size() : "null"));
+
+            boolean encontrado = false;
+            if (jugadoresSecundarios != null) {
+                for (IJugador rival : jugadoresSecundarios) {
+
+                    if (rival.getNumJugador() == idJugadorEvento) {
+                        System.out.println("   -> Rival ENCONTRADO (ID " + rival.getNumJugador() + "). Marcando casilla...");
+
+                        // A. Actualizamos la entidad
+                        rival.getTarjeta().marcarCasilla(casilla);
+                        encontrado = true;
+
+                        // B. Avisamos al controlador para que regenere la vista
+                        // IMPORTANTE: Asegúrate de que ControlVista genera objetos NUEVOS al recibir esta lista
+                        controlVistaJuego.setJugadoresSecundarios(jugadoresSecundarios);
+                        break; // Ya lo encontramos, salimos del for
+                    }
                 }
+            }
+
+            if (!encontrado) {
+                System.err.println("   -> [ALERTA] No se encontró ningún jugador secundario con ID: " + idJugadorEvento);
             }
         }
     }
@@ -338,7 +361,7 @@ public class ModeloJuego implements IModeloJuego {
 
     @Override
     public void EnviarEventoIniciarSiguienteRonda() {
-        
+
         if (empaquetador == null) {
             return;
         }
@@ -353,4 +376,28 @@ public class ModeloJuego implements IModeloJuego {
         System.out.println("[ModeloJuego] Enviado: INICIAR_SIGUIENTE_RONDA");
     }
 
+    @Override
+    public void limpiarEntidadesJuego() {
+        System.out.println("[ModeloJuego] Limpiando entidades internas...");
+
+        // principal
+        if (jugadorPrincipal != null && jugadorPrincipal.getTarjeta() != null) {
+            boolean[] marcadas = jugadorPrincipal.getTarjeta().getMarcadas();
+            if (marcadas != null) {
+                java.util.Arrays.fill(marcadas, false);
+            }
+        }
+
+        // secundarios
+        if (jugadoresSecundarios != null) {
+            for (IJugador j : jugadoresSecundarios) {
+                if (j.getTarjeta() != null) {
+                    boolean[] marcadas = j.getTarjeta().getMarcadas();
+                    if (marcadas != null) {
+                        java.util.Arrays.fill(marcadas, false);
+                    }
+                }
+            }
+        }
+    }
 }

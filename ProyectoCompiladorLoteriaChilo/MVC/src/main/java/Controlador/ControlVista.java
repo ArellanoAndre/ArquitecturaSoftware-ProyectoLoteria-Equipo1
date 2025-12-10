@@ -4,7 +4,7 @@ import ModeloVista.entidadesVista.CartaVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import ModeloVista.entidadesVista.TarjetaVista;
 import Interfaces.IModeloVista;
-import Interfaces.IOyenteVista;
+
 import interfacesEntidades.ICarta;
 import interfacesEntidades.IJugador;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import interfacesComunicacionModelo.IControlVistaMVC_Juego;
  * Convierte los datos del modelo (jugadores y cartas) en sus versiones visuales
  * para mostrarlos en pantalla.
  */
-public class ControlVista implements IControlVistaMVC_Juego, IOyenteVista {
+public class ControlVista implements IControlVistaMVC_Juego {
 
     private IModeloVista modeloVista;
 
@@ -59,16 +59,58 @@ public class ControlVista implements IControlVistaMVC_Juego, IOyenteVista {
      *
      * @param jugadores lista de jugadores del modelo.
      */
+    // EN ControlVista.java
     @Override
-    public void setJugadoresSecundarios(List<IJugador> jugadores) {
-        List<JugadorVista> jugadoresV = new ArrayList<>();
-        for (IJugador jugador : jugadores) {
-            TarjetaVista tarjeta = new TarjetaVista(jugador.getTarjeta().getMarcadas(), jugador.getTarjeta().getImg());
-            JugadorVista jugadorSV = new JugadorVista(jugador.getNombre(), tarjeta, jugador.getNumJugador());
-            jugadorSV.setRutaAvatar("/img/Avatares/user" + jugador.getNumJugador() + ".png");
-            jugadoresV.add(jugadorSV);
+    public void setJugadoresSecundarios(List<IJugador> jugadoresModelo) {
+        if (jugadoresModelo == null) {
+            return;
         }
-        modeloVista.setJugadoresSecundarios(jugadoresV);
+
+        // 1. Obtenemos la lista ACTUAL de la vista (la que se está pintando)
+        List<JugadorVista> actualesEnVista = modeloVista.getJugadoresSecundarios();
+        if (actualesEnVista == null) {
+            actualesEnVista = new ArrayList<>();
+        }
+
+        // 2. Lista temporal para guardar los nuevos si no existen
+        List<JugadorVista> listaFinal = new ArrayList<>();
+
+        for (IJugador jModelo : jugadoresModelo) {
+            if (jModelo == null || jModelo.getTarjeta() == null) {
+                continue;
+            }
+
+            JugadorVista jugadorVistaExistente = null;
+            for (JugadorVista jugadorVista : actualesEnVista) {
+
+                if (jugadorVista.getNumJugador() == jModelo.getNumJugador()) {
+                    jugadorVistaExistente = jugadorVista;
+                    break;
+                }
+            }
+
+            if (jugadorVistaExistente != null) {
+
+                jugadorVistaExistente.getTarjeta().setMarcadas(jModelo.getTarjeta().getMarcadas());
+
+                // Agregamos el existente a la lista final para mantener el orden
+                listaFinal.add(jugadorVistaExistente);
+            } else {
+
+                TarjetaVista tarjeta = new TarjetaVista(jModelo.getTarjeta().getMarcadas(), jModelo.getTarjeta().getImg());
+                JugadorVista nuevo = new JugadorVista(jModelo.getNombre(), tarjeta, jModelo.getNumJugador());
+
+                String ruta = "/img/Avatares/user" + jModelo.getNumJugador() + ".png";
+                if (jModelo.getAvatar() != null && !jModelo.getAvatar().startsWith("/img")) {
+                    ruta = jModelo.getAvatar();
+                }
+                nuevo.setRutaAvatar(ruta);
+
+                listaFinal.add(nuevo);
+            }
+        }
+
+        modeloVista.setJugadoresSecundarios(listaFinal);
     }
 
     /**
@@ -79,6 +121,7 @@ public class ControlVista implements IControlVistaMVC_Juego, IOyenteVista {
      */
     @Override
     public void actualizarCartaCantada(ICarta cartaActual) {
+
         CartaVista cv = new CartaVista(
                 cartaActual.getNumCarta(),
                 cartaActual.getNombreCarta(),
@@ -86,16 +129,19 @@ public class ControlVista implements IControlVistaMVC_Juego, IOyenteVista {
         );
 
         modeloVista.setCartaCantada(cv);
+
     }
 
     @Override
-    public void mostrarMensajeFinRonda(int ronda, String ganador) {
+    public void mostrarMensajeFinRonda(int ronda, String ganador
+    ) {
 
         modeloVista.setDatosFinRonda(ronda, ganador);
     }
 
     @Override
-    public void procesarFinPartida(List<IJugador> ranking) {
+    public void procesarFinPartida(List<IJugador> ranking
+    ) {
 
         List<JugadorVista> rankingVisual = new ArrayList<>();
 
@@ -122,20 +168,16 @@ public class ControlVista implements IControlVistaMVC_Juego, IOyenteVista {
         modeloVista.setRankingFinal(rankingVisual);
     }
 
-   
-
     @Override
     public void solicitarSiguienteRonda() {
-        
+
         modeloVista.solicitarEnvioSiguienteRonda();
     }
 
     @Override
     public void solicitarIntentoLoteria() {
-        
+
         modeloVista.solicitarEnvioCantarLoteria();
     }
-
-    
 
 }

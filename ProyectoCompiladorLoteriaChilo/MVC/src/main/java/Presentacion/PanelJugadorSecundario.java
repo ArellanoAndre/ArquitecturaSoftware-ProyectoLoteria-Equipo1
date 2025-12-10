@@ -19,7 +19,7 @@ import javax.swing.JPanel;
  * @author abrilislas
  */
 public class PanelJugadorSecundario extends javax.swing.JPanel implements Observer {
-    
+
     private JugadorVista jugador;
     private IModeloVista modeloVista;
     private JPanel[] panelCasillasGrid;
@@ -35,7 +35,7 @@ public class PanelJugadorSecundario extends javax.swing.JPanel implements Observ
         lblNombre.setText(jugador.getNombre());
         cargarAvatar();
         this.panelCasillasGrid = new JPanel[16];
-        
+
         //construimos cada uno de los paneles individuales y se agregan al panel con el grid 4x4
         for (int i = 0; i < 16; i++) {
             JPanel casilla = new JPanel();
@@ -44,11 +44,25 @@ public class PanelJugadorSecundario extends javax.swing.JPanel implements Observ
             casilla.setBorder(javax.swing.BorderFactory.createLineBorder(Color.DARK_GRAY));
             pnlCasillas.add(casilla);
             panelCasillasGrid[i] = casilla;
-    }
-        
+        }
+
     }
 
     public PanelJugadorSecundario() {
+    }
+
+    public int getIdJugador() {
+        if (jugador != null) {
+            return jugador.getNumJugador();
+        }
+        return -1;
+    }
+
+    public void recibirDatosNuevos(JugadorVista nuevosDatos) {
+
+        this.jugador = nuevosDatos;
+
+        actualizar(this.jugador);
     }
 
     /**
@@ -123,26 +137,26 @@ public class PanelJugadorSecundario extends javax.swing.JPanel implements Observ
 
             casilla.setPreferredSize(new Dimension(38, 28));
 
-            casilla.setBackground(new Color(203,191,168));  
+            casilla.setBackground(new Color(203, 191, 168));
 
             if (marcadas[i]) {
-                casilla.setBackground(new Color(255,144,144));
+                casilla.setBackground(new Color(255, 144, 144));
             }
 
             casilla.revalidate();
             casilla.repaint();
-    }
+        }
 
-    pnlCasillas.revalidate();
-    pnlCasillas.repaint();
-}
+        pnlCasillas.revalidate();
+        pnlCasillas.repaint();
+    }
 
     @Override
     public void update() {
         actualizar(jugador);
     }
-    
-        private void cargarAvatar() {
+
+    private void cargarAvatar() {
         String rutaAvatar = jugador.getRutaAvatar();
         if (rutaAvatar != null) {
             java.net.URL url = getClass().getResource(rutaAvatar);

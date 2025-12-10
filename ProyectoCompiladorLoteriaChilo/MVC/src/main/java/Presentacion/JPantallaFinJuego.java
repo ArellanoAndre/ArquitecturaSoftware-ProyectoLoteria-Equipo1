@@ -23,17 +23,24 @@ import javax.swing.SwingConstants;
  * @author isaac
  */
 public class JPantallaFinJuego extends javax.swing.JDialog {
-    
+
+    private JPanel panelContenidoRanking;
 
     /**
-     * Creates new form JPantallaFinJuego
+     * Creates new form JPantallaFinJuegoy
      */
     public JPantallaFinJuego(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        initComponents();
+        initComponents(); // NetBeans crea el JScrollPane (pnlRanking)
         this.setLocationRelativeTo(null);
 
-        pnlRanking.setLayout(new BoxLayout(pnlRanking, BoxLayout.Y_AXIS));
+        // Creamos el panel para contenido rankign 
+        panelContenidoRanking = new JPanel();
+        panelContenidoRanking.setBackground(Color.WHITE); 
+        panelContenidoRanking.setLayout(new BoxLayout(panelContenidoRanking, BoxLayout.Y_AXIS));
+
+        // se mete al scrollpane
+        pnlRanking.setViewportView(panelContenidoRanking);
 
     }
 
@@ -58,32 +65,32 @@ public class JPantallaFinJuego extends javax.swing.JDialog {
         lblAvatar.setPreferredSize(new Dimension(40, 40)); // Tamaño fijo del contenedor de imagen
         lblAvatar.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // --- LÓGICA DE CARGA DE IMAGEN ---
+        // ==== LÓGICA DE CARGA DE IMAGEN =====
         try {
-            // El controlador ya debió setear algo como "/img/Avatares/user1.png"
+            // El controlador setea
             String rutaImagen = jugador.getRutaAvatar();
 
             if (rutaImagen != null && !rutaImagen.isEmpty()) {
-                // Buscamos el recurso en el classpath
+                // buscamos recurso
                 java.net.URL imgURL = getClass().getResource(rutaImagen);
 
                 if (imgURL != null) {
-                    // Cargamos la imagen original
+                    // cargamos la imagen original
                     ImageIcon iconOriginal = new ImageIcon(imgURL);
 
-                    // La redimensionamos suavemente a 40x40 pixeles
+                    // redimension a 40x40 pixeles
                     Image imgEscalada = iconOriginal.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
 
-                    // La asignamos al Label
+                    // asignamos al Label
                     lblAvatar.setIcon(new ImageIcon(imgEscalada));
                 } else {
-                    // Si la ruta no existe (archivo perdido), ponemos texto de error
+                    // Si la ruta no existe ponemos texto de error
                     System.err.println("No se encontró la imagen en: " + rutaImagen);
                     lblAvatar.setText("?");
                     lblAvatar.setForeground(Color.RED);
                 }
             } else {
-                lblAvatar.setText("-"); // Sin ruta asignada
+                lblAvatar.setText("-"); // sin ruta asignada
             }
         } catch (Exception e) {
             System.err.println("Error al cargar avatar para " + jugador.getNombre() + ": " + e.getMessage());
@@ -104,26 +111,23 @@ public class JPantallaFinJuego extends javax.swing.JDialog {
         }
 
         //  Limpiar el panel por si acaso
-        pnlRanking.removeAll();
+        panelContenidoRanking.removeAll();
 
-        // Generar dinamicamente las filas del Top
+        // generar dinamicamente las filas del Top
         for (int i = 0; i < ranking.size(); i++) {
             JugadorVista jugador = ranking.get(i);
-            int posicion = i + 1; // Top 1, Top 2...
+            int posicion = i + 1; 
 
             // Crear un panel para la fila
             JPanel fila = crearFilaJugador(posicion, jugador);
 
-            // Agregarlo al contenedor visual
-            pnlRanking.add(fila);
-
-            // Agregar un pequeño espacio entre filas
-            pnlRanking.add(Box.createRigidArea(new Dimension(0, 10)));
+            panelContenidoRanking.add(fila);
+            panelContenidoRanking.add(Box.createRigidArea(new Dimension(0, 10)));
         }
 
-        // Refrescar la interfaz para que aparezcan los cambios
-        pnlRanking.revalidate();
-        pnlRanking.repaint();
+        //   Refrescar
+        panelContenidoRanking.revalidate();
+        panelContenidoRanking.repaint();
 
     }
 
@@ -138,8 +142,8 @@ public class JPantallaFinJuego extends javax.swing.JDialog {
 
         labelTitulo = new javax.swing.JLabel();
         lblGanador = new javax.swing.JLabel();
-        btnAceptar = new javax.swing.JButton();
         pnlRanking = new javax.swing.JScrollPane();
+        btnAceptar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -148,7 +152,7 @@ public class JPantallaFinJuego extends javax.swing.JDialog {
 
         lblGanador.setText("EL GANADOR DE LA PARTIDA ES:");
 
-        btnAceptar.setBackground(new java.awt.Color(191, 233, 150));
+        btnAceptar.setBackground(new java.awt.Color(102, 255, 255));
         btnAceptar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnAceptar.setText("Aceptar");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -162,84 +166,46 @@ public class JPantallaFinJuego extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(pnlRanking, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelTitulo))
-                .addGap(0, 83, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(pnlRanking, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(43, 43, 43))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(labelTitulo)
+                        .addGap(54, 54, 54))))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(147, 147, 147)
-                        .addComponent(btnAceptar))
+                        .addGap(122, 122, 122)
+                        .addComponent(lblGanador))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(98, 98, 98)
-                        .addComponent(lblGanador)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(154, 154, 154)
+                        .addComponent(btnAceptar)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(labelTitulo)
-                .addGap(63, 63, 63)
+                .addGap(8, 8, 8)
                 .addComponent(lblGanador)
-                .addGap(30, 30, 30)
-                .addComponent(pnlRanking, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(pnlRanking, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnAceptar)
-                .addGap(29, 29, 29))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        
         this.dispose();
-
     }//GEN-LAST:event_btnAceptarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JPantallaFinJuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JPantallaFinJuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JPantallaFinJuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JPantallaFinJuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                JPantallaFinJuego dialog = new JPantallaFinJuego(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;

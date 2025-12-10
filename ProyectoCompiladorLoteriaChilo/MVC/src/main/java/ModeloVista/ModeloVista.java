@@ -63,12 +63,12 @@ public class ModeloVista implements IModeloVista {
     @Override
     public void setCartaCantada(CartaVista carta) {
         cartaCantada = carta;
-        
+
         // checar si esta bien o mal hacer esto
         // si llega una carta nueva, entonces la ronda de espera termino
         // o se puede hacer todo en pantallajuego nose
         if (this.finDeRonda) {
-            this.finDeRonda = false; 
+            this.finDeRonda = false;
         }
         notificar();
     }
@@ -174,7 +174,13 @@ public class ModeloVista implements IModeloVista {
      */
     @Override
     public void notificar() {
-        for (Observer o : observers) {
+
+        List<Observer> copiaObservers;
+
+        synchronized (observers) {
+            copiaObservers = new ArrayList<>(observers);
+        }
+        for (Observer o : copiaObservers) {
             o.update();
         }
     }
@@ -266,13 +272,34 @@ public class ModeloVista implements IModeloVista {
 
     @Override
     public void reiniciarTableroJugador() {
+
+        // limpieza interna 
+        if (modeloJuego != null) {
+            modeloJuego.limpiarEntidadesJuego();
+        }
+
+        // principal
         if (jugadorPrincipal != null && jugadorPrincipal.getTarjeta() != null) {
 
-            boolean[] vacias = new boolean[16];
-            jugadorPrincipal.getTarjeta().setMarcadas(vacias);
-
-            notificar();
+            boolean[] susCasillas = jugadorPrincipal.getTarjeta().getMarcadas();
+            if (susCasillas != null) {
+                java.util.Arrays.fill(susCasillas, false);
+            }
         }
-    }
 
+        // secundarios
+        if (jugadoresSecundarios != null) {
+            for (JugadorVista j : jugadoresSecundarios) {
+                if (j != null && j.getTarjeta() != null) {
+
+                    boolean[] susCasillas = j.getTarjeta().getMarcadas();
+                    if (susCasillas != null) {
+                        java.util.Arrays.fill(susCasillas, false);
+                    }
+                }
+            }
+        }
+
+        notificar();
+    }
 }

@@ -52,6 +52,8 @@ public interface IControlVistaMVC_Juego {
      */
     void procesarFinPartida(List<IJugador> ranking);
 
-    
+    void solicitarIntentoLoteria();
+
+    void solicitarSiguienteRonda();
 
 }

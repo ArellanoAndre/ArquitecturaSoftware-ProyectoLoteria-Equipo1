@@ -54,5 +54,7 @@ public interface IModeloJuego {
     void EnviarEventoCantarLoteria();
 
     void EnviarEventoIniciarSiguienteRonda();
+    
+    void limpiarEntidadesJuego();
 
 }

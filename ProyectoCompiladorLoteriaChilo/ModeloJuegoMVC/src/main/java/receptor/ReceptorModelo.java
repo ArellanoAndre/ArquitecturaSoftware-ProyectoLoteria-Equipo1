@@ -42,7 +42,7 @@ public class ReceptorModelo implements IReceptorEvento {
         casillaSeleccionada.setSiguiente(unirsepartida); 
         unirsepartida.setSiguiente(configurar);
         configurar.setSiguiente(finRonda);
-        finRonda.setSiguiente(configurar);
+        finRonda.setSiguiente(finPartida);
         
                 
         this.cadenaProcesamiento = cartaCantada;

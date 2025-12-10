@@ -53,7 +53,7 @@ public class LogicaDeJuego implements ILogicaJuego {
         this.griton = new Griton();
         this.jugadores = new ArrayList<>();
         this.imagenesTarjetas = TarjetasLoteria();
-        this.MAX_RONDAS = 2; // por mientras prueba
+        this.MAX_RONDAS = 1; // por mientras prueba
 
     }
 
@@ -390,22 +390,28 @@ public class LogicaDeJuego implements ILogicaJuego {
      * Maneja la transición cuando alguien gana una ronda. Detiene el juego y
      * decide si sigue la siguiente ronda o se acaba la partida.
      */
+    /**
+     * Maneja la transición cuando alguien gana una ronda. CORREGIDO: Evita
+     * enviar doble evento (FinRonda + FinPartida) al mismo tiempo.
+     */
     private void finalizarRonda(String nombreGanador) {
 
         if (timer != null) {
             timer.stop();
         }
 
-        System.out.println("===== FIN DE LA RONDA " + rondaActual + " =====");
-
-        if (modeloLogica != null) {
-            modeloLogica.notificarFinDeRonda(rondaActual, nombreGanador);
-        }
+        System.out.println("===== RESULTADO DE LA RONDA " + rondaActual + " =====");
 
         if (rondaActual >= MAX_RONDAS) {
 
             finalizarPartida();
+
         } else {
+
+            if (modeloLogica != null) {
+                modeloLogica.notificarFinDeRonda(rondaActual, nombreGanador);
+            }
+
             rondaActual++;
             reiniciarTableros();
         }
@@ -431,10 +437,6 @@ public class LogicaDeJuego implements ILogicaJuego {
         System.out.println("=== PARTIDA TERMINADA ===");
 
         List<Jugador> ranking = getListaRanking();
-
-        if (!ranking.isEmpty()) {
-            System.out.println("Ganador Supremo: " + ranking.get(0).getNombre());
-        }
 
         if (modeloLogica != null) {
             modeloLogica.notificarFinPartida(ranking);
