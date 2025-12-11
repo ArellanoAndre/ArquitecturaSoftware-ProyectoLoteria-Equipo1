@@ -21,6 +21,7 @@
         <module>ArrancadorBroker</module>
         <module>ModeloJuegoMVC</module>
         <module>IComunicacionModelo</module>
+        <module>ArrancadorLogica</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

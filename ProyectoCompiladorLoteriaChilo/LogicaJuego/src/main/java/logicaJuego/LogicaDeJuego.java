@@ -104,6 +104,8 @@ public class LogicaDeJuego implements ILogicaJuego {
     @Override
     public void iniciarRonda() {
 
+        griton.barajear();
+        
         if (timer != null) {
             timer.stop();
         }

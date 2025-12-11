@@ -77,34 +77,6 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         notificarJugadaValida(pos, idJugador);
     }
 
-    public void manejar(Evento payloadJSON) {
-
-        System.out.println("[ModeloLogica-Host] Procesando payload: " + payloadJSON);
-
-        if (logicaDeJuego == null) {
-            System.err.println("ERROR: LogicaDeJuego es null");
-            return;
-        }
-
-        try {
-            JSONObject peticion = new JSONObject(payloadJSON);
-
-            if (peticion.has("TipoEvento")) {
-                String tipo = peticion.getString("TipoEvento");
-
-                cadenaProcesamiento.procesar(tipo, peticion, logicaDeJuego);
-
-            } else {
-                System.err.println("JSON ignorado: No tiene TipoEvento");
-            }
-
-        } catch (Exception e) {
-            System.err.println("Error interpretando JSON: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-    }
-
     @Override
     public void notificarCartaCantada(int idCarta, String nombreCarta) {
 
