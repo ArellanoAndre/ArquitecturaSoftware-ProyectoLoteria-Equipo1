@@ -53,7 +53,7 @@ public class LogicaDeJuego implements ILogicaJuego {
         this.griton = new Griton();
         this.jugadores = new ArrayList<>();
         this.imagenesTarjetas = TarjetasLoteria();
-        this.MAX_RONDAS = 1; // por mientras prueba
+        //this.MAX_RONDAS = 1; // por mientras prueba
 
     }
 
@@ -105,7 +105,7 @@ public class LogicaDeJuego implements ILogicaJuego {
     public void iniciarRonda() {
 
         griton.barajear();
-        
+
         if (timer != null) {
             timer.stop();
         }
@@ -287,7 +287,7 @@ public class LogicaDeJuego implements ILogicaJuego {
     public void notificarConfirmacionReglas() {
         modeloLogica.enviarConfirmacionReglas(
                 this.dificultad,
-                this.punMax,
+                this.MAX_RONDAS,
                 this.jugadores,
                 this.numJugadores,
                 this.TarjetasLoteria()
@@ -304,21 +304,22 @@ public class LogicaDeJuego implements ILogicaJuego {
 
     public void configurarPartida(String dificultad,
             int numJugadores,
-            int puntMax,
+            int numRondas,
             Map<String, Integer> puntuaciones) {
 
-        System.out.println("[Lógica] Configurando partida...");
+        System.out.println("[Logica] Configurando partida...");
 
         this.dificultad = dificultad;
         this.numJugadores = numJugadores;
-        this.punMax = puntMax;
+        this.MAX_RONDAS = numRondas;
 
         // Guardamos las puntuaciones
         this.puntuaciones = puntuaciones;
-        System.out.println("[Lógica] Partida configurada correctamente.");
 
-        // Enviar confirmación de reglas al Cliente
-        
+        this.partidaConfigurada = true;
+        System.out.println("[Logica] Partida configurada correctamente.");
+
+        // YA NO - enviar confirmación de reglas al Cliente
     }
 
     public List<String> TarjetasLoteria() {

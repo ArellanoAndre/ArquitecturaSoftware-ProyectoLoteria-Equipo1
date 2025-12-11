@@ -154,7 +154,7 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
     @Override
     public void enviarConfirmacionReglas(
             String dificultad,
-            int puntuacionMaxima,
+            int numRondas,
             List<Jugador> jugadores,
             int numJugadores,
             List<String> tarjetas) {
@@ -162,7 +162,7 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         JSONObject json = new JSONObject();
         json.put("TipoEvento", "Confirmacion_Reglas");
         json.put("Dificultad", dificultad);
-        json.put("PuntuacionMaxima", puntuacionMaxima);
+        json.put("NumeroRondas", numRondas);
         json.put("NumeroJugadores", numJugadores);
 
         // -------------------------------------------------------

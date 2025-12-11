@@ -14,12 +14,12 @@ public interface IConfiguracionPartida {
     void  setDatos(String dificultad, List<IJugador> jugadores, int puntuacionMaxima,List<String> imagenesTarjetas,int numJugadores);
     void setDificultad(String dificultad);
     void setJugadores(List<IJugador> jugadores);
-    void setPuntuacionMaxima(int puntuacionMaxima);
+    void setNumeroRondas(int numRondas);
     String getDificultad();
     int getNumJugadores();
     List<IJugador> getJugadores();
     void setNumJugadores(int numJugadores);
-    int getPuntuacionMaxima();
+    int getNumeroRondas();
     List<String> getImagenesTarjetas();
     void setImagenesTarjetas(List<String> imagenesTarjetas);
     

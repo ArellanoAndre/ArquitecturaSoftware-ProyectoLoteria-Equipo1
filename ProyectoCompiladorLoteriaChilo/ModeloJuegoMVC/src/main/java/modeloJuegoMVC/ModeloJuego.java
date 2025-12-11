@@ -158,7 +158,7 @@ public class ModeloJuego implements IModeloJuego {
 
     @Override
     public void EnviarEventoConfigurarPartida(String dificultad, int numJugadores,
-            int puntuacionMax,
+            int numRondas,
             Map<String, Integer> puntuaciones) {
 
         System.out.println("[ModeloJuego] → Enviando CONFIGURAR_PARTIDA al Host...");
@@ -168,7 +168,7 @@ public class ModeloJuego implements IModeloJuego {
             json.put("TipoEvento", "CONFIGURAR_PARTIDA");
             json.put("Dificultad", dificultad);
             json.put("NumeroJugadores", numJugadores);
-            json.put("PuntuacionMaxima", puntuacionMax);
+            json.put("NumeroRondas", numRondas);
 
             // Puntuaciones (Chorro, Cruz, Llena, etc.)
             JSONObject jsonPunts = new JSONObject();
@@ -245,7 +245,7 @@ public class ModeloJuego implements IModeloJuego {
 
         // === 1) Leer datos generales ===
         String dificultad = datos.optString("Dificultad", null);
-        int puntuacionMax = datos.optInt("PuntuacionMaxima", 0);
+        int numRondas = datos.optInt("NumeroRondas", 0);
         int numJugadores = datos.optInt("NumeroJugadores", 0);
 
         // === 2) Convertir jugadores JSON -> List<IJugador> ===
@@ -278,7 +278,7 @@ public class ModeloJuego implements IModeloJuego {
 
         System.out.println("[FiltroUnirsePartida] Datos procesados:");
         System.out.println(" - Dificultad: " + dificultad);
-        System.out.println(" - PuntMax: " + puntuacionMax);
+        System.out.println(" - numRondas: " + numRondas);
         System.out.println(" - Jugadores: " + listaJugadores.size());
         System.out.println(" - NumJugadores: " + numJugadores);
         System.out.println(" - Tarjetas: " + tarjetas.size());
@@ -288,7 +288,7 @@ public class ModeloJuego implements IModeloJuego {
         configuracion.setDatos(
                 dificultad,
                 listaJugadores,
-                puntuacionMax,
+                numRondas,
                 tarjetas,
                 numJugadores
         );

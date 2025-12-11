@@ -55,7 +55,7 @@ public class ControladorInicio implements IControladorInicio {
     }
 
     @Override
-    public void onConfirmarConfig(String dificultad, int numJugadores, int puntuacionMax, Map<String, Integer> puntuaciones) {
+    public void onConfirmarConfig(String dificultad, int numJugadores, int numRondas, Map<String, Integer> puntuaciones) {
        
         if (dificultad == null) {
             pantallaConfig.mostrarError("Selecciona un nivel de dificultad.");
@@ -67,8 +67,8 @@ public class ControladorInicio implements IControladorInicio {
             return;
         }
 
-        if ( puntuacionMax <= 0) {
-            pantallaConfig.mostrarError("Ingresa una puntuación máxima válida (mayor a 0).");
+        if ( numRondas <= 0) {
+            pantallaConfig.mostrarError("Ingresa un numero de rondas valido (mayor a 0).");
             return;
         }
 
@@ -77,7 +77,7 @@ public class ControladorInicio implements IControladorInicio {
             return;
         }
         
-     modeloVista.CrearPartida(dificultad, numJugadores, puntuacionMax, puntuaciones);
+     modeloVista.CrearPartida(dificultad, numJugadores, numRondas, puntuaciones);
 
      //   pantallaConfig.dispose();
     }

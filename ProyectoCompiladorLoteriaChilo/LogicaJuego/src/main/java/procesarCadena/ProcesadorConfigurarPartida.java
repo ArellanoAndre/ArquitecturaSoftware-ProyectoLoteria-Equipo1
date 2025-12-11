@@ -32,7 +32,7 @@ public class ProcesadorConfigurarPartida implements IProcesadorEvento {
             // Leer datos enviados por el cliente
             String dificultad = datos.getString("Dificultad");
             int numJugadores = datos.getInt("NumeroJugadores");
-            int puntMax = datos.getInt("PuntuacionMaxima");
+            int numRondas = datos.getInt("NumeroRondas");
 
             // Puntuaciones
             JSONObject puntuacionesJSON = datos.getJSONObject("Puntuaciones");
@@ -45,14 +45,14 @@ public class ProcesadorConfigurarPartida implements IProcesadorEvento {
             System.out.println("[Chain] Configuración recibida:");
             System.out.println("        Dificultad: " + dificultad);
             System.out.println("        Jugadores: " + numJugadores);
-            System.out.println("        PuntMax: " + puntMax);
+            System.out.println("        Rondas: " + numRondas);
             System.out.println("        Puntuaciones: " + puntuacionesJSON);
 
             // Mandarlo a la lógica de juego
             logica.configurarPartida(
                     dificultad,
                     numJugadores,
-                    puntMax,
+                    numRondas,
                     puntuacionesMap
             );
 

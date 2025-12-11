@@ -4,8 +4,10 @@ import Controlador.ControladorInicio;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ButtonGroup;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
 public class JPantallaConfigurarPartida extends JFrame {
@@ -54,7 +56,7 @@ public class JPantallaConfigurarPartida extends JFrame {
         jRadioButton6 = new javax.swing.JRadioButton();
         panelPuntuacionMax = new javax.swing.JPanel();
         labelSubtitulo2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        numRondasSpinner = new javax.swing.JSpinner();
         panelBotones = new javax.swing.JPanel();
         btnConfirmar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
@@ -115,11 +117,6 @@ public class JPantallaConfigurarPartida extends JFrame {
         jRadioButton1.setBackground(new java.awt.Color(255, 232, 195));
         jRadioButton1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jRadioButton1.setText("Básico (10s)");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
-            }
-        });
 
         jRadioButton2.setBackground(new java.awt.Color(255, 232, 195));
         jRadioButton2.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
@@ -142,7 +139,7 @@ public class JPantallaConfigurarPartida extends JFrame {
         labelSubtitulo3.setFont(new java.awt.Font("Sarabun", 1, 24)); // NOI18N
         labelSubtitulo3.setForeground(new java.awt.Color(99, 62, 2));
         labelSubtitulo3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelSubtitulo3.setText("Dificultad");
+        labelSubtitulo3.setText("DIFICULTAD");
 
         javax.swing.GroupLayout panelDificultadLayout = new javax.swing.GroupLayout(panelDificultad);
         panelDificultad.setLayout(panelDificultadLayout);
@@ -187,7 +184,7 @@ public class JPantallaConfigurarPartida extends JFrame {
         labelSubtitulo1.setFont(new java.awt.Font("Sarabun", 1, 24)); // NOI18N
         labelSubtitulo1.setForeground(new java.awt.Color(96, 60, 5));
         labelSubtitulo1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelSubtitulo1.setText("Jugadores");
+        labelSubtitulo1.setText("JUGADORES");
 
         jRadioButton4.setBackground(new java.awt.Color(255, 209, 138));
         jRadioButton4.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
@@ -248,28 +245,31 @@ public class JPantallaConfigurarPartida extends JFrame {
         labelSubtitulo2.setFont(new java.awt.Font("Sarabun", 1, 24)); // NOI18N
         labelSubtitulo2.setForeground(new java.awt.Color(10, 27, 192));
         labelSubtitulo2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelSubtitulo2.setText("Puntuación Máxima");
+        labelSubtitulo2.setText("NUMERO DE RONDAS");
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        numRondasSpinner.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        numRondasSpinner.setModel(new javax.swing.SpinnerNumberModel(1, 1, 10, 1));
+        numRondasSpinner.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        numRondasSpinner.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         javax.swing.GroupLayout panelPuntuacionMaxLayout = new javax.swing.GroupLayout(panelPuntuacionMax);
         panelPuntuacionMax.setLayout(panelPuntuacionMaxLayout);
         panelPuntuacionMaxLayout.setHorizontalGroup(
             panelPuntuacionMaxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(labelSubtitulo2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPuntuacionMaxLayout.createSequentialGroup()
-                .addContainerGap(37, Short.MAX_VALUE)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33))
+            .addComponent(labelSubtitulo2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
+            .addGroup(panelPuntuacionMaxLayout.createSequentialGroup()
+                .addGap(111, 111, 111)
+                .addComponent(numRondasSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelPuntuacionMaxLayout.setVerticalGroup(
             panelPuntuacionMaxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelPuntuacionMaxLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(labelSubtitulo2)
-                .addGap(32, 32, 32)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addGap(36, 36, 36)
+                .addComponent(numRondasSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(62, Short.MAX_VALUE))
         );
 
         panelBotones.setBackground(new java.awt.Color(255, 250, 242));
@@ -519,19 +519,19 @@ public class JPantallaConfigurarPartida extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-            if (controlador != null) {
+        if (controlador != null) {
 
-        if (!configuracionCompleta()) {
-            mostrarError("Debes completar todos los campos de manera correcta antes de continuar.");
-            return;
+            if (!configuracionCompleta()) {
+                mostrarError("Debes completar todos los campos de manera correcta antes de continuar.");
+                return;
+            }
+            controlador.onConfirmarConfig(
+                    getDificultadSeleccionada(),
+                    getNumeroJugadoresSeleccionado(),
+                    getNumRondas(),
+                    getPuntuaciones()
+            );
         }
-        controlador.onConfirmarConfig(
-                getDificultadSeleccionada(),
-                getNumeroJugadoresSeleccionado(),
-                getPuntuacionMaxima(),
-                getPuntuaciones()
-        );
-    }    
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -572,12 +572,17 @@ public class JPantallaConfigurarPartida extends JFrame {
         grupoJugadores.add(jRadioButton4);
         grupoJugadores.add(jRadioButton5);
         grupoJugadores.add(jRadioButton6);
+
+        JSpinner.DefaultEditor editor = (JSpinner.DefaultEditor) numRondasSpinner.getEditor();
+        JFormattedTextField txt = editor.getTextField();
+        txt.setEditable(false);
+        txt.setFocusable(false);
     }
 
     private void notificarCambio() {
         if (controlador != null) {
             controlador.onConfigChanged(getDificultadSeleccionada(), getNumeroJugadoresSeleccionado(),
-                    getPuntuacionMaxima(), getPuntuaciones());
+                    getNumRondas(), getPuntuaciones());
         }
     }
 
@@ -607,8 +612,8 @@ public class JPantallaConfigurarPartida extends JFrame {
         return null;
     }
 
-    public Integer getPuntuacionMaxima() {
-        return parsePositiveInteger(jTextField1);
+    public Integer getNumRondas() {
+        return (Integer) numRondasSpinner.getValue();
     }
 
     public Map<String, Integer> getPuntuaciones() {
@@ -645,11 +650,11 @@ public class JPantallaConfigurarPartida extends JFrame {
     }
 
     public boolean configuracionCompleta() {
-    return getDificultadSeleccionada() != null
-            && getNumeroJugadoresSeleccionado() != null
-            && getPuntuacionMaxima() != null
-            && getPuntuaciones() != null;
-}
+        return getDificultadSeleccionada() != null
+                && getNumeroJugadoresSeleccionado() != null
+                && getNumRondas() != null
+                && getPuntuaciones() != null;
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -664,7 +669,6 @@ public class JPantallaConfigurarPartida extends JFrame {
     private javax.swing.JRadioButton jRadioButton4;
     private javax.swing.JRadioButton jRadioButton5;
     private javax.swing.JRadioButton jRadioButton6;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
@@ -682,6 +686,7 @@ public class JPantallaConfigurarPartida extends JFrame {
     private javax.swing.JLabel labelSubtitulo8;
     private javax.swing.JLabel labelSubtitulo9;
     private javax.swing.JLabel labelTitulo;
+    private javax.swing.JSpinner numRondasSpinner;
     private javax.swing.JPanel panelBotones;
     private javax.swing.JPanel panelDificultad;
     private javax.swing.JPanel panelJugadas;

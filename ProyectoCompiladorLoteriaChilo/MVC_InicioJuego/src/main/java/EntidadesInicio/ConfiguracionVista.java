@@ -17,20 +17,20 @@ public class ConfiguracionVista implements IConfiguracionPartida {
   
     private String dificultad;
     private List<IJugador> jugadores; 
-    private int puntuacionMaxima;
+    private int numRondas;
     private List<String> imagenesTarjetas;
     private int numJugadores;
 
     @Override
     public void setDatos(String dificultad,
                      List<IJugador> jugadores,
-                     int puntuacion,
+                     int numRondas,
                      List<String> tarjetas,
                      int numJugadores) {
 
     this.dificultad = dificultad;
     this.jugadores = jugadores != null ? jugadores : new ArrayList<>();
-    this.puntuacionMaxima = puntuacion;
+    this.numRondas = numRondas;
     this.imagenesTarjetas = tarjetas != null ? tarjetas : new ArrayList<>();
     this.numJugadores = numJugadores;
 }
@@ -57,8 +57,8 @@ public class ConfiguracionVista implements IConfiguracionPartida {
     }
 
     @Override
-    public void setPuntuacionMaxima(int puntuacionMaxima) {
-        this.puntuacionMaxima = puntuacionMaxima;
+    public void setNumeroRondas(int numRondas) {
+        this.numRondas = numRondas;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ConfiguracionVista implements IConfiguracionPartida {
     public List<IJugador> getJugadores() { return jugadores; }
     
     @Override
-    public int getPuntuacionMaxima() { return puntuacionMaxima; }
+    public int getNumeroRondas() { return numRondas; }
 
     @Override
     public List<String> getImagenesTarjetas() {

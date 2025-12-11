@@ -333,7 +333,7 @@ public class JFrameLobby extends JFramePadre implements IObserver{
         labelNivel10.setFont(new java.awt.Font("Sarabun", 1, 18)); // NOI18N
         labelNivel10.setForeground(new java.awt.Color(51, 51, 51));
         labelNivel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelNivel10.setText("Puntuacion Maxima");
+        labelNivel10.setText("Numero de Rondas");
 
         labelDificultad.setFont(new java.awt.Font("Sarabun", 2, 18)); // NOI18N
         labelDificultad.setForeground(new java.awt.Color(102, 102, 102));
@@ -618,7 +618,7 @@ public void update() {
     labelDificultad.setText(config.getDificultad());
     labelNivel12.setText(String.valueOf(config.getNumJugadores()));
     labelNivel.setText(config.getDificultad());
-    labelPuntuacion.setText(String.valueOf(config.getPuntuacionMaxima()));
+    labelPuntuacion.setText(String.valueOf(config.getNumeroRondas()));
     labelNombre.setText(modeloVista.getJugador());
     actualizarJugadores(config.getJugadores());
     actualizarTarjetas(config.getImagenesTarjetas());

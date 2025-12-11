@@ -619,7 +619,7 @@
                   <Color blue="33" green="33" red="33" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="Puntuacion Maxima"/>
+                <Property name="text" type="java.lang.String" value="Numero de Rondas"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="labelDificultad">

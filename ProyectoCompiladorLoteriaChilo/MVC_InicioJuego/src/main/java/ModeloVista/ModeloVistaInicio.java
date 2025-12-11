@@ -78,7 +78,7 @@ public class ModeloVistaInicio extends Subject implements IModeloVistaInicio {
         configuracion.setDatos(
                 config.getDificultad(),
                 config.getJugadores(),
-                config.getPuntuacionMaxima(),
+                config.getNumeroRondas(),
                 config.getImagenesTarjetas(),
                 config.getNumJugadores()
         );
@@ -159,13 +159,13 @@ public void solicitarIniciarJuego() {
     
     
 @Override
-public void CrearPartida(String dificultad, int numJugadores, int puntuacionMax,
+public void CrearPartida(String dificultad, int numJugadores, int numRondas,
                          Map<String, Integer> puntuaciones) {
 
     System.out.println("[ModeloVistaInicio] CrearPartida() llamado");
     // ========== 1) ENVIAR EVENTO AL MODELO JUEGO ==========
     if (modeloJuego != null) {
-        modeloJuego.EnviarEventoConfigurarPartida(dificultad, numJugadores, puntuacionMax, puntuaciones);
+        modeloJuego.EnviarEventoConfigurarPartida(dificultad, numJugadores, numRondas, puntuaciones);
            
     }
 
