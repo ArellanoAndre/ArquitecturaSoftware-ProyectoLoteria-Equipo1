@@ -115,6 +115,7 @@ public class Prueba_MVC2 {
                 Logger.getLogger(Prueba_MVC.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+            modeloJuego.suscribirseJuegoOut();
         });
     }
 }

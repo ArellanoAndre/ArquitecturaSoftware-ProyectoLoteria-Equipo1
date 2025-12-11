@@ -59,7 +59,7 @@ public class ModeloVistaInicio extends Subject implements IModeloVistaInicio {
         System.out.println("[ModeloVista] → Solicitando UNIRSE_PARTIDA");
         this.jugador = nombre;
         if (modeloJuego != null) {
-            modeloJuego.EnviarNombreAvatarConfirmado(nombre, avatar);
+            modeloJuego.enviarNombreAvatarConfirmado(nombre, avatar);
         }
     }
 
@@ -165,7 +165,7 @@ public void CrearPartida(String dificultad, int numJugadores, int numRondas,
     System.out.println("[ModeloVistaInicio] CrearPartida() llamado");
     // ========== 1) ENVIAR EVENTO AL MODELO JUEGO ==========
     if (modeloJuego != null) {
-        modeloJuego.EnviarEventoConfigurarPartida(dificultad, numJugadores, numRondas, puntuaciones);
+        modeloJuego.enviarEventoConfigurarPartida(dificultad, numJugadores, numRondas, puntuaciones);
            
     }
 

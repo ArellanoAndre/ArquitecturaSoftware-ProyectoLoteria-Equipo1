@@ -40,7 +40,6 @@ public class ModeloJuego implements IModeloJuego {
         this.jugadoresSecundarios = jugadoresSecundarios;
         controlVistaJuego.setJugadorPrincipal(this.jugadorPrincipal);
         controlVistaJuego.setJugadoresSecundarios(jugadoresSecundarios);
-
     }
 
     public ModeloJuego(IControlVistaMVC_Juego controlVistaJuego, Jugador jugadorPrincipal, List<IJugador> jugadoresSecundarios) {
@@ -49,33 +48,10 @@ public class ModeloJuego implements IModeloJuego {
         this.jugadoresSecundarios = jugadoresSecundarios;
         controlVistaJuego.setJugadorPrincipal(this.jugadorPrincipal);
         controlVistaJuego.setJugadoresSecundarios(jugadoresSecundarios);
-
     }
 
     public void setEmpaquetador(IEnvioEvento empaquetador) {
         this.empaquetador = empaquetador;
-    }
-
-    @Override
-    public void EnviarEventoCartaSeleccionada(int pos, int jugador) {
-        IEvento eventoCarta = empaquetador.crearEvento();
-        eventoCarta.setTopico("Juego-in");
-        eventoCarta.setEvento("Juego");
-        eventoCarta.setJSON(
-                "{ \"TipoEvento\": \"CASILLA_SELECCIONADA\", \"Jugador\": " + jugadorPrincipal.getNumJugador() + ", \"Casilla\": " + pos + " }"
-        );
-        empaquetador.enviarEvento(eventoCarta);
-    }
-
-    @Override
-    public void EnviarEventoIniciarRonda() {
-        IEvento eventoInicioRonda = empaquetador.crearEvento();
-        eventoInicioRonda.setTopico("Juego-in");
-        eventoInicioRonda.setEvento("Juego");
-        eventoInicioRonda.setJSON(
-                "{ \"TipoEvento\": \"INICIAR_RONDA\" }"
-        );
-        empaquetador.enviarEvento(eventoInicioRonda);
     }
 
     public Jugador getJugadorPrincipal() {
@@ -85,44 +61,15 @@ public class ModeloJuego implements IModeloJuego {
     public List<IJugador> getJugadoresSecundarios() {
         return jugadoresSecundarios;
     }
-
+    
     @Override
-    public void EnviarNombreAvatarConfirmado(String nombre, String avatar) {
-
-        System.out.println("[ModeloJuego] → Enviando evento UNIRSE_PARTIDA");
-
-        try {
-            // 1) Construir JSON del evento
-            JSONObject json = new JSONObject();
-            json.put("TipoEvento", "UNIRSE_PARTIDA");
-            json.put("Nombre", nombre);
-            json.put("Avatar", avatar);
-
-            // 2) Usar el método general de envío
-            enviarEventoBroadcast(json.toString(), "Juego-in");
-
-            System.out.println("[ModeloJuego] JSON enviado: " + json.toString());
-
-        } catch (Exception e) {
-            System.err.println("[ModeloJuego] Error enviando UnirsePartida: " + e.getMessage());
-        }
+    public void setControlVistaInicio(IControlVistaMVC_Inicio controlVistaInicio) {
+        this.controlVistaInicio = controlVistaInicio;
     }
 
     @Override
-    public void enviarEventoBroadcast(String jsonPayload, String topico) { // para no repetir codigo
-
-        if (empaquetador == null) {
-            return;
-        }
-
-        IEvento evento = empaquetador.crearEvento();
-        evento.setTopico(topico);
-        evento.setEvento("ActualizacionJuego");
-        evento.setJSON(jsonPayload);
-
-        empaquetador.enviarEvento(evento);
-        System.out.println("[ModeloLogica-Host] Enviado evento: " + jsonPayload);
-
+    public void setControlVistaJuego(IControlVistaMVC_Juego controlVistaJuego) {
+        this.controlVistaJuego = controlVistaJuego;
     }
 
     @Override
@@ -132,57 +79,9 @@ public class ModeloJuego implements IModeloJuego {
         json.put("TipoEvento", "suscripcion");
 
         // Usamos el mismo método que ya centraliza el envío
-        enviarEventoBroadcast(json.toString(), "Juego-out");
+        enviarEventoBroadcast(json.toString(), "Juego-out", "suscripcion");
 
         System.out.println("[Cliente] Suscripción enviada a Juego-out");
-    }
-
-    @Override
-    public void enviarEventoJugar() {
-        System.out.println("[ModeloJuego] → Enviando evento JUGAR");
-
-        try {
-            // Construir JSON
-            JSONObject json = new JSONObject();
-            json.put("TipoEvento", "JUGAR");
-
-            // Enviar usando el método centralizado
-            enviarEventoBroadcast(json.toString(), "Juego-in");
-
-            System.out.println("[ModeloJuego] JSON enviado: " + json.toString());
-
-        } catch (Exception e) {
-            System.err.println("[ModeloJuego] Error enviando JUGAR: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public void EnviarEventoConfigurarPartida(String dificultad, int numJugadores,
-            int numRondas,
-            Map<String, Integer> puntuaciones) {
-
-        System.out.println("[ModeloJuego] → Enviando CONFIGURAR_PARTIDA al Host...");
-        System.out.println(numJugadores);
-        try {
-            JSONObject json = new JSONObject();
-            json.put("TipoEvento", "CONFIGURAR_PARTIDA");
-            json.put("Dificultad", dificultad);
-            json.put("NumeroJugadores", numJugadores);
-            json.put("NumeroRondas", numRondas);
-
-            // Puntuaciones (Chorro, Cruz, Llena, etc.)
-            JSONObject jsonPunts = new JSONObject();
-            for (Map.Entry<String, Integer> entry : puntuaciones.entrySet()) {
-                jsonPunts.put(entry.getKey(), entry.getValue());
-            }
-            json.put("Puntuaciones", jsonPunts);
-
-            // Enviar por Juego-in al Host
-            enviarEventoBroadcast(json.toString(), "Juego-in");
-            host = true;
-        } catch (Exception e) {
-            System.err.println("[ModeloJuego] ERROR enviando CONFIGURAR_PARTIDA: " + e.getMessage());
-        }
     }
 
     // Control Vista Seccion ---------
@@ -298,16 +197,6 @@ public class ModeloJuego implements IModeloJuego {
     }
 
     @Override
-    public void setControlVistaInicio(IControlVistaMVC_Inicio controlVistaInicio) {
-        this.controlVistaInicio = controlVistaInicio;
-    }
-
-    @Override
-    public void setControlVistaJuego(IControlVistaMVC_Juego controlVistaJuego) {
-        this.controlVistaJuego = controlVistaJuego;
-    }
-
-    @Override
     public void abrirPantallaConfig() {
         controlVistaInicio.abrirPantallaConfig();
     }
@@ -335,44 +224,6 @@ public class ModeloJuego implements IModeloJuego {
     }
 
     @Override
-    public void EnviarEventoCantarLoteria() {
-
-        if (empaquetador == null) {
-            System.err.println("[ModeloJuego] Error: Empaquetador no inicializado.");
-            return;
-        }
-
-        IEvento evento = empaquetador.crearEvento();
-        evento.setTopico("Juego-in");
-        evento.setEvento("Juego");
-
-        // El JSON que espera el Host
-        evento.setJSON("{ \"TipoEvento\": \"INTENTO_LOTERIA\", \"Jugador\": " + jugadorPrincipal.getNumJugador() + " }"
-        );
-
-        empaquetador.enviarEvento(evento);
-        System.out.println("[ModeloJuego] Enviado: INTENTO_LOTERIA por jugador" + jugadorPrincipal.getNumJugador());
-
-    }
-
-    @Override
-    public void EnviarEventoIniciarSiguienteRonda() {
-
-        if (empaquetador == null) {
-            return;
-        }
-
-        IEvento evento = empaquetador.crearEvento();
-        evento.setTopico("Juego-in");
-        evento.setEvento("Juego");
-
-        evento.setJSON("{ \"TipoEvento\": \"INICIAR_SIGUIENTE_RONDA\" }");
-
-        empaquetador.enviarEvento(evento);
-        System.out.println("[ModeloJuego] Enviado: INICIAR_SIGUIENTE_RONDA");
-    }
-
-    @Override
     public void limpiarEntidadesJuego() {
         System.out.println("[ModeloJuego] Limpiando entidades internas...");
 
@@ -395,5 +246,149 @@ public class ModeloJuego implements IModeloJuego {
                 }
             }
         }
+    }
+
+    @Override
+    public void enviarEventoCartaSeleccionada(int pos, int jugador) {
+        JSONObject json = new JSONObject();
+        json.put("TipoEvento", "CASILLA_SELECCIONADA");
+        json.put("Jugador", jugadorPrincipal.getNumJugador());
+        json.put("Casilla", pos);
+        
+        enviarEventoBroadcast(json.toString(), "Juego-in", "ActualizacionJuego");
+    }
+
+    @Override
+    public void enviarEventoIniciarRonda() {
+        JSONObject json = new JSONObject();
+        json.put("TipoEvento", "INICIAR_RONDA");
+        
+        enviarEventoBroadcast(json.toString(), "Juego-in", "ActualizacionJuego");
+    }
+    
+    @Override
+    public void enviarNombreAvatarConfirmado(String nombre, String avatar) {
+
+        System.out.println("[ModeloJuego] → Enviando evento UNIRSE_PARTIDA");
+
+        try {
+            // 1) Construir JSON del evento
+            JSONObject json = new JSONObject();
+            json.put("TipoEvento", "UNIRSE_PARTIDA");
+            json.put("Nombre", nombre);
+            json.put("Avatar", avatar);
+
+            // 2) Usar el método general de envío
+            enviarEventoBroadcast(json.toString(), "Juego-in", "ActualizacionJuego");
+
+            System.out.println("[ModeloJuego] JSON enviado: " + json.toString());
+            host = true;
+            
+        } catch (Exception e) {
+            System.err.println("[ModeloJuego] Error enviando UnirsePartida: " + e.getMessage());
+        }
+    }
+    
+    @Override
+    public void enviarEventoJugar() {
+        System.out.println("[ModeloJuego] → Enviando evento JUGAR");
+
+        try {
+            // Construir JSON
+            JSONObject json = new JSONObject();
+            json.put("TipoEvento", "JUGAR");
+
+            // Enviar usando el método centralizado
+            enviarEventoBroadcast(json.toString(), "Juego-in", "ActualizacionJuego");
+
+            System.out.println("[ModeloJuego] JSON enviado: " + json.toString());
+
+        } catch (Exception e) {
+            System.err.println("[ModeloJuego] Error enviando JUGAR: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void enviarEventoConfigurarPartida(String dificultad, int numJugadores,
+            int numRondas,
+            Map<String, Integer> puntuaciones) {
+
+        System.out.println("[ModeloJuego] → Enviando CONFIGURAR_PARTIDA al Host...");
+        System.out.println(numJugadores);
+        try {
+            JSONObject json = new JSONObject();
+            json.put("TipoEvento", "CONFIGURAR_PARTIDA");
+            json.put("Dificultad", dificultad);
+            json.put("NumeroJugadores", numJugadores);
+            json.put("NumeroRondas", numRondas);
+
+            // Puntuaciones (Chorro, Cruz, Llena, etc.)
+            JSONObject jsonPunts = new JSONObject();
+            for (Map.Entry<String, Integer> entry : puntuaciones.entrySet()) {
+                jsonPunts.put(entry.getKey(), entry.getValue());
+            }
+            json.put("Puntuaciones", jsonPunts);
+
+            // Enviar por Juego-in al Host
+            enviarEventoBroadcast(json.toString(), "Juego-in", "ActualizacionJuego");
+            host = true;
+        } catch (Exception e) {
+            System.err.println("[ModeloJuego] ERROR enviando CONFIGURAR_PARTIDA: " + e.getMessage());
+        }
+    }
+    
+    @Override
+    public void enviarEventoCantarLoteria() {
+
+        if (empaquetador == null) {
+            System.err.println("[ModeloJuego] Error: Empaquetador no inicializado.");
+            return;
+        }
+
+        IEvento evento = empaquetador.crearEvento();
+        evento.setTopico("Juego-in");
+        evento.setEvento("Juego");
+
+        // El JSON que espera el Host
+        evento.setJSON("{ \"TipoEvento\": \"INTENTO_LOTERIA\", \"Jugador\": " + jugadorPrincipal.getNumJugador() + " }"
+        );
+
+        empaquetador.enviarEvento(evento);
+        System.out.println("[ModeloJuego] Enviado: INTENTO_LOTERIA por jugador" + jugadorPrincipal.getNumJugador());
+
+    }
+    
+    @Override
+    public void enviarEventoIniciarSiguienteRonda() {
+
+        if (empaquetador == null) {
+            return;
+        }
+
+        IEvento evento = empaquetador.crearEvento();
+        evento.setTopico("Juego-in");
+        evento.setEvento("Juego");
+
+        evento.setJSON("{ \"TipoEvento\": \"INICIAR_SIGUIENTE_RONDA\" }");
+
+        empaquetador.enviarEvento(evento);
+        System.out.println("[ModeloJuego] Enviado: INICIAR_SIGUIENTE_RONDA");
+    }
+
+    @Override
+    public void enviarEventoBroadcast(String jsonPayload, String topico, String Evento) { // para no repetir codigo
+
+        if (empaquetador == null) {
+            return;
+        }
+
+        IEvento evento = empaquetador.crearEvento();
+        evento.setTopico(topico);
+        evento.setEvento(Evento);
+        evento.setJSON(jsonPayload);
+
+        empaquetador.enviarEvento(evento);
+        System.out.println("[ModeloLogica-Host] Enviado evento: " + jsonPayload);
+
     }
 }

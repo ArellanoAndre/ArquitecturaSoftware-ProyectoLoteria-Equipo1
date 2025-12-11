@@ -155,7 +155,7 @@ public class ModeloVista implements IModeloVista {
     public void seleccionarCarta(int pos) {
         // VER SI ES NECESARIO ENVIAR STRING CON NOMBRE CARTA
         // Y SI ES AGREGAR ESA FUNCIONALIDAD
-        modeloJuego.EnviarEventoCartaSeleccionada(pos, jugadorPrincipal.getNumJugador());
+        modeloJuego.enviarEventoCartaSeleccionada(pos, jugadorPrincipal.getNumJugador());
     }
 
     /**
@@ -248,7 +248,7 @@ public class ModeloVista implements IModeloVista {
     public void solicitarEnvioCantarLoteria() {
 
         if (modeloJuego != null) {
-            modeloJuego.EnviarEventoCantarLoteria();
+            modeloJuego.enviarEventoCantarLoteria();
         }
     }
 
@@ -256,7 +256,7 @@ public class ModeloVista implements IModeloVista {
     public void solicitarEnvioSiguienteRonda() {
 
         if (modeloJuego != null) {
-            modeloJuego.EnviarEventoIniciarSiguienteRonda();
+            modeloJuego.enviarEventoIniciarSiguienteRonda();
         }
     }
 

@@ -55,6 +55,7 @@ public class EnsambladorLogica {
         System.out.println("[INFO] Esperando jugadas del ID 2. Tarjeta: "
                 + java.util.Arrays.toString(jugador2.getTarjeta().getCasillas()));
 
+        modelo.suscribirseJuegoIn();
         // MODO ESPERA
         while (true) {
             Thread.sleep(1000);

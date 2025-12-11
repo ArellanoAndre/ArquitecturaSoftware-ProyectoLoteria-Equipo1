@@ -15,13 +15,13 @@ import org.json.JSONObject;
  */
 public interface IModeloJuego {
 
-    void EnviarNombreAvatarConfirmado(String nombre, String avatar);
+    void enviarNombreAvatarConfirmado(String nombre, String avatar);
 
-    void EnviarEventoIniciarRonda();
+    void enviarEventoIniciarRonda();
 
-    void EnviarEventoCartaSeleccionada(int pos, int jugador);
+    void enviarEventoCartaSeleccionada(int pos, int jugador);
 
-    void enviarEventoBroadcast(String jsonPayload, String topico);
+    void enviarEventoBroadcast(String jsonPayload, String topico, String Evento);
 
     public void suscribirseJuegoOut();
 
@@ -41,7 +41,7 @@ public interface IModeloJuego {
 
     void abrirPantallaAvatar();
 
-    public void EnviarEventoConfigurarPartida(String dificultad, int numJugadores,
+    public void enviarEventoConfigurarPartida(String dificultad, int numJugadores,
             int puntuacionMax,
             Map<String, Integer> puntuaciones);
 
@@ -49,9 +49,9 @@ public interface IModeloJuego {
 
     void notificarFinPartida(List<IJugador> ranking);
 
-    void EnviarEventoCantarLoteria();
+    void enviarEventoCantarLoteria();
 
-    void EnviarEventoIniciarSiguienteRonda();
+    void enviarEventoIniciarSiguienteRonda();
     
     void limpiarEntidadesJuego();
 

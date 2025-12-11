@@ -125,7 +125,7 @@ public class Prueba_MVC3 {
             }
             
             // Iniciar la ronda automáticamente
-            modeloJuego.EnviarEventoIniciarRonda();
+            modeloJuego.enviarEventoIniciarRonda();
 
         });
     }

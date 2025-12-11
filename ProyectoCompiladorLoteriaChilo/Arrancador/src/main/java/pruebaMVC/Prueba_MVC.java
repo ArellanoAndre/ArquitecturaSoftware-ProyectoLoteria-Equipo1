@@ -108,7 +108,10 @@ public class Prueba_MVC {
             } catch (IOException ex) {
                 Logger.getLogger(Prueba_MVC.class.getName()).log(Level.SEVERE, null, ex);
             }
-            modeloJuego.EnviarEventoIniciarRonda();
+            
+            modeloJuego.suscribirseJuegoOut();
+            
+            modeloJuego.enviarEventoIniciarRonda();
 
         });
     }
