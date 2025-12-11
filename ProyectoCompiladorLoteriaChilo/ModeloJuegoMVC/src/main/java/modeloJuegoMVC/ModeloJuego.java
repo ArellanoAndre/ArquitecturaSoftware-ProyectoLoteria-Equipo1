@@ -206,72 +206,80 @@ public class ModeloJuego implements IModeloJuego {
     }
 
     @Override
-    public void actualizarConfiguracion(JSONObject datos) {
+public void actualizarConfiguracion(JSONObject datos) {
 
-        System.out.println("[FiltroUnirsePartida] → Evento ConfirmacionReglas recibido");
+    System.out.println("[FiltroUnirsePartida] → Evento ConfirmacionReglas recibido");
 
-        // === 1) Leer datos generales ===
-        String dificultad = datos.optString("Dificultad", null);
-        int numRondas = datos.optInt("NumeroRondas", 0);
-        int numJugadores = datos.optInt("NumeroJugadores", 0);
+    // === 1) Leer datos generales ===
+    String dificultad = datos.optString("Dificultad", null);
+    int numRondas = datos.optInt("NumeroRondas", 0);
+    int numJugadores = datos.optInt("NumeroJugadores", 0);
 
-        // === 2) Convertir jugadores JSON -> List<IJugador> ===
-        List<IJugador> listaJugadores = new ArrayList<>();
+    // === 2) Convertir jugadores JSON -> List<IJugador> ===
+    List<IJugador> listaJugadores = new ArrayList<>();
 
-        if (datos.has("Jugadores")) {
-            JSONArray arr = datos.getJSONArray("Jugadores");
+    if (datos.has("Jugadores")) {
+        JSONArray arr = datos.getJSONArray("Jugadores");
 
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject obj = arr.getJSONObject(i);
+        for (int i = 0; i < arr.length(); i++) {
+            JSONObject obj = arr.getJSONObject(i);
 
-                // --- SIEMPRE SE PUEDE LEER ---
-                int id = obj.optInt("IdJugador", -1);  // nunca truena
+            int id = obj.optInt("IdJugador", -1);
+            String nombre = obj.optString("Nombre", "Jugador_" + id);
+            String avatar = obj.optString("Avatar", "default.png");
 
-                // --- PUEDE VENIR VACÍO ---
-                String nombre = obj.optString("Nombre", "Jugador_" + id);
-                String avatar = obj.optString("Avatar", "default.png");
+            System.out.println("[DEBUG] Jugador recibido: id=" + id
+                    + ", nombre=" + nombre
+                    + ", avatar=" + avatar);
 
-                System.out.println("[DEBUG] Jugador recibido: id=" + id
-                        + ", nombre=" + nombre
-                        + ", avatar=" + avatar);
-
-                listaJugadores.add(new Jugador(id, nombre, avatar));
-            }
+            listaJugadores.add(new Jugador(id, nombre, avatar));
         }
-
-        settearJugadores(listaJugadores);
-
-        // === 3) Leer Tarjetas ===
-        List<String> tarjetas = new ArrayList<>();
-
-        if (datos.has("Tarjetas")) {
-            JSONArray arrTarjetas = datos.getJSONArray("Tarjetas");
-
-            for (int i = 0; i < arrTarjetas.length(); i++) {
-                tarjetas.add(arrTarjetas.getString(i)); // Rutas de imagen
-            }
-        }
-
-        System.out.println("[FiltroUnirsePartida] Datos procesados:");
-        System.out.println(" - Dificultad: " + dificultad);
-        System.out.println(" - numRondas: " + numRondas);
-        System.out.println(" - Jugadores: " + listaJugadores.size());
-        System.out.println(" - NumJugadores: " + numJugadores);
-        System.out.println(" - Tarjetas: " + tarjetas.size());
-
-        // === 4) Crear objeto ConfiguracionPartida ===
-        ConfiguracionPartida configuracion = new ConfiguracionPartida();
-        configuracion.setDatos(
-                dificultad,
-                listaJugadores,
-                numRondas,
-                tarjetas,
-                numJugadores
-        );
-
-        // === 5) Notificar a ControlModeloVista para actualizar pantalla ===
-        controlVistaInicio.actualizarPantalla(configuracion);
     }
+
+    settearJugadores(listaJugadores);
+
+    // === ⛔ VALIDAR SI ESTE EVENTO INCLUYE AL JUGADOR LOCAL ===
+    boolean jugadorEncontrado = false;
+
+    for (IJugador j : listaJugadores) {
+        if (j.getNumJugador() == jugadorPrincipal.getNumJugador()) {
+            jugadorEncontrado = true;
+            break;
+        }
+    }
+
+    if (!jugadorEncontrado) {
+        System.out.println("[FiltroUnirsePartida] ⚠ Este evento NO es para mí. No cambio pantalla.");
+        return; // ← IMPORTANTE: NO continuar
+    }
+
+    System.out.println("[FiltroUnirsePartida] ✔ Mi jugador SI está en la lista. Cambio de pantalla.");
+
+    // === 3) Leer Tarjetas ===
+    List<String> tarjetas = new ArrayList<>();
+
+    if (datos.has("Tarjetas")) {
+        JSONArray arrTarjetas = datos.getJSONArray("Tarjetas");
+
+        for (int i = 0; i < arrTarjetas.length(); i++) {
+            tarjetas.add(arrTarjetas.getString(i));
+        }
+    }
+
+    // === 4) Crear objeto ConfiguracionPartida ===
+    ConfiguracionPartida configuracion = new ConfiguracionPartida();
+    configuracion.setDatos(
+            dificultad,
+            listaJugadores,
+            numRondas,
+            tarjetas,
+            numJugadores
+    );
+
+    // === 5) Solo si coincide el jugador → actualizar pantalla ===
+    controlVistaInicio.actualizarPantalla(configuracion);
+}
+
 
     @Override
     public void abrirPantallaConfig(int id) {
