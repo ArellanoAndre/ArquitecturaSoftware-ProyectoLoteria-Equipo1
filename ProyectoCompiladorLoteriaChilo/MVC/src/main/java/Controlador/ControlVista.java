@@ -39,7 +39,7 @@ public class ControlVista implements IControlVistaMVC_Juego {
     public void setJugadorPrincipal(IJugador jugador) {
         TarjetaVista tarjeta = new TarjetaVista(jugador.getTarjeta().getMarcadas(), jugador.getTarjeta().getImg());
         JugadorVista jugadorP = new JugadorVista(jugador.getNombre(), tarjeta, jugador.getNumJugador());
-        jugadorP.setRutaAvatar("/img/Avatares/user" + jugador.getNumJugador() + ".png");
+        jugadorP.setRutaAvatar("/img/Avatares/" +jugador.getAvatar());
         modeloVista.setJugadorPrincipal(jugadorP);
     }
 
@@ -100,11 +100,11 @@ public class ControlVista implements IControlVistaMVC_Juego {
                 TarjetaVista tarjeta = new TarjetaVista(jModelo.getTarjeta().getMarcadas(), jModelo.getTarjeta().getImg());
                 JugadorVista nuevo = new JugadorVista(jModelo.getNombre(), tarjeta, jModelo.getNumJugador());
 
-                String ruta = "/img/Avatares/user" + jModelo.getNumJugador() + ".png";
+                String ruta = jModelo.getAvatar();
                 if (jModelo.getAvatar() != null && !jModelo.getAvatar().startsWith("/img")) {
                     ruta = jModelo.getAvatar();
                 }
-                nuevo.setRutaAvatar(ruta);
+                nuevo.setRutaAvatar("/img/Avatares/" + ruta );
 
                 listaFinal.add(nuevo);
             }

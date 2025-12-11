@@ -145,6 +145,7 @@ public class ModeloVistaJuego implements IModeloVista {
     @Override
     public void setJugadoresSecundarios(List<JugadorVista> jugadoresSecundarios) {
         this.jugadoresSecundarios = jugadoresSecundarios;
+        notificar();
     }
 
     /**

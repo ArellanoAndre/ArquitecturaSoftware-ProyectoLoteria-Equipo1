@@ -27,6 +27,8 @@ public class JPanelJugadorPrincipal extends javax.swing.JPanel implements Observ
         this.modeloVista.addObserver(this);
         cargarNombre();
         cargarAvatar(modeloVista.getJugadorPrincipal().getRutaAvatar());
+        System.out.println("**********************************************");
+        System.out.println(modeloVista.getJugadorPrincipal().getRutaAvatar());
 
     }
 

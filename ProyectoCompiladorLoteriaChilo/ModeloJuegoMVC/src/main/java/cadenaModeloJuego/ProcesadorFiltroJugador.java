@@ -5,6 +5,7 @@
 package cadenaModeloJuego;
 
 import interfacesComunicacionModelo.IModeloJuego;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -25,34 +26,26 @@ public class ProcesadorFiltroJugador implements IModeloChain {
 
         System.out.println("[FiltroJugador] Evento recibido: " + tipoEvento);
 
-        // ================================================================
-        // 1. OBTENER idLocal (0 si aún no existe jugador)
-        // ================================================================
         int idLocal = 0;
 
         try {
-            if (modeloJuego.getJugadorPrincipal() != null) {
+            if (modeloJuego.getJugadorPrincipal() != null)
                 idLocal = modeloJuego.getJugadorPrincipal().getNumJugador();
-            }
         } catch (Exception ignored) {}
 
-        // ================================================================
-        // 2. Obtener ID del evento
-        // ================================================================
-        int idEvento = datos.optInt("ID", -1);
+        int idEvento = datos.optInt("ID", -2); 
+        // -2 = "no enviado", -1 = global
 
         // ================================================================
-        // 3. TRATAMIENTO ESPECIAL: ID_ASIGNADO
+        // 1. TRATAMIENTO ESPECIAL: ID_ASIGNADO
         // ================================================================
         if ("ID_ASIGNADO".equals(tipoEvento)) {
 
-            // Si YA TENGO ID → no reasignar
             if (idLocal != 0) {
                 System.out.println("[FiltroJugador] ❌ ID_ASIGNADO ignorado (ya tengo ID=" + idLocal + ")");
                 return;
             }
 
-            // Aceptar SOLO si trae un ID válido > 0
             if (idEvento > 0) {
                 System.out.println("[FiltroJugador] ✔ Aceptado ID_ASIGNADO → " + idEvento);
                 modeloJuego.guardarIDAsignado(idEvento);
@@ -60,11 +53,11 @@ public class ProcesadorFiltroJugador implements IModeloChain {
                 System.out.println("[FiltroJugador] ❌ ID_ASIGNADO inválido");
             }
 
-            return; // NO pasamos a la cadena
+            return;
         }
 
         // ================================================================
-        // 4. SI NO TENGO ID → NO PUEDO PROCESAR OTROS EVENTOS
+        // 2. SI NO TENGO ID → IGNORO TODO EXCEPTO ID_ASIGNADO
         // ================================================================
         if (idLocal == 0) {
             System.out.println("[FiltroJugador] ❌ Ignorado → aún no tengo ID asignado");
@@ -72,18 +65,37 @@ public class ProcesadorFiltroJugador implements IModeloChain {
         }
 
         // ================================================================
-        // 5. SI EL EVENTO NO ES PARA ESTE JUGADOR → SE IGNORA
+        // 3. EVENTOS QUE TRAEN LISTA COMPLETA DE JUGADORES (broadcast)
         // ================================================================
-        if (idEvento != idLocal) {
-            System.out.println("[FiltroJugador] ❌ Ignorado → Evento para " + idEvento + " yo soy " + idLocal);
+        JSONArray jugadores = datos.optJSONArray("Jugadores");
+
+        boolean esEventoGeneral = jugadores != null;
+
+        if (esEventoGeneral) {
+            System.out.println("[FiltroJugador] ✔ Evento general → procesado por todos");
+            if (siguiente != null) siguiente.procesar(tipoEvento, datos, modeloJuego);
             return;
         }
 
-        System.out.println("[FiltroJugador] ✔ Aceptado → Evento dirigido a mí (" + idLocal + ")");
+        // ================================================================
+        // 4. EVENTO GLOBAL → ID = -1
+        // ================================================================
+        if (idEvento == -1) {
+            System.out.println("[FiltroJugador] ✔ Evento GLOBAL → todos los jugadores lo procesan");
+            if (siguiente != null) siguiente.procesar(tipoEvento, datos, modeloJuego);
+            return;
+        }
 
         // ================================================================
-        // 6. CONTINUAR LA CADENA NORMALMENTE
+        // 5. EVENTO PERSONAL
         // ================================================================
+        if (idEvento != idLocal) {
+            System.out.println("[FiltroJugador] ❌ Ignorado → Evento personal para " + idEvento + " yo soy " + idLocal);
+            return;
+        }
+
+        System.out.println("[FiltroJugador] ✔ Evento personal para mí");
+
         if (siguiente != null) {
             siguiente.procesar(tipoEvento, datos, modeloJuego);
         }

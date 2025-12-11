@@ -56,6 +56,7 @@ public class LogicaDeJuego implements ILogicaJuego {
     public LogicaDeJuego() {
         this.griton = new Griton();
         this.jugadores = new ArrayList<>();
+        this.jugadorespartida = new ArrayList<>();
         this.todasLasTarjetas = GenerarTarjetas();
         //this.MAX_RONDAS = 1; // por mientras prueba
 
@@ -288,6 +289,8 @@ public class LogicaDeJuego implements ILogicaJuego {
         System.err.println("[Logica] ERROR: No existe jugador con ID = " + id);
         return;
     }
+    
+    jugadorespartida.add(jugadorEncontrado);
 
     // Actualizar nombre y avatar
     jugadorEncontrado.setNombre(nombre);
@@ -305,7 +308,7 @@ public class LogicaDeJuego implements ILogicaJuego {
         modeloLogica.enviarConfirmacionReglas(
                 this.dificultad,
                 this.MAX_RONDAS,
-                this.jugadores,
+                this.jugadorespartida,
                 this.numJugadores,
                 this.obtener3TarjetasAlAzar(),id
                 
