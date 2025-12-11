@@ -29,13 +29,14 @@ public class ProcesadorUnirsePartida implements IProcesadorEvento {
 
             String nombre = datos.getString("Nombre");
             String avatar = datos.getString("Avatar");
+            int id = datos.optInt("ID", -2);
 
             System.out.println("[Chain] Solicitud de unión:");
             System.out.println("        Nombre: " + nombre);
             System.out.println("        Avatar: " + avatar);
 
             // Mandar a la lógica de juego
-            logica.settearAvatar(nombre, avatar);
+            logica.settearAvatar(id, nombre, avatar);
 
             return;
         }

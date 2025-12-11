@@ -12,6 +12,7 @@ import logicaJuego.entidades.Jugador;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import procesarCadena.IProcesadorEvento;
+import procesarCadena.ProcesadorAsignarID;
 import procesarCadena.ProcesadorConfigurarPartida;
 import procesarCadena.ProcesadorIniciar;
 import procesarCadena.ProcesadorIniciarPartida;
@@ -27,8 +28,8 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
 
     private LogicaDeJuego logicaDeJuego;
     private IEnvioEvento empaquetador;
-
     private IProcesadorEvento cadenaProcesamiento;
+   int test = -1;
 
     public ModeloLogica() {
         // armar cadena de responsabilidad aqui
@@ -41,9 +42,11 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         IProcesadorEvento intentoLoteria = new ProcesadorIntentoLoteria();
         IProcesadorEvento inicioSiguienteRonda = new ProcesadorInicioSiguienteRonda();
         IProcesadorEvento iniciarPartida = new ProcesadorIniciarPartida();
-        IProcesadorEvento settearTarjeta = new ProcesadorSetTarjeta();
+        IProcesadorEvento settearTarjeta = new ProcesadorSetTarjeta(); 
+        IProcesadorEvento asignarid = new ProcesadorAsignarID();
 
         // Conectamos los eslabones
+        asignarid.setSiguiente(iniciarRonda);
         iniciarRonda.setSiguiente(marcar);
         marcar.setSiguiente(iniciar);
         iniciar.setSiguiente(unirsePartida);
@@ -53,7 +56,8 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         intentoLoteria.setSiguiente(inicioSiguienteRonda);
         inicioSiguienteRonda.setSiguiente(iniciarPartida);
         iniciarPartida.setSiguiente(settearTarjeta);
-        this.cadenaProcesamiento = iniciarRonda; // Guardamos la referencia al primero
+        
+        this.cadenaProcesamiento = asignarid; // Guardamos la referencia al primero
     }
 
     public void setLogicaDeJuego(LogicaDeJuego logica) {
@@ -80,7 +84,7 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         json.put("TipoEvento", "suscripcion");
 
         // Usamos el mismo método que ya centraliza el envío
-        enviarEventoBroadcast(json.toString(), "Juego-in", "suscripcion");
+        enviarEventoBroadcast(json.toString(), "Juego-in", "suscripcion",test);
 
         System.out.println("[Cliente] Suscripción enviada a Juego-out");
     }
@@ -94,7 +98,7 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         json.put("IdCarta", idCarta);
         json.put("Nombre", nombreCarta);
 
-        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego");
+        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego",test);
 
     }
 
@@ -106,7 +110,7 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         json.put("Jugador", idJugador);
         json.put("Casilla", posicion);
 
-        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego");
+        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego",test);
 
     }
 
@@ -117,7 +121,7 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         json.put("TipoEvento", "GANADOR");
         json.put("Nombre", nombreGanador);
 
-        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego");
+        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego",test);
 
     }
 
@@ -131,7 +135,7 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         json.put("Ronda", ronda);
         json.put("Ganador", ganadorRonda);
 
-        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego");
+        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego",test);
 
         System.out.println("[ModeloLogica] Enviado FIN_RONDA: " + json.toString());
 
@@ -159,7 +163,7 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         }
 
         json.put("Ranking", arrayRanking);
-        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego");
+        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego",test);
 
         System.out.println("[ModeloLogica] Enviado FIN_PARTIDA: " + json.toString());
     }
@@ -188,23 +192,23 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
     }
 
     @Override
-    public void enviarAbrirPantallaSeleccionAvatar() {
+    public void enviarAbrirPantallaSeleccionAvatar(int idJugador) {
 
         JSONObject json = new JSONObject();
         json.put("TipoEvento", "SELECCION_AVATAR");
 
-        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego");
+        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego",idJugador);
 
         System.out.println("[Host] → Indicando al cliente que abra SELECCION DE AVATAR");
     }
 
     @Override
-    public void enviarAbrirPantallaConfig() {
+    public void enviarAbrirPantallaConfig(int idJugador) {
 
         JSONObject json = new JSONObject();
         json.put("TipoEvento", "CONFIGURAR_PARTIDA");
 
-        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego");
+        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego", idJugador);
 
         System.out.println("[Host] → Indicando al cliente que abra CONFIGURAR PARTIDA");
     }
@@ -215,7 +219,7 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
             int numRondas,
             List<Jugador> jugadores,
             int numJugadores,
-            List<String> tarjetas) {
+            List<String> tarjetas,int id) {
 
         JSONObject json = new JSONObject();
         json.put("TipoEvento", "Confirmacion_Reglas");
@@ -254,7 +258,7 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         // -------------------------------------------------------
         // Enviar evento a todos los clientes
         // -------------------------------------------------------
-        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego");
+        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego",id);
 
         System.out.println("[ModeloLogica] → Enviando ConfirmacionReglas: " + json.toString());
     }
@@ -266,29 +270,43 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         notificarJugadaValida(pos, idJugador);
     }
 
-    private void enviarEventoBroadcast(String jsonPayload, String topico, String Evento) { // para no repetir codigo
+    private void enviarEventoBroadcast(String jsonPayload, String topico, String Evento, int idJugador) {
 
-        if (empaquetador == null) {
-            return;
-        }
+    if (empaquetador == null) {
+        System.err.println("[ModeloJuego] ERROR: empaquetador no inicializado.");
+        return;
+    }
 
+    try {
+        // Convertimos el JSON original para agregar el ID
+        JSONObject json = new JSONObject(jsonPayload);
+        json.put("ID", idJugador); // ← Insertamos el ID
+
+        // Crear el evento real
         IEvento evento = empaquetador.crearEvento();
         evento.setTopico(topico);
         evento.setEvento(Evento);
-        evento.setJSON(jsonPayload);
+        evento.setJSON(json.toString());
 
+        // Enviar al broker
         empaquetador.enviarEvento(evento);
-        System.out.println("[ModeloLogica-Host] Enviado evento: " + jsonPayload);
 
+        System.out.println("[ModeloJuego] Enviado evento (con ID): " + json.toString());
+
+    } catch (Exception e) {
+        System.err.println("[ModeloJuego] ERROR en enviarEventoBroadcast: " + e.getMessage());
     }
-    
+}
+
     @Override
     public void enviarEventoCambiarMVC(){
         JSONObject json = new JSONObject();
         json.put("TipoEvento", "CAMBIAR_MVC");
         
-        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego");
+        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego",test);
     }
+    
+
     
     @Override
     public void enviarTarjetaAsignada(int idJugador, String rutaTarjeta) {
@@ -297,7 +315,7 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         json.put("idJugador", idJugador);
         json.put("rutaTarjeta", rutaTarjeta);
         
-        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego");
+        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego",test);
         
     }
     
@@ -323,6 +341,24 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
             System.err.println("Error procesando entrada" + e.getMessage());
         }
     }
+
+    public void enviarIDAsignadoAlCliente(int idJugadorAsignado) {
+
+    System.out.println("[LogicaDeJuego] → Enviando ID_ASIGNADO al cliente " + idJugadorAsignado);
+
+    // JSON que se enviará al cliente
+    JSONObject json = new JSONObject();
+    json.put("TipoEvento", "ID_ASIGNADO");
+    // NOTA: también agregaremos IdJugador automáticamente dentro del broadcast
+
+    // Usamos tu método centralizado
+    enviarEventoBroadcast(
+        json.toString(),
+        "Juego-out",            // tópico hacia los clientes
+        "ActualizacionJuego",   // etiqueta del tipo de evento
+        idJugadorAsignado       // ← este ID se añadirá al JSON automáticamente
+    );
+}
 
     
 

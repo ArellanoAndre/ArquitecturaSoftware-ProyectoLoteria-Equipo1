@@ -26,6 +26,7 @@ public class ModeloVistaInicio extends Subject implements IModeloVistaInicio {
     private JPantallaConfigurarPartida pantallaConfig;
     private JPantallaMenuPrincipal MenuPrincipal;
     private String jugador;
+    private int id;
     private List<IObserverCambioMVCInicio> observersCambioMVC = new ArrayList<>();
 
     public ModeloVistaInicio() {
@@ -60,11 +61,11 @@ public class ModeloVistaInicio extends Subject implements IModeloVistaInicio {
     }
 
     @Override
-    public void EnviarNombreAvatarConfirmado(String nombre, String avatar) {
+    public void EnviarNombreAvatarConfirmado(int id, String nombre, String avatar) {
         System.out.println("[ModeloVista] → Solicitando UNIRSE_PARTIDA");
         this.jugador = nombre;
         if (modeloJuego != null) {
-            modeloJuego.enviarNombreAvatarConfirmado(nombre, avatar);
+            modeloJuego.enviarNombreAvatarConfirmado(id, nombre, avatar);
         }
     }
 
@@ -145,17 +146,20 @@ public class ModeloVistaInicio extends Subject implements IModeloVistaInicio {
     }
 
     @Override
-    public void abrirPantallaConfig() {
-        pantallaAvatar.setVisible(false);
+    public void abrirPantallaConfig(int id) {
+        pantallaAvatar.setId(id); pantallaAvatar.setVisible(false);
         pantallaLobby.setVisible(false);
         pantallaConfig.setVisible(true);
+        MenuPrincipal.setVisible(false);
+        
+        
     }
 
     @Override
-    public void abrirPantallaAvatar() {
+    public void abrirPantallaAvatar(int id) {
         pantallaConfig.setVisible(false);
         pantallaLobby.setVisible(false);
-        pantallaAvatar.setVisible(true);
+        pantallaAvatar.setId(id); pantallaAvatar.setVisible(true);
     }
 
     public JPantallaConfigurarPartida getPantallaConfig() {
@@ -185,7 +189,7 @@ public class ModeloVistaInicio extends Subject implements IModeloVistaInicio {
 
         // ========== 2) MOSTRAR SELECCION DE AVATAR ==========
         if (controlador != null) {
-            abrirPantallaAvatar();
+            abrirPantallaAvatar(id);
         }
     }
 
@@ -215,4 +219,14 @@ public class ModeloVistaInicio extends Subject implements IModeloVistaInicio {
     public void addObserverCambioMVC(IObserverCambioMVCInicio o) {
         observersCambioMVC.add(o);
     }
+    
+    @Override
+    public void abrirPantallaMenu(int id) {
+        pantallaAvatar.setVisible(false);
+        pantallaLobby.setVisible(false);
+        pantallaConfig.setVisible(false);
+        MenuPrincipal.setVisible(true);
+        this.id = id;
+    }
+
 }

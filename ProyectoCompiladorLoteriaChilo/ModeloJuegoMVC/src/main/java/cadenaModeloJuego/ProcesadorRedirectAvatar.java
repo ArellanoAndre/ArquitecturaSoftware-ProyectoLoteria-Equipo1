@@ -24,7 +24,8 @@ public class ProcesadorRedirectAvatar implements IModeloChain{
     public void procesar(String tipoEvento, JSONObject datos, IModeloJuego modeloJuego) {
         if ("SELECCION_AVATAR".equals(tipoEvento)) {
             if (!modeloJuego.isRegistrado()) {
-                modeloJuego.abrirPantallaAvatar();
+                 int id = datos.optInt("ID", -1);
+                modeloJuego.abrirPantallaAvatar(id);
             }
         } else if (siguiente != null) {
             siguiente.procesar(tipoEvento, datos, modeloJuego);

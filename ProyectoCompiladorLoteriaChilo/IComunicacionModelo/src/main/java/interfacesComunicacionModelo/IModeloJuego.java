@@ -15,7 +15,7 @@ import org.json.JSONObject;
  */
 public interface IModeloJuego {
 
-    void enviarNombreAvatarConfirmado(String nombre, String avatar);
+    void enviarNombreAvatarConfirmado(int id, String nombre, String avatar);
     
     void enviarTarjetaSeleccionada(String tarjetaRuta);
 
@@ -39,9 +39,12 @@ public interface IModeloJuego {
 
     void enviarEventoJugar();
 
-    void abrirPantallaConfig();
+    void abrirPantallaConfig(int id);
 
-    void abrirPantallaAvatar();
+    void abrirPantallaAvatar(int id);
+    
+    public void AsignarID();
+    public void guardarIDAsignado(int idJugador) ;
 
     public void enviarEventoConfigurarPartida(String dificultad, int numJugadores,
             int puntuacionMax,
@@ -70,4 +73,8 @@ public interface IModeloJuego {
     public boolean isHost();
     
     public void setHost(boolean host);
+    
+     int ObtenerIDJugadorPrincipal();
+     
+     public IJugador getJugadorPrincipal();
 }

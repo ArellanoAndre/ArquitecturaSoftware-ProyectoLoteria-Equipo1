@@ -40,18 +40,24 @@ public class ControlIModeloVista implements IControlVistaMVC_Inicio {
     }
 
     @Override
-    public void abrirPantallaConfig() {
-        modeloVista.abrirPantallaConfig();
+    public void abrirPantallaConfig(int id) {
+        modeloVista.abrirPantallaConfig(id);
     }
 
     @Override
-    public void abrirPantallaAvatar() {
-        modeloVista.abrirPantallaAvatar();
+    public void abrirPantallaAvatar(int id) {
+        modeloVista.abrirPantallaAvatar(id);
     }
 
     @Override
     public void cambiarMVC() {
         modeloVista.notificarCambioMVC();
+    }
+    
+    @Override
+    public void abrirPantallaMenu(int idJugador) {
+        modeloVista.abrirPantallaMenu(idJugador);
+        
     }
 
 }

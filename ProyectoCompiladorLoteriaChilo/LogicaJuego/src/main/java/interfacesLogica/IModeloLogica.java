@@ -22,16 +22,16 @@ public interface IModeloLogica {
 
     void notificarGanador(String nombreGanador);
 
-    void enviarConfirmacionReglas(
+     public void enviarConfirmacionReglas(
             String dificultad,
-            int puntuacionMaxima,
+            int numRondas,
             List<Jugador> jugadores,
             int numJugadores,
-            List<String> tarjetas);
+            List<String> tarjetas,int id);
 
-    void enviarAbrirPantallaConfig();
+    void enviarAbrirPantallaConfig(int idJugador);
 
-    void enviarAbrirPantallaSeleccionAvatar();
+    void enviarAbrirPantallaSeleccionAvatar(int idJugador);
 
     void EnviarEventoIniciarSiguienteRonda();
 
@@ -44,4 +44,6 @@ public interface IModeloLogica {
     void enviarEventoCambiarMVC();
     
     void enviarTarjetaAsignada(int idJugador, String rutaTarjeta);
+
+    public void enviarIDAsignadoAlCliente(int nuevoID);
 }

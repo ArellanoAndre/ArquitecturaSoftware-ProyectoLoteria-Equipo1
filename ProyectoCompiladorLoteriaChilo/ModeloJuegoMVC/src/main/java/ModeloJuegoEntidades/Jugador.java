@@ -9,7 +9,7 @@ import interfacesEntidades.ITarjeta;
  */
 public class Jugador implements IJugador {
 
-    private int numJugador;
+    private  int numJugador;
     private String nombre;
     private double puntaje;
     private ITarjeta tarjeta;

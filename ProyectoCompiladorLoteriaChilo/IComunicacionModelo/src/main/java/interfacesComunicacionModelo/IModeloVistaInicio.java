@@ -16,7 +16,7 @@ public interface IModeloVistaInicio {
 
     void actualizarConfiguracion(IConfiguracionPartida config);
 
-    public void EnviarNombreAvatarConfirmado(String nombre, String avatar);
+    public void EnviarNombreAvatarConfirmado(int id, String nombre, String avatar);
     
     public void enviarTarjetaSeleccionada(String tarjetaRuta);
 
@@ -34,11 +34,11 @@ public interface IModeloVistaInicio {
 
     void solicitarIniciarJuego();
 
-    void abrirPantallaConfig();
+    void abrirPantallaConfig(int id);
 
     void setPantallaConfig(JFrame pantallaConfig);
 
-    void abrirPantallaAvatar();
+    void abrirPantallaAvatar(int id);
 
     void setMenuPrincipal(JFrame MenuPrincipal);
 
@@ -51,4 +51,5 @@ public interface IModeloVistaInicio {
     
     public void notificarCambioMVC();
 
+    public void abrirPantallaMenu(int id);
 }

@@ -7,11 +7,13 @@ package receptor;
 import InterfacesEventClient.IEvento;
 import InterfacesEventClient.IReceptorEvento;
 import cadenaModeloJuego.IModeloChain;
+import cadenaModeloJuego.ProcesadorAsignarID;
 import cadenaModeloJuego.ProcesadorAsignarTarjeta;
 import cadenaModeloJuego.ProcesadorCambioMVC;
 import cadenaModeloJuego.ProcesadorCartaCantada;
 import cadenaModeloJuego.ProcesadorCasillaSeleccionada;
 import cadenaModeloJuego.ProcesadorConfigurarPartida;
+import cadenaModeloJuego.ProcesadorFiltroJugador;
 import cadenaModeloJuego.ProcesadorFinPartida;
 import cadenaModeloJuego.ProcesadorFinRonda;
 import cadenaModeloJuego.ProcesadorRedirectAvatar;
@@ -35,30 +37,38 @@ public class ReceptorModelo implements IReceptorEvento {
     }
 
     public void armarFiltros(){
-        IModeloChain cartaCantada = new ProcesadorCartaCantada();
-        IModeloChain casillaSeleccionada = new ProcesadorCasillaSeleccionada(); 
-        IModeloChain unirsepartida = new ProcesadorUnirsePartida(); 
-        IModeloChain configurar = new ProcesadorConfigurarPartida();
-        IModeloChain finRonda = new ProcesadorFinRonda();
-        IModeloChain finPartida = new ProcesadorFinPartida();
-        IModeloChain suscripcion = new ProcesadorSuscripcion();
-        IModeloChain cambiarMVC = new ProcesadorCambioMVC();
-        IModeloChain asignarTarjeta = new ProcesadorAsignarTarjeta();
-        IModeloChain redirectAvatar = new ProcesadorRedirectAvatar();
-        
-        cartaCantada.setSiguiente(casillaSeleccionada);
-        casillaSeleccionada.setSiguiente(unirsepartida); 
-        unirsepartida.setSiguiente(configurar);
-        configurar.setSiguiente(finRonda);
-        finRonda.setSiguiente(finPartida);
-        finPartida.setSiguiente(suscripcion);
-        suscripcion.setSiguiente(cambiarMVC);
-        cambiarMVC.setSiguiente(asignarTarjeta);
-        asignarTarjeta.setSiguiente(redirectAvatar);
-        redirectAvatar.setSiguiente(null);
-              
-        this.cadenaProcesamiento = cartaCantada;
-    }
+    IModeloChain cartaCantada = new ProcesadorCartaCantada();
+    IModeloChain casillaSeleccionada = new ProcesadorCasillaSeleccionada(); 
+    IModeloChain unirsepartida = new ProcesadorUnirsePartida(); 
+    IModeloChain configurar = new ProcesadorConfigurarPartida();
+    IModeloChain finRonda = new ProcesadorFinRonda();
+    IModeloChain finPartida = new ProcesadorFinPartida();
+    IModeloChain suscripcion = new ProcesadorSuscripcion();
+    IModeloChain cambiarMVC = new ProcesadorCambioMVC();
+    IModeloChain asignarTarjeta = new ProcesadorAsignarTarjeta();
+    IModeloChain redirectAvatar = new ProcesadorRedirectAvatar(); 
+    IModeloChain filtrojugadorid = new ProcesadorFiltroJugador(); 
+    IModeloChain asignarid = new ProcesadorAsignarID();
+
+    // Construcción correcta
+    filtrojugadorid.setSiguiente(asignarid);
+    asignarid.setSiguiente(cartaCantada);
+    cartaCantada.setSiguiente(casillaSeleccionada);
+    casillaSeleccionada.setSiguiente(unirsepartida); 
+    unirsepartida.setSiguiente(configurar);
+    configurar.setSiguiente(finRonda);
+    finRonda.setSiguiente(finPartida);
+    finPartida.setSiguiente(suscripcion);
+    suscripcion.setSiguiente(cambiarMVC);
+    cambiarMVC.setSiguiente(asignarTarjeta);
+    asignarTarjeta.setSiguiente(redirectAvatar);
+    redirectAvatar.setSiguiente(null);
+
+    // ⛔ ESTO ESTABA MAL → asignarid
+    // ❗ ESTA ES LA CORRECCIÓN
+    this.cadenaProcesamiento = filtrojugadorid;
+}
+
     
     @Override
     public void manejar(IEvento evento) {

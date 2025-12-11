@@ -96,11 +96,11 @@ public class ControladorInicio implements IControladorInicio {
     }
 
     @Override
-    public void EnviarNombreAvatarConfirmado(String nombre, String avatar) {
+    public void EnviarNombreAvatarConfirmado(int id, String nombre, String avatar) {
         System.out.println("[ControlInicio] → Enviando UNIRSE_PARTIDA");
 
         if (modeloVista != null) {
-            modeloVista.EnviarNombreAvatarConfirmado(nombre, avatar);
+            modeloVista.EnviarNombreAvatarConfirmado(id, nombre, avatar);
         }
     }
     

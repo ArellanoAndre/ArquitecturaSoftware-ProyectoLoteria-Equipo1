@@ -27,6 +27,7 @@ public class JFrameSeleccionAvatar extends JFrame  implements IObserver {
     private String Avatar;
     private List<String> rutasAvatares = new ArrayList<>();
     private IModeloVistaInicio modeloVista;
+    private int id;
 
 
 
@@ -258,7 +259,7 @@ public class JFrameSeleccionAvatar extends JFrame  implements IObserver {
 
     // Si todo está correcto → llamar al controlador
     if (controlador != null) {
-        controlador.EnviarNombreAvatarConfirmado(nombre, avatar);
+        controlador.EnviarNombreAvatarConfirmado(id, nombre, avatar);
     } else {
         System.err.println("[ERROR] controlador es null en JFrameSeleccionAvatar");
     }
@@ -369,6 +370,16 @@ private void marcarSeleccion(JLabel seleccionado) {
     @Override
     public void update() {
         System.out.println("");    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirmar;

@@ -21,24 +21,27 @@ public class ProcesarJugar implements IProcesadorEvento {
     }
 
     @Override
-    public void procesar(String tipoEvento, JSONObject datos, LogicaDeJuego logica) {
+public void procesar(String tipoEvento, JSONObject datos, LogicaDeJuego logica) {
 
-        if ("JUGAR".equals(tipoEvento)) {
+    if ("JUGAR".equals(tipoEvento)) {
 
-            System.out.println("[FiltroJugar] Evento JUGAR recibido");
+        int idJugador = datos.optInt("ID", -1);
 
-            if (!logica.estaConfiguradaPartida()) {
-                System.out.println("[FiltroJugar] → La partida NO está configurada.");
-                logica.enviarAbrirPantallaConfig();
-            } else {
-                System.out.println("[FiltroJugar] → La partida YA está configurada.");
-                logica.enviarAbrirPantallaSeleccionAvatar();
-            }
+        System.out.println("[FiltroJugar] Evento JUGAR recibido de jugador ID = " + idJugador);
 
-            return;
+        if (!logica.estaConfiguradaPartida()) {
+            System.out.println("[FiltroJugar] → La partida NO está configurada.");
+            logica.enviarAbrirPantallaConfig(idJugador);  // ← ahora recibe ID
+        } else {
+            System.out.println("[FiltroJugar] → La partida YA está configurada.");
+            logica.enviarAbrirPantallaSeleccionAvatar(idJugador); // ← recibe ID
         }
 
-        if (siguiente != null)
-            siguiente.procesar(tipoEvento, datos, logica);
+        return;
     }
+
+    if (siguiente != null)
+        siguiente.procesar(tipoEvento, datos, logica);
+}
+
 }

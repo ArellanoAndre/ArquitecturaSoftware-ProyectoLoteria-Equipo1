@@ -11,7 +11,7 @@ public interface IControladorInicio {
 
     void onSalir();
 
-    void EnviarNombreAvatarConfirmado(String nombre, String avatar);
+    void EnviarNombreAvatarConfirmado(int id, String nombre, String avatar);
 
     void onIniciarLobby();
 

@@ -33,6 +33,7 @@ public class ProcesadorConfigurarPartida implements IProcesadorEvento {
             String dificultad = datos.getString("Dificultad");
             int numJugadores = datos.getInt("NumeroJugadores");
             int numRondas = datos.getInt("NumeroRondas");
+             int id = datos.optInt("ID", -1);
 
             // Puntuaciones
             JSONObject puntuacionesJSON = datos.getJSONObject("Puntuaciones");
@@ -53,7 +54,7 @@ public class ProcesadorConfigurarPartida implements IProcesadorEvento {
                     dificultad,
                     numJugadores,
                     numRondas,
-                    puntuacionesMap
+                    puntuacionesMap,id
             );
 
             return;

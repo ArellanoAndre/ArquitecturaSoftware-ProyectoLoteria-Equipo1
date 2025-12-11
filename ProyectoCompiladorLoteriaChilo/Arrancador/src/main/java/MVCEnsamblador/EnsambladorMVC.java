@@ -91,7 +91,7 @@ public class EnsambladorMVC {
             modeloVistaInicio.addObserver(avatar);
 
             // Mostrar pantalla inicio
-            menu.setVisible(true);
+            //menu.setVisible(true);
 
             // ===============================
             // Infraestructura MVC Juego
@@ -141,6 +141,7 @@ public class EnsambladorMVC {
 
             System.out.println("[CLIENTE] Flujo iniciado. Usa el botón JUGAR.");
             modeloJuego.suscribirseJuegoOut();
+            modeloJuego.AsignarID();
         });
     }
 

@@ -23,7 +23,8 @@ public class ProcesadorConfigurarPartida implements IModeloChain {
     @Override
     public void procesar(String tipoEvento, JSONObject datos, IModeloJuego modeloJuego) {
         if ("CONFIGURAR_PARTIDA".equals(tipoEvento)) {
-            modeloJuego.abrirPantallaConfig();
+             int id = datos.optInt("ID", -1);
+            modeloJuego.abrirPantallaConfig(id);
         } else if (siguiente != null) {
             siguiente.procesar(tipoEvento, datos, modeloJuego);
         } else {

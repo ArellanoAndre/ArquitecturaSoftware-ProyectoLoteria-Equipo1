@@ -20,8 +20,8 @@ public interface ILogicaJuego {
     
     boolean estaConfiguradaPartida();
 
-    void enviarAbrirPantallaConfig();
+    void enviarAbrirPantallaConfig(int idJugador);
 
-    void enviarAbrirPantallaSeleccionAvatar();
+    void enviarAbrirPantallaSeleccionAvatar(int idJugador);
 
 }

@@ -13,7 +13,8 @@ import interfacesEntidades.IConfiguracionPartida;
 public interface IControlVistaMVC_Inicio {
     void actualizarPantalla(IConfiguracionPartida configuracion);
      void setConfig(IConfiguracionPartida config);
-      void abrirPantallaConfig();
-      void abrirPantallaAvatar();
+      void abrirPantallaConfig(int id );
+      void abrirPantallaAvatar(int id);
       void cambiarMVC();
+      public void abrirPantallaMenu(int idJugador) ;
 }

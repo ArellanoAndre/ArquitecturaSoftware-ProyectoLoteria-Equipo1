@@ -49,10 +49,15 @@ public class ModeloJuego implements IModeloJuego {
     public void setEmpaquetador(IEnvioEvento empaquetador) {
         this.empaquetador = empaquetador;
     }
+    @Override
+    public int ObtenerIDJugadorPrincipal(){
+    return jugadorPrincipal.getNumJugador();
+    }
 
     public Jugador getJugadorPrincipal() {
         return jugadorPrincipal;
     }
+
 
     public List<IJugador> getJugadoresSecundarios() {
         return jugadoresSecundarios;
@@ -79,6 +84,54 @@ public class ModeloJuego implements IModeloJuego {
 
         System.out.println("[Cliente] Suscripción enviada a Juego-out");
     }
+    
+
+    @Override
+public void AsignarID() {
+
+    System.out.println("[ModeloJuego] → Solicitando ID al Host...");
+
+    try {
+        // Construir JSON del evento
+        JSONObject json = new JSONObject();
+        json.put("TipoEvento", "ASIGNAR_ID");
+
+        // Enviar al Host por Juego-in
+        enviarEventoBroadcast(json.toString(), "Juego-in", "ActualizacionJuego");
+
+        System.out.println("[ModeloJuego] Evento ASIGNAR_ID enviado al Host.");
+
+    } catch (Exception e) {
+        System.err.println("[ModeloJuego] Error enviando ASIGNAR_ID: " + e.getMessage());
+    }
+}
+      
+@Override
+public void guardarIDAsignado(int idJugador) {
+
+    // Si ya tenemos ID → NO reasignar
+    if (jugadorPrincipal != null && jugadorPrincipal.getNumJugador() != 0) {
+        System.out.println("[ModeloJuego] ❌ Ignorado: Ya tenía ID = " 
+                           + jugadorPrincipal.getNumJugador());
+        return; // ← EVITA REASIGNACIÓN
+    }
+
+    System.out.println("[ModeloJuego] → Guardando ID asignado por el Host: " + idJugador);
+
+    // Crear jugador si no existe
+    if (jugadorPrincipal == null) {
+        jugadorPrincipal = new Jugador();
+    }
+
+    // Asignar ID UNA sola vez
+    jugadorPrincipal.setNumJugador(idJugador);
+
+    // Abrir pantalla correspondiente
+    controlVistaInicio.abrirPantallaMenu(idJugador);
+
+    System.out.println("[ModeloJuego] ✔ ID FIJADO = " + jugadorPrincipal.getNumJugador());
+}
+
 
     // Control Vista Seccion ---------
     //-------------------------------------------------------------------------------------------------------------------------------------
@@ -216,16 +269,14 @@ public class ModeloJuego implements IModeloJuego {
     }
 
     @Override
-    public void abrirPantallaConfig() {
-        if (host){
-        controlVistaInicio.abrirPantallaConfig();
-        }
+    public void abrirPantallaConfig(int id) {
+        controlVistaInicio.abrirPantallaConfig(id);
     }
 
     @Override
-    public void abrirPantallaAvatar() {
+    public void abrirPantallaAvatar(int id) {
         if (!registrado) {
-        controlVistaInicio.abrirPantallaAvatar();
+        controlVistaInicio.abrirPantallaAvatar(id);
         registrado = true;
         }
     }
@@ -305,7 +356,7 @@ public class ModeloJuego implements IModeloJuego {
     }
 
     @Override
-    public void enviarNombreAvatarConfirmado(String nombre, String avatar) {
+    public void enviarNombreAvatarConfirmado(int id, String nombre, String avatar) {
 
         System.out.println("[ModeloJuego] → Enviando evento UNIRSE_PARTIDA");
 
@@ -313,7 +364,7 @@ public class ModeloJuego implements IModeloJuego {
         jugadorP.setNombre(nombre);
         jugadorP.setAvatar(avatar);
 
-        jugadorPrincipal = jugadorP;
+         jugadorP.setNumJugador(id);
 
         try {
             // 1) Construir JSON del evento
@@ -349,23 +400,23 @@ public class ModeloJuego implements IModeloJuego {
     }
 
     @Override
-    public void enviarEventoJugar() {
-        System.out.println("[ModeloJuego] → Enviando evento JUGAR");
+public void enviarEventoJugar() {
+    System.out.println("[ModeloJuego] → Enviando evento JUGAR");
 
-        try {
-            // Construir JSON
-            JSONObject json = new JSONObject();
-            json.put("TipoEvento", "JUGAR");
+    try {
+        JSONObject json = new JSONObject();
+        json.put("TipoEvento", "JUGAR");
+        json.put("IdJugador", jugadorPrincipal.getNumJugador()); // ← ID limpio
 
-            // Enviar usando el método centralizado
-            enviarEventoBroadcast(json.toString(), "Juego-in", "ActualizacionJuego");
+        enviarEventoBroadcast(json.toString(), "Juego-in", "ActualizacionJuego");
 
-            System.out.println("[ModeloJuego] JSON enviado: " + json.toString());
+        System.out.println("[ModeloJuego] JSON enviado: " + json.toString());
 
-        } catch (Exception e) {
-            System.err.println("[ModeloJuego] Error enviando JUGAR: " + e.getMessage());
-        }
+    } catch (Exception e) {
+        System.err.println("[ModeloJuego] Error enviando JUGAR: " + e.getMessage());
     }
+}
+
 
     @Override
     public void enviarEventoConfigurarPartida(String dificultad, int numJugadores,
@@ -380,7 +431,7 @@ public class ModeloJuego implements IModeloJuego {
             json.put("Dificultad", dificultad);
             json.put("NumeroJugadores", numJugadores);
             json.put("NumeroRondas", numRondas);
-
+            
             // Puntuaciones (Chorro, Cruz, Llena, etc.)
             JSONObject jsonPunts = new JSONObject();
             for (Map.Entry<String, Integer> entry : puntuaciones.entrySet()) {
@@ -447,22 +498,40 @@ public class ModeloJuego implements IModeloJuego {
         }
     }
 
-    @Override
-    public void enviarEventoBroadcast(String jsonPayload, String topico, String Evento) { // para no repetir codigo
+@Override
+public void enviarEventoBroadcast(String jsonPayload, String topico, String Evento) {
 
-        if (empaquetador == null) {
-            return;
+    if (empaquetador == null) {
+        return;
+    }
+
+    try {
+        // Convertimos el JSON original
+        JSONObject json = new JSONObject(jsonPayload);
+
+        // Agregamos el ID del jugador SI YA EXISTE
+        if (jugadorPrincipal != null && jugadorPrincipal.getNumJugador() > 0) {
+            json.put("ID", jugadorPrincipal.getNumJugador());
+        } else {
+            System.out.println("[ModeloJuego] Advertencia: el jugador aún NO tiene ID asignado.");
         }
 
+        // Construimos el evento
         IEvento evento = empaquetador.crearEvento();
         evento.setTopico(topico);
         evento.setEvento(Evento);
-        evento.setJSON(jsonPayload);
+        evento.setJSON(json.toString()); // JSON final con IdJugador agregado
 
+        // Enviar al broker
         empaquetador.enviarEvento(evento);
-        System.out.println("[ModeloLogica-Host] Enviado evento: " + jsonPayload);
 
+        System.out.println("[ModeloJuego] Enviado evento con ID incluido: " + json.toString());
+
+    } catch (Exception e) {
+        System.err.println("[ModeloJuego] ERROR en enviarEventoBroadcast: " + e.getMessage());
     }
+}
+
 
     public void settearJugadores(List<IJugador> listaJugadores) {
         for (IJugador iJugador : listaJugadores) {

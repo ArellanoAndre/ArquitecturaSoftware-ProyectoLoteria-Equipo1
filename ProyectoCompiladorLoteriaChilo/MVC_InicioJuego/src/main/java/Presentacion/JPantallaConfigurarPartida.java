@@ -15,6 +15,7 @@ public class JPantallaConfigurarPartida extends JFrame {
     private ControladorInicio controlador;
     private final ButtonGroup grupoDificultad = new ButtonGroup();
     private final ButtonGroup grupoJugadores = new ButtonGroup();
+    private int id;
 
     /**
      * Creates new form JPantallaConfigurarPartida
@@ -654,6 +655,14 @@ public class JPantallaConfigurarPartida extends JFrame {
                 && getNumeroJugadoresSeleccionado() != null
                 && getNumRondas() != null
                 && getPuntuaciones() != null;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
 
