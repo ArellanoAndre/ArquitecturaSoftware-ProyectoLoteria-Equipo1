@@ -20,6 +20,10 @@ public class Jugador {
      * @param tarjeta Tarjeta asignada al jugador.
      * @param numJugador Número identificador del jugador.
      */
+    
+    public Jugador() {
+    }
+
     public Jugador(String nombre, Tarjeta tarjeta, int numJugador) {
         this.nombre = nombre;
         this.tarjeta = tarjeta;
@@ -34,8 +38,12 @@ public class Jugador {
         this.tarjeta = tarjeta;
         this.avatar = avatar;
     }
-    
-    
+
+    public Jugador(int numJugador, String nombre, String avatar) {
+        this.numJugador = numJugador;
+        this.nombre = nombre;
+        this.avatar = avatar;
+    }
 
     /**
      * @return Nombre del jugador.
@@ -107,12 +115,6 @@ public class Jugador {
         this.tarjeta = tarjeta;
     }
 
-    public Jugador(int numJugador, String nombre, String avatar) {
-        this.numJugador = numJugador;
-        this.nombre = nombre;
-        this.avatar = avatar;
-    }
-
     public String getAvatar() {
         return avatar;
     }
@@ -120,6 +122,5 @@ public class Jugador {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
-    
 
 }

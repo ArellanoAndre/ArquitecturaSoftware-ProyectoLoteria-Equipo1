@@ -271,7 +271,7 @@ public class LogicaDeJuego implements ILogicaJuego {
         this.dificultad = dificultad;
     }
 
-    public void agregarJugador(String nombre, String avatar) {
+    public void settearAvatar(String nombre, String avatar) {
 
         int id = jugadores.size() + 1;
 
@@ -424,6 +424,7 @@ public class LogicaDeJuego implements ILogicaJuego {
         jugador.setTarjeta(tarjeta);
 
         System.out.println("✔ Tarjeta asignada al jugador " + idJugador + ": " + rutaTarjeta);
+        modeloLogica.enviarTarjetaAsignada(idJugador, rutaTarjeta);
     }
 
     public void setJugadores(List<Jugador> jugadores) {
@@ -555,4 +556,7 @@ public class LogicaDeJuego implements ILogicaJuego {
                 .orElse(null);
     }
 
+    public void cambioMVC() {
+        modeloLogica.enviarEventoCambiarMVC();
+    }
 }

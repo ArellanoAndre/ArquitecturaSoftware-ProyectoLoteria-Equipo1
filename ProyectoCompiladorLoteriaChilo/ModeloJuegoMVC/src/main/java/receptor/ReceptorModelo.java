@@ -7,11 +7,14 @@ package receptor;
 import InterfacesEventClient.IEvento;
 import InterfacesEventClient.IReceptorEvento;
 import cadenaModeloJuego.IModeloChain;
+import cadenaModeloJuego.ProcesadorAsignarTarjeta;
+import cadenaModeloJuego.ProcesadorCambioMVC;
 import cadenaModeloJuego.ProcesadorCartaCantada;
 import cadenaModeloJuego.ProcesadorCasillaSeleccionada;
 import cadenaModeloJuego.ProcesadorConfigurarPartida;
 import cadenaModeloJuego.ProcesadorFinPartida;
 import cadenaModeloJuego.ProcesadorFinRonda;
+import cadenaModeloJuego.ProcesadorRedirectAvatar;
 import cadenaModeloJuego.ProcesadorSuscripcion;
 import cadenaModeloJuego.ProcesadorUnirsePartida;
 import interfacesComunicacionModelo.IModeloJuego;
@@ -39,6 +42,9 @@ public class ReceptorModelo implements IReceptorEvento {
         IModeloChain finRonda = new ProcesadorFinRonda();
         IModeloChain finPartida = new ProcesadorFinPartida();
         IModeloChain suscripcion = new ProcesadorSuscripcion();
+        IModeloChain cambiarMVC = new ProcesadorCambioMVC();
+        IModeloChain asignarTarjeta = new ProcesadorAsignarTarjeta();
+        IModeloChain redirectAvatar = new ProcesadorRedirectAvatar();
         
         cartaCantada.setSiguiente(casillaSeleccionada);
         casillaSeleccionada.setSiguiente(unirsepartida); 
@@ -46,7 +52,10 @@ public class ReceptorModelo implements IReceptorEvento {
         configurar.setSiguiente(finRonda);
         finRonda.setSiguiente(finPartida);
         finPartida.setSiguiente(suscripcion);
-        suscripcion.setSiguiente(null);
+        suscripcion.setSiguiente(cambiarMVC);
+        cambiarMVC.setSiguiente(asignarTarjeta);
+        asignarTarjeta.setSiguiente(redirectAvatar);
+        redirectAvatar.setSiguiente(null);
               
         this.cadenaProcesamiento = cartaCantada;
     }
@@ -73,6 +82,7 @@ public class ReceptorModelo implements IReceptorEvento {
 
         } catch (Exception e) {
             System.err.println("[ModeloJuegoMock] ERROR manejando evento: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

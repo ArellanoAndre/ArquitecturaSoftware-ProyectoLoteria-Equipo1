@@ -16,6 +16,8 @@ import org.json.JSONObject;
 public interface IModeloJuego {
 
     void enviarNombreAvatarConfirmado(String nombre, String avatar);
+    
+    void enviarTarjetaSeleccionada(String tarjetaRuta);
 
     void enviarEventoIniciarRonda();
 
@@ -54,5 +56,18 @@ public interface IModeloJuego {
     void enviarEventoIniciarSiguienteRonda();
     
     void limpiarEntidadesJuego();
+    
+    void enviarEventoCambiarMVC();
 
+    void cambiarMVC();
+    
+    void asignarTarjeta(JSONObject datos);
+    
+    boolean isRegistrado();
+    
+    void setRegistrado(boolean registrado);
+    
+    public boolean isHost();
+    
+    public void setHost(boolean host);
 }

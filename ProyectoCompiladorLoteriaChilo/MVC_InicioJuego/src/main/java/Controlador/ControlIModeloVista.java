@@ -38,15 +38,20 @@ public class ControlIModeloVista implements IControlVistaMVC_Inicio {
 
         modeloVista.actualizarConfiguracion(this.config);
     }
-    
-    @Override
-public void abrirPantallaConfig() {
-    modeloVista.abrirPantallaConfig();
-}
 
-@Override
-public void abrirPantallaAvatar() {
-    modeloVista.abrirPantallaAvatar();
-}
+    @Override
+    public void abrirPantallaConfig() {
+        modeloVista.abrirPantallaConfig();
+    }
+
+    @Override
+    public void abrirPantallaAvatar() {
+        modeloVista.abrirPantallaAvatar();
+    }
+
+    @Override
+    public void cambiarMVC() {
+        modeloVista.notificarCambioMVC();
+    }
 
 }

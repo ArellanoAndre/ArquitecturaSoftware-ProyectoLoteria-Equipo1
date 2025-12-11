@@ -4,7 +4,7 @@
  */
 package Presentacion;
 
-import ModeloVista.ModeloVista;
+import ModeloVista.ModeloVistaJuego;
 import ModeloVista.entidadesVista.JugadorVista;
 import Interfaces.IModeloVista;
 import Interfaces.Observer;

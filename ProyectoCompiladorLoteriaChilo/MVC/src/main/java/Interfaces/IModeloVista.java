@@ -82,12 +82,15 @@ public interface IModeloVista {
      */
     void addObserver(Observer o);
 
+    void addObserverCambioMVC(IObserverCambioMVCJuego o);
+    
     /**
      * Notifica a todos los observadores que hubo un cambio para que actualicen
      * su interfaz.
      */
     void notificar();
     
+    public void notificarCambioMVC();
     
     // --- metodos para el estado de las rondas ---
     void setDatosFinRonda(int ronda, String ganador);
@@ -108,6 +111,6 @@ public interface IModeloVista {
     // --- PUENTES DE COMUNICACIÓN (Salida) ---
     void solicitarEnvioCantarLoteria();
     void solicitarEnvioSiguienteRonda();
-    
+    void cambioMVC();
     
 }

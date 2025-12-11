@@ -14,11 +14,12 @@ import org.json.JSONObject;
 import procesarCadena.IProcesadorEvento;
 import procesarCadena.ProcesadorConfigurarPartida;
 import procesarCadena.ProcesadorIniciar;
+import procesarCadena.ProcesadorIniciarPartida;
 import procesarCadena.ProcesadorIniciarRonda;
 import procesarCadena.ProcesadorInicioSiguienteRonda;
 import procesarCadena.ProcesadorIntentoLoteria;
 import procesarCadena.ProcesadorMarcar;
-import procesarCadena.ProcesadorUnirse;
+import procesarCadena.ProcesadorSetTarjeta;
 import procesarCadena.ProcesadorUnirsePartida;
 import procesarCadena.ProcesarJugar;
 
@@ -33,23 +34,25 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         // armar cadena de responsabilidad aqui
         IProcesadorEvento iniciarRonda = new ProcesadorIniciarRonda();
         IProcesadorEvento marcar = new ProcesadorMarcar();
-        IProcesadorEvento unirse = new ProcesadorUnirse();
         IProcesadorEvento iniciar = new ProcesadorIniciar();
         IProcesadorEvento unirsePartida = new ProcesadorUnirsePartida();
         IProcesadorEvento Jugar = new ProcesarJugar();
         IProcesadorEvento configurar = new ProcesadorConfigurarPartida();
         IProcesadorEvento intentoLoteria = new ProcesadorIntentoLoteria();
         IProcesadorEvento inicioSiguienteRonda = new ProcesadorInicioSiguienteRonda();
+        IProcesadorEvento iniciarPartida = new ProcesadorIniciarPartida();
+        IProcesadorEvento settearTarjeta = new ProcesadorSetTarjeta();
 
         // Conectamos los eslabones
         iniciarRonda.setSiguiente(marcar);
-        marcar.setSiguiente(unirse);
-        unirse.setSiguiente(iniciar);
+        marcar.setSiguiente(iniciar);
         iniciar.setSiguiente(unirsePartida);
         unirsePartida.setSiguiente(Jugar);
         Jugar.setSiguiente(configurar);
         configurar.setSiguiente(intentoLoteria);
         intentoLoteria.setSiguiente(inicioSiguienteRonda);
+        inicioSiguienteRonda.setSiguiente(iniciarPartida);
+        iniciarPartida.setSiguiente(settearTarjeta);
         this.cadenaProcesamiento = iniciarRonda; // Guardamos la referencia al primero
     }
 
@@ -116,29 +119,6 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
 
         enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego");
 
-    }
-
-    @Override
-    public void manejar(IEvento evento) {
-
-        String jsonPayload = evento.getJSON();
-        System.out.println("ModeloLogica: Evento recibido: " + jsonPayload);
-
-        if (logicaDeJuego == null) {
-            System.out.println("logicajuego nula");
-            return;
-        }
-
-        try {
-            JSONObject peticion = new JSONObject(jsonPayload);
-
-            if (peticion.has("TipoEvento")) {
-                String tipo = peticion.getString("TipoEvento");
-                cadenaProcesamiento.procesar(tipo, peticion, logicaDeJuego);
-            }
-        } catch (Exception e) {
-            System.err.println("Error procesando entrada" + e.getMessage());
-        }
     }
 
     @Override
@@ -211,7 +191,7 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
     public void enviarAbrirPantallaSeleccionAvatar() {
 
         JSONObject json = new JSONObject();
-        json.put("TipoEvento", "UNIRSE_PARTIDA");
+        json.put("TipoEvento", "SELECCION_AVATAR");
 
         enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego");
 
@@ -301,5 +281,49 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         System.out.println("[ModeloLogica-Host] Enviado evento: " + jsonPayload);
 
     }
+    
+    @Override
+    public void enviarEventoCambiarMVC(){
+        JSONObject json = new JSONObject();
+        json.put("TipoEvento", "CAMBIAR_MVC");
+        
+        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego");
+    }
+    
+    @Override
+    public void enviarTarjetaAsignada(int idJugador, String rutaTarjeta) {
+        JSONObject json = new JSONObject();
+        json.put("TipoEvento", "TARJETA_ASIGNADA");
+        json.put("idJugador", idJugador);
+        json.put("rutaTarjeta", rutaTarjeta);
+        
+        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego");
+        
+    }
+    
+    @Override
+    public void manejar(IEvento evento) {
+
+        String jsonPayload = evento.getJSON();
+        System.out.println("ModeloLogica: Evento recibido: " + jsonPayload);
+
+        if (logicaDeJuego == null) {
+            System.out.println("logicajuego nula");
+            return;
+        }
+
+        try {
+            JSONObject peticion = new JSONObject(jsonPayload);
+
+            if (peticion.has("TipoEvento")) {
+                String tipo = peticion.getString("TipoEvento");
+                cadenaProcesamiento.procesar(tipo, peticion, logicaDeJuego);
+            }
+        } catch (Exception e) {
+            System.err.println("Error procesando entrada" + e.getMessage());
+        }
+    }
+
+    
 
 }

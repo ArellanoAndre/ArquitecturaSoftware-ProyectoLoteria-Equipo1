@@ -55,5 +55,7 @@ public interface IControlVistaMVC_Juego {
     void solicitarIntentoLoteria();
 
     void solicitarSiguienteRonda();
+    
+    public void cambiarMVC();
 
 }

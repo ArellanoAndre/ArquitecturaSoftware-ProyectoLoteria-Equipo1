@@ -1,6 +1,6 @@
 package Presentacion;
 
-import ModeloVista.ModeloVista;
+import ModeloVista.ModeloVistaJuego;
 import ModeloVista.entidadesVista.JugadorVista;
 import Interfaces.Observer;
 import Presentacion.utilidades.GridPanel;
@@ -21,16 +21,16 @@ public class JPanelJugadorSecundario extends JPanel implements Observer {
     private JLabel lblAvatar;               // Etiqueta con el avatar del jugador
     private JPanel[] panelCasillasGrid;     // Arreglo de paneles que representan las casillas de la tarjeta
     private JugadorVista jugador;           // Jugador asociado a este panel
-    private ModeloVista modeloVista;        // ModeloVista del juego
+    private ModeloVistaJuego modeloVista;        // ModeloVistaJuego del juego
 
     /**
      * Constructor que inicializa el panel del jugador secundario y lo registra
      * como observador.
      *
      * @param jugador JugadorVista del jugador secundario.
-     * @param modeloVista ModeloVista del juego.
+     * @param modeloVista ModeloVistaJuego del juego.
      */
-    public JPanelJugadorSecundario(JugadorVista jugador, ModeloVista modeloVista) {
+    public JPanelJugadorSecundario(JugadorVista jugador, ModeloVistaJuego modeloVista) {
         this.jugador = jugador;
         this.modeloVista = modeloVista;
         this.modeloVista.addObserver(this);

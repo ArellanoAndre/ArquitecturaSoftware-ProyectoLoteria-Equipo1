@@ -1,7 +1,7 @@
 
 import Controlador.ControlSeleccionarCarta;
 import Controlador.ControlVista;
-import ModeloVista.ModeloVista;
+import ModeloVista.ModeloVistaJuego;
 import Presentacion.JPantallaJuego;
 import javax.swing.*;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class main {
 //            jugadores.add(jugador2);
 //
 //            
-//            ModeloVista modeloVista = new ModeloVista();
+//            ModeloVistaJuego modeloVista = new ModeloVistaJuego();
 //            ControlVista controlVista = new ControlVista(modeloVista);
 //            
 //            //Instancia de modeloJuego
@@ -58,7 +58,7 @@ public class main {
 //            jugadores.add(jugador1);
 //
 //            // Crear MVC principal
-//            ModeloVista modeloVista = new ModeloVista();
+//            ModeloVistaJuego modeloVista = new ModeloVistaJuego();
 //            ControlVista controlVista = new ControlVista(modeloVista);
 //            LogicaJuego modeloJuego = new LogicaJuego(controlVista, jugador1, jugadores);
 //            modeloVista.setModeloJuego(modeloJuego);

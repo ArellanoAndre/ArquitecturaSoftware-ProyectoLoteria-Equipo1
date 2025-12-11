@@ -12,8 +12,8 @@ import java.util.Map;
 
 public class ControladorInicio implements IControladorInicio {
 
-    private  IModeloVistaInicio modeloVista = null;
-    private  IModeloJuego modeloJuego = null;
+    private IModeloVistaInicio modeloVista = null;
+    private IModeloJuego modeloJuego = null;
     private JPantallaMenuPrincipal inicio;
     private JPantallaConfigurarPartida pantallaConfig;
     private JFrameSeleccionAvatar seleccionAvatar;
@@ -26,7 +26,7 @@ public class ControladorInicio implements IControladorInicio {
 
     public ControladorInicio(IModeloJuego modeloJuego) {
         this.modeloJuego = modeloJuego;
-        
+
     }
 
     public void setModeloJuego(IModeloJuego modeloJuego) {
@@ -43,10 +43,9 @@ public class ControladorInicio implements IControladorInicio {
         this.inicio = inicio;
     }
 
-
     @Override
     public void onConfigChanged(String dificultad, Integer numeroJugadores, Integer puntuacionMaxima,
-          Map<String, Integer> puntuaciones) {
+            Map<String, Integer> puntuaciones) {
 //        modeloVista.setDificultad(dificultad);
 //        modeloVista.setNumeroJugadores(numeroJugadores);
 //        modeloVista.setPuntuacionMaxima(puntuacionMaxima);
@@ -56,7 +55,7 @@ public class ControladorInicio implements IControladorInicio {
 
     @Override
     public void onConfirmarConfig(String dificultad, int numJugadores, int numRondas, Map<String, Integer> puntuaciones) {
-       
+
         if (dificultad == null) {
             pantallaConfig.mostrarError("Selecciona un nivel de dificultad.");
             return;
@@ -67,7 +66,7 @@ public class ControladorInicio implements IControladorInicio {
             return;
         }
 
-        if ( numRondas <= 0) {
+        if (numRondas <= 0) {
             pantallaConfig.mostrarError("Ingresa un numero de rondas valido (mayor a 0).");
             return;
         }
@@ -76,10 +75,10 @@ public class ControladorInicio implements IControladorInicio {
             pantallaConfig.mostrarError("Todas las puntuaciones deben ser números mayores a 0.");
             return;
         }
-        
-     modeloVista.CrearPartida(dificultad, numJugadores, numRondas, puntuaciones);
 
-     //   pantallaConfig.dispose();
+        modeloVista.CrearPartida(dificultad, numJugadores, numRondas, puntuaciones);
+
+        //   pantallaConfig.dispose();
     }
 
     @Override
@@ -97,13 +96,20 @@ public class ControladorInicio implements IControladorInicio {
     }
 
     @Override
-    public void EnviarNombreAvatarConfirmado(String nombre,String avatar) {
-    System.out.println("[ControlInicio] → Enviando UNIRSE_PARTIDA");
+    public void EnviarNombreAvatarConfirmado(String nombre, String avatar) {
+        System.out.println("[ControlInicio] → Enviando UNIRSE_PARTIDA");
 
-    if (modeloVista != null) {
-        modeloVista.EnviarNombreAvatarConfirmado(nombre, avatar);
+        if (modeloVista != null) {
+            modeloVista.EnviarNombreAvatarConfirmado(nombre, avatar);
+        }
     }
-}
+    
+    @Override
+    public void enviarTarjetaSeleccionada(String tarjetaRuta) {
+        if (modeloVista != null) {
+            modeloVista.enviarTarjetaSeleccionada(tarjetaRuta);
+        }
+    }
 
     @Override
     public void onIniciarLobby() {
@@ -120,9 +126,6 @@ public class ControladorInicio implements IControladorInicio {
 //        }
     }
 
-
-    
-
     public JPantallaConfigurarPartida getPantallaConfig() {
         return pantallaConfig;
     }
@@ -130,16 +133,16 @@ public class ControladorInicio implements IControladorInicio {
     public void setPantallaConfig(JPantallaConfigurarPartida pantallaConfig) {
         this.pantallaConfig = pantallaConfig;
     }
-    
+
     @Override
-public void onJugar() {
+    public void onJugar() {
 
-    System.out.println("[Inicio] Botón JUGAR presionado");
+        System.out.println("[Inicio] Botón JUGAR presionado");
 
-    if (modeloVista != null) {
-        modeloVista.solicitarIniciarJuego();
+        if (modeloVista != null) {
+            modeloVista.solicitarIniciarJuego();
+        }
     }
-}
 
     @Override
     public void onConfirmarConfig() {
@@ -152,21 +155,24 @@ public void onJugar() {
             lobby = new JFrameLobby();
         }
         actualizarLobby();
-        lobby.setVisible(true);    }
+        lobby.setVisible(true);
+    }
 
-    
     @Override
     public void abrirSeleccionAvatar() {
         if (seleccionAvatar == null) {
-            seleccionAvatar = new JFrameSeleccionAvatar(); }
-        
+            seleccionAvatar = new JFrameSeleccionAvatar();
+        }
+
         seleccionAvatar.setModeloVista(modeloVista);
-        seleccionAvatar.setVisible(true);    }
-
+        seleccionAvatar.setVisible(true);
+    }
+    
+    @Override
+    public void cambiarMVC(){
+        modeloVista.cambiarMVC();
+    }
+    
     
 
-
-
-    
-    
 }

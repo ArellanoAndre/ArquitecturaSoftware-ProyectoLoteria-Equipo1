@@ -41,4 +41,7 @@ public interface IModeloLogica {
     
     void notificarFinPartida(List<Jugador> ranking);
     
+    void enviarEventoCambiarMVC();
+    
+    void enviarTarjetaAsignada(int idJugador, String rutaTarjeta);
 }

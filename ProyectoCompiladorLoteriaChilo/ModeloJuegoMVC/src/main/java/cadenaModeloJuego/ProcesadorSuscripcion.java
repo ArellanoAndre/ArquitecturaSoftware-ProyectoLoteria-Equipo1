@@ -22,7 +22,13 @@ public class ProcesadorSuscripcion implements IModeloChain {
 
     @Override
     public void procesar(String tipoEvento, JSONObject datos, IModeloJuego modeloJuego) {
-        System.out.println("**SUSCRIPCION**");
+        if ("suscripcion".equals(tipoEvento)) {
+            modeloJuego.actualizarConfiguracion(datos);
+        } else if (siguiente != null) {
+            siguiente.procesar(tipoEvento, datos, modeloJuego);
+        } else {
+            System.out.println("[Chain] Evento desconocido: " + tipoEvento);
+        }
     }
     
 }

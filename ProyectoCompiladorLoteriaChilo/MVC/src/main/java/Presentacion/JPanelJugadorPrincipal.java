@@ -1,6 +1,6 @@
 package Presentacion;
 
-import ModeloVista.ModeloVista;
+import ModeloVista.ModeloVistaJuego;
 import Interfaces.IModeloVista;
 import Interfaces.Observer;
 import java.awt.Image;
@@ -19,7 +19,7 @@ public class JPanelJugadorPrincipal extends javax.swing.JPanel implements Observ
     /**
      * Constructor que inicializa el panel y registra el observador.
      * Carga el nombre y avatar del jugador principal.
-     * @param modeloVista ModeloVista del juego.
+     * @param modeloVista ModeloVistaJuego del juego.
      */
     public JPanelJugadorPrincipal(IModeloVista modeloVista) {
         initComponents();

@@ -1,8 +1,8 @@
 package ModeloVista;
 
-    
 import Interfaces.IObserver;
 import EntidadesInicio.ConfiguracionVista;
+import Interfaces.IObserverCambioMVCInicio;
 import interfacesComunicacionModelo.IControladorInicio;
 import Presentacion.JFrameLobby;
 import Presentacion.JFrameSeleccionAvatar;
@@ -11,6 +11,7 @@ import Presentacion.JPantallaMenuPrincipal;
 import interfacesComunicacionModelo.IModeloJuego;
 import interfacesComunicacionModelo.IModeloVistaInicio;
 import interfacesEntidades.IConfiguracionPartida;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JFrame;
@@ -25,6 +26,7 @@ public class ModeloVistaInicio extends Subject implements IModeloVistaInicio {
     private JPantallaConfigurarPartida pantallaConfig;
     private JPantallaMenuPrincipal MenuPrincipal;
     private String jugador;
+    private List<IObserverCambioMVCInicio> observersCambioMVC = new ArrayList<>();
 
     public ModeloVistaInicio() {
         // NO LLAMAR notifyObservers() AQUÍ
@@ -37,7 +39,6 @@ public class ModeloVistaInicio extends Subject implements IModeloVistaInicio {
     public void setMenuPrincipal(JPantallaMenuPrincipal MenuPrincipal) {
         this.MenuPrincipal = MenuPrincipal;
     }
-    
 
     public void setControlador(IControladorInicio controlador) {
         this.controlador = controlador;
@@ -49,10 +50,14 @@ public class ModeloVistaInicio extends Subject implements IModeloVistaInicio {
     }
 
     @Override
-    public void setPantallaAvatar(JFrame p) { this.pantallaAvatar = (JFrameSeleccionAvatar) p; }
+    public void setPantallaAvatar(JFrame p) {
+        this.pantallaAvatar = (JFrameSeleccionAvatar) p;
+    }
 
     @Override
-    public void setPantallaLobby(JFrame l) { this.pantallaLobby = (JFrameLobby) l; }
+    public void setPantallaLobby(JFrame l) {
+        this.pantallaLobby = (JFrameLobby) l;
+    }
 
     @Override
     public void EnviarNombreAvatarConfirmado(String nombre, String avatar) {
@@ -60,6 +65,13 @@ public class ModeloVistaInicio extends Subject implements IModeloVistaInicio {
         this.jugador = nombre;
         if (modeloJuego != null) {
             modeloJuego.enviarNombreAvatarConfirmado(nombre, avatar);
+        }
+    }
+
+    @Override
+    public void enviarTarjetaSeleccionada(String tarjetaRuta) {
+        if (modeloJuego != null) {
+            modeloJuego.enviarTarjetaSeleccionada(tarjetaRuta);
         }
     }
 
@@ -106,42 +118,45 @@ public class ModeloVistaInicio extends Subject implements IModeloVistaInicio {
     public void setJugador(String jugador) {
         this.jugador = jugador;
     }
-    
-    
 
-    public JFrameSeleccionAvatar getPantallaAvatar() { return pantallaAvatar; }
+    public JFrameSeleccionAvatar getPantallaAvatar() {
+        return pantallaAvatar;
+    }
 
-    public JFrameLobby getPantallaLobby() { return pantallaLobby; }
+    public JFrameLobby getPantallaLobby() {
+        return pantallaLobby;
+    }
 
     @Override
     public IControladorInicio getControlador() {
-    return this.controlador;    }
-    
-    @Override
-public void solicitarIniciarJuego() {
-
-    System.out.println("[ModeloVistaInicio] → Enviando solicitud de JUGAR al ModeloJuego");
-
-    if (modeloJuego != null) {
-        modeloJuego.enviarEventoJugar();
-    } else {
-        System.err.println("[ModeloVistaInicio] ERROR: modeloJuego es null");
+        return this.controlador;
     }
-}
 
+    @Override
+    public void solicitarIniciarJuego() {
 
+        System.out.println("[ModeloVistaInicio] → Enviando solicitud de JUGAR al ModeloJuego");
+
+        if (modeloJuego != null) {
+            modeloJuego.enviarEventoJugar();
+        } else {
+            System.err.println("[ModeloVistaInicio] ERROR: modeloJuego es null");
+        }
+    }
 
     @Override
     public void abrirPantallaConfig() {
-    pantallaAvatar.setVisible(false);
-    pantallaLobby.setVisible(false);
-    pantallaConfig.setVisible(true);    }
+        pantallaAvatar.setVisible(false);
+        pantallaLobby.setVisible(false);
+        pantallaConfig.setVisible(true);
+    }
 
     @Override
     public void abrirPantallaAvatar() {
-    pantallaConfig.setVisible(false);
-    pantallaLobby.setVisible(false);
-    pantallaAvatar.setVisible(true);   }
+        pantallaConfig.setVisible(false);
+        pantallaLobby.setVisible(false);
+        pantallaAvatar.setVisible(true);
+    }
 
     public JPantallaConfigurarPartida getPantallaConfig() {
         return pantallaConfig;
@@ -156,30 +171,48 @@ public void solicitarIniciarJuego() {
     public void setMenuPrincipal(JFrame MenuPrincipal) {
         this.MenuPrincipal = (JPantallaMenuPrincipal) MenuPrincipal;
     }
-    
-    
-@Override
-public void CrearPartida(String dificultad, int numJugadores, int numRondas,
-                         Map<String, Integer> puntuaciones) {
 
-    System.out.println("[ModeloVistaInicio] CrearPartida() llamado");
-    // ========== 1) ENVIAR EVENTO AL MODELO JUEGO ==========
-    if (modeloJuego != null) {
-        modeloJuego.enviarEventoConfigurarPartida(dificultad, numJugadores, numRondas, puntuaciones);
-           
-    }
+    @Override
+    public void CrearPartida(String dificultad, int numJugadores, int numRondas,
+            Map<String, Integer> puntuaciones) {
 
-    // ========== 2) MOSTRAR SELECCION DE AVATAR ==========
-    if (controlador != null) {
-        abrirPantallaAvatar();
+        System.out.println("[ModeloVistaInicio] CrearPartida() llamado");
+        // ========== 1) ENVIAR EVENTO AL MODELO JUEGO ==========
+        if (modeloJuego != null) {
+            modeloJuego.enviarEventoConfigurarPartida(dificultad, numJugadores, numRondas, puntuaciones);
+
+        }
+
+        // ========== 2) MOSTRAR SELECCION DE AVATAR ==========
+        if (controlador != null) {
+            abrirPantallaAvatar();
+        }
     }
-}
 
     @Override
     public void abrirSeleccionAvatar() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    @Override
+    public void cambiarMVC() {
+        modeloJuego.enviarEventoCambiarMVC();
+    }
 
+    @Override
+    public void notificarCambioMVC() {
+        System.out.println("Notificando a pantalla de juego");
+        List<IObserverCambioMVCInicio> copiaObservers;
+        
+        synchronized (observersCambioMVC) {
+            copiaObservers = new ArrayList<>(observersCambioMVC);
+        }
+        for (IObserverCambioMVCInicio o : copiaObservers) {
+            o.updateCambioMVC();
+        }
+    }
 
+    public void addObserverCambioMVC(IObserverCambioMVCInicio o) {
+        observersCambioMVC.add(o);
+    }
 }

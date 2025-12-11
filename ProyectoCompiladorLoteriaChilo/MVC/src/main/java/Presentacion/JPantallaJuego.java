@@ -4,6 +4,7 @@ import Controlador.ControlSeleccionarCarta;
 import Controlador.ControlVista;
 import ModeloVista.entidadesVista.JugadorVista;
 import Interfaces.IModeloVista;
+import Interfaces.IObserverCambioMVCJuego;
 import Interfaces.Observer;
 import interfacesComunicacionModelo.IControlVistaMVC_Juego;
 import java.awt.BorderLayout;
@@ -22,27 +23,24 @@ import javax.swing.SwingUtilities;
  * acción, y panel de jugadores secundarios. Implementa Observer para actualizar
  * la vista cuando el ModeloVista notifica cambios.
  */
-public class JPantallaJuego extends JFramePadre implements Observer {
+public class JPantallaJuego extends JFramePadre implements Observer, IObserverCambioMVCJuego {
 
     private IModeloVista modeloVista;
     private IControlVistaMVC_Juego control;
     private JDialog dialogoEspera;
     private JPanelTarjeta panelTarjeta;
     private JPanel contenedorJugadores;
+    private boolean visible = false;
 
     public JPantallaJuego(IModeloVista modeloVista, ControlSeleccionarCarta controlador) {
         super();
         this.modeloVista = modeloVista;
         this.modeloVista.addObserver(this);
+        this.modeloVista.addObserverCambioMVC(this);
 
         initComponents();           // Inicializa componentes generados por NetBeans
         setLocationRelativeTo(null);
         setResizable(false);        // Evita que el usuario cambie el tamaño
-
-        crearPanelTarjeta();        // Panel de tarjeta del jugador principal
-        crearPanelCarta();          // Panel de carta cantada
-        crearPanelJugadorPrincipal(); // Panel jugador principal
-        cargarJugadoresSecundarios(); // Panel jugadores secundarios
 
     }
 
@@ -572,6 +570,20 @@ public class JPantallaJuego extends JFramePadre implements Observer {
         // 4. Refrescar ventana completa
         this.repaint();
         this.revalidate();
+    }
+
+    @Override
+    public void updateCambioMVC() {
+        System.out.println("Cambiando Estado");
+        visible = !visible;              // invierte el estado
+        this.setVisible(visible);
+
+        if (visible) {
+            crearPanelTarjeta();        // Panel de tarjeta del jugador principal
+            crearPanelCarta();          // Panel de carta cantada
+            crearPanelJugadorPrincipal(); // Panel jugador principal
+            cargarJugadoresSecundarios(); // Panel jugadores secundarios
+        }
     }
 
 }

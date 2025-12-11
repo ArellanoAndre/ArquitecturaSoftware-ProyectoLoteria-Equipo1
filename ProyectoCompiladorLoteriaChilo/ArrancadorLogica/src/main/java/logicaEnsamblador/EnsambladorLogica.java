@@ -48,13 +48,6 @@ public class EnsambladorLogica {
 
         modelo.setEmpaquetador(empaquetador);
 
-        // 4. JUGADORES
-        logica.agregarJugadores();
-
-        var jugador2 = logica.getJugadores().get(1);
-        System.out.println("[INFO] Esperando jugadas del ID 2. Tarjeta: "
-                + java.util.Arrays.toString(jugador2.getTarjeta().getCasillas()));
-
         modelo.suscribirseJuegoIn();
         // MODO ESPERA
         while (true) {

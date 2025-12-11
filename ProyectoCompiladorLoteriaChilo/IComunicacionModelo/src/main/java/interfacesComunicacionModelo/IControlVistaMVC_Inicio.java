@@ -15,4 +15,5 @@ public interface IControlVistaMVC_Inicio {
      void setConfig(IConfiguracionPartida config);
       void abrirPantallaConfig();
       void abrirPantallaAvatar();
+      void cambiarMVC();
 }

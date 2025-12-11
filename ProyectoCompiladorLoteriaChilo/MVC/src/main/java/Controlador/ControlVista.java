@@ -179,5 +179,10 @@ public class ControlVista implements IControlVistaMVC_Juego {
 
         modeloVista.solicitarEnvioCantarLoteria();
     }
+    
+    @Override
+    public void cambiarMVC(){
+        modeloVista.notificarCambioMVC();
+    }
 
 }

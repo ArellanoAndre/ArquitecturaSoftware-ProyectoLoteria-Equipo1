@@ -3,6 +3,7 @@ package Presentacion;
 import EntidadesInicio.ConfiguracionVista;
 import interfacesComunicacionModelo.IControladorInicio;
 import Interfaces.IObserver;
+import Interfaces.IObserverCambioMVCInicio;
 import ModeloVista.ModeloVistaInicio;
 import interfacesComunicacionModelo.IModeloVistaInicio;
 import interfacesEntidades.IJugador;
@@ -15,21 +16,22 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class JFrameLobby extends JFramePadre implements IObserver{
-    
+public class JFrameLobby extends JFramePadre implements IObserver,IObserverCambioMVCInicio {
+
     private ModeloVistaInicio modeloVista;
     private IControladorInicio controlador;
     private int tarjetaSeleccionada = -1; // 0,1,2private int indiceTarjetaSeleccionada = -1; // 0, 1 o 2
     private String tarjetaSeleccionadaRuta = null; // Aquí guardamos la ruta real de la imagen
-
+    private boolean visible = true;
+    
     /**
      * Creates new form JFrameLobby
      */
     public JFrameLobby() {
-        this(null,null);
+        this(null, null);
     }
 
-    public JFrameLobby(IControladorInicio controlador,ModeloVistaInicio modeloVista) {
+    public JFrameLobby(IControladorInicio controlador, ModeloVistaInicio modeloVista) {
         this.controlador = controlador;
         this.modeloVista = modeloVista;
         initComponents();
@@ -43,13 +45,15 @@ public class JFrameLobby extends JFramePadre implements IObserver{
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
+        
     }
-    
 
     public void setModeloVista(ModeloVistaInicio modeloVista) {
-    this.modeloVista = modeloVista;
-     modeloVista.addObserver(this); // ← SIN ESTO NO HAY UPDATE
-}
+        this.modeloVista = modeloVista;
+        this.modeloVista.addObserver(this); // ← SIN ESTO NO HAY UPDATE
+        this.modeloVista.addObserverCambioMVC(this);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -493,92 +497,92 @@ public class JFrameLobby extends JFramePadre implements IObserver{
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        if (tarjetaSeleccionadaRuta == null) {
-        JOptionPane.showMessageDialog(this, 
-            "Por favor, selecciona una tarjeta antes de continuar.", 
-            "Tarjeta requerida", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
 
-    if (controlador != null) {
-       // controlador.onIniciarPartidaConTarjeta(tarjetaSeleccionadaRuta); // o como lo necesites
-        System.out.println("Hasta aqui llego yo mi apa");
-    }
+        if (tarjetaSeleccionadaRuta == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor, selecciona una tarjeta antes de continuar.",
+                    "Tarjeta requerida", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (controlador != null) {
+            controlador.cambiarMVC();
+        }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     public void actualizarJugadores(List<IJugador> jugadores) {
 
-    JPanel[] paneles = { panelJugador1, panelJugador2, panelJugador3, panelJugador4 };
-    JLabel[] labelsNombre = { labelNivel1, labelNivel3, labelNivel4, labelNivel5 };
-    JLabel[] labelsIcono = { jLabel1, jLabel3, jLabel4, jLabel5 };
+        JPanel[] paneles = {panelJugador1, panelJugador2, panelJugador3, panelJugador4};
+        JLabel[] labelsNombre = {labelNivel1, labelNivel3, labelNivel4, labelNivel5};
+        JLabel[] labelsIcono = {jLabel1, jLabel3, jLabel4, jLabel5};
 
-    // Ocultar todos primero
-    for (int i = 0; i < paneles.length; i++) {
-        paneles[i].setVisible(false);
-    }
+        // Ocultar todos primero
+        for (int i = 0; i < paneles.length; i++) {
+            paneles[i].setVisible(false);
+        }
 
-    // Mostrar solo los necesarios
-    for (int i = 0; i < jugadores.size(); i++) {
+        // Mostrar solo los necesarios
+        for (int i = 0; i < jugadores.size(); i++) {
 
-        IJugador j = jugadores.get(i);
+            IJugador j = jugadores.get(i);
 
-        paneles[i].setVisible(true);
-        labelsNombre[i].setText(j.getNombre());
+            paneles[i].setVisible(true);
+            labelsNombre[i].setText(j.getNombre());
 
-        // Cargar avatar desde resources
-        try {
-            URL url = getClass().getClassLoader().getResource("img/" + j.getAvatar());
-            if (url != null) {
-                ImageIcon icon = new ImageIcon(url);
-                Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-                labelsIcono[i].setIcon(new ImageIcon(img));
+            // Cargar avatar desde resources
+            try {
+                URL url = getClass().getClassLoader().getResource("img/" + j.getAvatar());
+                if (url != null) {
+                    ImageIcon icon = new ImageIcon(url);
+                    Image img = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+                    labelsIcono[i].setIcon(new ImageIcon(img));
+                }
+            } catch (Exception e) {
+                labelsIcono[i].setText("icono");
             }
-        } catch (Exception e) {
-            labelsIcono[i].setText("icono");
         }
     }
-}
 
     public void setNivel(String nivel) {
         labelNivel.setText(nivel);
     }
-private void actualizarTarjetas(List<String> rutas) {
-    if (rutas == null || rutas.isEmpty()) {
-        System.err.println("[Lobby] No hay rutas de tarjetas para mostrar.");
-        return;
-    }
 
-    JLabel[] labels = { labelTarjeta1, labelTarjeta2, labelTarjeta3 };
-
-    for (int i = 0; i < labels.length; i++) {
-        if (i < rutas.size()) {
-            String ruta = rutas.get(i);
-            try {
-                ImageIcon icono = new ImageIcon(getClass().getResource(ruta));
-                Image img = icono.getImage().getScaledInstance(
-                    labels[i].getWidth(), labels[i].getHeight(), Image.SCALE_SMOOTH);
-                labels[i].setIcon(new ImageIcon(img));
-                labels[i].setText("");
-            } catch (Exception e) {
-                labels[i].setIcon(null);
-                labels[i].setText("Error");
-            }
-        } else {
-            labels[i].setIcon(null);
-            labels[i].setText("");
+    private void actualizarTarjetas(List<String> rutas) {
+        if (rutas == null || rutas.isEmpty()) {
+            System.err.println("[Lobby] No hay rutas de tarjetas para mostrar.");
+            return;
         }
-        // Borde inicial sutil por defecto
-        labels[i].setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+
+        JLabel[] labels = {labelTarjeta1, labelTarjeta2, labelTarjeta3};
+
+        for (int i = 0; i < labels.length; i++) {
+            if (i < rutas.size()) {
+                String ruta = rutas.get(i);
+                try {
+                    ImageIcon icono = new ImageIcon(getClass().getResource(ruta));
+                    Image img = icono.getImage().getScaledInstance(
+                            labels[i].getWidth(), labels[i].getHeight(), Image.SCALE_SMOOTH);
+                    labels[i].setIcon(new ImageIcon(img));
+                    labels[i].setText("");
+                } catch (Exception e) {
+                    labels[i].setIcon(null);
+                    labels[i].setText("Error");
+                }
+            } else {
+                labels[i].setIcon(null);
+                labels[i].setText("");
+            }
+            // Borde inicial sutil por defecto
+            labels[i].setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+        }
+
+        // Reiniciar selección
+        tarjetaSeleccionada = -1;
+        tarjetaSeleccionadaRuta = null;
+
+        // Activar clics
+        prepararSeleccionTarjetas();
     }
-
-    // Reiniciar selección
-    tarjetaSeleccionada = -1;
-    tarjetaSeleccionadaRuta = null;
-
-    // Activar clics
-    prepararSeleccionTarjetas();
-}
-
 
     public void setDatosPartida(String dificultad, Integer jugadores, Integer puntuacionMaxima, String nombreJugador) {
         if (dificultad != null) {
@@ -598,71 +602,78 @@ private void actualizarTarjetas(List<String> rutas) {
             labelNombre.setText(nombreJugador);
         }
     }
-    
+
     @Override
-public void update() {
-    System.out.println("[JFrameLobby] UI actualizada con nueva configuración.");
-    if (modeloVista == null) return;
+    public void update() {
+        System.out.println("[JFrameLobby] UI actualizada con nueva configuración.");
+        if (modeloVista == null) {
+            return;
+        }
 
-    ConfiguracionVista config = modeloVista.getConfiguracion();
-    if (config == null) return;
+        ConfiguracionVista config = modeloVista.getConfiguracion();
+        if (config == null) {
+            return;
+        }
 
-    // Mostrar lobby automáticamente cuando llegue una config válida
-    this.setVisible(true);
+        // Mostrar lobby automáticamente cuando llegue una config válida
+        this.setVisible(true);
 
-    // Ocultar la pantalla de avatar
-    if (modeloVista.getPantallaAvatar() != null)
-        modeloVista.getPantallaAvatar().setVisible(false);
+        // Ocultar la pantalla de avatar
+        if (modeloVista.getPantallaAvatar() != null) {
+            modeloVista.getPantallaAvatar().setVisible(false);
+        }
 
-    // --- Resto de la actualización ---
-    labelDificultad.setText(config.getDificultad());
-    labelNivel12.setText(String.valueOf(config.getNumJugadores()));
-    labelNivel.setText(config.getDificultad());
-    labelPuntuacion.setText(String.valueOf(config.getNumeroRondas()));
-    labelNombre.setText(modeloVista.getJugador());
-    actualizarJugadores(config.getJugadores());
-    actualizarTarjetas(config.getImagenesTarjetas());
+        // --- Resto de la actualización ---
+        labelDificultad.setText(config.getDificultad());
+        labelNivel12.setText(String.valueOf(config.getNumJugadores()));
+        labelNivel.setText(config.getDificultad());
+        labelPuntuacion.setText(String.valueOf(config.getNumeroRondas()));
+        labelNombre.setText(modeloVista.getJugador());
+        actualizarJugadores(config.getJugadores());
+        actualizarTarjetas(config.getImagenesTarjetas());
 
-    System.out.println("[JFrameLobby] UI actualizada con nueva configuración.");
-}
-
-private void prepararSeleccionTarjetas() {
-    JLabel[] labels = { labelTarjeta1, labelTarjeta2, labelTarjeta3 };
-
-    for (int i = 0; i < labels.length; i++) {
-        final int index = i; // Necesario para lambda o clase anónima
-        labels[i].setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        labels[i].addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                seleccionarTarjeta(index);
-            }
-        });
-    }
-}
-private void seleccionarTarjeta(int index) {
-    JLabel[] labels = { labelTarjeta1, labelTarjeta2, labelTarjeta3 };
-    List<String> rutas = modeloVista.getConfiguracion().getImagenesTarjetas();
-
-    // Quitar borde de todas
-    for (JLabel label : labels) {
-        label.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4)); // o un borde gris sutil si prefieres
+        System.out.println("[JFrameLobby] UI actualizada con nueva configuración.");
     }
 
-    // Poner borde verde grueso a la seleccionada
-    labels[index].setBorder(BorderFactory.createLineBorder(new java.awt.Color(0, 180, 0), 6));
+    private void prepararSeleccionTarjetas() {
+        JLabel[] labels = {labelTarjeta1, labelTarjeta2, labelTarjeta3};
 
-    // Guardar datos
-    tarjetaSeleccionada = index;
-    if (rutas != null && index < rutas.size()) {
-        tarjetaSeleccionadaRuta = rutas.get(index);
-    } else {
-        tarjetaSeleccionadaRuta = null;
+        for (int i = 0; i < labels.length; i++) {
+            final int index = i; // Necesario para lambda o clase anónima
+            labels[i].setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+            labels[i].addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                    seleccionarTarjeta(index);
+                }
+            });
+        }
     }
 
-    System.out.println("Tarjeta seleccionada: " + tarjetaSeleccionadaRuta);
-}
+    private void seleccionarTarjeta(int index) {
+        JLabel[] labels = {labelTarjeta1, labelTarjeta2, labelTarjeta3};
+        List<String> rutas = modeloVista.getConfiguracion().getImagenesTarjetas();
+
+        // Quitar borde de todas
+        for (JLabel label : labels) {
+            label.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4)); // o un borde gris sutil si prefieres
+        }
+
+        // Poner borde verde grueso a la seleccionada
+        labels[index].setBorder(BorderFactory.createLineBorder(new java.awt.Color(0, 180, 0), 6));
+
+        // Guardar datos
+        tarjetaSeleccionada = index;
+        if (rutas != null && index < rutas.size()) {
+            tarjetaSeleccionadaRuta = rutas.get(index);
+        } else {
+            tarjetaSeleccionadaRuta = null;
+        }
+
+        System.out.println("Tarjeta seleccionada: " + tarjetaSeleccionadaRuta);
+        controlador.enviarTarjetaSeleccionada(tarjetaSeleccionadaRuta);
+    }
 
     public int getTarjetaSeleccionada() {
         return tarjetaSeleccionada;
@@ -679,10 +690,6 @@ private void seleccionarTarjeta(int index) {
     public void setTarjetaSeleccionadaRuta(String tarjetaSeleccionadaRuta) {
         this.tarjetaSeleccionadaRuta = tarjetaSeleccionadaRuta;
     }
-
-
-
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -721,5 +728,11 @@ private void seleccionarTarjeta(int index) {
     private javax.swing.JPanel panelJugador4;
     private javax.swing.JPanel pnlTarjetas;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void updateCambioMVC() {
+        visible = !visible;              // invierte el estado
+        this.setVisible(visible);
+    }
 
 }

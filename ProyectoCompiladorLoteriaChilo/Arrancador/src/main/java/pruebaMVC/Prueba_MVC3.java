@@ -7,7 +7,7 @@ import Empaquetador.Empaquetador;
 import Ensamblador.EnsambladorRed;
 import ModeloJuegoEntidades.Jugador;
 import ModeloJuegoEntidades.Tarjeta;
-import ModeloVista.ModeloVista;
+import ModeloVista.ModeloVistaJuego;
 import Presentacion.JPantallaJuego;
 import Sender.EventSender;
 import colaGenerica.ColaDePrioridad;
@@ -70,7 +70,7 @@ public class Prueba_MVC3 {
             // ===============================
             // 2. CREACIÓN DEL MVC REAL
             // ===============================
-            ModeloVista modeloVista = new ModeloVista();
+            ModeloVistaJuego modeloVista = new ModeloVistaJuego();
             modeloVista.setHost(true); // Es HOST
 
             ControlVista controlVista = new ControlVista(modeloVista);

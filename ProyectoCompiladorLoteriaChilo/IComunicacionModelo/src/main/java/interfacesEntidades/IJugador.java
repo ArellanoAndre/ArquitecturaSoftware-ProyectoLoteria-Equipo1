@@ -17,6 +17,8 @@ public interface IJugador {
     public void addPuntos(double puntos);
 
     public ITarjeta getTarjeta();
+    
+    public void setTarjeta(ITarjeta tarjeta);
 
     public boolean isPrincipal();
 
@@ -25,7 +27,6 @@ public interface IJugador {
     public int getNumJugador();
 
     public void setNumJugador(int numJugador);
-    
     
     public String getAvatar();
 

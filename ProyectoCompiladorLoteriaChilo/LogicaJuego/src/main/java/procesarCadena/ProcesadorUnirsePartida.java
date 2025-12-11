@@ -35,7 +35,7 @@ public class ProcesadorUnirsePartida implements IProcesadorEvento {
             System.out.println("        Avatar: " + avatar);
 
             // Mandar a la lógica de juego
-            logica.agregarJugador(nombre, avatar);
+            logica.settearAvatar(nombre, avatar);
 
             return;
         }
