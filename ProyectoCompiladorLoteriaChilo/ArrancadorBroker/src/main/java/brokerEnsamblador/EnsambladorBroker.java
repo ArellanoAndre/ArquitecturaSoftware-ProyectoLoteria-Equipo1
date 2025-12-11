@@ -75,7 +75,7 @@ public class EnsambladorBroker {
         // 9) Crear desempaquetador COMO OBSERVER de la colaEntrada
         desempaquetador = new Desempaquetador(colaEntrada, broker);
         colaEntrada.addObserverEntrada(desempaquetador);
-        
+
         EventListener eventListener = new EventListener(colaEntrada);
 
         //----------------------------------------------------------------------
@@ -86,9 +86,6 @@ public class EnsambladorBroker {
         } catch (IOException ex) {
             Logger.getLogger(EnsambladorBroker.class.getName()).log(Level.SEVERE, null, ex);
         }
-            
-
-        
 
         System.out.println("[EnsambladorBroker] Broker ensamblado y conectado a la red.");
     }

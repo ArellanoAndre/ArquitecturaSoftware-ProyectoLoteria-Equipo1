@@ -92,7 +92,6 @@ public class EnsambladorMVC {
 
             // Mostrar pantalla inicio
             //menu.setVisible(true);
-
             // ===============================
             // Infraestructura MVC Juego
             // ===============================
@@ -108,7 +107,9 @@ public class EnsambladorMVC {
             // 3. CREAR LA PANTALLA DEL JUEGO
             // ===============================
             JPantallaJuego pantalla1 = new JPantallaJuego(modeloVistaJuego, controlador);
+            pantalla1.setControl(controlVistaJuego);
             pantalla1.setTitle("Jugador 1");
+            
 
             // -------------------------------
             // RED
@@ -142,6 +143,7 @@ public class EnsambladorMVC {
             System.out.println("[CLIENTE] Flujo iniciado. Usa el botón JUGAR.");
             modeloJuego.suscribirseJuegoOut();
             modeloJuego.AsignarID();
+           
         });
     }
 

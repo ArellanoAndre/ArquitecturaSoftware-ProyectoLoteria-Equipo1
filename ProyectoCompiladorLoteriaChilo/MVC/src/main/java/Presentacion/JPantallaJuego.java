@@ -250,6 +250,7 @@ public class JPantallaJuego extends JFramePadre implements Observer, IObserverCa
 
     private void btnIntentoLoteriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIntentoLoteriaActionPerformed
 
+        System.out.println("[debuge UI] Botón presionado. Control es: " + control);
         if (control != null) {
             control.solicitarIntentoLoteria();
         }
