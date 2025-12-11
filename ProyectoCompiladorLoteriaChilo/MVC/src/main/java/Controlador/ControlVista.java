@@ -138,6 +138,11 @@ public class ControlVista implements IControlVistaMVC_Juego {
 
         modeloVista.setDatosFinRonda(ronda, ganador);
     }
+    
+    @Override
+    public void mostrarMensajeFinRondaBaraja(){
+        modeloVista.setDatosFinRondaBaraja();
+    }
 
     @Override
     public void procesarFinPartida(List<IJugador> ranking

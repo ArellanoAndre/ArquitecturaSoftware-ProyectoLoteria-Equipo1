@@ -94,7 +94,9 @@ public interface IModeloVista {
     
     // --- metodos para el estado de las rondas ---
     void setDatosFinRonda(int ronda, String ganador);
+    void setDatosFinRondaBaraja();
     boolean isFinDeRonda();
+    boolean isFinDeRondaBaraja();
     String getGanadorRonda();
     int getNumRonda();
     void limpiarEstadoRonda();

@@ -19,6 +19,7 @@ import cadenaModeloJuego.ProcesadorFinRonda;
 import cadenaModeloJuego.ProcesadorRedirectAvatar;
 import cadenaModeloJuego.ProcesadorSuscripcion;
 import cadenaModeloJuego.ProcesadorUnirsePartida;
+import cadenaModeloJuego.ProcesadorFinRondaBaraja;
 import interfacesComunicacionModelo.IModeloJuego;
 import org.json.JSONObject;
 
@@ -49,6 +50,7 @@ public class ReceptorModelo implements IReceptorEvento {
     IModeloChain redirectAvatar = new ProcesadorRedirectAvatar(); 
     IModeloChain filtrojugadorid = new ProcesadorFiltroJugador(); 
     IModeloChain asignarid = new ProcesadorAsignarID();
+    IModeloChain finRondaBaraja = new ProcesadorFinRondaBaraja();
 
     // Construcción correcta
     filtrojugadorid.setSiguiente(asignarid);
@@ -62,8 +64,9 @@ public class ReceptorModelo implements IReceptorEvento {
     suscripcion.setSiguiente(cambiarMVC);
     cambiarMVC.setSiguiente(asignarTarjeta);
     asignarTarjeta.setSiguiente(redirectAvatar);
-    redirectAvatar.setSiguiente(null);
-
+    redirectAvatar.setSiguiente(finRondaBaraja);
+    finRondaBaraja.setSiguiente(null);
+    
     // ⛔ ESTO ESTABA MAL → asignarid
     // ❗ ESTA ES LA CORRECCIÓN
     this.cadenaProcesamiento = filtrojugadorid;
@@ -87,11 +90,11 @@ public class ReceptorModelo implements IReceptorEvento {
             // Identificar el tipo de evento interno
             String tipo = obj.getString("TipoEvento");
 
-            System.out.println("[ModeloJuegoMock] TipoEvento = " + tipo);
+            System.out.println("[ReceptorModelo] TipoEvento = " + tipo);
             cadenaProcesamiento.procesar(tipo, obj, modeloJuego);
 
         } catch (Exception e) {
-            System.err.println("[ModeloJuegoMock] ERROR manejando evento: " + e.getMessage());
+            System.err.println("[ReceptorModelo] ERROR manejando evento: " + e.getMessage());
             e.printStackTrace();
         }
     }

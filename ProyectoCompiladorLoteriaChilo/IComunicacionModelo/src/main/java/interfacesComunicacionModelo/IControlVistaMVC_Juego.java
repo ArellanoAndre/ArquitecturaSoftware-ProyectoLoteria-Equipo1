@@ -45,6 +45,8 @@ public interface IControlVistaMVC_Juego {
      */
     void mostrarMensajeFinRonda(int ronda, String ganador);
 
+    public void mostrarMensajeFinRondaBaraja();
+    
     /**
      * Muestra mensaje de fin de partida en la vista.
      *

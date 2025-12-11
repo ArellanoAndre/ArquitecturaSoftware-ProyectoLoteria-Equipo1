@@ -39,6 +39,8 @@ public interface IModeloLogica {
     
     void notificarFinDeRonda(int ronda, String nombreGanador);
     
+    public void notificarFinDeRondaPorBaraja();
+    
     void notificarFinPartida(List<Jugador> ranking);
     
     void enviarEventoCambiarMVC();

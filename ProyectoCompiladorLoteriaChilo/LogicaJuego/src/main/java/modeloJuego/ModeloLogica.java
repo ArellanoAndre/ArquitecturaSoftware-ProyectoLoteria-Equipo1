@@ -140,6 +140,15 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         System.out.println("[ModeloLogica] Enviado FIN_RONDA: " + json.toString());
 
     }
+    
+    @Override
+    public void notificarFinDeRondaPorBaraja(){
+        JSONObject json = new JSONObject();
+        
+        json.put("TipoEvento", "FIN_RONDA_BARAJA");
+        
+        enviarEventoBroadcast(json.toString(), "Juego-out", "ActualizacionJuego",test);
+    }
 
     @Override
     public void notificarFinPartida(List<Jugador> ranking) {

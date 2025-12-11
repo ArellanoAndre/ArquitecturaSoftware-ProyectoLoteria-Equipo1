@@ -40,7 +40,6 @@ public class LogicaDeJuego implements ILogicaJuego {
     private List<Tarjeta> todasLasTarjetas;
     private List<Jugador> jugadorespartida;
 
-
     private IModeloLogica modeloLogica;
 
     public void setModeloLogica(IModeloLogica modelo) {
@@ -154,15 +153,16 @@ public class LogicaDeJuego implements ILogicaJuego {
      */
     @Override
     public void siguienteCarta() {
-        cartaActual = griton.getMazo().get(contador);
-        contador++;
 
-        if (contador == 54) {
-            contador = 0;
-        }
-        if (modeloLogica != null) {
-            // Usamos tipos primitivos (int, String) como definimos en la interfaz
-            modeloLogica.notificarCartaCantada(cartaActual.getNumCarta(), cartaActual.getNombreCarta());
+        if (contador > 53) {
+            finalizarRondaPorBaraja();
+        } else {
+            cartaActual = griton.getMazo().get(contador);
+            if (modeloLogica != null) {
+                // Usamos tipos primitivos (int, String) como definimos en la interfaz
+                modeloLogica.notificarCartaCantada(cartaActual.getNumCarta(), cartaActual.getNombreCarta());
+            }
+            contador++;
         }
     }
 
@@ -276,33 +276,32 @@ public class LogicaDeJuego implements ILogicaJuego {
 
     public void settearAvatar(int id, String nombre, String avatar) {
 
-    // Buscar al jugador por ID
-    Jugador jugadorEncontrado = null;
-    for (Jugador j : jugadores) {
-        if (j.getNumJugador()== id) {
-            jugadorEncontrado = j;
-            break;
+        // Buscar al jugador por ID
+        Jugador jugadorEncontrado = null;
+        for (Jugador j : jugadores) {
+            if (j.getNumJugador() == id) {
+                jugadorEncontrado = j;
+                break;
+            }
         }
+        // Si no existe, avisar y salir
+        if (jugadorEncontrado == null) {
+            System.err.println("[Logica] ERROR: No existe jugador con ID = " + id);
+            return;
+        }
+
+        jugadorespartida.add(jugadorEncontrado);
+
+        // Actualizar nombre y avatar
+        jugadorEncontrado.setNombre(nombre);
+        jugadorEncontrado.setAvatar(avatar);
+        notificarConfirmacionReglas(id);
+
+        System.out.println("[Logica] Jugador actualizado:");
+        System.out.println("        ID: " + id);
+        System.out.println("        Nombre: " + nombre);
+        System.out.println("        Avatar: " + avatar);
     }
-    // Si no existe, avisar y salir
-    if (jugadorEncontrado == null) {
-        System.err.println("[Logica] ERROR: No existe jugador con ID = " + id);
-        return;
-    }
-    
-    jugadorespartida.add(jugadorEncontrado);
-
-    // Actualizar nombre y avatar
-    jugadorEncontrado.setNombre(nombre);
-    jugadorEncontrado.setAvatar(avatar);
-    notificarConfirmacionReglas(id);
-
-    System.out.println("[Logica] Jugador actualizado:");
-    System.out.println("        ID: " + id);
-    System.out.println("        Nombre: " + nombre);
-    System.out.println("        Avatar: " + avatar);
-}
-
 
     public void notificarConfirmacionReglas(int id) {
         modeloLogica.enviarConfirmacionReglas(
@@ -310,8 +309,7 @@ public class LogicaDeJuego implements ILogicaJuego {
                 this.MAX_RONDAS,
                 this.jugadorespartida,
                 this.numJugadores,
-                this.obtener3TarjetasAlAzar(),id
-                
+                this.obtener3TarjetasAlAzar(), id
         );
     }
 
@@ -326,7 +324,7 @@ public class LogicaDeJuego implements ILogicaJuego {
     public void configurarPartida(String dificultad,
             int numJugadores,
             int numRondas,
-            Map<String, Integer> puntuaciones,int id) {
+            Map<String, Integer> puntuaciones, int id) {
 
         System.out.println("[Logica] Configurando partida...");
 
@@ -337,10 +335,10 @@ public class LogicaDeJuego implements ILogicaJuego {
         this.puntuaciones = puntuaciones;
         this.partidaConfigurada = true;
         System.out.println("[Logica] Partida configurada correctamente.");
-        
+
         modeloLogica.enviarAbrirPantallaSeleccionAvatar(id);
         // YA NO - enviar confirmación de reglas al Cliente
-        
+
     }
 
     public List<Tarjeta> GenerarTarjetas() {
@@ -469,12 +467,12 @@ public class LogicaDeJuego implements ILogicaJuego {
 
     @Override
     public void enviarAbrirPantallaConfig(int idJugador) {
-        modeloLogica.enviarAbrirPantallaConfig( idJugador);
+        modeloLogica.enviarAbrirPantallaConfig(idJugador);
     }
 
     @Override
     public void enviarAbrirPantallaSeleccionAvatar(int idJugador) {
-        modeloLogica.enviarAbrirPantallaSeleccionAvatar( idJugador);
+        modeloLogica.enviarAbrirPantallaSeleccionAvatar(idJugador);
     }
 
     public void procesarIntentoLoteria(int idJugador) {
@@ -521,6 +519,15 @@ public class LogicaDeJuego implements ILogicaJuego {
             rondaActual++;
             reiniciarTableros();
         }
+    }
+
+    private void finalizarRondaPorBaraja() {
+        if (timer != null) {
+            timer.stop();
+        }
+        contador = 0;
+        modeloLogica.notificarFinDeRondaPorBaraja();
+        reiniciarTableros();
     }
 
     /**
@@ -578,40 +585,40 @@ public class LogicaDeJuego implements ILogicaJuego {
     public void cambioMVC() {
         modeloLogica.enviarEventoCambiarMVC();
     }
-    
+
     /**
- * Atiende la petición de un cliente que solicita un ID.
- * Crea el jugador en la lógica del host, genera su ID y envía
- * un evento de regreso al cliente con dicho ID.
- */
-public void procesarAsignacionID() {
+     * Atiende la petición de un cliente que solicita un ID. Crea el jugador en
+     * la lógica del host, genera su ID y envía un evento de regreso al cliente
+     * con dicho ID.
+     */
+    public void procesarAsignacionID() {
 
-    // 1. Crear jugador nuevo y obtener el ID generado
-    int nuevoID = crearJugadorYDevolverID();
+        // 1. Crear jugador nuevo y obtener el ID generado
+        int nuevoID = crearJugadorYDevolverID();
 
-    System.out.println("[LogicaDeJuego] → Nuevo jugador creado con ID = " + nuevoID);
+        System.out.println("[LogicaDeJuego] → Nuevo jugador creado con ID = " + nuevoID);
 
-    // 2. Crear JSON de respuesta
-    JSONObject json = new JSONObject();
-    json.put("TipoEvento", "ID_ASIGNADO");
-    json.put("ID", nuevoID);
+        // 2. Crear JSON de respuesta
+        JSONObject json = new JSONObject();
+        json.put("TipoEvento", "ID_ASIGNADO");
+        json.put("ID", nuevoID);
 
-    // 3. Enviar solamente al cliente que pidió la suscripción
-    modeloLogica.enviarIDAsignadoAlCliente(nuevoID);
+        // 3. Enviar solamente al cliente que pidió la suscripción
+        modeloLogica.enviarIDAsignadoAlCliente(nuevoID);
 
-    System.out.println("[LogicaDeJuego] → Evento ID_ASIGNADO enviado al cliente " + nuevoID);
-}
+        System.out.println("[LogicaDeJuego] → Evento ID_ASIGNADO enviado al cliente " + nuevoID);
+    }
 
-public int crearJugadorYDevolverID() {
+    public int crearJugadorYDevolverID() {
 
-    int nuevoID = this.jugadores .size() + 1; // o tu lógica interna
+        int nuevoID = this.jugadores.size() + 1; // o tu lógica interna
 
-    Jugador nuevoJugador = new Jugador();
-    nuevoJugador.setNumJugador(nuevoID);
+        Jugador nuevoJugador = new Jugador();
+        nuevoJugador.setNumJugador(nuevoID);
 
-    jugadores.add(nuevoJugador);
+        jugadores.add(nuevoJugador);
 
-    return nuevoID;
-}
+        return nuevoID;
+    }
 
 }

@@ -314,6 +314,20 @@ public class JPantallaJuego extends JFramePadre implements Observer, IObserverCa
                 modeloVista.reiniciarTableroJugador(); // Limpia datos
                 forzarActualizacionVisualTableros();   // Limpia visual (reconstruye paneles)
             }
+            
+            // Fin de Ronda por Baraja
+            if (modeloVista.isFinDeRondaBaraja()) {
+                if (dialogoEspera == null || !dialogoEspera.isVisible()) {
+                    mostrarJOptionPaneFinRondaBaraja(modeloVista.getNumRonda());
+                }
+            } // 3. INICIO NUEVA RONDA (Limpieza Total)
+            else if (dialogoEspera != null && dialogoEspera.isVisible()) {
+                dialogoEspera.dispose();
+                dialogoEspera = null;
+
+                modeloVista.reiniciarTableroJugador(); // Limpia datos
+                forzarActualizacionVisualTableros();   // Limpia visual (reconstruye paneles)
+            }
 
             // 4, actualizacion 
             List<JugadorVista> datosFrescos = modeloVista.getJugadoresSecundarios();
@@ -543,6 +557,69 @@ public class JPantallaJuego extends JFramePadre implements Observer, IObserverCa
                     new Object[]{},
                     null
             );
+            dialogoEspera = pane.createDialog(this, titulo);
+            dialogoEspera.setDefaultCloseOperation(javax.swing.JDialog.DO_NOTHING_ON_CLOSE);
+            dialogoEspera.setModal(false);
+            dialogoEspera.setVisible(true);
+        }
+    }
+    
+    public void mostrarJOptionPaneFinRondaBaraja(int ronda) {
+        String titulo = "Fin de la Ronda " + ronda;
+        String mensaje = "La ronda ha terminado \n sin ganador. Baraja agotada.";
+
+        System.out.println(modeloVista.isHost());
+        if (modeloVista.isHost()) {
+            // --- CASO HOST ---
+            Object[] opciones = {"Iniciar Siguiente Ronda"};
+
+            int seleccion = JOptionPane.showOptionDialog(
+                    this,
+                    mensaje + "\n\nPresiona para continuar la partida.",
+                    titulo,
+                    JOptionPane.OK_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    opciones,
+                    opciones[0]
+            );
+
+            // Botón OK presionado
+            if (seleccion == JOptionPane.OK_OPTION) {
+
+                // limpiar estado lógico
+                modeloVista.limpiarEstadoRonda();
+
+                // limpiar tablero visual
+                modeloVista.reiniciarTableroJugador();
+
+                // actualizar tableros de todos los jugadores
+                forzarActualizacionVisualTableros();
+
+                // notificar al servidor que inicie la siguiente ronda
+                if (control != null) {
+                    control.solicitarSiguienteRonda();
+                }
+
+                this.repaint();
+                this.revalidate();
+            }
+
+        } else {
+            // --- CASO CLIENTE ---
+            if (dialogoEspera != null && dialogoEspera.isVisible()) {
+                return; // si ya existe, no abrirlo de nuevo
+            }
+
+            JOptionPane pane = new JOptionPane(
+                    mensaje + "\n\nEsperando al anfitrión para continuar...",
+                    JOptionPane.INFORMATION_MESSAGE,
+                    JOptionPane.DEFAULT_OPTION,
+                    null,
+                    new Object[]{},
+                    null
+            );
+
             dialogoEspera = pane.createDialog(this, titulo);
             dialogoEspera.setDefaultCloseOperation(javax.swing.JDialog.DO_NOTHING_ON_CLOSE);
             dialogoEspera.setModal(false);

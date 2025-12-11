@@ -30,6 +30,7 @@ public class ModeloVistaJuego implements IModeloVista {
 
     // para el estado de la ronda y partida
     private boolean finDeRonda = false;
+    private boolean finDeRondaBaraja = false;
     private boolean juegoTerminado = false;
     private String ganadorRonda;
 
@@ -214,11 +215,24 @@ public class ModeloVistaJuego implements IModeloVista {
         this.finDeRonda = true;
         notificar();
     }
+    
+    @Override
+    public void setDatosFinRondaBaraja() {
+        finDeRondaBaraja = true;
+        notificar();
+        finDeRondaBaraja = false;
+    }
 
     @Override
     public boolean isFinDeRonda() {
 
         return finDeRonda;
+    }
+    
+    @Override
+    public boolean isFinDeRondaBaraja() {
+
+        return finDeRondaBaraja;
     }
 
     @Override
@@ -236,6 +250,8 @@ public class ModeloVistaJuego implements IModeloVista {
     public void limpiarEstadoRonda() {
 
         this.finDeRonda = false;
+        this.finDeRondaBaraja = false;
+        
     }
 
     @Override
@@ -261,7 +277,7 @@ public class ModeloVistaJuego implements IModeloVista {
     @Override
     public boolean isHost() {
 
-        return host;
+        return modeloJuego.isHost();
     }
 
     @Override

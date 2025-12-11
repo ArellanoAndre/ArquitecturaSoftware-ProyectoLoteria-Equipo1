@@ -52,6 +52,8 @@ public interface IModeloJuego {
 
     void notificarFinRonda(int ronda, String ganador);
 
+    public void notificarFinRondaBaraja();
+    
     void notificarFinPartida(List<IJugador> ranking);
 
     void enviarEventoCantarLoteria();
