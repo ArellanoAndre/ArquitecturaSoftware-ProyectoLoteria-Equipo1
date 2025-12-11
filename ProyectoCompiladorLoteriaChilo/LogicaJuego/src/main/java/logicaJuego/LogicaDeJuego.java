@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.swing.Timer;
 import logicaJuego.entidades.Carta;
 import logicaJuego.entidades.Jugador;
@@ -36,6 +37,7 @@ public class LogicaDeJuego implements ILogicaJuego {
     private Map<String, Integer> puntuaciones;
     private int rondaActual = 1;
     private int MAX_RONDAS;
+    private List<Tarjeta> todasLasTarjetas;
 
     private IModeloLogica modeloLogica;
 
@@ -52,7 +54,7 @@ public class LogicaDeJuego implements ILogicaJuego {
     public LogicaDeJuego() {
         this.griton = new Griton();
         this.jugadores = new ArrayList<>();
-        this.imagenesTarjetas = TarjetasLoteria();
+        this.todasLasTarjetas = GenerarTarjetas();
         //this.MAX_RONDAS = 1; // por mientras prueba
 
     }
@@ -290,7 +292,7 @@ public class LogicaDeJuego implements ILogicaJuego {
                 this.MAX_RONDAS,
                 this.jugadores,
                 this.numJugadores,
-                this.TarjetasLoteria()
+                this.obtener3TarjetasAlAzar()
         );
     }
 
@@ -322,27 +324,106 @@ public class LogicaDeJuego implements ILogicaJuego {
         // YA NO - enviar confirmación de reglas al Cliente
     }
 
-    public List<String> TarjetasLoteria() {
+    public List<Tarjeta> GenerarTarjetas() {
         // Creamos la lista completa con los 54 tableros (01 al 54)
-        List<String> todosLosTableros = new ArrayList<>();
-        todosLosTableros.add("/img/Tableros/Tablero01.png");
-        todosLosTableros.add("/img/Tableros/Tablero02.png");
-        todosLosTableros.add("/img/Tableros/Tablero03.png");
-        todosLosTableros.add("/img/Tableros/Tablero04.png");
-        todosLosTableros.add("/img/Tableros/Tablero05.png");
-        todosLosTableros.add("/img/Tableros/Tablero06.png");
-        todosLosTableros.add("/img/Tableros/Tablero07.png");
-        todosLosTableros.add("/img/Tableros/Tablero08.png");
-        todosLosTableros.add("/img/Tableros/Tablero09.png");
-        todosLosTableros.add("/img/Tableros/Tablero10.png");
-        todosLosTableros.add("/img/Tableros/Tablero11.png");
-        todosLosTableros.add("/img/Tableros/Tablero12.png");
 
-        // Mezclamos la lista para que sea aleatorio
-        Collections.shuffle(todosLosTableros);
+        List<Tarjeta> todosLosTableros = new ArrayList<>();
 
-        // Tomamos solo los primeros 3 (ya están en orden aleatorio)
-        return todosLosTableros.subList(0, 3);
+        todosLosTableros.add(new Tarjeta(
+                new int[]{46, 6, 38, 3, 8, 11, 33, 35, 21, 54, 50, 29, 30, 40, 36, 26},
+                "/img/Tableros/Tablero01.png"
+        ));
+
+        todosLosTableros.add(new Tarjeta(
+                new int[]{29, 16, 3, 10, 14, 47, 40, 4, 53, 20, 35, 27, 15, 9, 51, 36},
+                "/img/Tableros/Tablero02.png"
+        ));
+
+        todosLosTableros.add(new Tarjeta(
+                new int[]{41, 51, 16, 48, 26, 53, 28, 31, 42, 33, 34, 27, 6, 37, 39, 8},
+                "/img/Tableros/Tablero03.png"
+        ));
+
+        todosLosTableros.add(new Tarjeta(
+                new int[]{13, 32, 42, 43, 23, 48, 2, 15, 26, 33, 17, 49, 8, 18, 45, 46},
+                "/img/Tableros/Tablero04.png"
+        ));
+
+        todosLosTableros.add(new Tarjeta(
+                new int[]{11, 13, 16, 48, 32, 17, 7, 52, 22, 45, 23, 27, 6, 47, 53, 29},
+                "/img/Tableros/Tablero05.png"
+        ));
+        todosLosTableros.add(new Tarjeta(
+                new int[]{42, 21, 50, 14, 9, 5, 1, 3, 52, 12, 25, 54, 24, 41, 35, 43},
+                "/img/Tableros/Tablero06.png"
+        ));
+        todosLosTableros.add(new Tarjeta(
+                new int[]{12, 2, 27, 32, 3, 31, 37, 24, 41, 44, 38, 47, 16, 21, 30, 29},
+                "/img/Tableros/Tablero07.png"
+        ));
+        todosLosTableros.add(new Tarjeta(
+                new int[]{24, 10, 47, 44, 28, 40, 27, 32, 19, 31, 30, 39, 49, 26, 7, 33},
+                "/img/Tableros/Tablero08.png"
+        ));
+        todosLosTableros.add(new Tarjeta(
+                new int[]{36, 22, 37, 35, 6, 46, 53, 52, 4, 31, 25, 45, 16, 50, 5, 2},
+                "/img/Tableros/Tablero09.png"
+        ));
+        todosLosTableros.add(new Tarjeta(
+                new int[]{3, 51, 48, 40, 10, 28, 53, 34, 42, 38, 47, 52, 43, 54, 9, 44},
+                "/img/Tableros/Tablero10.png"
+        ));
+        todosLosTableros.add(new Tarjeta(
+                new int[]{8, 17, 36, 32, 19, 20, 14, 31, 49, 37, 51, 39, 4, 46, 23, 22},
+                "/img/Tableros/Tablero11.png"
+        ));
+        todosLosTableros.add(new Tarjeta(
+                new int[]{39, 23, 46, 51, 6, 53, 11, 45, 9, 54, 50, 18, 28, 33, 27, 49},
+                "/img/Tableros/Tablero12.png"
+        ));
+
+        return todosLosTableros;
+    }
+
+    public List<String> obtener3TarjetasAlAzar() {
+
+        List<Tarjeta> copia = new ArrayList<>(todasLasTarjetas);
+        Collections.shuffle(copia);
+
+        return copia.stream()
+                .limit(3)
+                .map(Tarjeta::getImg)
+                .collect(Collectors.toList());
+    }
+
+    public void asignarTarjetaAJugador(int idJugador, String rutaTarjeta) {
+
+        // 1) Buscar jugador por su número
+        Jugador jugador = jugadores.stream()
+                .filter(j -> j.getNumJugador() == idJugador)
+                .findFirst()
+                .orElse(null);
+
+        if (jugador == null) {
+            System.out.println("❌ ERROR: No existe un jugador con numJugador = " + idJugador);
+            return;
+        }
+
+        // 2) Buscar la tarjeta completa según la ruta
+        Tarjeta tarjeta = todasLasTarjetas.stream()
+                .filter(t -> t.getImg().equals(rutaTarjeta))
+                .findFirst()
+                .orElse(null);
+
+        if (tarjeta == null) {
+            System.out.println("❌ ERROR: No existe una tarjeta con ruta " + rutaTarjeta);
+            return;
+        }
+
+        // 3) Asignar la tarjeta al jugador
+        jugador.setTarjeta(tarjeta);
+
+        System.out.println("✔ Tarjeta asignada al jugador " + idJugador + ": " + rutaTarjeta);
     }
 
     public void setJugadores(List<Jugador> jugadores) {
