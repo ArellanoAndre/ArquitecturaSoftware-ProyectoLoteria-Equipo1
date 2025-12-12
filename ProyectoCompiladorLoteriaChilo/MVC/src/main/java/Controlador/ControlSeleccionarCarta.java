@@ -32,5 +32,10 @@ public class ControlSeleccionarCarta implements IControlSeleccionarCarta{
     public void seleccionarCarta(int pos) {
         modeloVista.seleccionarCarta(pos);
     }
+    
+    @Override
+    public void cambiarMVC(){
+        modeloVista.cambiarMVC();
+    }
 
 }

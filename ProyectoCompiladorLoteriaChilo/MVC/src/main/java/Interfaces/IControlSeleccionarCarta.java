@@ -11,5 +11,7 @@ public interface IControlSeleccionarCarta {
      * @param pos Posición de la carta seleccionada.
      */
     void seleccionarCarta(int pos);
+    
+    void cambiarMVC();
 }
 

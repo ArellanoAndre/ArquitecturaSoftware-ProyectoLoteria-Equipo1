@@ -251,8 +251,9 @@ public class ModeloVistaJuego implements IModeloVista {
 
         this.numRonda = ronda;
         this.ganadorRonda = ganador;
-        this.finDeRonda = true;
+        finDeRonda = true;
         notificar();
+        finDeRonda = false;
     }
 
     @Override
@@ -379,7 +380,7 @@ public class ModeloVistaJuego implements IModeloVista {
     }
 
     @Override
-    public void cambioMVC() {
-
+    public void cambiarMVC() {
+        modeloJuego.enviarEventoCambiarMVC();
     }
 }

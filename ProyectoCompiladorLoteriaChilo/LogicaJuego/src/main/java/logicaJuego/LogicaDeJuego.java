@@ -495,12 +495,12 @@ public class LogicaDeJuego implements ILogicaJuego {
 
         if (jugador != null) {
 
-            if (jugador.getTarjeta().esLoteria()) {
+//            if (jugador.getTarjeta().esLoteria()) {
                 System.out.println("" + jugador.getNombre() + " ganó la ronda " + rondaActual);
 
-                jugador.addPuntos(100);
+                jugador.addPuntos(500);
                 finalizarRonda(jugador.getNombre());
-            }
+//            }
 
         }
     }
@@ -598,6 +598,11 @@ public class LogicaDeJuego implements ILogicaJuego {
     }
 
     public void cambioMVC() {
+        for (Jugador jugador : jugadores) {
+            if (jugador.getTarjeta() == null) {
+                return;
+            }
+        }
         modeloLogica.enviarEventoCambiarMVC();
     }
 

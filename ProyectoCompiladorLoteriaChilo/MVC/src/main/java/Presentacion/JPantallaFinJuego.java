@@ -4,6 +4,7 @@
  */
 package Presentacion;
 
+import Controlador.ControlSeleccionarCarta;
 import ModeloVista.entidadesVista.JugadorVista;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -25,15 +26,16 @@ import javax.swing.SwingConstants;
 public class JPantallaFinJuego extends javax.swing.JDialog {
 
     private JPanel panelContenidoRanking;
-
+    private ControlSeleccionarCarta controlador;
     /**
      * Creates new form JPantallaFinJuegoy
      */
-    public JPantallaFinJuego(java.awt.Frame parent, boolean modal) {
+    public JPantallaFinJuego(java.awt.Frame parent, boolean modal, ControlSeleccionarCarta controlador) {
         super(parent, modal);
         initComponents(); // NetBeans crea el JScrollPane (pnlRanking)
         this.setLocationRelativeTo(null);
 
+        this.controlador = controlador;
         // Creamos el panel para contenido rankign 
         panelContenidoRanking = new JPanel();
         panelContenidoRanking.setBackground(Color.WHITE); 
@@ -204,6 +206,7 @@ public class JPantallaFinJuego extends javax.swing.JDialog {
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         
         this.dispose();
+        controlador.cambiarMVC();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
 

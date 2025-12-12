@@ -32,12 +32,14 @@ public class JPantallaJuego extends JFramePadre implements Observer, IObserverCa
     private JPanelTarjeta panelTarjeta;
     private JPanel contenedorJugadores;
     private boolean visible = false;
+    private ControlSeleccionarCarta controlador;
 
     public JPantallaJuego(IModeloVista modeloVista, ControlSeleccionarCarta controlador) {
         super();
         this.modeloVista = modeloVista;
         this.modeloVista.addObserver(this);
         this.modeloVista.addObserverCambioMVC(this);
+        this.controlador = controlador;
 
         initComponents();           // Inicializa componentes generados por NetBeans
         setLocationRelativeTo(null);
@@ -293,7 +295,7 @@ public class JPantallaJuego extends JFramePadre implements Observer, IObserverCa
                 if (dialogoEspera != null) {
                     dialogoEspera.dispose();
                 }
-                JPantallaFinJuego dialogFinPartida = new JPantallaFinJuego((java.awt.Frame) null, true);
+                JPantallaFinJuego dialogFinPartida = new JPantallaFinJuego((java.awt.Frame) null, true, controlador);
 
                 dialogFinPartida.mostrarRanking(modeloVista.getListaRanking());
 

@@ -113,6 +113,6 @@ public interface IModeloVista {
     // --- PUENTES DE COMUNICACIÓN (Salida) ---
     void solicitarEnvioCantarLoteria();
     void solicitarEnvioSiguienteRonda();
-    void cambioMVC();
+    void cambiarMVC();
     
 }
