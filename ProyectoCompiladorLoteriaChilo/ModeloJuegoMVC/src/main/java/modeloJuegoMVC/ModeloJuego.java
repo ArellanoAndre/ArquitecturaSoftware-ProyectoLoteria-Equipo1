@@ -193,16 +193,16 @@ public class ModeloJuego implements IModeloJuego {
                 .filter(t -> t.getImg().equals(rutaTarjeta))
                 .findFirst()
                 .orElse(null);
-
+        
+        Tarjeta tarjetaJugador = new Tarjeta(copiarCasillas(tarjeta.getCasillas()), tarjeta.getImg());
+        
         if (jugadorPrincipal.getNumJugador() == numJugador) {
-
-            Tarjeta tarjetaJugador = new Tarjeta(copiarCasillas(tarjeta.getCasillas()), tarjeta.getImg());
 
             jugadorPrincipal.setTarjeta(tarjetaJugador);
         } else {
             for (IJugador jugadorSecundario : jugadoresSecundarios) {
                 if (jugadorSecundario.getNumJugador() == numJugador) {
-                    jugadorSecundario.setTarjeta(tarjeta);
+                    jugadorSecundario.setTarjeta(tarjetaJugador);
                 }
             }
         }
