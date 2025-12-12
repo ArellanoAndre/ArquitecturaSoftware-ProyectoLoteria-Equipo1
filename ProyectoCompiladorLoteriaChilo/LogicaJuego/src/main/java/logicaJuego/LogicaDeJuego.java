@@ -34,6 +34,7 @@ public class LogicaDeJuego implements ILogicaJuego {
     private int numJugadores;
     private List<String> imagenesTarjetas;
     private boolean partidaConfigurada = false;
+    private boolean configuracionEnCurso = false;
     private Map<String, Integer> puntuaciones;
     private int rondaActual = 1;
     private int MAX_RONDAS;
@@ -334,6 +335,7 @@ public class LogicaDeJuego implements ILogicaJuego {
         // Guardamos las puntuaciones
         this.puntuaciones = puntuaciones;
         this.partidaConfigurada = true;
+        this.configuracionEnCurso = false;
         System.out.println("[Logica] Partida configurada correctamente.");
 
         modeloLogica.enviarAbrirPantallaSeleccionAvatar(id);
@@ -479,9 +481,15 @@ public class LogicaDeJuego implements ILogicaJuego {
     public boolean estaConfiguradaPartida() {
         return partidaConfigurada;
     }
+    
+    @Override
+    public boolean configEnCurso(){
+        return configuracionEnCurso;
+    }
 
     @Override
     public void enviarAbrirPantallaConfig(int idJugador) {
+        configuracionEnCurso = true;
         modeloLogica.enviarAbrirPantallaConfig(idJugador);
     }
 

@@ -159,6 +159,7 @@ public class ModeloVistaInicio extends Subject implements IModeloVistaInicio {
     public void abrirPantallaAvatar(int id) {
         pantallaConfig.setVisible(false);
         pantallaLobby.setVisible(false);
+        MenuPrincipal.setVisible(false);
         pantallaAvatar.setId(id); pantallaAvatar.setVisible(true);
     }
 

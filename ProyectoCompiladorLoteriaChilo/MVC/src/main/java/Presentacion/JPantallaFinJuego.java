@@ -206,7 +206,7 @@ public class JPantallaFinJuego extends javax.swing.JDialog {
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         
         this.dispose();
-        controlador.cambiarMVC();
+//        controlador.cambiarMVC();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
 

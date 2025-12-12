@@ -139,7 +139,6 @@ public class JPantallaMenuPrincipal extends JFramePadre {
     private void btnJugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJugarActionPerformed
         if (controlador != null) {
         controlador.onJugar();
-        this.dispose();
         }
     }//GEN-LAST:event_btnJugarActionPerformed
 

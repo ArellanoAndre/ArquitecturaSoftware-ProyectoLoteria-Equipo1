@@ -21,27 +21,31 @@ public class ProcesarJugar implements IProcesadorEvento {
     }
 
     @Override
-public void procesar(String tipoEvento, JSONObject datos, LogicaDeJuego logica) {
+    public void procesar(String tipoEvento, JSONObject datos, LogicaDeJuego logica) {
 
-    if ("JUGAR".equals(tipoEvento)) {
+        if ("JUGAR".equals(tipoEvento)) {
 
-        int idJugador = datos.optInt("ID", -1);
+            int idJugador = datos.optInt("ID", -1);
 
-        System.out.println("[FiltroJugar] Evento JUGAR recibido de jugador ID = " + idJugador);
+            System.out.println("[FiltroJugar] Evento JUGAR recibido de jugador ID = " + idJugador);
 
-        if (!logica.estaConfiguradaPartida()) {
-            System.out.println("[FiltroJugar] → La partida NO está configurada.");
-            logica.enviarAbrirPantallaConfig(idJugador);  // ← ahora recibe ID
-        } else {
-            System.out.println("[FiltroJugar] → La partida YA está configurada.");
-            logica.enviarAbrirPantallaSeleccionAvatar(idJugador); // ← recibe ID
+            if (!logica.configEnCurso()) {
+
+                if (!logica.estaConfiguradaPartida()) {
+                    System.out.println("[FiltroJugar] → La partida NO está configurada.");
+                    logica.enviarAbrirPantallaConfig(idJugador);  // ← ahora recibe ID
+                } else {
+                    System.out.println("[FiltroJugar] → La partida YA está configurada.");
+                    logica.enviarAbrirPantallaSeleccionAvatar(idJugador); // ← recibe ID
+                }
+
+            }
+            return;
         }
 
-        return;
+        if (siguiente != null) {
+            siguiente.procesar(tipoEvento, datos, logica);
+        }
     }
-
-    if (siguiente != null)
-        siguiente.procesar(tipoEvento, datos, logica);
-}
 
 }

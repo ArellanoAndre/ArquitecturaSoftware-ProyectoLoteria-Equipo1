@@ -19,6 +19,8 @@ public interface ILogicaJuego {
     void siguienteCarta();
     
     boolean estaConfiguradaPartida();
+    
+    boolean configEnCurso();
 
     void enviarAbrirPantallaConfig(int idJugador);
 
