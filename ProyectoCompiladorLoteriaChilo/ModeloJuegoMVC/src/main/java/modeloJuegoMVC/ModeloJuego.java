@@ -195,7 +195,10 @@ public class ModeloJuego implements IModeloJuego {
                 .orElse(null);
 
         if (jugadorPrincipal.getNumJugador() == numJugador) {
-            jugadorPrincipal.setTarjeta(tarjeta);
+            
+            Tarjeta tarjetaJugador = new Tarjeta(copiarCasillas(tarjeta.getCasillas()), tarjeta.getImg());
+            
+            jugadorPrincipal.setTarjeta(tarjetaJugador);
         } else {
             for (IJugador jugadorSecundario : jugadoresSecundarios) {
                 if (jugadorSecundario.getNumJugador() == numJugador) {
@@ -203,6 +206,18 @@ public class ModeloJuego implements IModeloJuego {
                 }
             }
         }
+    }
+    
+    private int[] copiarCasillas(int[] original) {
+        if (original == null) {
+            return null;
+        }
+        int[] copia = new int[original.length];
+        for (int i = 0; i < original.length; i++) {
+            int c = original[i];
+            copia[i] = c;
+        }
+        return copia;
     }
 
     @Override

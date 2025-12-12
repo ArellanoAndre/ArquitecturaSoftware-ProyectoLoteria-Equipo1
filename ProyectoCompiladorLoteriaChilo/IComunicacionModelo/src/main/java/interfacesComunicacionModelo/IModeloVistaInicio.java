@@ -52,4 +52,6 @@ public interface IModeloVistaInicio {
     public void notificarCambioMVC();
 
     public void abrirPantallaMenu(int id);
+    
+    public boolean isHost();
 }

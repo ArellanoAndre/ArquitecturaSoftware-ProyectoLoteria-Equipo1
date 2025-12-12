@@ -17,7 +17,7 @@ public class ArrancadorMVC {
      */
     public static void main(String[] args) {
         EnsambladorMVC ensambladorMVC = new EnsambladorMVC();
-        ensambladorMVC.ensamblarMVC("127.0.0.1", 5001, 7000);
+        ensambladorMVC.ensamblarMVC("localhost", 5001, 7000);
     }
     
 }

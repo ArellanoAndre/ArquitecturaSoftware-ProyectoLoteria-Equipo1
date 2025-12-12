@@ -225,6 +225,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnConfirmarActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="btnConfirmar.setVisible(false);"/>
+          </AuxValues>
         </Component>
         <Container class="javax.swing.JPanel" name="panelJugador1">
           <Properties>

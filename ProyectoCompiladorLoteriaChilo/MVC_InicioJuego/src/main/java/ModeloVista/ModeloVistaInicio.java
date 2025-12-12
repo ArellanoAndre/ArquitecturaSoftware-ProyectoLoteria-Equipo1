@@ -229,4 +229,9 @@ public class ModeloVistaInicio extends Subject implements IModeloVistaInicio {
         this.id = id;
     }
 
+    @Override
+    public boolean isHost() {
+        return modeloJuego.isHost();
+    }
+
 }

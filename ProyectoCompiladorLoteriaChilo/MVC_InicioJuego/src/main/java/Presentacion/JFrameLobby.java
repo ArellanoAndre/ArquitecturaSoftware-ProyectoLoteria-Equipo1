@@ -29,6 +29,7 @@ public class JFrameLobby extends JFramePadre implements IObserver,IObserverCambi
      */
     public JFrameLobby() {
         this(null, null);
+        this.setResizable(true);
     }
 
     public JFrameLobby(IControladorInicio controlador, ModeloVistaInicio modeloVista) {
@@ -36,7 +37,7 @@ public class JFrameLobby extends JFramePadre implements IObserver,IObserverCambi
         this.modeloVista = modeloVista;
         initComponents();
         setLocationRelativeTo(null);
-        setResizable(false);
+        setResizable(true);
         //this.modeloVista.addObserver(this);   // Se registra como observador
     }
 
@@ -44,8 +45,7 @@ public class JFrameLobby extends JFramePadre implements IObserver,IObserverCambi
         this.controlador = controlador;
         initComponents();
         setLocationRelativeTo(null);
-        setResizable(false);
-        
+        setResizable(true);
     }
 
     public void setModeloVista(ModeloVistaInicio modeloVista) {
@@ -159,6 +159,7 @@ public class JFrameLobby extends JFramePadre implements IObserver,IObserverCambi
         btnConfirmar.setFont(new java.awt.Font("Sarabun", 1, 24)); // NOI18N
         btnConfirmar.setForeground(new java.awt.Color(0, 42, 0));
         btnConfirmar.setText("INICIAR");
+        btnConfirmar.setVisible(false);
         btnConfirmar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmarActionPerformed(evt);
@@ -498,15 +499,22 @@ public class JFrameLobby extends JFramePadre implements IObserver,IObserverCambi
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
 
-        if (tarjetaSeleccionadaRuta == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Por favor, selecciona una tarjeta antes de continuar.",
-                    "Tarjeta requerida", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        if (modeloVista.isHost()) {
+            if (tarjetaSeleccionadaRuta == null) {
+                JOptionPane.showMessageDialog(this,
+                        "Por favor, selecciona una tarjeta antes de continuar.",
+                        "Tarjeta requerida", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-        if (controlador != null) {
-            controlador.cambiarMVC();
+            if (controlador != null) {
+                controlador.cambiarMVC();
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(this,
+                        "Solo el host puede iniciar la partida.",
+                        "No es host", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
@@ -617,7 +625,10 @@ public class JFrameLobby extends JFramePadre implements IObserver,IObserverCambi
 
         // Mostrar lobby automáticamente cuando llegue una config válida
         this.setVisible(true);
-
+        
+        if (modeloVista.isHost()) {
+            btnConfirmar.setVisible(true);
+        }
         // Ocultar la pantalla de avatar
         if (modeloVista.getPantallaAvatar() != null) {
             modeloVista.getPantallaAvatar().setVisible(false);

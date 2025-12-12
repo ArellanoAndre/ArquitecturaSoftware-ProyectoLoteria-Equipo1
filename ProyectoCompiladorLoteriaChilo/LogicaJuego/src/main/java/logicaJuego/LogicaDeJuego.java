@@ -415,7 +415,6 @@ public class LogicaDeJuego implements ILogicaJuego {
 
     public void asignarTarjetaAJugador(int idJugador, String rutaTarjeta) {
 
-        // 1) Buscar jugador por su número
         Jugador jugador = jugadores.stream()
                 .filter(j -> j.getNumJugador() == idJugador)
                 .findFirst()
@@ -426,7 +425,6 @@ public class LogicaDeJuego implements ILogicaJuego {
             return;
         }
 
-        // 2) Buscar la tarjeta completa según la ruta
         Tarjeta tarjeta = todasLasTarjetas.stream()
                 .filter(t -> t.getImg().equals(rutaTarjeta))
                 .findFirst()
@@ -437,11 +435,28 @@ public class LogicaDeJuego implements ILogicaJuego {
             return;
         }
 
-        // 3) Asignar la tarjeta al jugador
-        jugador.setTarjeta(tarjeta);
+        // ✅ Copia profunda de casillas (para que no se compartan referencias)
+        Tarjeta tarjetaJugador = new Tarjeta(copiarCasillas(tarjeta.getCasillas()), tarjeta.getImg());
+
+        jugador.setTarjeta(tarjetaJugador);
+
+        System.out.println(System.identityHashCode(tarjeta.getCasillas()));
+        System.out.println(System.identityHashCode(tarjetaJugador.getCasillas()));
 
         System.out.println("✔ Tarjeta asignada al jugador " + idJugador + ": " + rutaTarjeta);
         modeloLogica.enviarTarjetaAsignada(idJugador, rutaTarjeta);
+    }
+
+    private int[] copiarCasillas(int[] original) {
+        if (original == null) {
+            return null;
+        }
+        int[] copia = new int[original.length];
+        for (int i = 0; i < original.length; i++) {
+            int c = original[i];
+            copia[i] = c;
+        }
+        return copia;
     }
 
     public void setJugadores(List<Jugador> jugadores) {
