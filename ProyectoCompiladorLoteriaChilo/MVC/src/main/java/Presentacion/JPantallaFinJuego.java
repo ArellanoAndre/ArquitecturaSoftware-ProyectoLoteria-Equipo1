@@ -41,6 +41,7 @@ public class JPantallaFinJuego extends javax.swing.JDialog {
         panelContenidoRanking.setBackground(Color.WHITE); 
         panelContenidoRanking.setLayout(new BoxLayout(panelContenidoRanking, BoxLayout.Y_AXIS));
 
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         // se mete al scrollpane
         pnlRanking.setViewportView(panelContenidoRanking);
 
@@ -157,6 +158,7 @@ public class JPantallaFinJuego extends javax.swing.JDialog {
         btnAceptar.setBackground(new java.awt.Color(102, 255, 255));
         btnAceptar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnAceptar.setText("Aceptar");
+        btnAceptar.setVisible(false);
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAceptarActionPerformed(evt);
