@@ -26,8 +26,7 @@ public class TarjetaVista {
      */
     public void setMarcadas(boolean[] marcadas) {
         this.marcadas = marcadas;
-    }
-
+    } 
     /**
      * @return Arreglo indicando qué casillas están marcadas.
      */

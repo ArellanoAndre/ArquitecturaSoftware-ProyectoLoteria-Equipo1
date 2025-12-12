@@ -86,4 +86,37 @@ public interface IModeloVista {
      * su interfaz.
      */
     void notificar();
+<<<<<<< Updated upstream:ProyectoCompiladorLoteria/MVC/src/main/java/Interfaces/IModeloVista.java
+=======
+    
+    public void notificarCambioMVC();
+    
+    // --- metodos para el estado de las rondas ---
+    void setDatosFinRonda(int ronda, String ganador);
+    void setDatosFinRondaBaraja();
+    boolean isFinDeRonda();
+    boolean isFinDeRondaBaraja();
+    boolean isActivarJugadaEspecial();
+    String getGanadorRonda();
+    int getNumRonda();
+    void limpiarEstadoRonda();
+    void reiniciarTableroJugador();
+
+    // --- metodos para el estado de la partida ---
+    void setRankingFinal(List<JugadorVista> ranking);
+    boolean isJuegoTerminado();
+    List<JugadorVista> getListaRanking();
+
+    // --- DATOS GLOBALES ---
+    boolean isHost(); 
+    
+    // --- PUENTES DE COMUNICACIÓN (Salida) ---
+    void solicitarEnvioCantarLoteria();
+    void solicitarEnvioSiguienteRonda();
+    void cambioMVC();
+    
+    double actualizarPuntaje(int puntos);
+    void actualizarTarjetaJugadorecundario(int puntos, String jugada, int idJugador);
+    
+>>>>>>> Stashed changes:ProyectoCompiladorLoteriaChilo/MVC/src/main/java/Interfaces/IModeloVista.java
 }

@@ -36,5 +36,35 @@ public interface IControlVista {
      *
      * @param cartaActual Carta que fue cantada en el juego.
      */
+<<<<<<< Updated upstream:ProyectoCompiladorLoteria/MVC/src/main/java/Interfaces/IControlVista.java
     void actualizarCartaCantada(Carta cartaActual);
+=======
+    void actualizarCartaCantada(ICarta cartaActual);
+
+    /**
+     * Muestra mensaje de fin de ronda en la vista.
+     *
+     *
+     */
+    void mostrarMensajeFinRonda(int ronda, String ganador);
+
+    public void mostrarMensajeFinRondaBaraja();
+    
+    /**
+     * Muestra mensaje de fin de partida en la vista.
+     *
+     *
+     */
+    void procesarFinPartida(List<IJugador> ranking);
+
+    void solicitarIntentoLoteria();
+
+    void solicitarSiguienteRonda();
+    
+    public void cambiarMVC();
+    
+    public void actualizarVistaJugadas(int puntos, String jugada, int idJugador);
+    void actualizarPuntos(int puntos);
+
+>>>>>>> Stashed changes:ProyectoCompiladorLoteriaChilo/IComunicacionModelo/src/main/java/interfacesComunicacionModelo/IControlVistaMVC_Juego.java
 }

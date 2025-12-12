@@ -33,7 +33,7 @@ public class Prueba_MVC {
             //======================================================================
             String ipDestino = "127.0.0.1";
             int puertoLocal = 5001;
-            int puertoDestino = 7000;
+            int puertoDestino = 7777;
 
             // ===============================
             // 1. CREACIÓN DE JUGADORES REALES
@@ -100,6 +100,12 @@ public class Prueba_MVC {
             } catch (IOException ex) {
                 Logger.getLogger(Prueba_MVC.class.getName()).log(Level.SEVERE, null, ex);
             }
+<<<<<<< Updated upstream:ProyectoCompiladorLoteria/Arrancador/src/main/java/pruebaMVC/Prueba_MVC.java
+=======
+            
+            modeloJuego.suscribirseJuegoOut();
+            modeloJuego.enviarEventoIniciarRonda();
+>>>>>>> Stashed changes:ProyectoCompiladorLoteriaChilo/Arrancador/src/main/java/pruebaMVC/Prueba_MVC.java
 
         });
     }

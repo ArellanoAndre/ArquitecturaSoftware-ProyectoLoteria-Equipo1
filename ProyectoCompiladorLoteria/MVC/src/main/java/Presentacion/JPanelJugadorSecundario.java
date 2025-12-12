@@ -97,6 +97,17 @@ public class JPanelJugadorSecundario extends JPanel implements Observer {
             }
         }
     }
+    public void jugadaEspecial(JugadorVista jugador){
+        lblPuntaje.setText("Puntaje: " + jugador.getPuntaje());
+
+        boolean[] marcadas = jugador.getTarjeta().getMarcadas();
+        for (int i = 0; i < panelCasillasGrid.length; i++) {
+            if (marcadas[i]) {
+                panelCasillasGrid[i].setBackground(Color.BLUE);
+            }
+        }
+    
+    }
 
     /**
      * Método llamado cuando el ModeloVista notifica un cambio. Actualiza el
@@ -104,6 +115,11 @@ public class JPanelJugadorSecundario extends JPanel implements Observer {
      */
     @Override
     public void update() {
-        actualizar(jugador);
+        if (modeloVista.isActivarJugadaEspecial()) {
+            jugadaEspecial(jugador);
+        } else {
+            actualizar(jugador);
+        }
     }
 }
+    

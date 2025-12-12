@@ -82,7 +82,9 @@ public class JPanelJugadorPrincipal extends javax.swing.JPanel implements Observ
 
     @Override
     public void update() {
-        //codigo para actualizar puntaje
+        double puntos = modeloVista.getJugadorPrincipal().getPuntaje();
+        lblPuntaje.setText("Puntaje: " + String.format("%.2f", puntos));
+        
     }
     
     
