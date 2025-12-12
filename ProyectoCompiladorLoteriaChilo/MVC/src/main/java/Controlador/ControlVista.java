@@ -39,7 +39,7 @@ public class ControlVista implements IControlVistaMVC_Juego {
     public void setJugadorPrincipal(IJugador jugador) {
         TarjetaVista tarjeta = new TarjetaVista(jugador.getTarjeta().getMarcadas(), jugador.getTarjeta().getImg());
         JugadorVista jugadorP = new JugadorVista(jugador.getNombre(), tarjeta, jugador.getNumJugador());
-        jugadorP.setRutaAvatar("/img/Avatares/" +jugador.getAvatar());
+        jugadorP.setRutaAvatar("/img/Avatares/" + jugador.getAvatar());
         modeloVista.setJugadorPrincipal(jugadorP);
     }
 
@@ -66,23 +66,20 @@ public class ControlVista implements IControlVistaMVC_Juego {
             return;
         }
 
-        // 1. Obtenemos la lista ACTUAL de la vista (la que se está pintando)
         List<JugadorVista> actualesEnVista = modeloVista.getJugadoresSecundarios();
         if (actualesEnVista == null) {
             actualesEnVista = new ArrayList<>();
         }
 
-        // 2. Lista temporal para guardar los nuevos si no existen
         List<JugadorVista> listaFinal = new ArrayList<>();
 
         for (IJugador jModelo : jugadoresModelo) {
-            if (jModelo == null || jModelo.getTarjeta() == null) {
-                continue;
+            if (jModelo == null) {
+                continue; // <-- SE PERMITE tarjeta = null
             }
 
             JugadorVista jugadorVistaExistente = null;
             for (JugadorVista jugadorVista : actualesEnVista) {
-
                 if (jugadorVista.getNumJugador() == jModelo.getNumJugador()) {
                     jugadorVistaExistente = jugadorVista;
                     break;
@@ -91,20 +88,34 @@ public class ControlVista implements IControlVistaMVC_Juego {
 
             if (jugadorVistaExistente != null) {
 
-                jugadorVistaExistente.getTarjeta().setMarcadas(jModelo.getTarjeta().getMarcadas());
+                // Si hay tarjeta en el modelo, actualizar marcadas
+                if (jModelo.getTarjeta() != null && jugadorVistaExistente.getTarjeta() != null) {
+                    jugadorVistaExistente.getTarjeta().setMarcadas(
+                            jModelo.getTarjeta().getMarcadas()
+                    );
+                }
 
-                // Agregamos el existente a la lista final para mantener el orden
                 listaFinal.add(jugadorVistaExistente);
+
             } else {
 
-                TarjetaVista tarjeta = new TarjetaVista(jModelo.getTarjeta().getMarcadas(), jModelo.getTarjeta().getImg());
-                JugadorVista nuevo = new JugadorVista(jModelo.getNombre(), tarjeta, jModelo.getNumJugador());
+                // Crear tarjeta vista SOLO si existe en IModelo
+                TarjetaVista tarjetaVista = null;
+                if (jModelo.getTarjeta() != null) {
+                    tarjetaVista = new TarjetaVista(
+                            jModelo.getTarjeta().getMarcadas(),
+                            jModelo.getTarjeta().getImg()
+                    );
+                }
+
+                JugadorVista nuevo = new JugadorVista(
+                        jModelo.getNombre(),
+                        tarjetaVista,
+                        jModelo.getNumJugador()
+                );
 
                 String ruta = jModelo.getAvatar();
-                if (jModelo.getAvatar() != null && !jModelo.getAvatar().startsWith("/img")) {
-                    ruta = jModelo.getAvatar();
-                }
-                nuevo.setRutaAvatar("/img/Avatares/" + ruta );
+                nuevo.setRutaAvatar("/img/Avatares/" + ruta);
 
                 listaFinal.add(nuevo);
             }
@@ -138,9 +149,9 @@ public class ControlVista implements IControlVistaMVC_Juego {
 
         modeloVista.setDatosFinRonda(ronda, ganador);
     }
-    
+
     @Override
-    public void mostrarMensajeFinRondaBaraja(){
+    public void mostrarMensajeFinRondaBaraja() {
         modeloVista.setDatosFinRondaBaraja();
     }
 
@@ -184,9 +195,9 @@ public class ControlVista implements IControlVistaMVC_Juego {
 
         modeloVista.solicitarEnvioCantarLoteria();
     }
-    
+
     @Override
-    public void cambiarMVC(){
+    public void cambiarMVC() {
         modeloVista.notificarCambioMVC();
     }
 

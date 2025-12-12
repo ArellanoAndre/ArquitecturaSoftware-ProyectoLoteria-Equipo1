@@ -8,6 +8,7 @@ import Interfaces.IObserverCambioMVCJuego;
 import Interfaces.Observer;
 import interfacesComunicacionModelo.IControlVistaMVC_Juego;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
@@ -283,10 +284,11 @@ public class JPantallaJuego extends JFramePadre implements Observer, IObserverCa
      */
     @Override
     public void update() {
-        // Usamos invokeLater para que Swing maneje los gráficos en orden
         SwingUtilities.invokeLater(() -> {
 
+            // ======================
             // 1. FIN DE PARTIDA
+            // ======================
             if (modeloVista.isJuegoTerminado()) {
                 if (dialogoEspera != null) {
                     dialogoEspera.dispose();
@@ -297,63 +299,75 @@ public class JPantallaJuego extends JFramePadre implements Observer, IObserverCa
 
                 this.dispose();
                 dialogFinPartida.setVisible(true);
-
                 return;
             }
 
+            // ======================
             // 2. FIN DE RONDA
+            // ======================
             if (modeloVista.isFinDeRonda()) {
                 if (dialogoEspera == null || !dialogoEspera.isVisible()) {
                     mostrarJOptionPaneFinRonda(modeloVista.getNumRonda(), modeloVista.getGanadorRonda());
                 }
-            } // 3. INICIO NUEVA RONDA (Limpieza Total)
-            else if (dialogoEspera != null && dialogoEspera.isVisible()) {
+            } else if (dialogoEspera != null && dialogoEspera.isVisible()) {
                 dialogoEspera.dispose();
                 dialogoEspera = null;
 
-                modeloVista.reiniciarTableroJugador(); // Limpia datos
-                forzarActualizacionVisualTableros();   // Limpia visual (reconstruye paneles)
+                modeloVista.reiniciarTableroJugador();
+                forzarActualizacionVisualTableros();
             }
-            
-            // Fin de Ronda por Baraja
+
+            // ===============================
+            // 3. FIN DE RONDA POR BARAJA
+            // ===============================
             if (modeloVista.isFinDeRondaBaraja()) {
                 if (dialogoEspera == null || !dialogoEspera.isVisible()) {
                     mostrarJOptionPaneFinRondaBaraja(modeloVista.getNumRonda());
                 }
-            } // 3. INICIO NUEVA RONDA (Limpieza Total)
-            else if (dialogoEspera != null && dialogoEspera.isVisible()) {
+            } else if (dialogoEspera != null && dialogoEspera.isVisible()) {
                 dialogoEspera.dispose();
                 dialogoEspera = null;
 
-                modeloVista.reiniciarTableroJugador(); // Limpia datos
-                forzarActualizacionVisualTableros();   // Limpia visual (reconstruye paneles)
+                modeloVista.reiniciarTableroJugador();
+                forzarActualizacionVisualTableros();
             }
 
-            // 4, actualizacion 
+            // ======================
+            // 4. ACTUALIZAR JUGADORES SECUNDARIOS
+            // ======================
             List<JugadorVista> datosFrescos = modeloVista.getJugadoresSecundarios();
 
-            // Verificamos si el contenedor existe y tiene hijos
-            if (datosFrescos != null && contenedorJugadores != null && contenedorJugadores.getComponentCount() > 0) {
+            // Caso 1: No hay contenedor aún → CREAR todo
+            if (contenedorJugadores == null) {
+                cargarJugadoresSecundarios();
+                this.repaint();
+                this.revalidate();
+                return;
+            }
 
-                // >>> CAMBIO CLAVE: Iteramos sobre contenedorJugadores, NO panelJugadoresSecundarios <<<
-                for (java.awt.Component comp : contenedorJugadores.getComponents()) {
+            // Caso 2: Hay datos, pero NO hay paneles creados → CREAR
+            if (contenedorJugadores.getComponentCount() == 0 && datosFrescos != null && !datosFrescos.isEmpty()) {
+                cargarJugadoresSecundarios();
+                this.repaint();
+                this.revalidate();
+                return;
+            }
 
-                    if (comp instanceof PanelJugadorSecundario) {
-                        PanelJugadorSecundario panel = (PanelJugadorSecundario) comp;
+            // Caso 3: Actualizar paneles existentes (SIN reconstruir todo)
+            if (datosFrescos != null && !datosFrescos.isEmpty()) {
+                for (Component comp : contenedorJugadores.getComponents()) {
+                    if (comp instanceof PanelJugadorSecundario panel) {
                         int idPanel = panel.getIdJugador();
 
+                        // Buscar en datos frescos
                         for (JugadorVista data : datosFrescos) {
                             if (data.getNumJugador() == idPanel) {
-                                // ¡Ahora sí lo va a encontrar!
                                 panel.recibirDatosNuevos(data);
                                 break;
                             }
                         }
                     }
                 }
-            } else {
-                // Si no hay contenedor, creamos todo (ej. inicio del juego)
-                cargarJugadoresSecundarios();
             }
 
             this.repaint();
@@ -413,68 +427,85 @@ public class JPantallaJuego extends JFramePadre implements Observer, IObserverCa
      * mantener un layout uniforme incluso si hay pocos jugadores.
      */
     public void cargarJugadoresSecundarios() {
-        List<JugadorVista> jugadores = modeloVista.getJugadoresSecundarios();
 
+        List<JugadorVista> jugadores = modeloVista.getJugadoresSecundarios();
         if (jugadores == null) {
             jugadores = new ArrayList<>();
         }
 
+        System.out.println(">>> cargarJugadoresSecundarios() llamado. Ventana="
+                + this.hashCode() + " jugadores=" + jugadores.size());
+
+        // ================================================
+        // 1. Crear contenedor solo si NO existía
+        // ================================================
         if (contenedorJugadores == null) {
             contenedorJugadores = new JPanel();
             contenedorJugadores.setLayout(new BoxLayout(contenedorJugadores, BoxLayout.Y_AXIS));
             contenedorJugadores.setOpaque(false);
         } else {
+            // Evitar duplicados
             contenedorJugadores.removeAll();
         }
 
-        // 1) Agrega los jugadores reales
+        // ================================================
+        // 2. Pintar jugadores reales
+        // ================================================
         int count = 0;
-        Dimension slotDim = null; // calcularemos el alto con el 1er panel real
+        int alturaItem = 0;
+
         for (JugadorVista j : jugadores) {
-            PanelJugadorSecundario item = new PanelJugadorSecundario(j, modeloVista);
 
-            item.setAlignmentX(JPanel.LEFT_ALIGNMENT);
+            PanelJugadorSecundario panel = new PanelJugadorSecundario(j, modeloVista);
 
-            // guardamos el alto del primer panel para copiarlo a los vacíos
-            if (slotDim == null) {
+            // Debug
+            System.out.println(" -> Pintando jugador: ID=" + j.getNumJugador()
+                    + " Nombre=" + j.getNombre() + " Avatar=" + j.getRutaAvatar());
 
-                slotDim = new Dimension(300, item.getPreferredSize().height);
-
+            // Obtener la altura base del primer panel
+            if (alturaItem == 0) {
+                alturaItem = panel.getPreferredSize().height;
             }
 
-            item.setMaximumSize(new Dimension(Integer.MAX_VALUE, item.getPreferredSize().height));
+            panel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
+            panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, alturaItem));
 
-            contenedorJugadores.add(item);
+            contenedorJugadores.add(panel);
             count++;
         }
 
-        // 2) Agrega placeholders (vacíos) del MISMO tamaño para empujar hacia arriba
-        final int MIN_SLOTS = 4; // <- ajusta cuántos "slots" quieres ver como mínimo
-        if (slotDim == null) {
-            // Si no hubo jugadores, define un alto base para los vacíos (coherente con tu UI)
-            slotDim = new Dimension(300, 200);
+        // ================================================
+        // 3. PLACEHOLDERS (solo si NO hay jugadores)
+        // ================================================
+        final int MIN_SLOTS = 4;
+
+        if (alturaItem == 0) {
+            // No había jugadores, elegimos un tamaño estándar
+            alturaItem = 200;
         }
 
+        // Rellenar hasta los slots mínimos
         while (count < MIN_SLOTS) {
-            JPanel placeholder = crearPlaceholder(slotDim.height);
+            JPanel placeholder = crearPlaceholder(alturaItem);
             placeholder.setAlignmentX(JPanel.LEFT_ALIGNMENT);
-            placeholder.setMaximumSize(new Dimension(Integer.MAX_VALUE, slotDim.height));
+            placeholder.setMaximumSize(new Dimension(Integer.MAX_VALUE, alturaItem));
             contenedorJugadores.add(placeholder);
             count++;
         }
 
-        // 3) Monta el contenedor en el panel derecho
+        // ================================================
+        // 4. Montar el contenedor en pantalla
+        // ================================================
         panelJugadoresSecundarios.removeAll();
 
         if (!(panelJugadoresSecundarios.getLayout() instanceof BorderLayout)) {
             panelJugadoresSecundarios.setLayout(new BorderLayout());
         }
 
-        panelJugadoresSecundarios.add(contenedorJugadores, BorderLayout.NORTH); // anclado arriba
+        panelJugadoresSecundarios.add(contenedorJugadores, BorderLayout.NORTH);
 
         panelJugadoresSecundarios.revalidate();
         panelJugadoresSecundarios.repaint();
-
     }
 
     /**
@@ -563,7 +594,7 @@ public class JPantallaJuego extends JFramePadre implements Observer, IObserverCa
             dialogoEspera.setVisible(true);
         }
     }
-    
+
     public void mostrarJOptionPaneFinRondaBaraja(int ronda) {
         String titulo = "Fin de la Ronda " + ronda;
         String mensaje = "La ronda ha terminado \n sin ganador. Baraja agotada.";
@@ -660,7 +691,6 @@ public class JPantallaJuego extends JFramePadre implements Observer, IObserverCa
             crearPanelTarjeta();        // Panel de tarjeta del jugador principal
             crearPanelCarta();          // Panel de carta cantada
             crearPanelJugadorPrincipal(); // Panel jugador principal
-            cargarJugadoresSecundarios(); // Panel jugadores secundarios
         }
     }
 

@@ -25,7 +25,9 @@ public class JugadorVista {
         this.tarjeta = tarjeta;
         this.puntaje = 0;
         this.principal = false;
+        this.numJugador = numJugador;
     }
+    
 
     /**
      * @return Nombre del jugador.

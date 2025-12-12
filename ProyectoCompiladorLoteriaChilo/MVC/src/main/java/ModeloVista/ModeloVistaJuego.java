@@ -139,6 +139,24 @@ public class ModeloVistaJuego implements IModeloVista {
     public List<JugadorVista> getJugadoresSecundarios() {
         return jugadoresSecundarios;
     }
+    
+    public JugadorVista getJugadorPorNum(int numJugador) {
+    if (jugadoresSecundarios != null) {
+        for (JugadorVista j : jugadoresSecundarios) {
+            if (j.getNumJugador() == numJugador) {
+                return j;
+            }
+        }
+    }
+
+    // También busca al jugador principal si aplica
+    if (jugadorPrincipal != null && jugadorPrincipal.getNumJugador() == numJugador) {
+        return jugadorPrincipal;
+    }
+
+    return null;
+}
+
 
     /**
      * Asigna la lista de jugadores secundarios y notifica a los observadores.
@@ -171,7 +189,7 @@ public class ModeloVistaJuego implements IModeloVista {
     public void addObserver(Observer o) {
         observers.add(o);
     }
-    
+
     public void addObserverCambioMVC(IObserverCambioMVCJuego o) {
         observersCambioMVC.add(o);
     }
@@ -182,6 +200,27 @@ public class ModeloVistaJuego implements IModeloVista {
      */
     @Override
     public void notificar() {
+        System.out.println("*********************************");
+        System.out.println("**LISTA JUGADORES SECUNDARIOS**");
+
+        if (jugadoresSecundarios == null) {
+            System.out.println("jugadoresSecundarios ES NULL");
+        } else if (jugadoresSecundarios.isEmpty()) {
+            System.out.println("jugadoresSecundarios está VACÍA");
+        } else {
+            System.out.println("Total: " + jugadoresSecundarios.size());
+            int i = 1;
+            for (JugadorVista jv : jugadoresSecundarios) {
+                System.out.println(
+                        "  #" + (i++)
+                        + " → ID=" + jv.getNumJugador()
+                        + ", Nombre=" + jv.getNombre()
+                        + ", Avatar=" + jv.getRutaAvatar()
+                );
+            }
+        }
+
+        System.out.println("*********************************\n");
 
         List<Observer> copiaObservers;
 
@@ -192,12 +231,12 @@ public class ModeloVistaJuego implements IModeloVista {
             o.update();
         }
     }
-    
+
     @Override
     public void notificarCambioMVC() {
         System.out.println("Notificando a pantalla de juego");
         List<IObserverCambioMVCJuego> copiaObservers;
-        
+
         synchronized (observersCambioMVC) {
             copiaObservers = new ArrayList<>(observersCambioMVC);
         }
@@ -215,7 +254,7 @@ public class ModeloVistaJuego implements IModeloVista {
         this.finDeRonda = true;
         notificar();
     }
-    
+
     @Override
     public void setDatosFinRondaBaraja() {
         finDeRondaBaraja = true;
@@ -228,7 +267,7 @@ public class ModeloVistaJuego implements IModeloVista {
 
         return finDeRonda;
     }
-    
+
     @Override
     public boolean isFinDeRondaBaraja() {
 
@@ -251,7 +290,7 @@ public class ModeloVistaJuego implements IModeloVista {
 
         this.finDeRonda = false;
         this.finDeRondaBaraja = false;
-        
+
     }
 
     @Override
@@ -341,6 +380,6 @@ public class ModeloVistaJuego implements IModeloVista {
 
     @Override
     public void cambioMVC() {
-        
+
     }
 }

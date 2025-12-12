@@ -234,7 +234,7 @@ public class ModeloLogica implements IModeloLogica, IReceptorEvento {
         json.put("TipoEvento", "Confirmacion_Reglas");
         json.put("Dificultad", dificultad);
         json.put("NumeroRondas", numRondas);
-        json.put("NumeroJugadores", numJugadores);
+        json.put("NumeroJugadores", jugadores.size());
 
         // -------------------------------------------------------
         // Construir arreglo JSON "Jugadores"

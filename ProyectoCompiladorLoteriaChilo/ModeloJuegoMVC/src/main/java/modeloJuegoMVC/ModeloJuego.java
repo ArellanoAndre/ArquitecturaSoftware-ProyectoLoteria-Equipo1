@@ -195,9 +195,9 @@ public class ModeloJuego implements IModeloJuego {
                 .orElse(null);
 
         if (jugadorPrincipal.getNumJugador() == numJugador) {
-            
+
             Tarjeta tarjetaJugador = new Tarjeta(copiarCasillas(tarjeta.getCasillas()), tarjeta.getImg());
-            
+
             jugadorPrincipal.setTarjeta(tarjetaJugador);
         } else {
             for (IJugador jugadorSecundario : jugadoresSecundarios) {
@@ -207,7 +207,7 @@ public class ModeloJuego implements IModeloJuego {
             }
         }
     }
-    
+
     private int[] copiarCasillas(int[] original) {
         if (original == null) {
             return null;
@@ -228,7 +228,9 @@ public class ModeloJuego implements IModeloJuego {
         // === 1) Leer datos generales ===
         String dificultad = datos.optString("Dificultad", null);
         int numRondas = datos.optInt("NumeroRondas", 0);
-        int numJugadores = datos.optInt("NumeroJugadores", 0);
+
+        // NO usar NumeroJugadores del JSON (puede venir incorrecto)
+        int numJugadores;
 
         // === 2) Convertir jugadores JSON -> List<IJugador> ===
         List<IJugador> listaJugadores = new ArrayList<>();
@@ -243,13 +245,19 @@ public class ModeloJuego implements IModeloJuego {
                 String nombre = obj.optString("Nombre", "Jugador_" + id);
                 String avatar = obj.optString("Avatar", "default.png");
 
-                System.out.println("[DEBUG] Jugador recibido: id=" + id
+                System.out.println(
+                        "[DEBUG] Jugador recibido: id=" + id
                         + ", nombre=" + nombre
-                        + ", avatar=" + avatar);
+                        + ", avatar=" + avatar
+                );
 
                 listaJugadores.add(new Jugador(id, nombre, avatar));
             }
         }
+
+        // Ahora sí:
+        numJugadores = listaJugadores.size();
+        System.out.println("[FiltroUnirsePartida] Total jugadores recibidos = " + numJugadores);
 
         settearJugadores(listaJugadores);
 
@@ -265,7 +273,7 @@ public class ModeloJuego implements IModeloJuego {
 
         if (!jugadorEncontrado) {
             System.out.println("[FiltroUnirsePartida] ⚠ Este evento NO es para mí. No cambio pantalla.");
-            return; // ← IMPORTANTE: NO continuar
+            return;
         }
 
         System.out.println("[FiltroUnirsePartida] ✔ Mi jugador SI está en la lista. Cambio de pantalla.");
@@ -288,7 +296,7 @@ public class ModeloJuego implements IModeloJuego {
                 listaJugadores,
                 numRondas,
                 tarjetas,
-                numJugadores
+                numJugadores // <<< AHORA ES CORRECTO
         );
 
         // === 5) Solo si coincide el jugador → actualizar pantalla ===
@@ -574,35 +582,59 @@ public class ModeloJuego implements IModeloJuego {
 
         System.out.println("[settearJugadores] Iniciando actualización...");
 
-        // Limpia secundarios al inicio para evitar duplicados
+        // Siempre limpio antes
         jugadoresSecundarios.clear();
 
         int idPrincipal = jugadorPrincipal.getNumJugador();
-
         System.out.println("[settearJugadores] ID jugador principal actual: " + idPrincipal);
 
         for (IJugador iJugador : listaJugadores) {
 
-            System.out.println("  → Procesando jugador: ID=" + iJugador.getNumJugador()
+            int id = iJugador.getNumJugador();
+
+            System.out.println("  → Procesando jugador: ID=" + id
                     + ", Nombre=" + iJugador.getNombre()
                     + ", Avatar=" + iJugador.getAvatar());
 
-            if (iJugador.getNumJugador() == idPrincipal) {
+            // -----------------------
+            // ⚠️ 1. Ignorar jugadores sin ID válido
+            // -----------------------
+            if (id <= 0) {
+                System.out.println("    ❌ Ignorado: jugador con ID inválido: " + id);
+                continue;
+            }
 
-                System.out.println("    ✔ Coincide con jugador PRINCIPAL → Actualizando");
-
+            // -----------------------
+            // 2. Si es el jugador principal
+            // -----------------------
+            if (id == idPrincipal) {
+                System.out.println("    ✔ Coincide con PRINCIPAL → actualizando datos");
                 jugadorPrincipal.setNombre(iJugador.getNombre());
                 jugadorPrincipal.setAvatar(iJugador.getAvatar());
-
-            } else {
-
-                System.out.println("    ➕ Agregado a secundarios");
-
-                jugadoresSecundarios.add(iJugador);
+                continue;
             }
+
+            // -----------------------
+            // ⚠️ 3. Evitar duplicados en secundarios
+            // -----------------------
+            boolean yaExiste = jugadoresSecundarios.stream()
+                    .anyMatch(j -> j.getNumJugador() == id);
+
+            if (yaExiste) {
+                System.out.println("    ⚠️ Duplicado detectado → ignorado");
+                continue;
+            }
+
+            // -----------------------
+            // 4. Agregar a secundarios
+            // -----------------------
+            System.out.println("    ➕ Agregado a SECUNDARIOS");
+            jugadoresSecundarios.add(iJugador);
         }
 
-        // Mostrar resultado final
+        // -----------------------
+        // Imprimir resultado final
+        // -----------------------
         System.out.println("[settearJugadores] Jugadores secundarios (" + jugadoresSecundarios.size() + "):");
         for (IJugador sec : jugadoresSecundarios) {
             System.out.println("    - ID=" + sec.getNumJugador()
