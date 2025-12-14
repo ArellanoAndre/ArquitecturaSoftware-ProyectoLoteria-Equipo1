@@ -106,6 +106,8 @@ public interface IModeloVista {
     void setRankingFinal(List<JugadorVista> ranking);
     boolean isJuegoTerminado();
     List<JugadorVista> getListaRanking();
+    void reiniciarEstadoFinPartida();
+    void reiniciarClienteCompleto();
 
     // --- DATOS GLOBALES ---
     boolean isHost(); 

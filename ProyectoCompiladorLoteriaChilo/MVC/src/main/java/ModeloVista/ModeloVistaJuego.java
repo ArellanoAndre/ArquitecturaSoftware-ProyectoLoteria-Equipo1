@@ -233,8 +233,30 @@ public class ModeloVistaJuego implements IModeloVista {
     }
 
     @Override
+    public void reiniciarEstadoFinPartida() {
+        juegoTerminado = false;
+        if (rankingFinal != null) {
+            rankingFinal.clear();
+        }
+    }
+
+    @Override
+    public void reiniciarClienteCompleto() {
+        reiniciarEstadoFinPartida();
+        reiniciarTableroJugador();
+        if (jugadoresSecundarios != null) {
+            jugadoresSecundarios.clear();
+            notificar();
+        }
+        if (modeloJuego != null) {
+            modeloJuego.reiniciarCliente();
+        }
+    }
+
+    @Override
     public void notificarCambioMVC() {
         System.out.println("Notificando a pantalla de juego");
+        reiniciarEstadoFinPartida();
         List<IObserverCambioMVCJuego> copiaObservers;
 
         synchronized (observersCambioMVC) {

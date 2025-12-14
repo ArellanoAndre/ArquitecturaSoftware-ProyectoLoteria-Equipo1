@@ -66,6 +66,8 @@ public interface IModeloJuego {
 
     void cambiarMVC();
     
+    void reiniciarCliente();
+    
     void asignarTarjeta(JSONObject datos);
     
     boolean isRegistrado();

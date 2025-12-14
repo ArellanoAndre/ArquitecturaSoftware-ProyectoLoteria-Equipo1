@@ -8,10 +8,17 @@ public interface IControlSeleccionarCarta {
 
     /**
      * Indica que se ha seleccionado una carta en la posición indicada.
+     *
      * @param pos Posición de la carta seleccionada.
      */
     void seleccionarCarta(int pos);
-    
-    void cambiarMVC();
-}
 
+    void cambiarMVC();
+
+    void solicitarIntentoLoteria();
+    
+    void solicitarSiguienteRonda();
+    
+    void cerrarFinPartida();
+
+}

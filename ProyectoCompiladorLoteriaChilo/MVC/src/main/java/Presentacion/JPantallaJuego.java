@@ -253,9 +253,9 @@ public class JPantallaJuego extends JFramePadre implements Observer, IObserverCa
 
     private void btnIntentoLoteriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIntentoLoteriaActionPerformed
 
-        System.out.println("[debuge UI] Botón presionado. Control es: " + control);
-        if (control != null) {
-            control.solicitarIntentoLoteria();
+        System.out.println("[debuge UI] Botón presionado. Control es: " + controlador);
+        if (controlador != null) {
+            controlador.solicitarIntentoLoteria();
         }
     }//GEN-LAST:event_btnIntentoLoteriaActionPerformed
 
@@ -569,7 +569,7 @@ public class JPantallaJuego extends JFramePadre implements Observer, IObserverCa
 
                 // 3. ENVIAR ORDEN AL SERVIDOR
                 if (control != null) {
-                    control.solicitarSiguienteRonda();
+                    controlador.solicitarSiguienteRonda();
                 }
 
                 this.repaint();
@@ -631,7 +631,7 @@ public class JPantallaJuego extends JFramePadre implements Observer, IObserverCa
 
                 // notificar al servidor que inicie la siguiente ronda
                 if (control != null) {
-                    control.solicitarSiguienteRonda();
+                    controlador.solicitarSiguienteRonda();
                 }
 
                 this.repaint();

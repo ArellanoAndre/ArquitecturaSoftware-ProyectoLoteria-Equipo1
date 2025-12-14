@@ -185,18 +185,6 @@ public class ControlVista implements IControlVistaMVC_Juego {
     }
 
     @Override
-    public void solicitarSiguienteRonda() {
-
-        modeloVista.solicitarEnvioSiguienteRonda();
-    }
-
-    @Override
-    public void solicitarIntentoLoteria() {
-
-        modeloVista.solicitarEnvioCantarLoteria();
-    }
-
-    @Override
     public void cambiarMVC() {
         modeloVista.notificarCambioMVC();
     }

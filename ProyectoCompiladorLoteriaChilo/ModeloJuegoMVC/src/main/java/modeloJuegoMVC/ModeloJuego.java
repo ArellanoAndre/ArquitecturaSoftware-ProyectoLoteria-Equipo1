@@ -379,6 +379,29 @@ public class ModeloJuego implements IModeloJuego {
     }
 
     @Override
+    public void reiniciarCliente() {
+        System.out.println("[ModeloJuego] Reiniciando cliente para nuevo inicio...");
+        limpiarEntidadesJuego();
+
+        if (jugadoresSecundarios == null) {
+            jugadoresSecundarios = new ArrayList<>();
+        } else {
+            jugadoresSecundarios.clear();
+        }
+
+        if (controlVistaJuego != null) {
+            controlVistaJuego.setJugadoresSecundarios(new ArrayList<>());
+        }
+
+        if (controlVistaInicio != null) {
+            int idJugador = (jugadorPrincipal != null) ? jugadorPrincipal.getNumJugador() : 0;
+            controlVistaInicio.abrirPantallaMenu(idJugador);
+        }
+
+        registrado = false;
+    }
+
+    @Override
     public void enviarEventoCartaSeleccionada(int pos, int jugador) {
         JSONObject json = new JSONObject();
         json.put("TipoEvento", "CASILLA_SELECCIONADA");

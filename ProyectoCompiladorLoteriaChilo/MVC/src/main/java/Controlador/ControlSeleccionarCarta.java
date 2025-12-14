@@ -37,5 +37,21 @@ public class ControlSeleccionarCarta implements IControlSeleccionarCarta{
     public void cambiarMVC(){
         modeloVista.cambiarMVC();
     }
+    
+    @Override
+    public void cerrarFinPartida() {
+        modeloVista.reiniciarClienteCompleto();
+    }
+    
+    @Override
+    public void solicitarIntentoLoteria() {
 
+        modeloVista.solicitarEnvioCantarLoteria();
+    }
+
+   @Override
+    public void solicitarSiguienteRonda() {
+
+        modeloVista.solicitarEnvioSiguienteRonda();
+    }
 }

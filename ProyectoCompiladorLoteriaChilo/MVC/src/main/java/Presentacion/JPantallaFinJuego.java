@@ -18,6 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 /**
  *
@@ -158,7 +159,7 @@ public class JPantallaFinJuego extends javax.swing.JDialog {
         btnAceptar.setBackground(new java.awt.Color(102, 255, 255));
         btnAceptar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnAceptar.setText("Aceptar");
-        btnAceptar.setVisible(false);
+        btnAceptar.setVisible(true);
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAceptarActionPerformed(evt);
@@ -208,7 +209,14 @@ public class JPantallaFinJuego extends javax.swing.JDialog {
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         
         this.dispose();
-//        controlador.cambiarMVC();
+        if (controlador != null ) {
+            System.out.println("Solicitando reset completo desde pantalla fin juego");
+            controlador.cerrarFinPartida();
+            
+        } else {
+            System.err.println("Error el controlador es null");
+        }
+        
     }//GEN-LAST:event_btnAceptarActionPerformed
 
 
